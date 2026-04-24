@@ -1,26 +1,178 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
+@import "@heroui/styles";
+
+@source "../../src";
+@source "../../node_modules/@tremor/react";
+
+/* Safelist Tremor's dynamic fill/stroke color classes */
+@source inline("fill-{red,rose,amber,violet,cyan,stone,gray}-{50,100,200,300,400,500,600,700,800,900}");
+@source inline("stroke-{red,rose,amber,violet,cyan,stone,gray}-{50,100,200,300,400,500,600,700,800,900}");
+@source inline("bg-{red,rose,amber,violet,cyan,stone,gray,emerald}-{50,100,200,300,400,500,600,700,800,900}");
+@source inline("text-{red,rose,amber,violet,cyan,stone,gray,emerald}-{50,100,200,300,400,500,600,700,800,900}");
+
+/* ──────────────────────────────────────────────────────
+   FEUCSC Finanzas — Design System
+   Estética: Apple-inspired, paleta roja institucional
+   ────────────────────────────────────────────────────── */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Red palette — Multi-tone system based on #e30707 */
+  --red-50: #FFF5F5;
+  --red-100: #FEE2E2;
+  --red-200: #FECACA;
+  --red-300: #FCA5A5;
+  --red-400: #F87171;
+  --red-500: #E30707;
+  --red-600: #C80606;
+  --red-700: #A30505;
+  --red-800: #7F0404;
+  --red-900: #5C0303;
+
+  /* Neutrals — Apple-style grays */
+  --gray-50: #F5F5F7;
+  --gray-100: #E8E8ED;
+  --gray-200: #D2D2D7;
+  --gray-300: #AEAEB2;
+  --gray-400: #86868B;
+  --gray-500: #6E6E73;
+  --gray-600: #48484A;
+  --gray-700: #3A3A3C;
+  --gray-800: #2C2C2E;
+  --gray-900: #1D1D1F;
+
+  /* Semantic tokens */
+  --background: #FFFFFF;
+  --background-secondary: var(--gray-50);
+  --foreground: var(--gray-900);
+  --foreground-secondary: var(--gray-500);
+  --primary: var(--red-500);
+  --primary-light: var(--red-50);
+  --primary-hover: var(--red-600);
+  --border-color: var(--gray-100);
+  --surface: #FFFFFF;
+  --surface-elevated: #FFFFFF;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-hover: var(--primary-hover);
+  --color-surface: var(--surface);
+  --color-muted: var(--foreground-secondary);
+  --color-border: var(--border-color);
+  --color-bg-secondary: var(--background-secondary);
+
+  /* Red palette tokens for Tailwind */
+  --color-red-50: var(--red-50);
+  --color-red-100: var(--red-100);
+  --color-red-200: var(--red-200);
+  --color-red-300: var(--red-300);
+  --color-red-400: var(--red-400);
+  --color-red-500: var(--red-500);
+  --color-red-600: var(--red-600);
+  --color-red-700: var(--red-700);
+  --color-red-800: var(--red-800);
+  --color-red-900: var(--red-900);
+
+  /* Gray palette tokens */
+  --color-gray-50: var(--gray-50);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+  --color-gray-600: var(--gray-600);
+  --color-gray-700: var(--gray-700);
+  --color-gray-800: var(--gray-800);
+  --color-gray-900: var(--gray-900);
+
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ── Base styles ───────────────────────────────────── */
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Apple-style utilities ─────────────────────────── */
+
+/* Glassmorphism surface */
+@utility glass-surface {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+/* Subtle card hover lift */
+@utility card-hover {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Apple-style subtle shadow */
+@utility shadow-apple {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04),
+              0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+@utility shadow-apple-lg {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04),
+              0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Smooth text gradient for headings */
+@utility text-gradient-red {
+  background: linear-gradient(135deg, var(--red-500), var(--red-700));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Stagger children animation */
+@utility stagger-1 { animation-delay: 0.05s; }
+@utility stagger-2 { animation-delay: 0.1s; }
+@utility stagger-3 { animation-delay: 0.15s; }
+@utility stagger-4 { animation-delay: 0.2s; }
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-200);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-300);
 }
