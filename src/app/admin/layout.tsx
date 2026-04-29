@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { isAuthorizedEmail } from "@/lib/auth";
-import type { User } from "@supabase/supabase-js";
+
+import { Toast } from "@heroui/react";
 
 /**
  * Admin layout — protects all /admin/* routes.
@@ -16,7 +17,6 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +36,6 @@ export default function AdminLayout({
         return;
       }
 
-      setUser(session.user);
       setLoading(false);
     };
 
@@ -57,10 +56,10 @@ export default function AdminLayout({
   // Loading state
   if (loading) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-gray-50">
+      <div className="flex min-h-dvh items-center justify-center bg-gray-50 dark:bg-black">
         <div className="flex flex-col items-center gap-4 animate-fade-in-up">
-          <div className="size-8 animate-spin rounded-full border-3 border-gray-200 border-t-red-500" />
-          <p className="text-sm text-gray-400 font-medium">
+          <div className="size-8 animate-spin rounded-full border-3 border-gray-200 dark:border-gray-800 border-t-red-500" />
+          <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">
             Verificando acceso...
           </p>
         </div>
@@ -68,5 +67,10 @@ export default function AdminLayout({
     );
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <Toast.Provider />
+      {children}
+    </>
+  );
 }

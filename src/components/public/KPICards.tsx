@@ -1,153 +1,213 @@
-import { Card } from "@heroui/react";
-import { resumenFinanciero, formatCLP } from "@/lib/mockData";
+"use client";
 
-const WalletIcon = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
-    <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
-  </svg>
-);
+import { formatCLP } from "@/lib/utils";
+import { useEffect, useState, useRef } from "react";
+import { ProgressBar } from "@heroui/react";
 
-const TrendDownIcon = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="22 17 13.5 8.5 8.5 13.5 2 7" />
-    <polyline points="16 17 22 17 22 11" />
-  </svg>
-);
+interface ResumenFinanciero {
+  presupuestoTotal: number;
+  totalGastado: number;
+  saldoDisponible: number;
+}
 
-const CheckCircleIcon = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-    <path d="m9 11 3 3L22 4" />
-  </svg>
-);
+interface KPICardsProps {
+  resumenFinanciero: ResumenFinanciero;
+}
 
+// ── Animated counter hook ──────────────────────────────
+function useCountUp(target: number, duration = 1200, delay = 0) {
+  const [value, setValue] = useState(target);
+  const hasMounted = useRef(false);
+  const raf = useRef<number>(0);
+
+  useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      setValue(0);
+    }
+
+    const timeout = setTimeout(() => {
+      const start = performance.now();
+      const step = (now: number) => {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setValue(Math.round(target * eased));
+        if (progress < 1) {
+          raf.current = requestAnimationFrame(step);
+        }
+      };
+      raf.current = requestAnimationFrame(step);
+    }, delay);
+
+    return () => {
+      clearTimeout(timeout);
+      cancelAnimationFrame(raf.current);
+    };
+  }, [target, duration, delay]);
+
+  return value;
+}
+
+// ── Status color system ────────────────────────────────
+type StatusColors = {
+  fill: string;
+  track: string;
+  text: string;
+  dot: string;
+};
+
+const STATUS_GREEN: StatusColors = {
+  fill: "bg-emerald-500",
+  track: "bg-emerald-500/10",
+  text: "text-emerald-600",
+  dot: "bg-emerald-500",
+};
+
+const STATUS_AMBER: StatusColors = {
+  fill: "bg-amber-400",
+  track: "bg-amber-400/10",
+  text: "text-amber-600",
+  dot: "bg-amber-400",
+};
+
+const STATUS_RED: StatusColors = {
+  fill: "bg-rose-500",
+  track: "bg-rose-500/10",
+  text: "text-rose-600",
+  dot: "bg-rose-500",
+};
+
+const STATUS_NEUTRAL: StatusColors = {
+  fill: "bg-gray-400",
+  track: "bg-gray-400/10",
+  text: "text-gray-500",
+  dot: "bg-gray-400",
+};
+
+function getSpentStatus(percent: number): StatusColors {
+  if (percent <= 40) return STATUS_GREEN;
+  if (percent <= 69) return STATUS_AMBER;
+  return STATUS_RED;
+}
+
+function getAvailableStatus(percent: number): StatusColors {
+  if (percent >= 60) return STATUS_GREEN;
+  if (percent >= 31) return STATUS_AMBER;
+  return STATUS_RED;
+}
+
+// ── Single KPI Card ────────────────────────────────────
 interface KPICardProps {
   title: string;
-  value: string;
-  icon: React.ReactNode;
-  accent?: boolean;
+  rawValue: number;
   subtitle: string;
   delay?: string;
+  countDelay?: number;
+  progressValue: number;
+  status: StatusColors;
 }
 
 function KPICard({
   title,
-  value,
-  icon,
-  accent,
+  rawValue,
   subtitle,
   delay,
+  countDelay = 0,
+  progressValue,
+  status,
 }: KPICardProps) {
+  const animatedValue = useCountUp(rawValue, 1200, countDelay);
+
   return (
-    <Card
-      className={`
-        relative overflow-hidden rounded-2xl border p-5
-        card-hover animate-fade-in-up opacity-0
-        ${
-          accent
-            ? "border-red-200 bg-gradient-to-br from-red-500 to-red-600 text-white shadow-apple-lg"
-            : "border-gray-100 bg-white text-gray-900 shadow-apple"
-        }
-      `}
-      variant="transparent"
+    <div
+      className="relative overflow-hidden rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm card-hover animate-fade-in-up opacity-0 p-6"
       style={{ animationDelay: delay }}
     >
-      {/* Decorative gradient orb for accent card */}
-      {accent && (
-        <div className="absolute -top-8 -right-8 size-24 rounded-full bg-white/10 blur-2xl" />
-      )}
-
-      <div className="flex items-start justify-between">
-        <div className="flex flex-col gap-1">
-          <span
-            className={`text-xs font-medium tracking-wide uppercase ${accent ? "text-red-100" : "text-gray-400"}`}
-          >
-            {title}
-          </span>
-          <span
-            className={`text-2xl font-bold tracking-tight ${accent ? "text-white" : "text-gray-900"}`}
-          >
-            {value}
-          </span>
-        </div>
-        <div
-          className={`flex items-center justify-center size-10 rounded-xl
-          ${accent ? "bg-white/20 text-white" : "bg-red-50 text-red-500"}
-        `}
-        >
-          {icon}
-        </div>
-      </div>
-
-      <div
-        className={`mt-3 pt-3 border-t ${accent ? "border-white/20" : "border-gray-50"}`}
-      >
+      <div className="flex flex-col gap-1">
+        <span className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-400 dark:text-gray-500">
+          {title}
+        </span>
         <span
-          className={`text-xs font-medium ${accent ? "text-red-100" : "text-gray-400"}`}
+          className="text-3xl sm:text-4xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white"
+          style={{ fontWeight: 300 }}
         >
-          {subtitle}
+          {formatCLP(animatedValue)}
         </span>
       </div>
-    </Card>
+
+      {/* Progress bar */}
+      <div className="mt-4">
+        <ProgressBar
+          aria-label={`${title} progreso`}
+          value={progressValue}
+          size="sm"
+          className="w-full"
+        >
+          <ProgressBar.Track className={`${status.track} h-[2px] rounded-full`}>
+            <ProgressBar.Fill
+              className={`${status.fill} rounded-full transition-all duration-700 ease-out`}
+            />
+          </ProgressBar.Track>
+        </ProgressBar>
+      </div>
+
+      <div className="mt-3 pt-3 border-t border-gray-50 dark:border-gray-800">
+        <div className="flex items-center gap-1.5">
+          <span
+            className={`inline-block size-1.5 rounded-full ${status.dot} shrink-0`}
+          />
+          <span
+            className={`text-xs font-medium ${status.text} transition-colors duration-500`}
+          >
+            {subtitle}
+          </span>
+        </div>
+      </div>
+    </div>
   );
 }
 
-export default function KPICards() {
+export default function KPICards({ resumenFinanciero }: KPICardsProps) {
   const porcentajeGastado = Math.round(
     (resumenFinanciero.totalGastado / resumenFinanciero.presupuestoTotal) * 100,
   );
+  const porcentajeDisponible = 100 - porcentajeGastado;
+
+  const spentStatus = getSpentStatus(porcentajeGastado);
+  const availableStatus = getAvailableStatus(porcentajeDisponible);
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Presupuesto Total — neutral, informational */}
       <KPICard
         title="Presupuesto Total"
-        value={formatCLP(resumenFinanciero.presupuestoTotal)}
-        icon={<WalletIcon />}
-        accent
+        rawValue={resumenFinanciero.presupuestoTotal}
         subtitle="Año académico 2026"
         delay="0.05s"
+        countDelay={300}
+        progressValue={100}
+        status={STATUS_NEUTRAL}
       />
+      {/* Total Gastado — green <40%, yellow 41-69%, red ≥70% */}
       <KPICard
         title="Total Gastado"
-        value={formatCLP(resumenFinanciero.totalGastado)}
-        icon={<TrendDownIcon />}
+        rawValue={resumenFinanciero.totalGastado}
         subtitle={`${porcentajeGastado}% del presupuesto utilizado`}
         delay="0.1s"
+        countDelay={500}
+        progressValue={porcentajeGastado}
+        status={spentStatus}
       />
+      {/* Presupuesto Disponible — inverted: green when lots left, red when little */}
       <KPICard
         title="Presupuesto Disponible"
-        value={formatCLP(resumenFinanciero.saldoDisponible)}
-        icon={<CheckCircleIcon />}
-        subtitle={`${100 - porcentajeGastado}% restante`}
+        rawValue={resumenFinanciero.saldoDisponible}
+        subtitle={`${porcentajeDisponible}% restante`}
         delay="0.15s"
+        countDelay={700}
+        progressValue={porcentajeDisponible}
+        status={availableStatus}
       />
     </div>
   );

@@ -73,7 +73,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-dvh items-center justify-center bg-gray-50 px-4">
+    <div className="relative flex min-h-dvh items-center justify-center bg-gray-50 dark:bg-black px-4">
       {/* Background decorative elements */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-32 -right-32 size-96 rounded-full bg-red-500/5 blur-3xl" />
@@ -82,32 +82,32 @@ export default function LoginPage() {
 
       {/* Login card */}
       <div className="relative z-10 w-full max-w-md animate-fade-in-up">
-        <Card className="rounded-3xl shadow-apple-lg border border-gray-100 bg-white p-8 sm:p-10">
+        <Card className="rounded-3xl shadow-apple-lg border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 sm:p-10">
           {/* Logo + branding */}
           <div className="flex flex-col items-center mb-8">
             <Image
-              src="/feucsclogo.webp"
+              src="/logofeucsc.webp"
               alt="Logo FEUCSC"
               width={160}
               height={80}
               className="mb-6"
               priority
             />
-            <h1 className="text-xl font-bold tracking-tight text-gray-900 text-center">
+            <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
               Portal de Administración
             </h1>
-            <p className="mt-2 text-sm text-gray-400 text-center leading-relaxed max-w-xs">
+            <p className="mt-2 text-sm text-gray-400 dark:text-gray-500 text-center leading-relaxed max-w-xs">
               Inicia sesión con tu correo institucional.
             </p>
           </div>
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-gray-100" />
-            <span className="text-xs text-gray-300 font-medium uppercase tracking-wider">
+            <div className="h-px flex-1 bg-gray-100 dark:bg-gray-800" />
+            <span className="text-xs text-gray-300 dark:text-gray-600 font-medium uppercase tracking-wider">
               Iniciar sesión
             </span>
-            <div className="h-px flex-1 bg-gray-100" />
+            <div className="h-px flex-1 bg-gray-100 dark:bg-gray-800" />
           </div>
 
           {/* Error alert (from query params) */}
@@ -122,13 +122,13 @@ export default function LoginPage() {
             variant="outline"
             size="lg"
             isDisabled={loading}
-            className="w-full rounded-2xl border-gray-200 bg-white text-gray-700 font-medium
-                       hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm
+            className="w-full rounded-2xl border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-medium
+                       hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-sm
                        transition-all duration-200 h-12 text-sm cursor-pointer"
             onPress={handleGoogleLogin}
           >
             {loading ? (
-              <div className="size-5 animate-spin rounded-full border-2 border-gray-300 border-t-red-500" />
+              <div className="size-5 animate-spin rounded-full border-2 border-gray-300 dark:border-gray-700 border-t-red-500" />
             ) : (
               <GoogleIcon />
             )}
@@ -136,7 +136,7 @@ export default function LoginPage() {
           </Button>
 
           {/* Security note */}
-          <div className="mt-8 flex items-start gap-2.5 rounded-xl bg-gray-50 border border-gray-100 px-4 py-3">
+          <div className="mt-8 flex items-start gap-2.5 rounded-xl bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 px-4 py-3">
             <svg
               width="16"
               height="16"
@@ -146,12 +146,12 @@ export default function LoginPage() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="text-gray-400 mt-0.5 shrink-0"
+              className="text-gray-400 dark:text-gray-500 mt-0.5 shrink-0"
             >
               <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            <p className="text-xs text-gray-400 leading-relaxed">
+            <p className="text-xs text-gray-400 dark:text-gray-500 leading-relaxed">
               Solo cuentas autorizadas pueden acceder al panel de
               administración.
             </p>
@@ -162,7 +162,7 @@ export default function LoginPage() {
         <div className="mt-6 text-center">
           <Link
             href="/"
-            className="text-xs text-gray-400 hover:text-red-500 transition-colors duration-200"
+            className="text-xs text-gray-400 dark:text-gray-500 hover:text-red-500 transition-colors duration-200"
           >
             ← Volver al portal público
           </Link>
