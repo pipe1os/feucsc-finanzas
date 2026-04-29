@@ -99,7 +99,7 @@ export default function ExpenseCategoryChart({
       </Card.Header>
 
       <Card.Content className="flex flex-col items-center gap-6">
-        <div className="relative h-48 w-48">
+        <div className="relative h-48 w-48 [&_*]:outline-none">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -117,6 +117,7 @@ export default function ExpenseCategoryChart({
                 strokeWidth={0}
                 onClick={handlePieClick}
                 cursor="pointer"
+                className="outline-none"
               >
                 {chartData.map((entry, index) => {
                   const isActive = activeCategoryFilter === entry.name;
@@ -129,6 +130,7 @@ export default function ExpenseCategoryChart({
                       opacity={isDimmed ? 0.3 : 1}
                       stroke={isActive ? entry.color : "none"}
                       strokeWidth={isActive ? 3 : 0}
+                      className="outline-none"
                     />
                   );
                 })}
