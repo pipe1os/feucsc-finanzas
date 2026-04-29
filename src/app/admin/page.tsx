@@ -27,6 +27,7 @@ import Image from "next/image";
 import { getNextPaletteColor, OTROS_COLOR } from "@/lib/category-palette";
 import { uploadComprobante } from "@/lib/cloudinary";
 import { deleteCloudinaryImage } from "@/app/actions/cloudinary";
+import { revalidatePublicPages } from "@/app/actions/revalidate";
 
 /* ── Icons ──────────────────────────────────────── */
 const SunIcon = () => (
@@ -881,6 +882,7 @@ export default function AdminPage() {
     setDeletingCat(null);
     fetchCategorias();
     fetchGastos();
+    revalidatePublicPages();
   };
 
   // ── Search + Sort + Paginate ──
@@ -990,6 +992,7 @@ export default function AdminPage() {
     }
     setSuccess(true);
     toast.success("Gasto registrado exitosamente");
+    revalidatePublicPages();
     setFecha(new Date().toISOString().split("T")[0]);
     setDescripcion("");
     setCategoria("Otros");
@@ -1071,6 +1074,7 @@ export default function AdminPage() {
     setTimeout(() => {
       setEditGasto(null);
       fetchGastos();
+      revalidatePublicPages();
       toast.success("Gasto actualizado exitosamente");
     }, 500);
   };
@@ -1097,6 +1101,7 @@ export default function AdminPage() {
     toast.success("Gasto eliminado exitosamente");
     setDeleteGasto(null);
     fetchGastos();
+    revalidatePublicPages();
     if (paginated.length === 1 && page > 1) setPage(page - 1);
   };
 
