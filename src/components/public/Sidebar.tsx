@@ -1,21 +1,78 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
+import { supabase } from "@/lib/supabase";
 
-const HomeIcon = () => (
+/* ── Apple-style minimalist icons (SF Symbols inspired) ── */
+
+const ChartIcon = () => (
   <svg
     width="20"
     height="20"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-    <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+    <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+    <path d="m7 14 4-4 4 4 6-6" />
+  </svg>
+);
+
+const ReceiptIcon = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M4 2v20l3-3 3 3 3-3 3 3 3-3V2H4z" />
+    <path d="M8 6h8" />
+    <path d="M8 10h8" />
+    <path d="M8 14h5" />
+  </svg>
+);
+
+const MailIcon = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect width="20" height="16" x="2" y="4" rx="2" />
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+  </svg>
+);
+
+const QuestionIcon = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+    <path d="M12 17h.01" />
   </svg>
 );
 
@@ -26,7 +83,7 @@ const MenuIcon = () => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
@@ -43,7 +100,7 @@ const CloseIcon = () => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
@@ -52,8 +109,183 @@ const CloseIcon = () => (
   </svg>
 );
 
+const SunIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2" />
+    <path d="M12 20v2" />
+    <path d="m4.93 4.93 1.41 1.41" />
+    <path d="m17.66 17.66 1.41 1.41" />
+    <path d="M2 12h2" />
+    <path d="M20 12h2" />
+    <path d="m6.34 17.66-1.41 1.41" />
+    <path d="m19.07 4.93-1.41 1.41" />
+  </svg>
+);
+
+const MoonIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+  </svg>
+);
+
+interface NavItemProps {
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+  isActive: boolean;
+  onClick?: () => void;
+  badgeCount?: number;
+}
+
+function NavItem({
+  href,
+  label,
+  icon,
+  isActive,
+  onClick,
+  badgeCount,
+}: NavItemProps) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className={`group flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 font-medium text-sm transition-all duration-200 cursor-pointer
+        ${
+          isActive
+            ? "text-red-600 dark:text-red-400"
+            : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200"
+        }`}
+      style={
+        isActive ? { backgroundColor: "rgba(239, 68, 68, 0.08)" } : undefined
+      }
+    >
+      <div className="flex items-center gap-3">
+        <span
+          className={`flex items-center justify-center size-8 rounded-lg transition-all duration-200
+            ${
+              isActive
+                ? "text-red-500 dark:text-red-400"
+                : "text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300"
+            }`}
+        >
+          {icon}
+        </span>
+        {label}
+      </div>
+      {!!badgeCount && badgeCount > 0 && (
+        <span className="flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-red-600 dark:bg-red-500 text-[10px] font-bold text-gray-100 shadow-sm">
+          {badgeCount > 99 ? "99+" : badgeCount}
+        </span>
+      )}
+    </Link>
+  );
+}
+
+function NavCategory({ label }: { label: string }) {
+  return (
+    <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-[0.1em] text-zinc-400 dark:text-zinc-600 uppercase">
+      {label}
+    </span>
+  );
+}
+
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center rounded-lg bg-zinc-100 dark:bg-zinc-800 p-0.5 h-8">
+        <div className="flex-1" />
+      </div>
+    );
+  }
+
+  const isLight = theme === "light";
+
+  return (
+    <div className="flex items-center rounded-lg bg-zinc-100 dark:bg-zinc-800 p-0.5">
+      <button
+        onClick={() => setTheme("light")}
+        data-active={isLight}
+        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white data-[active=true]:text-gray-900 data-[active=true]:shadow-sm data-[active=false]:text-gray-500 dark:data-[active=false]:text-gray-400"
+      >
+        <SunIcon />
+        <span>Claro</span>
+      </button>
+      <button
+        onClick={() => setTheme("dark")}
+        data-active={!isLight}
+        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white dark:data-[active=true]:bg-zinc-700 data-[active=true]:text-gray-900 dark:data-[active=true]:text-white data-[active=true]:shadow-sm data-[active=false]:text-gray-500 dark:data-[active=false]:text-gray-400"
+      >
+        <MoonIcon />
+        <span>Oscuro</span>
+      </button>
+    </div>
+  );
+}
+
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const [newExpensesCount, setNewExpensesCount] = useState(0);
+
+  useEffect(() => {
+    // Determine the number of new expenses since last visit
+    const checkNewExpenses = async () => {
+      // If we are currently ON the gastos page, reset the count and update lastVisited
+      if (pathname === "/gastos") {
+        localStorage.setItem("lastVisitedGastos", new Date().toISOString());
+        setNewExpensesCount(0);
+        return;
+      }
+
+      const lastVisited = localStorage.getItem("lastVisitedGastos");
+      if (!lastVisited) {
+        // If they have never visited, initialize with current time to avoid showing everything
+        localStorage.setItem("lastVisitedGastos", new Date().toISOString());
+        return;
+      }
+
+      // Query Supabase for count of expenses newer than lastVisited
+      const { count } = await supabase
+        .from("gastos")
+        .select("*", { count: "exact", head: true })
+        .gt("creado_el", lastVisited);
+
+      if (count && count > 0) {
+        setNewExpensesCount(count);
+      }
+    };
+
+    checkNewExpenses();
+  }, [pathname]);
+
+  const close = () => setIsOpen(false);
 
   return (
     <>
@@ -61,8 +293,8 @@ export default function Sidebar() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-4 right-4 z-50 flex items-center justify-center
-                   size-10 rounded-xl bg-white shadow-apple-lg lg:hidden
-                   transition-colors hover:bg-gray-50 cursor-pointer"
+                   size-10 rounded-xl bg-white dark:bg-gray-800 shadow-apple-lg lg:hidden
+                   transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
         aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
       >
         {isOpen ? <CloseIcon /> : <MenuIcon />}
@@ -72,16 +304,16 @@ export default function Sidebar() {
       {isOpen && (
         <div
           className="fixed inset-0 z-30 bg-black/20 backdrop-blur-xs lg:hidden"
-          onClick={() => setIsOpen(false)}
+          onClick={close}
         />
       )}
 
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 z-40 h-dvh w-[260px]
-          flex flex-col bg-white/80 backdrop-blur-xl
-          border-r border-gray-100
+          fixed top-0 left-0 z-40 h-dvh w-65
+          flex flex-col bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl
+          border-r border-gray-100 dark:border-gray-800
           transition-transform duration-300 ease-out
           lg:translate-x-0
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
@@ -90,77 +322,67 @@ export default function Sidebar() {
         {/* Logo area */}
         <div className="flex items-center justify-center px-5 pt-7 pb-5">
           <Image
-            src="/feucsclogo.webp"
+            src="/logofeucsc.webp"
             alt="Logo FEUCSC"
             width={894}
             height={307}
-            className="h-16 w-auto object-contain"
+            className="h-16 w-auto object-contain dark:brightness-110 dark:contrast-110"
             priority
           />
         </div>
 
         {/* Divider */}
-        <div className="mx-5 h-px bg-gray-100" />
+        <div className="mx-5 h-px bg-gray-100 dark:bg-gray-800" />
 
         {/* Navigation */}
         <nav className="flex flex-col gap-1 px-4 pt-6">
-          <span className="px-3 pb-2 text-[11px] font-semibold tracking-widest text-gray-400 uppercase">
-            General
-          </span>
-          <button
-            className="group flex items-center gap-3 rounded-xl px-3 py-2.5
-                       bg-red-50 text-red-500 font-medium text-sm
-                       transition-all duration-200 cursor-pointer"
-          >
-            <span
-              className="flex items-center justify-center size-8 rounded-lg
-                            bg-red-500 text-white shadow-sm
-                            transition-transform duration-200 group-hover:scale-105"
-            >
-              <HomeIcon />
-            </span>
-            Inicio
-          </button>
+          {/* ── Finanzas ── */}
+          <NavCategory label="Finanzas" />
+          <NavItem
+            href="/"
+            label="Resumen"
+            icon={<ChartIcon />}
+            isActive={pathname === "/"}
+            onClick={close}
+          />
+          <NavItem
+            href="/gastos"
+            label="Gastos"
+            icon={<ReceiptIcon />}
+            isActive={pathname === "/gastos"}
+            onClick={close}
+            badgeCount={newExpensesCount}
+          />
 
-          <button
-            className="group flex items-center gap-3 rounded-xl px-3 py-2.5
-                       text-gray-500 hover:text-gray-900 font-medium text-sm
-                       transition-all duration-200 cursor-pointer"
-          >
-            <span
-              className="flex items-center justify-center size-8 rounded-lg
-                            text-gray-400 group-hover:text-gray-900
-                            transition-colors duration-200"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="20" height="16" x="2" y="4" rx="2" />
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-              </svg>
-            </span>
-            Contacto
-          </button>
+          {/* Spacer between groups */}
+          <div className="mt-4" />
 
-          <button
-            className="group flex items-center gap-3 rounded-xl px-3 py-2.5
-                       text-gray-500 hover:text-gray-900 font-medium text-sm
-                       transition-all duration-200 cursor-pointer"
-          >
-            <span
-              className="flex items-center justify-center size-8 rounded-lg
-                            text-gray-400 group-hover:text-gray-900
-                            transition-colors duration-200"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                <path d="M12 17h.01" />
-              </svg>
-            </span>
-            Preguntas frecuentes
-          </button>
+          {/* ── Soporte ── */}
+          <NavCategory label="Soporte" />
+          <NavItem
+            href="/faq"
+            label="Preguntas frecuentes"
+            icon={<QuestionIcon />}
+            isActive={pathname === "/faq"}
+            onClick={close}
+          />
+          <NavItem
+            href="/contacto"
+            label="Contacto"
+            icon={<MailIcon />}
+            isActive={pathname === "/contacto"}
+            onClick={close}
+          />
         </nav>
 
-        {/* Footer */}
+        {/* Spacer pushes footer to bottom */}
+        <div className="flex-1" />
+
+        {/* Theme toggle */}
+        <div className="px-5 pb-6">
+          <div className="h-px bg-gray-100 dark:bg-gray-800 mb-4" />
+          <ThemeToggle />
+        </div>
       </aside>
     </>
   );
