@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { supabase } from "@/lib/supabase";
+import { Badge } from "@heroui/react";
 
 /* ── Apple-style minimalist icons (SF Symbols inspired) ── */
 
@@ -179,23 +180,27 @@ function NavItem({
       }
     >
       <div className="flex items-center gap-3">
-        <span
-          className={`flex items-center justify-center size-8 rounded-lg transition-all duration-200
-            ${
-              isActive
-                ? "text-red-500 dark:text-red-400"
-                : "text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300"
-            }`}
-        >
-          {icon}
-        </span>
+        <Badge.Anchor>
+          <span
+            className={`flex items-center justify-center size-8 rounded-lg transition-all duration-200
+              ${
+                isActive
+                  ? "text-red-500 dark:text-red-400"
+                  : "text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300"
+              }`}
+          >
+            {icon}
+          </span>
+          {!!badgeCount && badgeCount > 0 && (
+            <Badge color="danger" size="sm" variant="primary" placement="top-right">
+              <Badge.Label className="text-[10px] font-bold">
+                {badgeCount > 99 ? "99+" : badgeCount}
+              </Badge.Label>
+            </Badge>
+          )}
+        </Badge.Anchor>
         {label}
       </div>
-      {!!badgeCount && badgeCount > 0 && (
-        <span className="flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-red-600 dark:bg-red-500 text-[10px] font-bold text-gray-100 shadow-sm">
-          {badgeCount > 99 ? "99+" : badgeCount}
-        </span>
-      )}
     </Link>
   );
 }
