@@ -1260,7 +1260,7 @@ export default function AdminPage() {
               >
                 <Label>Descripción</Label>
                 <Input
-                  placeholder="Ej: Producción Semana Mechona"
+                  placeholder="Ej: Producción Bienvenida Mechona"
                   value={descripcion}
                   className="h-10 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60"
                 />
