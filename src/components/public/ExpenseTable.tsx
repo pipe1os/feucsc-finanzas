@@ -170,7 +170,7 @@ export default function ExpenseTable({
     column: "fecha",
     direction: "descending",
   });
-  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");

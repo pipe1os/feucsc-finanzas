@@ -3,7 +3,7 @@ import KPICards from "@/components/public/KPICards";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { LazyExpenseTrendChart } from "@/components/public/LazyCharts";
 import { supabase } from "@/lib/supabase";
-import { formatCLP, formatDate } from "@/lib/utils";
+import { formatCLP, formatDate, parseISODate } from "@/lib/utils";
 import Link from "next/link";
 
 // ISR: revalidate every 60 seconds
@@ -16,9 +16,11 @@ export default async function Home() {
     supabase.from("categorias").select("*"),
   ]);
 
-  if (gastosRes.error) console.error("Error fetching gastos:", gastosRes.error);
-  if (categoriasRes.error)
-    console.error("Error fetching categorias:", categoriasRes.error);
+  if (gastosRes.error || categoriasRes.error) {
+    throw new Error(
+      gastosRes.error?.message || categoriasRes.error?.message || "Error al cargar datos"
+    );
+  }
 
   const data = gastosRes.data || [];
   const categoriasData = categoriasRes.data || [];
@@ -31,7 +33,7 @@ export default async function Home() {
   if (!categoryColors["N/A"]) categoryColors["N/A"] = "#9CA3AF";
   if (!categoryColors["Otros"]) categoryColors["Otros"] = "#9CA3AF";
 
-  const presupuestoTotal = 19972000;
+  const presupuestoTotal = Number(process.env.NEXT_PUBLIC_PRESUPUESTO_TOTAL || "19972000");
   const totalGastado = data.reduce((acc, curr) => acc + curr.monto, 0);
   const saldoDisponible = presupuestoTotal - totalGastado;
   const resumenFinanciero = { presupuestoTotal, totalGastado, saldoDisponible };
@@ -59,8 +61,8 @@ export default async function Home() {
   });
 
   data.forEach((g) => {
-    if (g.fecha) {
-      const date = new Date(g.fecha + "T12:00:00");
+    const date = parseISODate(g.fecha);
+    if (date) {
       const monthStr = months[date.getMonth()];
       gastosPorMesMap.set(
         monthStr,

@@ -12,6 +12,7 @@
     "@heroui/react": "^3.0.3",
     "@heroui/styles": "^3.0.3",
     "@internationalized/date": "^3.12.1",
+    "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.104.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
