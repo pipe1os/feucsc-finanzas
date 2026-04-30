@@ -123,7 +123,7 @@ export default async function Home() {
 
       {/* Main content area */}
       <main className="flex-1 min-w-0 lg:ml-65">
-        <div className="mx-auto max-w-7xl px-4 pt-20 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
+        <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
           {/* Page header — rendered in server HTML (instant LCP) */}
           <header className="mb-8 animate-fade-in-up opacity-0">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
@@ -158,12 +158,9 @@ export default async function Home() {
             <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple overflow-hidden">
               {/* Preview header */}
               <div className="px-6 pt-5 pb-4">
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-white">
                   Últimos Gastos
-                </h3>
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
-                  {data.length} registros en total
-                </p>
+                </h2>
               </div>
 
               {/* Mini table */}

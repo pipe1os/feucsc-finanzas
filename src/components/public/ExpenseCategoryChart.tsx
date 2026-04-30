@@ -99,7 +99,7 @@ export default function ExpenseCategoryChart({
       </Card.Header>
 
       <Card.Content className="flex flex-col items-center gap-6">
-        <div className="relative h-48 w-48 [&_*]:outline-none">
+        <div className="relative h-48 w-48 **:outline-none">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie

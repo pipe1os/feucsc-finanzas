@@ -327,26 +327,11 @@ function ComprobanteUpload({
   isMarkedForDeletion,
   onViewImage,
 }: ComprobanteUploadProps) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  // Crear URL de preview cuando hay archivo seleccionado
-  useEffect(() => {
-    if (selectedFile) {
-      const url = URL.createObjectURL(selectedFile);
-      setPreviewUrl(url);
-      return () => URL.revokeObjectURL(url);
-    } else {
-      setPreviewUrl(null);
-    }
-  }, [selectedFile]);
-
   const displayText = selectedFile
     ? selectedFile.name
     : existingUrl && !isMarkedForDeletion
       ? "Imagen adjunta"
       : "(sin archivo seleccionado)";
-
-  const hasContent = selectedFile || (existingUrl && !isMarkedForDeletion);
 
   // Modo edición con imagen existente
   if (existingUrl !== undefined) {
@@ -375,7 +360,7 @@ function ComprobanteUpload({
             </label>
             {selectedFile && (
               <div className="flex items-center gap-2 text-sm text-gray-500 overflow-hidden">
-                <span className="truncate max-w-[150px] sm:max-w-[200px]">
+                <span className="truncate max-w-37.5 sm:max-w-50">
                   {selectedFile.name}
                 </span>
                 <button
@@ -444,7 +429,7 @@ function ComprobanteUpload({
         </label>
 
         <div className="flex items-center gap-2 text-sm text-gray-500 overflow-hidden">
-          <span className="truncate max-w-[150px] sm:max-w-[200px]">
+          <span className="truncate max-w-37.5 sm:max-w-50">
             {displayText}
           </span>
           {selectedFile && (
@@ -529,18 +514,7 @@ const MONTH_OPTIONS = [
   { id: "12", label: "Diciembre" },
 ];
 
-// Colores por categoría
-const CATEGORY_COLORS: Record<string, string> = {
-  "Reuniones y eventos": "bg-amber-100 text-amber-800 border-amber-200",
-  "Viáticos y transporte": "bg-green-100 text-green-800 border-green-200",
-  "Infraestructura y mantenimiento": "bg-red-100 text-red-800 border-red-200",
-  "Tecnología y equipos": "bg-blue-100 text-blue-800 border-blue-200",
-  "Apoyo a estudiantes": "bg-purple-100 text-purple-800 border-purple-200",
-  "Difusión y publicidad": "bg-orange-100 text-orange-800 border-orange-200",
-  "Oficina y útiles": "bg-gray-100 text-gray-800 border-gray-200",
-  "Arriendo": "bg-indigo-100 text-indigo-800 border-indigo-200",
-  "Otros": "bg-gray-100 text-gray-800 border-gray-200",
-};
+
 
 function formatCLP(n: number) {
   return "$" + n.toLocaleString("es-CL");
@@ -703,7 +677,7 @@ function CategorySelect({
                     }
                     if (e.key === "Escape") setIsCreating(false);
                   }}
-                  className="flex-1 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:text-gray-500 outline-hidden focus:border-red-300 focus:ring-1 focus:ring-red-100"
+                  className="flex-1 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-hidden focus:border-red-300 focus:ring-1 focus:ring-red-100"
                 />
                 <button
                   type="button"
@@ -745,16 +719,12 @@ export default function AdminPage() {
   const router = useRouter();
 
   // ── Form ──
-  const [fecha, setFecha] = useState("");
-  useEffect(() => {
-    setFecha(new Date().toISOString().split("T")[0]);
-  }, []);
+  const [fecha, setFecha] = useState(() => new Date().toISOString().split("T")[0]);
   const [descripcion, setDescripcion] = useState("");
   const [categoria, setCategoria] = useState("Otros");
   const [monto, setMonto] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
   // ── Table ──
@@ -764,7 +734,7 @@ export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+  const [sortDescriptor] = useState<SortDescriptor>({
     column: "fecha",
     direction: "descending",
   });
@@ -882,7 +852,7 @@ export default function AdminPage() {
       setDeletingCat(null);
       fetchCategorias();
       fetchGastos();
-    } catch (err: any) {
+    } catch {
       toast.danger("Error al eliminar categoría");
     } finally {
       setDeletingCatLoading(false);
@@ -957,7 +927,6 @@ export default function AdminPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
-    setSuccess(false);
     if (!fecha || !descripcion.trim() || !monto) {
       setFormError("Completa los campos obligatorios.");
       return;
@@ -991,17 +960,17 @@ export default function AdminPage() {
       form.append("monto", String(montoNum));
       if (comprobanteUrl) form.append("comprobante_url", comprobanteUrl);
       await createGasto(form);
-      setSuccess(true);
+
       toast.success("Gasto registrado exitosamente");
       setFecha(new Date().toISOString().split("T")[0]);
       setDescripcion("");
       setCategoria("Otros");
       setMonto("");
       setSelectedFile(null);
-      setTimeout(() => setSuccess(false), 4000);
+
       fetchGastos();
-    } catch (err: any) {
-      setFormError(`Error: ${err.message}`);
+    } catch (err: unknown) {
+      setFormError(`Error: ${err instanceof Error ? err.message : "desconocido"}`);
       toast.danger("Error al registrar gasto");
     } finally {
       setSubmitting(false);
@@ -1075,8 +1044,8 @@ export default function AdminPage() {
         fetchGastos();
         toast.success("Gasto actualizado exitosamente");
       }, 500);
-    } catch (err: any) {
-      setEditError(`Error: ${err.message}`);
+    } catch (err: unknown) {
+      setEditError(`Error: ${err instanceof Error ? err.message : "desconocido"}`);
       toast.danger("Error al actualizar gasto");
     } finally {
       setEditSubmitting(false);
@@ -1098,8 +1067,8 @@ export default function AdminPage() {
       setDeleteGasto(null);
       fetchGastos();
       if (paginated.length === 1 && page > 1) setPage(page - 1);
-    } catch (err: any) {
-      setDeleteError(`Error: ${err.message}`);
+    } catch (err: unknown) {
+      setDeleteError(`Error: ${err instanceof Error ? err.message : "desconocido"}`);
       toast.danger("Error al eliminar gasto");
     } finally {
       setDeleting(false);
@@ -1412,7 +1381,7 @@ export default function AdminPage() {
                     placeholder="Buscar..."
                     defaultValue=""
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full h-9 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 pl-10 pr-4 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:text-gray-500 outline-hidden transition-all duration-200 focus:border-red-300 focus:ring-2 focus:ring-red-100"
+                    className="w-full h-9 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 pl-10 pr-4 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-hidden transition-all duration-200 focus:border-red-300 focus:ring-2 focus:ring-red-100"
                   />
                 </div>
               </div>
