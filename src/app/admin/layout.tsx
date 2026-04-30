@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { isAuthorizedEmail } from "@/lib/auth";
 
-import { Toast } from "@heroui/react";
-
 /**
  * Admin layout — protects all /admin/* routes.
  * Checks for an active Supabase session and verifies the email is authorized.
@@ -67,10 +65,5 @@ export default function AdminLayout({
     );
   }
 
-  return (
-    <>
-      <Toast.Provider />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

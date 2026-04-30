@@ -23,6 +23,10 @@ function extractPublicId(url: string) {
 
 export async function deleteCloudinaryImage(url: string) {
   try {
+    if (!url || !url.startsWith("https://res.cloudinary.com/")) {
+      return { success: false, error: "Invalid Cloudinary URL" };
+    }
+
     const publicId = extractPublicId(url);
     if (!publicId) return { success: false, error: "Invalid Cloudinary URL" };
 

@@ -25,9 +25,10 @@ import {
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 import { getNextPaletteColor, OTROS_COLOR } from "@/lib/category-palette";
-import { uploadComprobante } from "@/lib/cloudinary";
+import { parseISODate } from "@/lib/utils";
 import { deleteCloudinaryImage } from "@/app/actions/cloudinary";
-import { revalidatePublicPages } from "@/app/actions/revalidate";
+import { uploadComprobanteAction } from "@/app/actions/upload";
+import { createGasto, updateGasto, deleteGasto as deleteGastoAction, createCategoria, deleteCategoria as deleteCategoriaAction } from "@/app/actions/gastos";
 
 /* ── Icons ──────────────────────────────────────── */
 const SunIcon = () => (
@@ -550,7 +551,9 @@ function formatShortDate(dateStr: string) {
   return `${day}/${month}/${year}`;
 }
 function formatDate(d: string) {
-  return new Date(d + "T12:00:00").toLocaleDateString("es-CL", {
+  const date = parseISODate(d);
+  if (!date) return "—";
+  return date.toLocaleDateString("es-CL", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -765,7 +768,7 @@ export default function AdminPage() {
     column: "fecha",
     direction: "descending",
   });
-  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ── Categories from DB ──
   const [categoriasDB, setCategoriasDB] = useState<CategoriaDB[]>([]);
@@ -841,16 +844,17 @@ export default function AdminPage() {
   // ── Create category in DB if new ──
   const handleCategoriaChange = async (cat: string) => {
     setCategoria(cat);
-    // If this category doesn't exist in DB yet, insert it
     if (!categorias.includes(cat)) {
       const usedColors = categoriasDB
         .map((c) => c.color)
         .filter(Boolean) as string[];
       const newColor = getNextPaletteColor(usedColors);
-      await supabase
-        .from("categorias")
-        .insert({ nombre: cat, color: newColor });
-      fetchCategorias();
+      try {
+        await createCategoria(cat, newColor);
+        fetchCategorias();
+      } catch {
+        toast.danger("Error al crear categoría");
+      }
     }
   };
   const handleEditCategoriaChange = async (cat: string) => {
@@ -860,10 +864,12 @@ export default function AdminPage() {
         .map((c) => c.color)
         .filter(Boolean) as string[];
       const newColor = getNextPaletteColor(usedColors);
-      await supabase
-        .from("categorias")
-        .insert({ nombre: cat, color: newColor });
-      fetchCategorias();
+      try {
+        await createCategoria(cat, newColor);
+        fetchCategorias();
+      } catch {
+        toast.danger("Error al crear categoría");
+      }
     }
   };
 
@@ -871,18 +877,16 @@ export default function AdminPage() {
   const handleDeleteCategory = async () => {
     if (!deletingCat) return;
     setDeletingCatLoading(true);
-    // 1. Update all gastos with this category → "N/A"
-    await supabase
-      .from("gastos")
-      .update({ categoria: "N/A" })
-      .eq("categoria", deletingCat);
-    // 2. Delete from categorias table
-    await supabase.from("categorias").delete().eq("nombre", deletingCat);
-    setDeletingCatLoading(false);
-    setDeletingCat(null);
-    fetchCategorias();
-    fetchGastos();
-    revalidatePublicPages();
+    try {
+      await deleteCategoriaAction(deletingCat);
+      setDeletingCat(null);
+      fetchCategorias();
+      fetchGastos();
+    } catch (err: any) {
+      toast.danger("Error al eliminar categoría");
+    } finally {
+      setDeletingCatLoading(false);
+    }
   };
 
   // ── Search + Sort + Paginate ──
@@ -968,7 +972,9 @@ export default function AdminPage() {
     // Subir imagen a Cloudinary si hay archivo seleccionado
     let comprobanteUrl: string | null = null;
     if (selectedFile) {
-      comprobanteUrl = await uploadComprobante(selectedFile);
+      const uploadForm = new FormData();
+      uploadForm.append("file", selectedFile);
+      comprobanteUrl = await uploadComprobanteAction(uploadForm);
       if (!comprobanteUrl) {
         setSubmitting(false);
         setFormError("Error al subir el comprobante");
@@ -976,30 +982,30 @@ export default function AdminPage() {
         return;
       }
     }
-    
-    const { error } = await supabase.from("gastos").insert({
-      fecha,
-      descripcion: descripcion.trim(),
-      categoria,
-      monto: montoNum,
-      comprobante_url: comprobanteUrl,
-    });
-    setSubmitting(false);
-    if (error) {
-      setFormError(`Error: ${error.message}`);
+
+    try {
+      const form = new FormData();
+      form.append("fecha", fecha);
+      form.append("descripcion", descripcion.trim());
+      form.append("categoria", categoria);
+      form.append("monto", String(montoNum));
+      if (comprobanteUrl) form.append("comprobante_url", comprobanteUrl);
+      await createGasto(form);
+      setSuccess(true);
+      toast.success("Gasto registrado exitosamente");
+      setFecha(new Date().toISOString().split("T")[0]);
+      setDescripcion("");
+      setCategoria("Otros");
+      setMonto("");
+      setSelectedFile(null);
+      setTimeout(() => setSuccess(false), 4000);
+      fetchGastos();
+    } catch (err: any) {
+      setFormError(`Error: ${err.message}`);
       toast.danger("Error al registrar gasto");
-      return;
+    } finally {
+      setSubmitting(false);
     }
-    setSuccess(true);
-    toast.success("Gasto registrado exitosamente");
-    revalidatePublicPages();
-    setFecha(new Date().toISOString().split("T")[0]);
-    setDescripcion("");
-    setCategoria("Otros");
-    setMonto("");
-    setSelectedFile(null);
-    setTimeout(() => setSuccess(false), 4000);
-    fetchGastos();
   };
 
   const openEdit = (g: GastoDB) => {
@@ -1024,7 +1030,9 @@ export default function AdminPage() {
 
     // Si hay nueva imagen seleccionada, subirla
     if (editSelectedFile) {
-      const uploadedUrl = await uploadComprobante(editSelectedFile);
+      const uploadForm = new FormData();
+      uploadForm.append("file", editSelectedFile);
+      const uploadedUrl = await uploadComprobanteAction(uploadForm);
       if (uploadedUrl) {
         finalUrl = uploadedUrl;
       } else {
@@ -1040,69 +1048,62 @@ export default function AdminPage() {
       finalUrl = null;
     }
 
-    const { error } = await supabase
-      .from("gastos")
-      .update({
-        fecha: editFecha,
-        descripcion: editDescripcion.trim(),
-        categoria: editCategoria,
-        monto: parseInt(editMonto, 10),
-        comprobante_url: finalUrl,
-      })
-      .eq("id", editGasto.id);
-    
-    setEditSubmitting(false);
-    if (error) {
-      setEditError(`Error: ${error.message}`);
+    try {
+      const form = new FormData();
+      form.append("id", editGasto.id);
+      form.append("fecha", editFecha);
+      form.append("descripcion", editDescripcion.trim());
+      form.append("categoria", editCategoria);
+      form.append("monto", editMonto);
+      form.append("comprobante_url", finalUrl || "");
+      await updateGasto(form);
+
+      // Eliminar imagen anterior de Cloudinary si:
+      // 1. Se subió una nueva imagen (reemplazo)
+      // 2. Se eliminó la imagen existente
+      if (originalUrl && originalUrl !== finalUrl) {
+        await deleteCloudinaryImage(originalUrl);
+      }
+
+      // Limpiar estados de imagen primero
+      setEditSelectedFile(null);
+      setEditExistingUrl(null);
+      setEditImageMarkedForDeletion(false);
+      // Cerrar modal con delay para evitar conflicto de view transitions
+      setTimeout(() => {
+        setEditGasto(null);
+        fetchGastos();
+        toast.success("Gasto actualizado exitosamente");
+      }, 500);
+    } catch (err: any) {
+      setEditError(`Error: ${err.message}`);
       toast.danger("Error al actualizar gasto");
-      return;
+    } finally {
+      setEditSubmitting(false);
     }
-
-    // Eliminar imagen anterior de Cloudinary si:
-    // 1. Se subió una nueva imagen (reemplazo)
-    // 2. Se eliminó la imagen existente
-    if (originalUrl && originalUrl !== finalUrl) {
-      await deleteCloudinaryImage(originalUrl);
-    }
-
-    // Limpiar estados de imagen primero
-    setEditSelectedFile(null);
-    setEditExistingUrl(null);
-    setEditImageMarkedForDeletion(false);
-    // Cerrar modal con delay para evitar conflicto de view transitions
-    // HeroUI v3 usa View Transitions API y puede colisionar con múltiples overlays
-    setTimeout(() => {
-      setEditGasto(null);
-      fetchGastos();
-      revalidatePublicPages();
-      toast.success("Gasto actualizado exitosamente");
-    }, 500);
   };
 
   const handleDelete = async () => {
     if (!deleteGasto) return;
     setDeleting(true);
     setDeleteError(null);
-    const { error } = await supabase
-      .from("gastos")
-      .delete()
-      .eq("id", deleteGasto.id);
-    setDeleting(false);
-    if (error) {
-      setDeleteError(`Error: ${error.message}`);
+    try {
+      await deleteGastoAction(deleteGasto.id);
+
+      if (deleteGasto.comprobante_url) {
+        await deleteCloudinaryImage(deleteGasto.comprobante_url);
+      }
+
+      toast.success("Gasto eliminado exitosamente");
+      setDeleteGasto(null);
+      fetchGastos();
+      if (paginated.length === 1 && page > 1) setPage(page - 1);
+    } catch (err: any) {
+      setDeleteError(`Error: ${err.message}`);
       toast.danger("Error al eliminar gasto");
-      return;
+    } finally {
+      setDeleting(false);
     }
-
-    if (deleteGasto.comprobante_url) {
-      await deleteCloudinaryImage(deleteGasto.comprobante_url);
-    }
-
-    toast.success("Gasto eliminado exitosamente");
-    setDeleteGasto(null);
-    fetchGastos();
-    revalidatePublicPages();
-    if (paginated.length === 1 && page > 1) setPage(page - 1);
   };
 
   // Count gastos per category for the manager panel

@@ -2,6 +2,7 @@ import Sidebar from "@/components/public/Sidebar";
 import DashboardClient from "@/components/public/DashboardClient";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { supabase } from "@/lib/supabase";
+import { parseISODate } from "@/lib/utils";
 import Link from "next/link";
 
 export const revalidate = 60;
@@ -19,9 +20,11 @@ export default async function GastosPage() {
     supabase.from("categorias").select("*"),
   ]);
 
-  if (gastosRes.error) console.error("Error fetching gastos:", gastosRes.error);
-  if (categoriasRes.error)
-    console.error("Error fetching categorias:", categoriasRes.error);
+  if (gastosRes.error || categoriasRes.error) {
+    throw new Error(
+      gastosRes.error?.message || categoriasRes.error?.message || "Error al cargar datos"
+    );
+  }
 
   const data = gastosRes.data || [];
   const categoriasData = categoriasRes.data || [];

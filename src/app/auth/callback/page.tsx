@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { isAuthorizedEmail } from "@/lib/auth";
@@ -15,37 +15,44 @@ import { isAuthorizedEmail } from "@/lib/auth";
 export default function AuthCallbackPage() {
   const router = useRouter();
   const [status, setStatus] = useState("Verificando acceso...");
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    const clearTimeoutRef = () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+
     const handleCallback = async () => {
-      // The Supabase client auto-detects tokens from the URL hash
-      // and establishes the session. We just need to wait for it.
       const {
         data: { session },
         error,
       } = await supabase.auth.getSession();
 
       if (error || !session) {
-        // If no session yet, listen for the auth state change
         const {
           data: { subscription },
         } = supabase.auth.onAuthStateChange(async (event, newSession) => {
           if (event === "SIGNED_IN" && newSession) {
             subscription.unsubscribe();
+            clearTimeoutRef();
             await verifyAndRedirect(newSession.user.email);
           }
         });
 
-        // Timeout fallback — if nothing happens in 8s, redirect to login
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
           subscription.unsubscribe();
           router.replace("/login?error=unauthorized");
         }, 8000);
 
-        return;
+        return () => {
+          subscription.unsubscribe();
+          clearTimeoutRef();
+        };
       }
 
-      // Session already exists
       await verifyAndRedirect(session.user.email);
     };
 
@@ -53,15 +60,17 @@ export default function AuthCallbackPage() {
       if (!isAuthorizedEmail(email)) {
         setStatus("Cuenta no autorizada. Redirigiendo...");
         await supabase.auth.signOut();
-        setTimeout(() => router.replace("/login?error=unauthorized"), 1000);
+        timeoutRef.current = setTimeout(() => router.replace("/login?error=unauthorized"), 1000);
         return;
       }
 
       setStatus("¡Acceso verificado! Redirigiendo...");
-      setTimeout(() => router.replace("/admin"), 500);
+      timeoutRef.current = setTimeout(() => router.replace("/admin"), 500);
     };
 
     handleCallback();
+
+    return () => clearTimeoutRef();
   }, [router]);
 
   return (
