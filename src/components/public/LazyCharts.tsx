@@ -11,7 +11,7 @@ export const LazyExpenseTrendChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="min-h-[300px] rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-apple animate-pulse">
+      <div className="min-h-75 rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-apple animate-pulse">
         <div className="h-5 w-40 rounded bg-gray-100 dark:bg-gray-800 mb-2" />
         <div className="h-3 w-56 rounded bg-gray-50 dark:bg-gray-800/50 mb-6" />
         <div className="h-75 w-full rounded-xl bg-gray-50 dark:bg-gray-800/50" />

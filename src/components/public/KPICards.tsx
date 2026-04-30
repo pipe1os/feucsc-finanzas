@@ -144,7 +144,7 @@ function KPICard({
           size="sm"
           className="w-full"
         >
-          <ProgressBar.Track className={`${status.track} h-[2px] rounded-full`}>
+          <ProgressBar.Track className={`${status.track} h-0.5 rounded-full`}>
             <ProgressBar.Fill
               className={`${status.fill} rounded-full transition-all duration-700 ease-out`}
             />

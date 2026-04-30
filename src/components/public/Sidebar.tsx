@@ -207,7 +207,7 @@ function NavItem({
 
 function NavCategory({ label }: { label: string }) {
   return (
-    <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-[0.1em] text-zinc-400 dark:text-zinc-600 uppercase">
+    <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-zinc-400 dark:text-zinc-600 uppercase">
       {label}
     </span>
   );
