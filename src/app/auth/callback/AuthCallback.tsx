@@ -1,14 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Spinner } from "@heroui/react";
 import { supabase } from "@/lib/supabase";
 import { isAuthorizedEmail } from "@/lib/auth";
 
+/**
+ * OAuth Callback — relies on createBrowserClient's automatic PKCE handling.
+ *
+ * createBrowserClient (from @supabase/ssr) detects the ?code=... in the URL
+ * on mount and exchanges it automatically. We only listen for the resulting
+ * auth state change and verify the email is authorized.
+ */
 export default function AuthCallback() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [status, setStatus] = useState("Verificando acceso...");
 
   useEffect(() => {
@@ -32,39 +38,22 @@ export default function AuthCallback() {
       redirectTo("/admin");
     };
 
-    // ── PKCE flow: exchange code for session ──
-    const code = searchParams.get("code");
-    if (code) {
-      supabase.auth
-        .exchangeCodeForSession(code)
-        .then(({ data, error }) => {
-          if (!mounted) return;
-          if (error || !data.session) {
-            console.error("PKCE exchange error:", error?.message);
-            redirectTo("/login?error=unauthorized");
-            return;
-          }
-          verifyAndRedirect(data.session.user.email);
-        })
-        .catch((err) => {
-          console.error("PKCE exchange exception:", err);
-          if (mounted) redirectTo("/login?error=unauthorized");
-        });
-    } else {
-      // ── Fallback: check existing session (implicit flow) ──
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (!mounted) return;
-        if (session?.user?.email) {
-          verifyAndRedirect(session.user.email);
-        }
-      });
-    }
+    // ── Immediate check: auto-exchange may already be done ──
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!mounted) return;
+      if (session?.user?.email) {
+        verifyAndRedirect(session.user.email);
+      }
+    });
 
-    // ── Safety net: listen for auth state changes ──
+    // ── Listen for the automatic PKCE exchange result ──
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, newSession) => {
         if (!mounted) return;
-        if (event === "SIGNED_IN" && newSession?.user?.email) {
+        if (
+          (event === "SIGNED_IN" || event === "INITIAL_SESSION") &&
+          newSession?.user?.email
+        ) {
           verifyAndRedirect(newSession.user.email);
         }
       }
@@ -80,7 +69,7 @@ export default function AuthCallback() {
       subscription.unsubscribe();
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [router, searchParams]);
+  }, [router]);
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-background">
