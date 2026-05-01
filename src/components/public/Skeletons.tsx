@@ -5,21 +5,17 @@ import { Skeleton } from "@heroui/react";
 // ── KPI Cards Skeleton ───────────────────────────────────────────
 export function SkeletonKPICards() {
   return (
-    <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple p-6 sm:p-8">
-      {/* Top row: hero metric + sub-metrics */}
-      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-10">
+    <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple p-6 sm:p-8 h-full flex flex-col">
+      <div className="flex flex-col flex-1 justify-between gap-5">
         {/* Hero metric */}
-        <div className="flex-1 min-w-0 space-y-3">
+        <div className="space-y-3">
           <Skeleton className="h-3 w-28 rounded-lg" />
           <Skeleton className="h-12 w-48 sm:h-14 sm:w-64 rounded-lg" />
           <Skeleton className="h-4 w-40 rounded-lg" />
         </div>
 
-        {/* Divider */}
-        <div className="hidden lg:block w-px h-16 bg-gray-100 dark:bg-gray-800" />
-
         {/* Sub-metrics */}
-        <div className="flex items-end gap-8 sm:gap-10 shrink-0">
+        <div className="flex items-end justify-between gap-4 pt-4 border-t border-gray-50 dark:border-gray-800">
           <div className="space-y-2">
             <Skeleton className="h-3 w-28 rounded-lg" />
             <Skeleton className="h-7 w-32 rounded-lg" />
@@ -31,12 +27,12 @@ export function SkeletonKPICards() {
             <Skeleton className="h-3 w-24 rounded-lg" />
           </div>
         </div>
-      </div>
 
-      {/* Progress bar */}
-      <div className="mt-6 pt-6 border-t border-gray-50 dark:border-gray-800 space-y-2">
-        <Skeleton className="h-3 w-48 rounded-lg" />
-        <Skeleton className="h-1 w-full rounded-full" />
+        {/* Progress bar */}
+        <div className="pt-4 border-t border-gray-50 dark:border-gray-800 space-y-2">
+          <Skeleton className="h-3 w-48 rounded-lg" />
+          <Skeleton className="h-1 w-full rounded-full" />
+        </div>
       </div>
     </div>
   );
@@ -162,12 +158,12 @@ export function SkeletonChart({ type = "trend" }: { type?: "trend" | "category" 
   }
 
   return (
-    <div className="min-h-[300px] rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-apple overflow-hidden space-y-4">
+    <div className="h-full flex flex-col rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-apple overflow-hidden space-y-4">
       <div className="space-y-2">
         <Skeleton className="h-5 w-40 rounded-lg" />
         <Skeleton className="h-3 w-56 rounded-lg" />
       </div>
-      <Skeleton className="h-[300px] w-full rounded-xl" />
+      <Skeleton className="flex-1 w-full rounded-xl min-h-0" />
     </div>
   );
 }

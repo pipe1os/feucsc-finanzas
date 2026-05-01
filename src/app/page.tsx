@@ -109,8 +109,8 @@ export default async function Home() {
     }
   }
 
-  // Latest 3 transactions for preview
-  const latestTransactions = data.slice(0, 3).map((g) => {
+  // Latest 5 transactions for preview
+  const latestTransactions = data.slice(0, 5).map((g) => {
     const catName = g.categoria || "Varios";
     return {
       id: g.id,
@@ -146,22 +146,24 @@ export default async function Home() {
             </div>
           </header>
 
-          {/* KPI Cards — rendered in server HTML (part of LCP) */}
-          <section aria-label="Indicadores financieros" className="mb-8">
-            <KPICards resumenFinanciero={resumenFinanciero} />
-          </section>
+          {/* Dashboard Grid Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
+            {/* KPI Cards — rendered in server HTML (part of LCP) */}
+            <section aria-label="Indicadores financieros" className="col-span-1 lg:col-span-4 animate-fade-in-up opacity-0 h-full">
+              <KPICards resumenFinanciero={resumenFinanciero} />
+            </section>
 
-          {/* Trend Chart — lazy loaded (ssr: false, recharts deferred) */}
-          <section aria-label="Tendencia de gastos" className="mb-8">
-            <LazyExpenseTrendChart gastosPorMes={gastosPorMes} />
-          </section>
+            {/* Trend Chart — lazy loaded (ssr: false, recharts deferred) */}
+            <section aria-label="Tendencia de gastos" className="col-span-1 lg:col-span-8 animate-fade-in-up opacity-0 h-full" style={{ animationDelay: "0.1s" }}>
+              <LazyExpenseTrendChart gastosPorMes={gastosPorMes} />
+            </section>
 
-          {/* Latest transactions preview */}
-          <section
-            className="mb-8 animate-fade-in-up opacity-0"
-            style={{ animationDelay: "0.25s" }}
-          >
-            <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple overflow-hidden">
+            {/* Latest transactions preview */}
+            <section
+              className="col-span-1 lg:col-span-12 animate-fade-in-up opacity-0"
+              style={{ animationDelay: "0.25s" }}
+            >
+            <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-gray-900 shadow-xs dark:shadow-none overflow-hidden">
               {/* Preview header */}
               <div className="px-6 pt-5 pb-4">
                 <h2 className="text-base font-semibold text-gray-900 dark:text-white">
@@ -254,6 +256,7 @@ export default async function Home() {
               </div>
             </div>
           </section>
+          </div>
 
           {/* Footer */}
           <Footer />

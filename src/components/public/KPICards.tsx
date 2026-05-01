@@ -97,13 +97,13 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
   }
 
   return (
-    <div className="animate-fade-in-up opacity-0">
+    <div className="animate-fade-in-up opacity-0 h-full">
       {/* Single integrated summary surface */}
-      <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple p-6 sm:p-8">
-        {/* Top row: hero metric (spent) + sub-metrics (total + available) */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-10">
-          {/* Hero metric: Total Gastado — what students come to see */}
-          <div className="flex-1 min-w-0">
+      <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple p-6 sm:p-8 h-full flex flex-col">
+        {/* Content stacked vertically */}
+        <div className="flex flex-col flex-1 justify-between gap-5">
+          {/* Hero metric: Total Gastado */}
+          <div>
             <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-400 dark:text-gray-500 mb-1.5">
               Total Gastado
             </p>
@@ -113,13 +113,16 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
             <p className={`mt-1.5 text-sm font-medium ${spentStatusText}`}>
               {porcentajeGastado}% del presupuesto utilizado
             </p>
+            <div className="mt-3 h-1 w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+              <div
+                className={`h-full rounded-full ${statusColor} transition-all duration-1000 ease-out`}
+                style={{ width: `${porcentajeGastado}%` }}
+              />
+            </div>
           </div>
 
-          {/* Divider on desktop */}
-          <div className="hidden lg:block w-px h-16 bg-gray-100 dark:bg-gray-800" />
-
-          {/* Sub-metrics: Total y Disponible — amounts only, no redundant percentages */}
-          <div className="flex items-end gap-8 sm:gap-10 shrink-0">
+          {/* Sub-metrics: Total y Disponible */}
+          <div className="flex items-end justify-between gap-4 pt-4 border-t border-gray-50 dark:border-gray-800">
             <div>
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-400 dark:text-gray-500 mb-1">
                 Presupuesto Total
@@ -141,21 +144,6 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
                 {porcentajeDisponible}% restante
               </p>
             </div>
-          </div>
-        </div>
-
-        {/* Progress bar — visual only, percentage already stated above */}
-        <div className="mt-6 pt-6 border-t border-gray-50 dark:border-gray-800">
-          <div className="mb-2">
-            <span className="text-xs text-gray-400">
-              Progreso del presupuesto utilizado
-            </span>
-          </div>
-          <div className="h-1 w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
-            <div
-              className={`h-full rounded-full ${statusColor} transition-all duration-1000 ease-out`}
-              style={{ width: `${porcentajeGastado}%` }}
-            />
           </div>
         </div>
       </div>

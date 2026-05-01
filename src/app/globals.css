@@ -497,3 +497,16 @@ body {
     @apply font-sans;
   }
 }
+
+/* Placeholder visibility in dark mode */
+.dark ::placeholder {
+  color: #a1a1aa;
+  opacity: 1;
+}
+
+/* Scale up UI on large desktop screens (1920px+) to match ~120% zoom feel */
+@media (min-width: 1920px) {
+  :root {
+    font-size: 18px;
+  }
+}

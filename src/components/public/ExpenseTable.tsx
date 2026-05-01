@@ -379,7 +379,7 @@ export default function ExpenseTable({
   return (
     <>
       <div
-        className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple overflow-hidden animate-fade-in-up opacity-0"
+        className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-gray-900 shadow-xs dark:shadow-none overflow-hidden animate-fade-in-up opacity-0"
         style={{ animationDelay: "0.2s" }}
       >
         {/* Header row: title */}
