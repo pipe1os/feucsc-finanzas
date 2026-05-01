@@ -35,7 +35,7 @@ export default function ContactoPage() {
 
       {/* Main content area */}
       <main className="flex-1 min-w-0 lg:ml-65">
-        <div className="mx-auto max-w-3xl px-4 pt-20 pb-4 sm:px-6 lg:px-10 lg:pt-24 lg:pb-4">
+        <div className="mx-auto max-w-3xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
           {/* Page header */}
           <header className="mb-10 animate-fade-in-up opacity-0 text-center">
             <h1 className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">

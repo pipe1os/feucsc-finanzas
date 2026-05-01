@@ -83,7 +83,7 @@ export default async function GastosPage() {
       <Sidebar />
 
       <main className="flex-1 min-w-0 lg:ml-65">
-        <div className="mx-auto max-w-7xl px-4 pt-20 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
+        <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
           {/* Page header */}
           <header className="mb-8 animate-fade-in-up opacity-0">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">

@@ -3,10 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect, useSyncExternalStore } from "react";
+import { useState, useEffect, useSyncExternalStore, useRef } from "react";
 import { useTheme } from "next-themes";
 import { supabase } from "@/lib/supabase";
 import { Badge } from "@heroui/react";
+import { HugeiconsMenuIcon, type HugeiconsMenuIconHandle } from "@/components/ui/hugeicons-menu";
 
 /* ── Apple-style minimalist icons (SF Symbols inspired) ── */
 
@@ -258,6 +259,15 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const [newExpensesCount, setNewExpensesCount] = useState(0);
+  const menuIconRef = useRef<HugeiconsMenuIconHandle>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      menuIconRef.current?.startAnimation();
+    } else {
+      menuIconRef.current?.stopAnimation();
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     // Determine the number of new expenses since last visit
@@ -307,7 +317,7 @@ export default function Sidebar() {
                    transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
         aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
       >
-        {isOpen ? <CloseIcon /> : <MenuIcon />}
+        <HugeiconsMenuIcon ref={menuIconRef} size={22} />
       </button>
 
       {/* Mobile backdrop */}

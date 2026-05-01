@@ -66,22 +66,22 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
     const topCats = (dataPoint?.categorias || []).slice(0, 3);
 
     return (
-      <div className="rounded-2xl bg-white/50 dark:bg-gray-900/60 backdrop-blur-2xl px-5 py-4 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-gray-300/60 dark:border-white/10 min-w-48">
-        <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
+      <div className="rounded-xl sm:rounded-2xl bg-white/50 dark:bg-gray-900/60 backdrop-blur-2xl px-3 py-2 sm:px-5 sm:py-4 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-gray-300/60 dark:border-white/10 min-w-36 sm:min-w-48">
+        <p className="text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
           {label} 2026
         </p>
-        <p className="text-lg font-bold text-gray-900 dark:text-white tabular-nums">
+        <p className="text-base sm:text-lg font-bold text-gray-900 dark:text-white tabular-nums">
           {formatCLP(payload[0].value)}
         </p>
         {topCats.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-gray-200/50 dark:border-white/10 flex flex-col gap-2">
+          <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-gray-200/50 dark:border-white/10 flex flex-col gap-1 sm:gap-2">
             {topCats.map((cat) => (
               <div
                 key={cat.categoria}
-                className="flex items-center gap-2 text-xs"
+                className="flex items-center gap-2 text-[10px] sm:text-xs"
               >
                 <span
-                  className="size-2 rounded-full shrink-0"
+                  className="size-1.5 sm:size-2 rounded-full shrink-0"
                   style={{ backgroundColor: cat.color }}
                 />
                 <span className="text-gray-600 dark:text-gray-300 flex-1 truncate">
@@ -138,28 +138,28 @@ function ManualTooltip({ data, position, onClose }: ManualTooltipProps) {
   return (
     <div
       ref={tooltipRef}
-      className="fixed z-50 rounded-2xl bg-white/50 dark:bg-gray-900/60 backdrop-blur-2xl px-5 py-4 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-gray-300/60 dark:border-white/10 min-w-48 animate-fade-in"
+      className="fixed z-50 rounded-xl sm:rounded-2xl bg-white/50 dark:bg-gray-900/60 backdrop-blur-2xl px-3 py-2 sm:px-5 sm:py-4 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-gray-300/60 dark:border-white/10 min-w-36 sm:min-w-48 max-w-[90vw] animate-fade-in"
       style={{
         left: position.x,
         top: position.y,
         transform: "translate(-50%, -100%) translateY(-12px)",
       }}
     >
-      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
+      <p className="text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
         {data.mes} 2026
       </p>
-      <p className="text-lg font-bold text-gray-900 dark:text-white tabular-nums">
+      <p className="text-base sm:text-lg font-bold text-gray-900 dark:text-white tabular-nums">
         {formatCLP(data.monto)}
       </p>
       {topCats.length > 0 && (
-        <div className="mt-3 pt-3 border-t border-gray-200/50 dark:border-white/10 flex flex-col gap-2">
+        <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-gray-200/50 dark:border-white/10 flex flex-col gap-1 sm:gap-2">
           {topCats.map((cat) => (
             <div
               key={cat.categoria}
-              className="flex items-center gap-2 text-xs"
+              className="flex items-center gap-2 text-[10px] sm:text-xs"
             >
               <span
-                className="size-2 rounded-full shrink-0"
+                className="size-1.5 sm:size-2 rounded-full shrink-0"
                 style={{ backgroundColor: cat.color }}
               />
               <span className="text-gray-600 dark:text-gray-300 flex-1 truncate">
@@ -220,7 +220,7 @@ export default function ExpenseTrendChart({
 
   return (
     <Card
-      className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple ring-0 animate-fade-in-up opacity-0 h-full flex flex-col"
+      className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple ring-0 animate-fade-in-up opacity-0 h-full flex flex-col min-h-[320px] sm:min-h-[360px]"
       style={{ animationDelay: "0.2s" }}
     >
       <CardHeader className="pb-6">
