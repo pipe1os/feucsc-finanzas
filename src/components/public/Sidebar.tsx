@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { supabase } from "@/lib/supabase";
 import { Badge } from "@heroui/react";
@@ -169,16 +169,17 @@ function NavItem({
     <Link
       href={href}
       onClick={onClick}
-      className={`group flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 font-medium text-sm transition-all duration-200 cursor-pointer
+      className={`group relative flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 font-medium text-sm transition-all duration-200 cursor-pointer
         ${
           isActive
-            ? "text-red-500 dark:text-red-400"
+            ? "text-red-600 dark:text-red-400"
             : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200"
         }`}
-      style={
-        isActive ? { backgroundColor: "rgba(227, 7, 7, 0.08)" } : undefined
-      }
     >
+      {/* Subtle left border accent for active state */}
+      {isActive && (
+        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-red-500/70 dark:bg-red-400/70" />
+      )}
       <div className="flex items-center gap-3">
         <Badge.Anchor>
           <span
@@ -215,11 +216,11 @@ function NavCategory({ label }: { label: string }) {
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   if (!mounted) {
     return (

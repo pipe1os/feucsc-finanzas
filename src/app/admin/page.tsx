@@ -455,7 +455,7 @@ export default function AdminPage() {
   }, [gastos]);
 
   return (
-    <div className="min-h-dvh flex bg-bg-secondary">
+    <div className="min-h-dvh flex bg-transparent">
       {/* ── Sidebar (Desktop) ── */}
       <aside className="hidden lg:flex w-64 flex-col fixed inset-y-0 left-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-r border-gray-100 dark:border-gray-800 z-50">
         <div className="flex flex-col h-full">

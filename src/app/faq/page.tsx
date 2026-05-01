@@ -1,7 +1,6 @@
 import Sidebar from "@/components/public/Sidebar";
 import FAQContent from "@/components/public/FAQContent";
 import Footer from "@/components/public/Footer";
-import Link from "next/link";
 
 export const metadata = {
   title: "Preguntas Frecuentes | FEUCSC",
@@ -11,7 +10,7 @@ export const metadata = {
 
 export default function FAQPage() {
   return (
-    <div className="flex min-h-dvh bg-bg-secondary">
+    <div className="flex min-h-dvh bg-transparent">
       {/* Sidebar */}
       <Sidebar />
 

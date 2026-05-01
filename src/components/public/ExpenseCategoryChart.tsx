@@ -1,8 +1,20 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import { formatCLP } from "@/lib/utils";
-import { PieChart, Pie, ResponsiveContainer, Tooltip, Cell } from "recharts";
+import { PieChart, Pie, Cell } from "recharts";
+import * as React from "react";
 
 interface CategoriaData {
   categoria: string;
@@ -71,6 +83,21 @@ export default function ExpenseCategoryChart({
     fill: item.color,
   }));
 
+  const chartConfig = React.useMemo(() => {
+    const config: ChartConfig = {
+      value: {
+        label: "Monto",
+      },
+    };
+    gastosPorCategoria.forEach((item) => {
+      config[item.categoria] = {
+        label: item.categoria,
+        color: item.color,
+      };
+    });
+    return config;
+  }, [gastosPorCategoria]);
+
   const handlePieClick = (data: { name?: string }) => {
     if (onCategoryClick && data.name) {
       // If clicking the already-active filter, clear it
@@ -84,24 +111,31 @@ export default function ExpenseCategoryChart({
 
   return (
     <Card
-      className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-apple
-                 animate-fade-in-up opacity-0"
-      variant="transparent"
+      className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple ring-0 animate-fade-in-up opacity-0"
       style={{ animationDelay: "0.25s" }}
     >
-      <Card.Header className="pb-4">
-        <Card.Title className="text-base font-semibold text-gray-900 dark:text-white">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base font-semibold text-gray-900 dark:text-white">
           Distribución de Gastos
-        </Card.Title>
-        <Card.Description className="text-xs text-gray-400">
+        </CardTitle>
+        <CardDescription className="text-xs text-gray-400">
           Por categoría
-        </Card.Description>
-      </Card.Header>
+        </CardDescription>
+      </CardHeader>
 
-      <Card.Content className="flex flex-col items-center gap-6">
+      <CardContent className="flex flex-col items-center gap-6">
         <div className="relative h-48 w-48 **:outline-none">
-          <ResponsiveContainer width="100%" height="100%">
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-square h-48 w-48"
+          >
             <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<CustomTooltip totalGastado={totalGastado} />}
+                /* Añadido zIndex: 100 para forzar que el tooltip flote por encima del texto absoluto */
+                wrapperStyle={{ outline: "none", zIndex: 100 }}
+              />
               <Pie
                 data={chartData}
                 cx="50%"
@@ -135,14 +169,8 @@ export default function ExpenseCategoryChart({
                   );
                 })}
               </Pie>
-              <Tooltip
-                content={<CustomTooltip totalGastado={totalGastado} />}
-                cursor={false}
-                /* Añadido zIndex: 100 para forzar que el tooltip flote por encima del texto absoluto */
-                wrapperStyle={{ outline: "none", zIndex: 100 }}
-              />
             </PieChart>
-          </ResponsiveContainer>
+          </ChartContainer>
           {/* Añadido z-0 para asegurar que se quede por debajo del tooltip */}
           <div
             className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center z-0 animate-scale-in"
@@ -204,7 +232,7 @@ export default function ExpenseCategoryChart({
             );
           })}
         </div>
-      </Card.Content>
+      </CardContent>
     </Card>
   );
 }

@@ -54,7 +54,7 @@ export default function AdminLayout({
   // Loading state
   if (loading) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-gray-50 dark:bg-black">
+      <div className="flex min-h-dvh items-center justify-center bg-transparent">
         <div className="flex flex-col items-center gap-4 animate-fade-in-up">
           <div className="size-8 animate-spin rounded-full border-3 border-gray-200 dark:border-gray-800 border-t-red-500" />
           <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">
