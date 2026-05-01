@@ -1,6 +1,20 @@
 "use server";
 
 import crypto from "crypto";
+import { createAuthClient } from "@/lib/supabase-auth";
+import { isAuthorizedEmail } from "@/lib/auth";
+
+async function requireAuth() {
+  const supabase = await createAuthClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user || !isAuthorizedEmail(user.email)) {
+    throw new Error("No autorizado");
+  }
+  return user;
+}
+
 
 // Extracts public_id from Cloudinary URL
 function extractPublicId(url: string) {
@@ -23,6 +37,7 @@ function extractPublicId(url: string) {
 
 export async function deleteCloudinaryImage(url: string) {
   try {
+    await requireAuth();
     if (!url || !url.startsWith("https://res.cloudinary.com/")) {
       return { success: false, error: "Invalid Cloudinary URL" };
     }

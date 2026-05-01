@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Spinner } from "@heroui/react";
 import { supabase } from "@/lib/supabase";
 import { isAuthorizedEmail } from "@/lib/auth";
 
@@ -74,10 +75,10 @@ export default function AuthCallbackPage() {
   }, [router]);
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-gray-50">
+    <div className="flex min-h-dvh items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-4 animate-fade-in-up">
-        <div className="size-8 animate-spin rounded-full border-3 border-gray-200 border-t-red-500" />
-        <p className="text-sm text-gray-500 font-medium">{status}</p>
+        <Spinner size="md" color="danger" />
+        <p className="text-sm text-muted font-medium">{status}</p>
       </div>
     </div>
   );

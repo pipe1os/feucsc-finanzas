@@ -214,7 +214,7 @@ export default function ExpenseTrendChart({
       </Card.Header>
 
       <Card.Content>
-        <div ref={chartRef} className="h-75 w-full relative **:outline-none">
+        <div ref={chartRef} className="h-[300px] w-full relative **:outline-none">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={gastosPorMes}

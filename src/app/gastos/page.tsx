@@ -3,6 +3,7 @@ import DashboardClient from "@/components/public/DashboardClient";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { supabase } from "@/lib/supabase";
 import { parseISODate } from "@/lib/utils";
+import Footer from "@/components/public/Footer";
 import Link from "next/link";
 
 export const revalidate = 60;
@@ -128,17 +129,7 @@ export default async function GastosPage() {
           />
 
           {/* Footer */}
-          <footer
-            className="mt-12 border-t border-gray-100 dark:border-gray-800 pt-6 animate-fade-in-up opacity-0"
-            style={{ animationDelay: "0.3s" }}
-          >
-            <div className="flex justify-center items-center mb-2">
-              <p className="text-xs text-gray-400 text-center">
-                © 2026 Federación de Estudiantes Universidad Católica de la
-                Santísima Concepción.
-              </p>
-            </div>
-          </footer>
+          <Footer />
         </div>
       </main>
     </div>

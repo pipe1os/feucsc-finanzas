@@ -262,28 +262,33 @@ export default function Sidebar() {
   useEffect(() => {
     // Determine the number of new expenses since last visit
     const checkNewExpenses = async () => {
-      // If we are currently ON the gastos page, reset the count and update lastVisited
-      if (pathname === "/gastos") {
-        localStorage.setItem("lastVisitedGastos", new Date().toISOString());
+      try {
+        // If we are currently ON the gastos page, reset the count and update lastVisited
+        if (pathname === "/gastos") {
+          localStorage.setItem("lastVisitedGastos", new Date().toISOString());
+          setNewExpensesCount(0);
+          return;
+        }
+
+        const lastVisited = localStorage.getItem("lastVisitedGastos");
+        if (!lastVisited) {
+          // If they have never visited, initialize with current time to avoid showing everything
+          localStorage.setItem("lastVisitedGastos", new Date().toISOString());
+          return;
+        }
+
+        // Query Supabase for count of expenses newer than lastVisited
+        const { count } = await supabase
+          .from("gastos")
+          .select("*", { count: "exact", head: true })
+          .gt("creado_el", lastVisited);
+
+        if (count && count > 0) {
+          setNewExpensesCount(count);
+        }
+      } catch {
+        // Silently fail if localStorage is unavailable (private mode, restricted contexts)
         setNewExpensesCount(0);
-        return;
-      }
-
-      const lastVisited = localStorage.getItem("lastVisitedGastos");
-      if (!lastVisited) {
-        // If they have never visited, initialize with current time to avoid showing everything
-        localStorage.setItem("lastVisitedGastos", new Date().toISOString());
-        return;
-      }
-
-      // Query Supabase for count of expenses newer than lastVisited
-      const { count } = await supabase
-        .from("gastos")
-        .select("*", { count: "exact", head: true })
-        .gt("creado_el", lastVisited);
-
-      if (count && count > 0) {
-        setNewExpensesCount(count);
       }
     };
 

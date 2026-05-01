@@ -2,6 +2,7 @@
 
 import Sidebar from "@/components/public/Sidebar";
 import { toast } from "@heroui/react";
+import Footer from "@/components/public/Footer";
 import Link from "next/link";
 
 export default function ContactoPage() {
@@ -149,17 +150,7 @@ export default function ContactoPage() {
           </div>
 
           {/* Footer */}
-          <footer
-            className="mt-8 border-t border-gray-100 dark:border-gray-800 pt-6 animate-fade-in-up opacity-0"
-            style={{ animationDelay: "0.3s" }}
-          >
-            <div className="flex justify-center items-center mb-2">
-              <p className="text-xs text-gray-400 text-center">
-                © 2026 Federación de Estudiantes Universidad Católica de la
-                Santísima Concepción.
-              </p>
-            </div>
-          </footer>
+          <Footer />
         </div>
       </main>
     </div>
