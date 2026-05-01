@@ -1,8 +1,21 @@
 "use client";
 
-import { Card } from "@heroui/react";
 import { formatCLP } from "@/lib/utils";
 import { useState, useCallback, useRef, useEffect } from "react";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  type ChartConfig,
+} from "@/components/ui/chart";
+import { AreaChart, Area, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface CategoryBreakdown {
   categoria: string;
@@ -20,19 +33,13 @@ interface ExpenseTrendChartProps {
   gastosPorMes: TrendDataPoint[];
 }
 
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-
 function formatCompact(value: number): string {
   if (value >= 1000000) {
     // Formato CLP: $1,5M (coma como separador decimal)
-    const millions = (value / 1000000).toFixed(1).replace(".", ",").replace(/,0$/, "");
+    const millions = (value / 1000000)
+      .toFixed(1)
+      .replace(".", ",")
+      .replace(/,0$/, "");
     return `$${millions}M`;
   } else if (value >= 1000) {
     // Formato CLP: $750K (miles con punto, K mayúscula)
@@ -59,15 +66,15 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
     const topCats = (dataPoint?.categorias || []).slice(0, 3);
 
     return (
-      <div className="rounded-xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl px-4 py-3 shadow-lg border border-gray-100 dark:border-gray-700 min-w-45">
-        <p className="text-xs font-medium text-gray-400 dark:text-gray-400 mb-1">
+      <div className="rounded-2xl bg-white/50 dark:bg-gray-900/60 backdrop-blur-2xl px-5 py-4 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-gray-300/60 dark:border-white/10 min-w-48">
+        <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
           {label} 2026
         </p>
         <p className="text-lg font-bold text-gray-900 dark:text-white tabular-nums">
           {formatCLP(payload[0].value)}
         </p>
         {topCats.length > 0 && (
-          <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 flex flex-col gap-1.5">
+          <div className="mt-3 pt-3 border-t border-gray-200/50 dark:border-white/10 flex flex-col gap-2">
             {topCats.map((cat) => (
               <div
                 key={cat.categoria}
@@ -77,7 +84,7 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
                   className="size-2 rounded-full shrink-0"
                   style={{ backgroundColor: cat.color }}
                 />
-                <span className="text-gray-500 dark:text-gray-300 flex-1 truncate">
+                <span className="text-gray-600 dark:text-gray-300 flex-1 truncate">
                   {cat.categoria}
                 </span>
                 <span className="text-gray-900 dark:text-white font-medium tabular-nums">
@@ -105,7 +112,10 @@ function ManualTooltip({ data, position, onClose }: ManualTooltipProps) {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent | TouchEvent) => {
-      if (tooltipRef.current && !tooltipRef.current.contains(e.target as Node)) {
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(e.target as Node)
+      ) {
         onClose();
       }
     };
@@ -128,28 +138,31 @@ function ManualTooltip({ data, position, onClose }: ManualTooltipProps) {
   return (
     <div
       ref={tooltipRef}
-      className="fixed z-50 rounded-xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl px-4 py-3 shadow-lg border border-gray-100 dark:border-gray-700 min-w-45 animate-fade-in"
+      className="fixed z-50 rounded-2xl bg-white/50 dark:bg-gray-900/60 backdrop-blur-2xl px-5 py-4 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-gray-300/60 dark:border-white/10 min-w-48 animate-fade-in"
       style={{
         left: position.x,
         top: position.y,
         transform: "translate(-50%, -100%) translateY(-12px)",
       }}
     >
-      <p className="text-xs font-medium text-gray-400 dark:text-gray-400 mb-1">
+      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
         {data.mes} 2026
       </p>
       <p className="text-lg font-bold text-gray-900 dark:text-white tabular-nums">
         {formatCLP(data.monto)}
       </p>
       {topCats.length > 0 && (
-        <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 flex flex-col gap-1.5">
+        <div className="mt-3 pt-3 border-t border-gray-200/50 dark:border-white/10 flex flex-col gap-2">
           {topCats.map((cat) => (
-            <div key={cat.categoria} className="flex items-center gap-2 text-xs">
+            <div
+              key={cat.categoria}
+              className="flex items-center gap-2 text-xs"
+            >
               <span
                 className="size-2 rounded-full shrink-0"
                 style={{ backgroundColor: cat.color }}
               />
-              <span className="text-gray-500 dark:text-gray-300 flex-1 truncate">
+              <span className="text-gray-600 dark:text-gray-300 flex-1 truncate">
                 {cat.categoria}
               </span>
               <span className="text-gray-900 dark:text-white font-medium tabular-nums">
@@ -162,6 +175,13 @@ function ManualTooltip({ data, position, onClose }: ManualTooltipProps) {
     </div>
   );
 }
+
+const chartConfig = {
+  monto: {
+    label: "Gasto",
+    color: "#E30707",
+  },
+} satisfies ChartConfig;
 
 export default function ExpenseTrendChart({
   gastosPorMes,
@@ -190,7 +210,7 @@ export default function ExpenseTrendChart({
         setActiveIndex(index);
       }
     },
-    [gastosPorMes]
+    [gastosPorMes],
   );
 
   const closeManualTooltip = useCallback(() => {
@@ -200,22 +220,24 @@ export default function ExpenseTrendChart({
 
   return (
     <Card
-      className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-apple animate-fade-in-up opacity-0"
-      variant="transparent"
+      className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple ring-0 animate-fade-in-up opacity-0"
       style={{ animationDelay: "0.2s" }}
     >
-      <Card.Header className="pb-6">
-        <Card.Title className="text-base font-semibold text-gray-900 dark:text-white">
+      <CardHeader className="pb-6">
+        <CardTitle className="text-base font-semibold text-gray-900 dark:text-white">
           Tendencia de Gastos
-        </Card.Title>
-        <Card.Description className="text-xs text-gray-400 dark:text-gray-500">
+        </CardTitle>
+        <CardDescription className="text-xs text-gray-400 dark:text-gray-500">
           Gasto mensual a lo largo del año
-        </Card.Description>
-      </Card.Header>
+        </CardDescription>
+      </CardHeader>
 
-      <Card.Content>
-        <div ref={chartRef} className="h-[300px] w-full relative **:outline-none">
-          <ResponsiveContainer width="100%" height="100%">
+      <CardContent>
+        <div ref={chartRef} className="h-75 w-full relative **:outline-none">
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-full w-full"
+          >
             <AreaChart
               data={gastosPorMes}
               margin={{ top: 10, right: 10, left: 16, bottom: 0 }}
@@ -225,16 +247,17 @@ export default function ExpenseTrendChart({
                 <linearGradient id="colorMonto" x1="0" y1="0" x2="0" y2="1">
                   <stop
                     offset="5%"
-                    stopColor="var(--primary)"
+                    stopColor="var(--color-monto)"
                     stopOpacity={0.12}
                   />
                   <stop
                     offset="95%"
-                    stopColor="var(--primary)"
+                    stopColor="var(--color-monto)"
                     stopOpacity={0}
                   />
                 </linearGradient>
               </defs>
+              <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis
                 dataKey="mes"
                 axisLine={false}
@@ -249,11 +272,16 @@ export default function ExpenseTrendChart({
                 tickFormatter={(value) => {
                   if (value >= 1000000) {
                     // Formato CLP: $1,5M (coma como separador decimal)
-                    const millions = (value / 1000000).toFixed(1).replace(".", ",").replace(/,0$/, "");
+                    const millions = (value / 1000000)
+                      .toFixed(1)
+                      .replace(".", ",")
+                      .replace(/,0$/, "");
                     return `$${millions}M`;
                   } else if (value > 0) {
                     // Formato CLP: $750K (miles con punto, K mayúscula)
-                    const thousands = Math.round(value / 1000).toLocaleString("es-CL");
+                    const thousands = Math.round(value / 1000).toLocaleString(
+                      "es-CL",
+                    );
                     return `$${thousands}K`;
                   }
                   return "$0";
@@ -261,10 +289,10 @@ export default function ExpenseTrendChart({
                 dx={-8}
                 width={36}
               />
-              <Tooltip
+              <ChartTooltip
                 content={<CustomTooltip />}
                 cursor={{
-                  stroke: "var(--border-color)",
+                  stroke: "#9CA3AF",
                   strokeWidth: 1,
                   strokeDasharray: "4 4",
                 }}
@@ -272,7 +300,7 @@ export default function ExpenseTrendChart({
               <Area
                 type="monotone"
                 dataKey="monto"
-                stroke="var(--primary)"
+                stroke="var(--color-monto)"
                 strokeWidth={1.5}
                 fillOpacity={1}
                 fill="url(#colorMonto)"
@@ -287,12 +315,14 @@ export default function ExpenseTrendChart({
                       cx={props.cx}
                       cy={props.cy}
                       r={isActive ? 8 : 6}
-                      fill="var(--primary)"
+                      fill="#E30707"
                       stroke="white"
                       strokeWidth={2}
                       style={{
                         cursor: "pointer",
-                        filter: isActive ? "drop-shadow(0 2px 4px rgba(227, 7, 7, 0.4))" : "none",
+                        filter: isActive
+                          ? "drop-shadow(0 2px 4px rgba(227, 7, 7, 0.4))"
+                          : "none",
                       }}
                     />
                   );
@@ -300,14 +330,14 @@ export default function ExpenseTrendChart({
                 dot={false}
               />
             </AreaChart>
-          </ResponsiveContainer>
+          </ChartContainer>
           <ManualTooltip
             data={manualTooltip.data}
             position={manualTooltip.position}
             onClose={closeManualTooltip}
           />
         </div>
-      </Card.Content>
+      </CardContent>
     </Card>
   );
 }

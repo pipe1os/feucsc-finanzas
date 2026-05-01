@@ -72,7 +72,7 @@ export default function AuthCallback() {
   }, [router]);
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-background">
+    <div className="flex min-h-dvh items-center justify-center bg-transparent">
       <div className="flex flex-col items-center gap-4 animate-fade-in-up">
         <Spinner size="md" color="danger" />
         <p className="text-sm text-muted font-medium">{status}</p>

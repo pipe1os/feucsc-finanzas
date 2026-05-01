@@ -172,23 +172,20 @@ export default function ExpenseTable({
   });
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [selectedMonth, setSelectedMonth] = useState<string>("all");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-
-  // Load initial state from URL on mount (client-only to avoid hydration mismatch)
-  useEffect(() => {
+  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
     if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const cat = params.get("categoria");
-      const month = params.get("mes");
-      if (cat) {
-        setSelectedCategory(cat);
-      }
-      if (month) {
-        setSelectedMonth(month);
-      }
+      return new URLSearchParams(window.location.search).get("mes") || "all";
     }
-  }, []);
+    return "all";
+  });
+  const [selectedCategory, setSelectedCategory] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return (
+        new URLSearchParams(window.location.search).get("categoria") || "all"
+      );
+    }
+    return "all";
+  });
 
   // Sync state changes to URL
   useEffect(() => {
@@ -384,8 +381,8 @@ export default function ExpenseTable({
             Gastos Recientes
           </h3>
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
-            {filtered.length}{" "}
-            {filtered.length === 1 ? "registro" : "registros"} encontrados
+            {filtered.length} {filtered.length === 1 ? "registro" : "registros"}{" "}
+            encontrados
           </p>
         </div>
 
@@ -575,12 +572,16 @@ export default function ExpenseTable({
                             className="inline-flex items-center gap-1 text-xs font-medium text-red-500 hover:text-red-600 transition-colors cursor-pointer"
                             aria-label={`Ver comprobante de ${txn.concepto}`}
                           >
-                            <span className="size-3.5"><EyeIcon /></span>
+                            <span className="size-3.5">
+                              <EyeIcon />
+                            </span>
                             Ver comprobante
                           </button>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-xs text-gray-400">
-                            <span className="size-3.5"><EyeOffIcon /></span>
+                            <span className="size-3.5">
+                              <EyeOffIcon />
+                            </span>
                             Sin comprobante
                           </span>
                         )}
@@ -634,13 +635,13 @@ export default function ExpenseTable({
           {/* Desktop Table - hidden on mobile */}
           <div className="hidden md:block">
             <Table variant="secondary">
-            <Table.ScrollContainer>
-              <Table.Content
-                aria-label="Tabla de transacciones recientes"
-                className="min-w-165"
-                sortDescriptor={sortDescriptor}
-                onSortChange={setSortDescriptor}
-              >
+              <Table.ScrollContainer>
+                <Table.Content
+                  aria-label="Tabla de transacciones recientes"
+                  className="min-w-165"
+                  sortDescriptor={sortDescriptor}
+                  onSortChange={setSortDescriptor}
+                >
                 <Table.Header>
                   <Table.Column
                     allowsSorting
@@ -675,161 +676,161 @@ export default function ExpenseTable({
                     Boleta
                   </Table.Column>
                 </Table.Header>
-                <Table.Body
-                  items={paginated}
-                  renderEmptyState={() => (
-                    <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-                      <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 border border-gray-100 dark:border-gray-700 shadow-xs">
-                        <SearchIcon />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                          Sin resultados
-                        </span>
-                        <span className="text-xs text-gray-500 mt-0.5">
-                          {hasActiveFilters
-                            ? "No hay transacciones con los filtros seleccionados."
-                            : "La búsqueda no arrojó coincidencias."}
-                        </span>
-                      </div>
-                    </EmptyState>
-                  )}
-                >
-                  {(txn: TransaccionItem) => {
-                    const catColor = txn.color || "#9CA3AF";
-                    return (
-                      <Table.Row key={txn.id}>
-                        <Table.Cell>
-                          <span className="text-sm text-gray-600 whitespace-nowrap">
-                            {formatDate(txn.fecha)}
+                  <Table.Body
+                    items={paginated}
+                    renderEmptyState={() => (
+                      <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
+                        <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 border border-gray-100 dark:border-gray-700 shadow-xs">
+                          <SearchIcon />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                            Sin resultados
                           </span>
-                        </Table.Cell>
-                        <Table.Cell>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium text-gray-900 dark:text-white">
-                              {txn.concepto}
-                            </span>
-                            {isNew(txn.creado_el) && (
-                              <span className="inline-flex items-center rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 ring-1 ring-emerald-200/60">
-                                Nuevo
-                              </span>
-                            )}
-                          </div>
-                        </Table.Cell>
-                        <Table.Cell>
-                          <span
-                            className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
-                            style={{
-                              backgroundColor: `${catColor}18`,
-                              color: catColor,
-                            }}
-                          >
-                            {txn.categoria}
+                          <span className="text-xs text-gray-500 mt-0.5">
+                            {hasActiveFilters
+                              ? "No hay transacciones con los filtros seleccionados."
+                              : "La búsqueda no arrojó coincidencias."}
                           </span>
-                        </Table.Cell>
-                        <Table.Cell>
-                          <span className="text-sm font-semibold text-gray-900 dark:text-white tabular-nums">
-                            {formatCLP(txn.monto)}
-                          </span>
-                        </Table.Cell>
-                        <Table.Cell>
-                          <div className="flex justify-center">
-                            {txn.comprobante ? (
-                              <Tooltip delay={0}>
-                                <Tooltip.Trigger>
-                                  <button
-                                    onClick={() =>
-                                      setLightboxImage({
-                                        src: txn.comprobante,
-                                        concepto: txn.concepto,
-                                      })
-                                    }
-                                    className="inline-flex items-center justify-center size-8 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 cursor-pointer transition-all duration-200 hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 hover:scale-105 active:scale-95"
-                                    aria-label={`Ver comprobante de ${txn.concepto}`}
-                                  >
-                                    <EyeIcon />
-                                  </button>
-                                </Tooltip.Trigger>
-                                <Tooltip.Content className="bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
-                                  <p>Ver comprobante</p>
-                                </Tooltip.Content>
-                              </Tooltip>
-                            ) : (
-                              <Tooltip delay={0}>
-                                <Tooltip.Trigger>
-                                  <span className="inline-flex items-center justify-center size-8 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-400 cursor-not-allowed border border-gray-100 dark:border-gray-700">
-                                    <EyeOffIcon />
-                                  </span>
-                                </Tooltip.Trigger>
-                                <Tooltip.Content className="bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
-                                  <p>Comprobante pendiente</p>
-                                </Tooltip.Content>
-                              </Tooltip>
-                            )}
-                          </div>
-                        </Table.Cell>
-                      </Table.Row>
-                    );
-                  }}
-                </Table.Body>
-              </Table.Content>
-            </Table.ScrollContainer>
-            {totalPages > 0 && (
-              <Table.Footer>
-                <Pagination size="sm">
-                  <Pagination.Summary>
-                    {start} a {end} de {filtered.length} resultados
-                  </Pagination.Summary>
-                  <Pagination.Content>
-                    <Pagination.Item>
-                      <Pagination.Previous
-                        isDisabled={page === 1}
-                        onPress={() =>
-                          startTransition(() =>
-                            setPage((p) => Math.max(1, p - 1)),
-                          )
-                        }
-                      >
-                        <Pagination.PreviousIcon />
-                        Ant.
-                      </Pagination.Previous>
-                    </Pagination.Item>
-                    {visiblePages.map((p, idx) =>
-                      p === "ellipsis" ? (
-                        <Pagination.Item key={`ellipsis-${idx}`}>
-                          <span className="px-2 text-gray-400 text-sm select-none">
-                            …
-                          </span>
-                        </Pagination.Item>
-                      ) : (
-                        <Pagination.Item key={p}>
-                          <Pagination.Link
-                            isActive={p === page}
-                            onPress={() => startTransition(() => setPage(p))}
-                          >
-                            {p}
-                          </Pagination.Link>
-                        </Pagination.Item>
-                      ),
+                        </div>
+                      </EmptyState>
                     )}
-                    <Pagination.Item>
-                      <Pagination.Next
-                        isDisabled={page === totalPages}
-                        onPress={() =>
-                          startTransition(() =>
-                            setPage((p) => Math.min(totalPages, p + 1)),
-                          )
-                        }
-                      >
-                        Sig.
-                        <Pagination.NextIcon />
-                      </Pagination.Next>
-                    </Pagination.Item>
-                  </Pagination.Content>
-                </Pagination>
-              </Table.Footer>
-            )}
-          </Table>
+                  >
+                    {(txn: TransaccionItem) => {
+                      const catColor = txn.color || "#9CA3AF";
+                      return (
+                        <Table.Row key={txn.id}>
+                          <Table.Cell>
+                            <span className="text-sm text-gray-600 whitespace-nowrap">
+                              {formatDate(txn.fecha)}
+                            </span>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                {txn.concepto}
+                              </span>
+                              {isNew(txn.creado_el) && (
+                                <span className="inline-flex items-center rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 ring-1 ring-emerald-200/60">
+                                  Nuevo
+                                </span>
+                              )}
+                            </div>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <span
+                              className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
+                              style={{
+                                backgroundColor: `${catColor}18`,
+                                color: catColor,
+                              }}
+                            >
+                              {txn.categoria}
+                            </span>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <span className="text-sm font-semibold text-gray-900 dark:text-white tabular-nums">
+                              {formatCLP(txn.monto)}
+                            </span>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <div className="flex justify-center">
+                              {txn.comprobante ? (
+                                <Tooltip delay={0}>
+                                  <Tooltip.Trigger>
+                                    <button
+                                      onClick={() =>
+                                        setLightboxImage({
+                                          src: txn.comprobante,
+                                          concepto: txn.concepto,
+                                        })
+                                      }
+                                      className="inline-flex items-center justify-center size-8 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 cursor-pointer transition-all duration-200 hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 hover:scale-105 active:scale-95"
+                                      aria-label={`Ver comprobante de ${txn.concepto}`}
+                                    >
+                                      <EyeIcon />
+                                    </button>
+                                  </Tooltip.Trigger>
+                                  <Tooltip.Content className="bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
+                                    <p>Ver comprobante</p>
+                                  </Tooltip.Content>
+                                </Tooltip>
+                              ) : (
+                                <Tooltip delay={0}>
+                                  <Tooltip.Trigger>
+                                    <span className="inline-flex items-center justify-center size-8 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-400 cursor-not-allowed border border-gray-100 dark:border-gray-700">
+                                      <EyeOffIcon />
+                                    </span>
+                                  </Tooltip.Trigger>
+                                  <Tooltip.Content className="bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
+                                    <p>Comprobante pendiente</p>
+                                  </Tooltip.Content>
+                                </Tooltip>
+                              )}
+                            </div>
+                          </Table.Cell>
+                        </Table.Row>
+                      );
+                    }}
+                  </Table.Body>
+                </Table.Content>
+              </Table.ScrollContainer>
+              {totalPages > 0 && (
+                <Table.Footer>
+                  <Pagination size="sm">
+                    <Pagination.Summary>
+                      {start} a {end} de {filtered.length} resultados
+                    </Pagination.Summary>
+                    <Pagination.Content>
+                      <Pagination.Item>
+                        <Pagination.Previous
+                          isDisabled={page === 1}
+                          onPress={() =>
+                            startTransition(() =>
+                              setPage((p) => Math.max(1, p - 1)),
+                            )
+                          }
+                        >
+                          <Pagination.PreviousIcon />
+                          Ant.
+                        </Pagination.Previous>
+                      </Pagination.Item>
+                      {visiblePages.map((p, idx) =>
+                        p === "ellipsis" ? (
+                          <Pagination.Item key={`ellipsis-${idx}`}>
+                            <span className="px-2 text-gray-400 text-sm select-none">
+                              …
+                            </span>
+                          </Pagination.Item>
+                        ) : (
+                          <Pagination.Item key={p}>
+                            <Pagination.Link
+                              isActive={p === page}
+                              onPress={() => startTransition(() => setPage(p))}
+                            >
+                              {p}
+                            </Pagination.Link>
+                          </Pagination.Item>
+                        ),
+                      )}
+                      <Pagination.Item>
+                        <Pagination.Next
+                          isDisabled={page === totalPages}
+                          onPress={() =>
+                            startTransition(() =>
+                              setPage((p) => Math.min(totalPages, p + 1)),
+                            )
+                          }
+                        >
+                          Sig.
+                          <Pagination.NextIcon />
+                        </Pagination.Next>
+                      </Pagination.Item>
+                    </Pagination.Content>
+                  </Pagination>
+                </Table.Footer>
+              )}
+            </Table>
           </div>
         </div>
       </div>

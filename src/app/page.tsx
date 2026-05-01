@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { formatCLP, formatDate, parseISODate } from "@/lib/utils";
 import Footer from "@/components/public/Footer";
 import Link from "next/link";
+import { Table } from "@heroui/react";
 
 // ISR: revalidate every 60 seconds
 export const revalidate = 60;
@@ -19,7 +20,9 @@ export default async function Home() {
 
   if (gastosRes.error || categoriasRes.error) {
     throw new Error(
-      gastosRes.error?.message || categoriasRes.error?.message || "Error al cargar datos"
+      gastosRes.error?.message ||
+        categoriasRes.error?.message ||
+        "Error al cargar datos",
     );
   }
 
@@ -34,7 +37,9 @@ export default async function Home() {
   if (!categoryColors["N/A"]) categoryColors["N/A"] = "#9CA3AF";
   if (!categoryColors["Varios"]) categoryColors["Varios"] = "#9CA3AF";
 
-  const presupuestoTotal = Number(process.env.NEXT_PUBLIC_PRESUPUESTO_TOTAL || "19972000");
+  const presupuestoTotal = Number(
+    process.env.NEXT_PUBLIC_PRESUPUESTO_TOTAL || "19972000",
+  );
   const totalGastado = data.reduce((acc, curr) => acc + curr.monto, 0);
   const saldoDisponible = presupuestoTotal - totalGastado;
   const resumenFinanciero = { presupuestoTotal, totalGastado, saldoDisponible };
@@ -118,7 +123,7 @@ export default async function Home() {
   });
 
   return (
-    <div className="flex min-h-dvh bg-bg-secondary">
+    <div className="flex min-h-dvh bg-transparent">
       {/* Sidebar */}
       <Sidebar />
 
@@ -165,61 +170,61 @@ export default async function Home() {
               </div>
 
               {/* Mini table */}
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-t border-gray-50 dark:border-gray-800">
-                      <th className="px-6 py-2.5 text-left text-[11px] font-semibold tracking-wider text-gray-400">
-                        Descripción
-                      </th>
-                      <th className="px-4 py-2.5 text-left text-[11px] font-semibold tracking-wider text-gray-400">
-                        Categoría
-                      </th>
-                      <th className="px-4 py-2.5 text-left text-[11px] font-semibold tracking-wider text-gray-400">
+              <Table variant="secondary" className="w-full px-5">
+                <Table.ScrollContainer>
+                  <Table.Content aria-label="Últimos gastos">
+                    <Table.Header>
+                      <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
                         Fecha
-                      </th>
-                      <th className="px-6 py-2.5 text-right text-[11px] font-semibold tracking-wider text-gray-400">
+                      </Table.Column>
+                      <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
+                        Descripción
+                      </Table.Column>
+                      <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
+                        Categoría
+                      </Table.Column>
+                      <Table.Column className="text-right text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
                         Monto
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {latestTransactions.map((txn) => (
-                      <tr
-                        key={txn.id}
-                        className="border-t border-gray-50 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-white/3 transition-colors duration-150"
-                      >
-                        <td className="px-6 py-3.5">
-                          <span className="font-medium text-gray-900 dark:text-white">
-                            {txn.concepto}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3.5">
-                          <span
-                            className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
-                            style={{
-                              backgroundColor: `${txn.color}18`,
-                              color: txn.color,
-                            }}
-                          >
-                            {txn.categoria}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3.5">
-                          <span className="text-gray-500 whitespace-nowrap">
-                            {formatDate(txn.fecha)}
-                          </span>
-                        </td>
-                        <td className="px-6 py-3.5 text-right">
-                          <span className="font-semibold text-gray-900 dark:text-white tabular-nums">
-                            {formatCLP(txn.monto)}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                      </Table.Column>
+                    </Table.Header>
+                    <Table.Body>
+                      {latestTransactions.map((txn) => (
+                        <Table.Row
+                          key={txn.id}
+                          className="border-t border-gray-50 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-white/3 transition-colors duration-150"
+                        >
+                          <Table.Cell className="px-4 py-3.5">
+                            <span className="text-gray-500 whitespace-nowrap">
+                              {formatDate(txn.fecha)}
+                            </span>
+                          </Table.Cell>
+                          <Table.Cell className="px-6 py-3.5">
+                            <span className="font-medium text-gray-900 dark:text-white">
+                              {txn.concepto}
+                            </span>
+                          </Table.Cell>
+                          <Table.Cell className="px-4 py-3.5">
+                            <span
+                              className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
+                              style={{
+                                backgroundColor: `${txn.color}18`,
+                                color: txn.color,
+                              }}
+                            >
+                              {txn.categoria}
+                            </span>
+                          </Table.Cell>
+                          <Table.Cell className="px-6 py-3.5 text-right">
+                            <span className="font-semibold text-gray-900 dark:text-white tabular-nums">
+                              {formatCLP(txn.monto)}
+                            </span>
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </Table.Body>
+                  </Table.Content>
+                </Table.ScrollContainer>
+              </Table>
 
               {/* Footer with CTA */}
               <div className="px-6 py-4 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">

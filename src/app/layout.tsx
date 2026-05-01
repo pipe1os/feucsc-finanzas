@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+import { DotPattern } from "@/components/ui/dot-pattern";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,7 +29,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={inter.variable} suppressHydrationWarning>
-      <body className={`${inter.className} antialiased bg-background text-foreground`}>
+      <body className={`${inter.className} antialiased bg-transparent text-foreground`}>
+        <div className="fixed inset-0 -z-10 bg-bg-secondary" />
+        <DotPattern className="fixed inset-0 -z-10 text-neutral-400/15 dark:text-neutral-600/15" />
         <Providers>{children}</Providers>
         <Analytics />
         <SpeedInsights />

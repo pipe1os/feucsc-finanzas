@@ -2,7 +2,6 @@
 
 import { formatCLP } from "@/lib/utils";
 import { useEffect, useState, useRef } from "react";
-import { ProgressBar } from "@heroui/react";
 
 interface ResumenFinanciero {
   presupuestoTotal: number;
@@ -49,165 +48,111 @@ function useCountUp(target: number, duration = 1200, delay = 0) {
   return value;
 }
 
-// ── Status color system ────────────────────────────────
-type StatusColors = {
-  fill: string;
-  track: string;
-  text: string;
-  dot: string;
-};
-
-const STATUS_GREEN: StatusColors = {
-  fill: "bg-emerald-500",
-  track: "bg-emerald-500/10",
-  text: "text-emerald-600",
-  dot: "bg-emerald-500",
-};
-
-const STATUS_AMBER: StatusColors = {
-  fill: "bg-amber-400",
-  track: "bg-amber-400/10",
-  text: "text-amber-600",
-  dot: "bg-amber-400",
-};
-
-const STATUS_RED: StatusColors = {
-  fill: "bg-rose-500",
-  track: "bg-rose-500/10",
-  text: "text-rose-600",
-  dot: "bg-rose-500",
-};
-
-const STATUS_NEUTRAL: StatusColors = {
-  fill: "bg-gray-400",
-  track: "bg-gray-400/10",
-  text: "text-gray-500",
-  dot: "bg-gray-400",
-};
-
-function getSpentStatus(percent: number): StatusColors {
-  if (percent <= 40) return STATUS_GREEN;
-  if (percent <= 69) return STATUS_AMBER;
-  return STATUS_RED;
-}
-
-function getAvailableStatus(percent: number): StatusColors {
-  if (percent >= 60) return STATUS_GREEN;
-  if (percent >= 31) return STATUS_AMBER;
-  return STATUS_RED;
-}
-
-// ── Single KPI Card ────────────────────────────────────
-interface KPICardProps {
-  title: string;
-  rawValue: number;
-  subtitle: string;
-  delay?: string;
-  countDelay?: number;
-  progressValue: number;
-  status: StatusColors;
-}
-
-function KPICard({
-  title,
-  rawValue,
-  subtitle,
-  delay,
-  countDelay = 0,
-  progressValue,
-  status,
-}: KPICardProps) {
-  const animatedValue = useCountUp(rawValue, 1200, countDelay);
-
-  return (
-    <div
-      className="relative overflow-hidden rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-apple card-hover animate-fade-in-up opacity-0 p-6"
-      style={{ animationDelay: delay }}
-    >
-      <div className="flex flex-col gap-1">
-        <span className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-400 dark:text-gray-500">
-          {title}
-        </span>
-        <span
-          className="text-3xl sm:text-4xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light"
-        >
-          {formatCLP(animatedValue)}
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="mt-4">
-        <ProgressBar
-          aria-label={`${title} progreso`}
-          value={progressValue}
-          size="sm"
-          className="w-full"
-        >
-          <ProgressBar.Track className={`${status.track} h-0.5 rounded-full`}>
-            <ProgressBar.Fill
-              className={`${status.fill} rounded-full transition-all duration-700 ease-out`}
-            />
-          </ProgressBar.Track>
-        </ProgressBar>
-      </div>
-
-      <div className="mt-3 pt-3 border-t border-gray-50 dark:border-gray-800">
-        <div className="flex items-center gap-1.5">
-          <span
-            className={`inline-block size-1.5 rounded-full ${status.dot} shrink-0`}
-          />
-          <span
-            className={`text-xs font-medium ${status.text} transition-colors duration-500`}
-          >
-            {subtitle}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function KPICards({ resumenFinanciero }: KPICardsProps) {
   const porcentajeGastado = Math.round(
     (resumenFinanciero.totalGastado / resumenFinanciero.presupuestoTotal) * 100,
   );
   const porcentajeDisponible = 100 - porcentajeGastado;
 
-  const spentStatus = getSpentStatus(porcentajeGastado);
-  const availableStatus = getAvailableStatus(porcentajeDisponible);
+  const animatedGastado = useCountUp(resumenFinanciero.totalGastado, 1200, 200);
+  const animatedTotal = useCountUp(
+    resumenFinanciero.presupuestoTotal,
+    1200,
+    100,
+  );
+  const animatedDisponible = useCountUp(
+    resumenFinanciero.saldoDisponible,
+    1200,
+    300,
+  );
+
+  // Status color for progress bar (based on spent)
+  const statusColor =
+    porcentajeGastado <= 40
+      ? "bg-emerald-500"
+      : porcentajeGastado <= 69
+        ? "bg-amber-400"
+        : "bg-rose-500";
+
+  // Text color for spent percentage
+  const spentStatusText =
+    porcentajeGastado <= 40
+      ? "text-emerald-600 dark:text-emerald-400"
+      : porcentajeGastado <= 69
+        ? "text-amber-600 dark:text-amber-400"
+        : "text-rose-600 dark:text-rose-400";
+
+  // Text color for available percentage (inverted logic)
+  const availableStatusText =
+    porcentajeDisponible >= 60
+      ? "text-emerald-600 dark:text-emerald-400"
+      : porcentajeDisponible >= 31
+        ? "text-amber-600 dark:text-amber-400"
+        : "text-rose-600 dark:text-rose-400";
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {/* Presupuesto Total — neutral, informational */}
-      <KPICard
-        title="Presupuesto Total"
-        rawValue={resumenFinanciero.presupuestoTotal}
-        subtitle="Año académico 2026"
-        delay="0.05s"
-        countDelay={300}
-        progressValue={100}
-        status={STATUS_NEUTRAL}
-      />
-      {/* Total Gastado — green <40%, yellow 41-69%, red ≥70% */}
-      <KPICard
-        title="Total Gastado"
-        rawValue={resumenFinanciero.totalGastado}
-        subtitle={`${porcentajeGastado}% del presupuesto utilizado`}
-        delay="0.1s"
-        countDelay={500}
-        progressValue={porcentajeGastado}
-        status={spentStatus}
-      />
-      {/* Presupuesto Disponible — inverted: green when lots left, red when little */}
-      <KPICard
-        title="Presupuesto Disponible"
-        rawValue={resumenFinanciero.saldoDisponible}
-        subtitle={`${porcentajeDisponible}% restante`}
-        delay="0.15s"
-        countDelay={700}
-        progressValue={porcentajeDisponible}
-        status={availableStatus}
-      />
+    <div className="animate-fade-in-up opacity-0">
+      {/* Single integrated summary surface */}
+      <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple p-6 sm:p-8">
+        {/* Top row: hero metric (spent) + sub-metrics (total + available) */}
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-10">
+          {/* Hero metric: Total Gastado — what students come to see */}
+          <div className="flex-1 min-w-0">
+            <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-400 dark:text-gray-500 mb-1.5">
+              Total Gastado
+            </p>
+            <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light">
+              {formatCLP(animatedGastado)}
+            </p>
+            <p className={`mt-1.5 text-sm font-medium ${spentStatusText}`}>
+              {porcentajeGastado}% del presupuesto utilizado
+            </p>
+          </div>
+
+          {/* Divider on desktop */}
+          <div className="hidden lg:block w-px h-16 bg-gray-100 dark:bg-gray-800" />
+
+          {/* Sub-metrics: Total y Disponible — amounts only, no redundant percentages */}
+          <div className="flex items-end gap-8 sm:gap-10 shrink-0">
+            <div>
+              <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-400 dark:text-gray-500 mb-1">
+                Presupuesto Total
+              </p>
+              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light">
+                {formatCLP(animatedTotal)}
+              </p>
+              <p className="mt-1 text-xs text-gray-400">Año académico 2026</p>
+            </div>
+
+            <div>
+              <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-400 dark:text-gray-500 mb-1">
+                Presupuesto Disponible
+              </p>
+              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light">
+                {formatCLP(animatedDisponible)}
+              </p>
+              <p className={`mt-1 text-xs font-medium ${availableStatusText}`}>
+                {porcentajeDisponible}% restante
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Progress bar — visual only, percentage already stated above */}
+        <div className="mt-6 pt-6 border-t border-gray-50 dark:border-gray-800">
+          <div className="mb-2">
+            <span className="text-xs text-gray-400">
+              Progreso del presupuesto utilizado
+            </span>
+          </div>
+          <div className="h-1 w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+            <div
+              className={`h-full rounded-full ${statusColor} transition-all duration-1000 ease-out`}
+              style={{ width: `${porcentajeGastado}%` }}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

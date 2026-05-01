@@ -86,27 +86,27 @@ export default function FAQContent() {
             {category.title}
           </p>
 
-          {/* Accordion inside a white card */}
-          <div className="rounded-2xl bg-white dark:bg-gray-900 shadow-apple overflow-hidden">
+          {/* Lighter accordion without heavy card container */}
+          <div className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden">
             <Accordion
               allowsMultipleExpanded
-              className="w-full **:data-[slot=separator]:opacity-[0.06]"
+              className="w-full **:data-[slot=separator]:opacity-[0.04]"
             >
               {category.items.map((item, index) => (
                 <Accordion.Item key={index}>
                   <Accordion.Heading>
-                    <Accordion.Trigger className="px-5! py-4! text-left">
-                      <span className="text-sm font-semibold tracking-tight text-gray-900 dark:text-white">
+                    <Accordion.Trigger className="px-5! py-4! text-left hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors duration-150">
+                      <span className="text-[15px] font-medium tracking-tight text-gray-900 dark:text-white pr-4">
                         {item.title}
                       </span>
-                      <Accordion.Indicator className="text-gray-400 [&>svg]:size-4">
+                      <Accordion.Indicator className="text-gray-400 [&>svg]:size-5 shrink-0">
                         <ChevronDown />
                       </Accordion.Indicator>
                     </Accordion.Trigger>
                   </Accordion.Heading>
                   <Accordion.Panel>
                     <Accordion.Body className="px-5! pb-5! pt-0!">
-                      <p className="text-sm text-gray-500 leading-relaxed">
+                      <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed pr-4">
                         {item.content}
                       </p>
                     </Accordion.Body>

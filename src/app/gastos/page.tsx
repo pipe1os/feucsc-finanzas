@@ -79,7 +79,7 @@ export default async function GastosPage() {
   }
 
   return (
-    <div className="flex min-h-dvh bg-bg-secondary">
+    <div className="flex min-h-dvh bg-transparent">
       <Sidebar />
 
       <main className="flex-1 min-w-0 lg:ml-65">
@@ -88,25 +88,28 @@ export default async function GastosPage() {
           <header className="mb-8 animate-fade-in-up opacity-0">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
               <div>
-                <div className="flex items-center gap-2 mb-1">
+                {/* Back navigation — larger and clearer */}
+                <div className="flex items-center gap-2 mb-2">
                   <Link
                     href="/"
-                    className="group inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest text-red-500 uppercase hover:text-red-600 transition-colors"
+                    className="group inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors duration-200"
                   >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform duration-200 group-hover:-translate-x-0.5"
-                    >
-                      <path d="m15 18-6-6 6-6" />
-                    </svg>
-                    Resumen
+                    <span className="flex items-center justify-center size-7 rounded-lg bg-gray-100 dark:bg-gray-800 group-hover:bg-red-50 dark:group-hover:bg-red-500/10 transition-colors duration-200">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="transition-transform duration-200 group-hover:-translate-x-0.5"
+                      >
+                        <path d="m15 18-6-6 6-6" />
+                      </svg>
+                    </span>
+                    <span className="uppercase tracking-wider text-[11px] font-semibold">Resumen</span>
                   </Link>
                 </div>
                 <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
