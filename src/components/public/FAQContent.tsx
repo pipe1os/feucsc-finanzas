@@ -87,7 +87,7 @@ export default function FAQContent() {
           </p>
 
           {/* Accordion inside a white card */}
-          <div className="rounded-3xl bg-white dark:bg-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
+          <div className="rounded-2xl bg-white dark:bg-gray-900 shadow-apple overflow-hidden">
             <Accordion
               allowsMultipleExpanded
               className="w-full **:data-[slot=separator]:opacity-[0.06]"

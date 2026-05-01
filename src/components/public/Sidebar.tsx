@@ -172,11 +172,11 @@ function NavItem({
       className={`group flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 font-medium text-sm transition-all duration-200 cursor-pointer
         ${
           isActive
-            ? "text-red-600 dark:text-red-400"
+            ? "text-red-500 dark:text-red-400"
             : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200"
         }`}
       style={
-        isActive ? { backgroundColor: "rgba(239, 68, 68, 0.08)" } : undefined
+        isActive ? { backgroundColor: "rgba(227, 7, 7, 0.08)" } : undefined
       }
     >
       <div className="flex items-center gap-3">
@@ -218,8 +218,7 @@ function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setMounted(true), 0);
-    return () => clearTimeout(timer);
+    setMounted(true);
   }, []);
 
   if (!mounted) {
@@ -237,7 +236,7 @@ function ThemeToggle() {
       <button
         onClick={() => setTheme("light")}
         data-active={isLight}
-        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white data-[active=true]:text-gray-900 data-[active=true]:shadow-sm data-[active=false]:text-gray-500 dark:data-[active=false]:text-gray-400"
+        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white data-[active=true]:text-gray-900 data-[active=true]:shadow-xs data-[active=false]:text-gray-500 dark:data-[active=false]:text-gray-400"
       >
         <SunIcon />
         <span>Claro</span>
@@ -245,7 +244,7 @@ function ThemeToggle() {
       <button
         onClick={() => setTheme("dark")}
         data-active={!isLight}
-        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white dark:data-[active=true]:bg-zinc-700 data-[active=true]:text-gray-900 dark:data-[active=true]:text-white data-[active=true]:shadow-sm data-[active=false]:text-gray-500 dark:data-[active=false]:text-gray-400"
+        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white dark:data-[active=true]:bg-zinc-700 data-[active=true]:text-gray-900 dark:data-[active=true]:text-white data-[active=true]:shadow-xs data-[active=false]:text-gray-500 dark:data-[active=false]:text-gray-400"
       >
         <MoonIcon />
         <span>Oscuro</span>
@@ -325,6 +324,7 @@ export default function Sidebar() {
           flex flex-col bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl
           border-r border-gray-100 dark:border-gray-800
           transition-transform duration-300 ease-out
+          overflow-y-auto
           lg:translate-x-0
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}

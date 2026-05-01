@@ -32,7 +32,7 @@ export default async function Home() {
     if (c.color) categoryColors[c.nombre] = c.color;
   });
   if (!categoryColors["N/A"]) categoryColors["N/A"] = "#9CA3AF";
-  if (!categoryColors["Otros"]) categoryColors["Otros"] = "#9CA3AF";
+  if (!categoryColors["Varios"]) categoryColors["Varios"] = "#9CA3AF";
 
   const presupuestoTotal = Number(process.env.NEXT_PUBLIC_PRESUPUESTO_TOTAL || "19972000");
   const totalGastado = data.reduce((acc, curr) => acc + curr.monto, 0);
@@ -70,7 +70,7 @@ export default async function Home() {
         (gastosPorMesMap.get(monthStr) || 0) + g.monto,
       );
       const catMap = gastosPorMesCatMap.get(monthStr)!;
-      const cat = g.categoria || "Otros";
+      const cat = g.categoria || "Varios";
       catMap.set(cat, (catMap.get(cat) || 0) + g.monto);
     }
   });
@@ -106,7 +106,7 @@ export default async function Home() {
 
   // Latest 3 transactions for preview
   const latestTransactions = data.slice(0, 3).map((g) => {
-    const catName = g.categoria || "Otros";
+    const catName = g.categoria || "Varios";
     return {
       id: g.id,
       fecha: g.fecha,
@@ -118,7 +118,7 @@ export default async function Home() {
   });
 
   return (
-    <div className="flex min-h-dvh bg-zinc-50 dark:bg-zinc-950">
+    <div className="flex min-h-dvh bg-bg-secondary">
       {/* Sidebar */}
       <Sidebar />
 

@@ -225,12 +225,12 @@ export default function ExpenseTrendChart({
                 <linearGradient id="colorMonto" x1="0" y1="0" x2="0" y2="1">
                   <stop
                     offset="5%"
-                    stopColor="#E24B4A"
+                    stopColor="var(--primary)"
                     stopOpacity={0.12}
                   />
                   <stop
                     offset="95%"
-                    stopColor="#E24B4A"
+                    stopColor="var(--primary)"
                     stopOpacity={0}
                   />
                 </linearGradient>
@@ -272,7 +272,7 @@ export default function ExpenseTrendChart({
               <Area
                 type="monotone"
                 dataKey="monto"
-                stroke="#E24B4A"
+                stroke="var(--primary)"
                 strokeWidth={1.5}
                 fillOpacity={1}
                 fill="url(#colorMonto)"
@@ -287,12 +287,12 @@ export default function ExpenseTrendChart({
                       cx={props.cx}
                       cy={props.cy}
                       r={isActive ? 8 : 6}
-                      fill="#E24B4A"
+                      fill="var(--primary)"
                       stroke="white"
                       strokeWidth={2}
                       style={{
                         cursor: "pointer",
-                        filter: isActive ? "drop-shadow(0 2px 4px rgba(226, 75, 74, 0.4))" : "none",
+                        filter: isActive ? "drop-shadow(0 2px 4px rgba(227, 7, 7, 0.4))" : "none",
                       }}
                     />
                   );

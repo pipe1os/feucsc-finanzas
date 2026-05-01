@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function FAQPage() {
   return (
-    <div className="flex min-h-dvh bg-gray-50 dark:bg-gray-950">
+    <div className="flex min-h-dvh bg-bg-secondary">
       {/* Sidebar */}
       <Sidebar />
 
