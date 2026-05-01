@@ -76,7 +76,7 @@ export default function CategorySelect({
           <div className="max-h-60 overflow-y-auto">
             {categorias.map((cat) => {
               const isSelected = cat === value;
-              const isOtros = cat === "Otros";
+              const isVarios = cat === "Varios";
               return (
                 <div
                   key={cat}
@@ -107,7 +107,7 @@ export default function CategorySelect({
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     )}
-                    {!isOtros && onDeleteCategory && (
+                    {!isVarios && onDeleteCategory && (
                       <button
                         type="button"
                         onClick={(e) => {

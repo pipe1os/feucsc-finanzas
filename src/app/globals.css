@@ -249,7 +249,38 @@ body {
 }
 
 @utility animate-shimmer {
-  animation: shimmer 2s ease-in-out;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Skeleton shimmer — Apple-style loading placeholder */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@utility skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--gray-100) 25%,
+    var(--gray-50) 50%,
+    var(--gray-100) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.dark .skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--gray-800) 25%,
+    var(--gray-700) 50%,
+    var(--gray-800) 75%
+  );
+  background-size: 200% 100%;
 }
 
 /* Scrollbar styling */

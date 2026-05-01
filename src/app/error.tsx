@@ -36,7 +36,7 @@ export default function Error({
             Intenta nuevamente o contáctanos
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center justify-center gap-2">
           <Button
             onPress={reset}
             className="text-sm text-red-500 font-medium hover:text-red-600 bg-transparent"

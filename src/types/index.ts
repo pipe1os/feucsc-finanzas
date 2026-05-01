@@ -13,7 +13,7 @@ export interface Gasto {
 
 /**
  * Categorías dinámicas — el admin puede crear nuevas.
- * "Otros" siempre existe como default.
+ * "Varios" siempre existe como default.
  */
 export type CategoriaGasto = string;
 

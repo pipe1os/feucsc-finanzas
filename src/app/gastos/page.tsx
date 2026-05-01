@@ -35,10 +35,10 @@ export default async function GastosPage() {
     if (c.color) categoryColors[c.nombre] = c.color;
   });
   if (!categoryColors["N/A"]) categoryColors["N/A"] = "#9CA3AF";
-  if (!categoryColors["Otros"]) categoryColors["Otros"] = "#9CA3AF";
+  if (!categoryColors["Varios"]) categoryColors["Varios"] = "#9CA3AF";
 
   const transacciones = data.map((g) => {
-    const catName = g.categoria || "Otros";
+    const catName = g.categoria || "Varios";
     return {
       id: g.id,
       fecha: g.fecha,
@@ -53,7 +53,7 @@ export default async function GastosPage() {
 
   const categoriasMap = new Map<string, number>();
   data.forEach((g) => {
-    const cat = g.categoria || "Otros";
+    const cat = g.categoria || "Varios";
     categoriasMap.set(cat, (categoriasMap.get(cat) || 0) + g.monto);
   });
 
@@ -79,7 +79,7 @@ export default async function GastosPage() {
   }
 
   return (
-    <div className="flex min-h-dvh bg-gray-50 dark:bg-gray-950">
+    <div className="flex min-h-dvh bg-bg-secondary">
       <Sidebar />
 
       <main className="flex-1 min-w-0 lg:ml-65">

@@ -23,7 +23,7 @@ import {
 } from "@heroui/react";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
-import { getNextPaletteColor, OTROS_COLOR } from "@/lib/category-palette";
+import { getNextPaletteColor, VARIOS_COLOR } from "@/lib/category-palette";
 import { parseISODate } from "@/lib/utils";
 import { deleteCloudinaryImage } from "@/app/actions/cloudinary";
 import { uploadComprobanteAction } from "@/app/actions/upload";
@@ -105,7 +105,7 @@ export default function AdminPage() {
   // ── Form ──
   const [fecha, setFecha] = useState(() => new Date().toISOString().split("T")[0]);
   const [descripcion, setDescripcion] = useState("");
-  const [categoria, setCategoria] = useState("Otros");
+  const [categoria, setCategoria] = useState("Varios");
   const [monto, setMonto] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -132,7 +132,7 @@ export default function AdminPage() {
   const [editGasto, setEditGasto] = useState<GastoDB | null>(null);
   const [editFecha, setEditFecha] = useState("");
   const [editDescripcion, setEditDescripcion] = useState("");
-  const [editCategoria, setEditCategoria] = useState("Otros");
+  const [editCategoria, setEditCategoria] = useState("Varios");
   const [editMonto, setEditMonto] = useState("");
   // Estados para manejo de imagen en edición
   const [editSelectedFile, setEditSelectedFile] = useState<File | null>(null);
@@ -149,12 +149,12 @@ export default function AdminPage() {
   // ── Lightbox ──
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
 
-  // ── Category names sorted (Otros always last) ──
+  // ── Category names sorted (Varios always last) ──
   const categorias = useMemo(() => {
     const names = categoriasDB.map((c) => c.nombre);
     return names.sort((a, b) => {
-      if (a === "Otros") return 1;
-      if (b === "Otros") return -1;
+      if (a === "Varios") return 1;
+      if (b === "Varios") return -1;
       return a.localeCompare(b);
     });
   }, [categoriasDB]);
@@ -321,7 +321,7 @@ export default function AdminPage() {
       toast.success("Gasto registrado exitosamente");
       setFecha(new Date().toISOString().split("T")[0]);
       setDescripcion("");
-      setCategoria("Otros");
+      setCategoria("Varios");
       setMonto("");
       setSelectedFile(null);
 
@@ -455,7 +455,7 @@ export default function AdminPage() {
   }, [gastos]);
 
   return (
-    <div className="min-h-dvh flex bg-gray-50 dark:bg-zinc-950">
+    <div className="min-h-dvh flex bg-bg-secondary">
       {/* ── Sidebar (Desktop) ── */}
       <aside className="hidden lg:flex w-64 flex-col fixed inset-y-0 left-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-r border-gray-100 dark:border-gray-800 z-50">
         <div className="flex flex-col h-full">
@@ -805,7 +805,7 @@ export default function AdminPage() {
                         className="divide-y divide-gray-100 dark:divide-gray-800"
                       >
                         {paginated.map((g) => {
-                          const catColor = catColors[g.categoria] || OTROS_COLOR;
+                          const catColor = catColors[g.categoria] || VARIOS_COLOR;
                           return (
                             <ListBox.Item
                               key={g.id}
@@ -966,7 +966,7 @@ export default function AdminPage() {
                       >
                         {paginated.map((g) => {
                           const catColor =
-                            catColors[g.categoria] || OTROS_COLOR;
+                            catColors[g.categoria] || VARIOS_COLOR;
                           return (
                             <Table.Row key={g.id}>
                               <Table.Cell>

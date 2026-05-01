@@ -121,7 +121,7 @@ function KPICard({
 
   return (
     <div
-      className="relative overflow-hidden rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm card-hover animate-fade-in-up opacity-0 p-6"
+      className="relative overflow-hidden rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white dark:bg-zinc-900 text-gray-900 dark:text-white shadow-apple card-hover animate-fade-in-up opacity-0 p-6"
       style={{ animationDelay: delay }}
     >
       <div className="flex flex-col gap-1">
@@ -129,8 +129,7 @@ function KPICard({
           {title}
         </span>
         <span
-          className="text-3xl sm:text-4xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white"
-          style={{ fontWeight: 300 }}
+          className="text-3xl sm:text-4xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light"
         >
           {formatCLP(animatedValue)}
         </span>

@@ -30,7 +30,7 @@ export default function ContactoPage() {
   };
 
   return (
-    <div className="flex min-h-dvh bg-gray-50 dark:bg-gray-950">
+    <div className="flex min-h-dvh bg-bg-secondary">
       {/* Sidebar */}
       <Sidebar />
 
@@ -52,12 +52,12 @@ export default function ContactoPage() {
             className="mb-8 animate-fade-in-up opacity-0"
             style={{ animationDelay: "0.1s" }}
           >
-            <div className="rounded-3xl bg-white dark:bg-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] divide-y divide-gray-100 dark:divide-gray-800">
+            <div className="rounded-2xl bg-white dark:bg-gray-900 shadow-apple divide-y divide-gray-100 dark:divide-gray-800">
               {/* Email — click to copy */}
               <button
                 type="button"
                 onClick={handleCopyEmail}
-                className="group flex w-full items-center gap-4 p-5 sm:p-6 text-left cursor-pointer transition-colors duration-200 hover:bg-gray-50/60 dark:hover:bg-white/5 rounded-t-3xl"
+                className="group flex w-full items-center gap-4 p-5 sm:p-6 text-left cursor-pointer transition-colors duration-200 hover:bg-gray-50/60 dark:hover:bg-white/5 rounded-t-2xl"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +119,7 @@ export default function ContactoPage() {
                 href="https://instagram.com/feucsc_"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-4 p-5 sm:p-6 rounded-b-3xl transition-colors duration-200 hover:bg-gray-50/60 dark:hover:bg-white/5"
+                className="group flex items-center gap-4 p-5 sm:p-6 rounded-b-2xl transition-colors duration-200 hover:bg-gray-50/60 dark:hover:bg-white/5"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

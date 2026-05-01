@@ -1,7 +1,7 @@
 /**
  * Curated category color palette.
  * 20 hand-picked colors with good contrast on white, harmonious together.
- * "Otros" is always #9CA3AF (gray) — hardcoded separately.
+ * "Varios" is always #9CA3AF (gray) — hardcoded separately.
  */
 export const CATEGORY_PALETTE = [
   "#E30707", // Red (brand)
@@ -26,8 +26,8 @@ export const CATEGORY_PALETTE = [
   "#CA8A04", // Yellow-600
 ] as const;
 
-/** Fixed color for "Otros" / "N/A" categories */
-export const OTROS_COLOR = "#9CA3AF";
+/** Fixed color for "Varios" / "N/A" categories */
+export const VARIOS_COLOR = "#9CA3AF";
 
 /**
  * Picks the next available color from the curated palette.
