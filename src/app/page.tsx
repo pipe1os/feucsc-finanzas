@@ -2,11 +2,10 @@ import Sidebar from "@/components/public/Sidebar";
 import KPICards from "@/components/public/KPICards";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { LazyExpenseTrendChart } from "@/components/public/LazyCharts";
+import LatestTransactionsPreview from "@/components/public/LatestTransactionsPreview";
 import { supabase } from "@/lib/supabase";
-import { formatCLP, formatDate, parseISODate } from "@/lib/utils";
+import { parseISODate } from "@/lib/utils";
 import Footer from "@/components/public/Footer";
-import Link from "next/link";
-import { Table } from "@heroui/react";
 
 // ISR: revalidate every 60 seconds
 export const revalidate = 60;
@@ -163,99 +162,11 @@ export default async function Home() {
               className="col-span-1 lg:col-span-12 animate-fade-in-up opacity-0"
               style={{ animationDelay: "0.25s" }}
             >
-            <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-gray-900 shadow-xs dark:shadow-none overflow-hidden">
-              {/* Preview header */}
-              <div className="px-6 pt-5 pb-4">
-                <h2 className="text-base font-semibold text-gray-900 dark:text-white">
-                  Últimos Gastos
-                </h2>
-              </div>
-
-              {/* Mini table */}
-              <Table variant="secondary" className="w-full px-5">
-                <Table.ScrollContainer>
-                  <Table.Content aria-label="Últimos gastos">
-                    <Table.Header>
-                      <Table.Column isRowHeader className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
-                        Fecha
-                      </Table.Column>
-                      <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
-                        Descripción
-                      </Table.Column>
-                      <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
-                        Categoría
-                      </Table.Column>
-                      <Table.Column className="text-right text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
-                        Monto
-                      </Table.Column>
-                    </Table.Header>
-                    <Table.Body>
-                      {latestTransactions.map((txn) => (
-                        <Table.Row
-                          key={txn.id}
-                          className="border-t border-gray-50 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-white/3 transition-colors duration-150"
-                        >
-                          <Table.Cell className="px-4 py-3.5">
-                            <span className="text-gray-500 whitespace-nowrap">
-                              {formatDate(txn.fecha)}
-                            </span>
-                          </Table.Cell>
-                          <Table.Cell className="px-6 py-3.5">
-                            <span className="font-medium text-gray-900 dark:text-white">
-                              {txn.concepto}
-                            </span>
-                          </Table.Cell>
-                          <Table.Cell className="px-4 py-3.5">
-                            <span
-                              className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
-                              style={{
-                                backgroundColor: `${txn.color}18`,
-                                color: txn.color,
-                              }}
-                            >
-                              {txn.categoria}
-                            </span>
-                          </Table.Cell>
-                          <Table.Cell className="px-6 py-3.5 text-right">
-                            <span className="font-semibold text-gray-900 dark:text-white tabular-nums">
-                              {formatCLP(txn.monto)}
-                            </span>
-                          </Table.Cell>
-                        </Table.Row>
-                      ))}
-                    </Table.Body>
-                  </Table.Content>
-                </Table.ScrollContainer>
-              </Table>
-
-              {/* Footer with CTA */}
-              <div className="px-6 py-4 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
-                <span className="text-xs text-gray-400">
-                  {data.length} registros en total
-                </span>
-                <Link
-                  href="/gastos"
-                  className="group inline-flex items-center gap-1.5 text-sm font-medium text-red-500 hover:text-red-600 transition-colors duration-200"
-                >
-                  Ver todos los gastos
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-transform duration-200 group-hover:translate-x-0.5"
-                  >
-                    <path d="M5 12h14" />
-                    <path d="m12 5 7 7-7 7" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
-          </section>
+              <LatestTransactionsPreview
+                transactions={latestTransactions}
+                totalCount={data.length}
+              />
+            </section>
           </div>
 
           {/* Footer */}
