@@ -1,6 +1,6 @@
 "use client";
 
-import {
+import React, {
   useState,
   useMemo,
   useRef,
@@ -160,7 +160,7 @@ function isNew(creado_el?: string): boolean {
   return Date.now() - created < 48 * 60 * 60 * 1000;
 }
 
-export default function ExpenseTable({
+function ExpenseTable({
   transacciones,
   chartCategoryFilter,
   onClearChartFilter,
@@ -174,6 +174,15 @@ export default function ExpenseTable({
     direction: "descending",
   });
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Cleanup debounce timer on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+    };
+  }, []);
 
   const [selectedMonth, setSelectedMonth] = useState<string>(() => {
     if (typeof window !== "undefined") {
@@ -880,3 +889,5 @@ export default function ExpenseTable({
     </>
   );
 }
+
+export default React.memo(ExpenseTable);

@@ -17,7 +17,7 @@ export const metadata = {
 export default async function GastosPage() {
   // Parallel data fetching
   const [gastosRes, categoriasRes] = await Promise.all([
-    supabase.from("gastos").select("*").order("fecha", { ascending: false }),
+    supabase.from("gastos").select("*").order("fecha", { ascending: false }).limit(500),
     supabase.from("categorias").select("*"),
   ]);
 

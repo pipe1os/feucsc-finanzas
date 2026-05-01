@@ -32,6 +32,12 @@ function validUUID(id: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
 }
 
+function sanitizeDbError(error: { message?: string; code?: string }): Error {
+  // Don't leak raw Supabase messages to the client; log internally and return generic message
+  console.error("Supabase DB error:", error.code, error.message);
+  return new Error("Error al procesar la solicitud. Inténtalo de nuevo más tarde.");
+}
+
 export async function createGasto(formData: FormData) {
   await requireAuth();
   const fecha = formData.get("fecha") as string;
@@ -62,7 +68,7 @@ export async function createGasto(formData: FormData) {
     comprobante_url,
   });
 
-  if (error) throw new Error(error.message);
+  if (error) throw sanitizeDbError(error);
   revalidatePath("/");
   revalidatePath("/gastos");
 }
@@ -99,7 +105,7 @@ export async function updateGasto(formData: FormData) {
     comprobante_url,
   }).eq("id", id);
 
-  if (error) throw new Error(error.message);
+  if (error) throw sanitizeDbError(error);
   revalidatePath("/");
   revalidatePath("/gastos");
 }
@@ -109,7 +115,7 @@ export async function deleteGasto(id: string) {
   if (!validUUID(id)) throw new Error("ID inválido");
 
   const { error } = await supabaseServer.from("gastos").delete().eq("id", id);
-  if (error) throw new Error(error.message);
+  if (error) throw sanitizeDbError(error);
   revalidatePath("/");
   revalidatePath("/gastos");
 }
@@ -121,7 +127,7 @@ export async function createCategoria(nombre: string, color: string) {
   if (!/^#[0-9a-f]{6}$/i.test(color || "")) throw new Error("Color inválido");
 
   const { error } = await supabaseServer.from("categorias").insert({ nombre: n, color });
-  if (error) throw new Error(error.message);
+  if (error) throw sanitizeDbError(error);
 }
 
 export async function deleteCategoria(nombre: string) {
@@ -137,7 +143,7 @@ export async function deleteCategoria(nombre: string) {
   if (updateError) throw new Error("Error al reasignar gastos");
 
   const { error } = await supabaseServer.from("categorias").delete().eq("nombre", n);
-  if (error) throw new Error("Error al eliminar categoría");
+  if (error) throw sanitizeDbError(error);
   revalidatePath("/");
   revalidatePath("/gastos");
 }
