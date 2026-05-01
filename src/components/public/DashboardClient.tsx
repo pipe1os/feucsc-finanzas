@@ -23,11 +23,13 @@ interface CategoriaData {
 interface DashboardClientProps {
   transacciones: Transaccion[];
   gastosPorCategoria: CategoriaData[];
+  isLoading?: boolean;
 }
 
 export default function DashboardClient({
   transacciones,
   gastosPorCategoria,
+  isLoading,
 }: DashboardClientProps) {
   const [chartCategoryFilter, setChartCategoryFilter] = useState<string | null>(
     null,
@@ -43,6 +45,7 @@ export default function DashboardClient({
           transacciones={transacciones}
           chartCategoryFilter={chartCategoryFilter}
           onClearChartFilter={() => setChartCategoryFilter(null)}
+          isLoading={isLoading}
         />
       </div>
       <div className="xl:col-span-1">

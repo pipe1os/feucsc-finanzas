@@ -174,7 +174,7 @@ export default async function Home() {
                 <Table.ScrollContainer>
                   <Table.Content aria-label="Últimos gastos">
                     <Table.Header>
-                      <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
+                      <Table.Column isRowHeader className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
                         Fecha
                       </Table.Column>
                       <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
