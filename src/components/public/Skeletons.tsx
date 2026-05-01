@@ -1,0 +1,201 @@
+"use client";
+
+import { Skeleton } from "@heroui/react";
+
+// ── KPI Cards Skeleton ───────────────────────────────────────────
+export function SkeletonKPICards() {
+  return (
+    <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple p-6 sm:p-8">
+      {/* Top row: hero metric + sub-metrics */}
+      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-10">
+        {/* Hero metric */}
+        <div className="flex-1 min-w-0 space-y-3">
+          <Skeleton className="h-3 w-28 rounded-lg" />
+          <Skeleton className="h-12 w-48 sm:h-14 sm:w-64 rounded-lg" />
+          <Skeleton className="h-4 w-40 rounded-lg" />
+        </div>
+
+        {/* Divider */}
+        <div className="hidden lg:block w-px h-16 bg-gray-100 dark:bg-gray-800" />
+
+        {/* Sub-metrics */}
+        <div className="flex items-end gap-8 sm:gap-10 shrink-0">
+          <div className="space-y-2">
+            <Skeleton className="h-3 w-28 rounded-lg" />
+            <Skeleton className="h-7 w-32 rounded-lg" />
+            <Skeleton className="h-3 w-24 rounded-lg" />
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-3 w-32 rounded-lg" />
+            <Skeleton className="h-7 w-32 rounded-lg" />
+            <Skeleton className="h-3 w-24 rounded-lg" />
+          </div>
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mt-6 pt-6 border-t border-gray-50 dark:border-gray-800 space-y-2">
+        <Skeleton className="h-3 w-48 rounded-lg" />
+        <Skeleton className="h-1 w-full rounded-full" />
+      </div>
+    </div>
+  );
+}
+
+// ── Table Skeleton ───────────────────────────────────────────────
+export function SkeletonTable({ rows = 5 }: { rows?: number }) {
+  return (
+    <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple overflow-hidden">
+      {/* Header */}
+      <div className="p-6 pb-0 space-y-2">
+        <Skeleton className="h-5 w-40 rounded-lg" />
+        <Skeleton className="h-3 w-56 rounded-lg" />
+      </div>
+
+      {/* Filter row */}
+      <div className="flex flex-wrap items-center gap-3 px-6 pt-3">
+        <Skeleton className="h-9 w-full sm:w-56 rounded-xl" />
+        <Skeleton className="h-9 w-44 rounded-xl" />
+        <Skeleton className="h-9 w-56 rounded-xl" />
+      </div>
+
+      {/* Table */}
+      <div className="p-6 pt-4 space-y-3">
+        {/* Table header */}
+        <div className="hidden md:grid grid-cols-[120px_1fr_120px_100px_80px] gap-4 pb-3 border-b border-gray-100 dark:border-gray-800">
+          <Skeleton className="h-3 w-16 rounded" />
+          <Skeleton className="h-3 w-24 rounded" />
+          <Skeleton className="h-3 w-20 rounded" />
+          <Skeleton className="h-3 w-16 rounded" />
+          <Skeleton className="h-3 w-12 rounded" />
+        </div>
+
+        {/* Table rows */}
+        {Array.from({ length: rows }).map((_, index) => (
+          <div
+            key={index}
+            className="hidden md:grid grid-cols-[120px_1fr_120px_100px_80px] gap-4 items-center py-3 border-b border-gray-50 dark:border-gray-800 last:border-b-0"
+          >
+            <Skeleton className="h-4 w-20 rounded" />
+            <Skeleton className="h-4 w-3/4 rounded" />
+            <Skeleton className="h-5 w-20 rounded-lg" />
+            <Skeleton className="h-4 w-20 rounded" />
+            <Skeleton className="h-8 w-8 rounded-lg mx-auto" />
+          </div>
+        ))}
+
+        {/* Mobile rows */}
+        {Array.from({ length: rows }).map((_, index) => (
+          <div
+            key={`mobile-${index}`}
+            className="md:hidden flex flex-col gap-2 py-3 border-b border-gray-100 dark:border-gray-800 last:border-b-0"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <Skeleton className="h-4 w-3/4 rounded" />
+              <Skeleton className="h-4 w-20 rounded" />
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <Skeleton className="h-5 w-20 rounded-lg" />
+              <Skeleton className="h-3 w-16 rounded" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer pagination */}
+      <div className="px-6 py-4 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
+        <Skeleton className="h-4 w-32 rounded" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-8 w-8 rounded-lg" />
+          <Skeleton className="h-4 w-16 rounded" />
+          <Skeleton className="h-8 w-8 rounded-lg" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Latest Transactions Skeleton (Home page mini table) ──────────
+export function SkeletonLatestTransactions({ rows = 3 }: { rows?: number }) {
+  return (
+    <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple overflow-hidden">
+      {/* Header */}
+      <div className="px-6 pt-5 pb-4">
+        <Skeleton className="h-5 w-36 rounded-lg" />
+      </div>
+
+      {/* Rows */}
+      <div className="px-5 space-y-0">
+        {Array.from({ length: rows }).map((_, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-[100px_1fr_100px_100px] gap-4 items-center py-3.5 border-t border-gray-50 dark:border-gray-800"
+          >
+            <Skeleton className="h-4 w-16 rounded" />
+            <Skeleton className="h-4 w-3/4 rounded" />
+            <Skeleton className="h-5 w-20 rounded-lg" />
+            <Skeleton className="h-4 w-20 rounded ml-auto" />
+          </div>
+        ))}
+      </div>
+
+      {/* Footer */}
+      <div className="px-6 py-4 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
+        <Skeleton className="h-3 w-32 rounded" />
+        <Skeleton className="h-4 w-32 rounded" />
+      </div>
+    </div>
+  );
+}
+
+// ── Chart Skeleton ───────────────────────────────────────────────
+export function SkeletonChart({ type = "trend" }: { type?: "trend" | "category" }) {
+  if (type === "category") {
+    return (
+      <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-apple overflow-hidden space-y-4">
+        <Skeleton className="h-5 w-36 rounded-lg" />
+        <div className="flex justify-center">
+          <Skeleton className="h-48 w-48 rounded-full" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-[300px] rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-apple overflow-hidden space-y-4">
+      <div className="space-y-2">
+        <Skeleton className="h-5 w-40 rounded-lg" />
+        <Skeleton className="h-3 w-56 rounded-lg" />
+      </div>
+      <Skeleton className="h-[300px] w-full rounded-xl" />
+    </div>
+  );
+}
+
+// ── Generic List Items Skeleton ──────────────────────────────────
+export function SkeletonListItems({ count = 3 }: { count?: number }) {
+  return (
+    <div className="w-full max-w-sm space-y-4">
+      {Array.from({ length: count }).map((_, index) => (
+        <div key={index} className="flex items-center gap-3">
+          <Skeleton className="h-10 w-10 shrink-0 rounded-lg" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-3 w-full rounded" />
+            <Skeleton className="h-3 w-4/5 rounded" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Single Shimmer Grid Skeleton ─────────────────────────────────
+export function SkeletonGrid({ items = 3 }: { items?: number }) {
+  return (
+    <div className="skeleton--shimmer relative grid w-full max-w-xl grid-cols-3 gap-4 overflow-hidden rounded-xl">
+      {Array.from({ length: items }).map((_, index) => (
+        <Skeleton key={index} animationType="none" className="h-24 rounded-xl" />
+      ))}
+    </div>
+  );
+}

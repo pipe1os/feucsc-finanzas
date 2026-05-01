@@ -2,6 +2,7 @@
 
 import { formatCLP } from "@/lib/utils";
 import { useEffect, useState, useRef } from "react";
+import { SkeletonKPICards } from "./Skeletons";
 
 interface ResumenFinanciero {
   presupuestoTotal: number;
@@ -11,6 +12,7 @@ interface ResumenFinanciero {
 
 interface KPICardsProps {
   resumenFinanciero: ResumenFinanciero;
+  isLoading?: boolean;
 }
 
 // ── Animated counter hook ──────────────────────────────
@@ -48,7 +50,7 @@ function useCountUp(target: number, duration = 1200, delay = 0) {
   return value;
 }
 
-export default function KPICards({ resumenFinanciero }: KPICardsProps) {
+export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps) {
   const porcentajeGastado = Math.round(
     (resumenFinanciero.totalGastado / resumenFinanciero.presupuestoTotal) * 100,
   );
@@ -89,6 +91,10 @@ export default function KPICards({ resumenFinanciero }: KPICardsProps) {
       : porcentajeDisponible >= 31
         ? "text-amber-600 dark:text-amber-400"
         : "text-rose-600 dark:text-rose-400";
+
+  if (isLoading) {
+    return <SkeletonKPICards />;
+  }
 
   return (
     <div className="animate-fade-in-up opacity-0">

@@ -21,6 +21,7 @@ import {
 } from "@heroui/react";
 import { formatDate, formatCLP } from "@/lib/utils";
 import Image from "next/image";
+import { SkeletonTable } from "./Skeletons";
 
 interface TransaccionItem {
   id: string;
@@ -37,6 +38,7 @@ interface ExpenseTableProps {
   transacciones: TransaccionItem[];
   chartCategoryFilter?: string | null;
   onClearChartFilter?: () => void;
+  isLoading?: boolean;
 }
 
 const SearchIcon = () => (
@@ -162,6 +164,7 @@ export default function ExpenseTable({
   transacciones,
   chartCategoryFilter,
   onClearChartFilter,
+  isLoading,
 }: ExpenseTableProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -369,6 +372,10 @@ export default function ExpenseTable({
   const hasActiveFilters =
     selectedMonth !== "all" || selectedCategory !== "all";
 
+  if (isLoading) {
+    return <SkeletonTable rows={5} />;
+  }
+
   return (
     <>
       <div
@@ -430,7 +437,7 @@ export default function ExpenseTable({
                   return `Mes: ${found?.label ?? "Todos"}`;
                 }}
               </Select.Value>
-              <Select.Indicator />
+              <Select.Indicator className="text-gray-400 dark:text-gray-500" />
             </Select.Trigger>
             <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-gray-800 dark:bg-gray-900 min-w-48">
               <ListBox>
@@ -471,7 +478,7 @@ export default function ExpenseTable({
                   return `Categoría: ${String(key ?? "Todas")}`;
                 }}
               </Select.Value>
-              <Select.Indicator />
+              <Select.Indicator className="text-gray-400 dark:text-gray-500" />
             </Select.Trigger>
             <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-gray-800 dark:bg-gray-900 min-w-56">
               <ListBox>
