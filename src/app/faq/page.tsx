@@ -1,5 +1,6 @@
 import Sidebar from "@/components/public/Sidebar";
 import FAQContent from "@/components/public/FAQContent";
+import Footer from "@/components/public/Footer";
 import Link from "next/link";
 
 export const metadata = {
@@ -35,7 +36,7 @@ export default function FAQPage() {
             className="mt-12 mb-0 text-center animate-fade-in-up opacity-0"
             style={{ animationDelay: "0.4s" }}
           >
-            <h2 className="text-x1 sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900 dark:text-white leading-snug">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900 dark:text-white leading-snug">
               ¿Tienes otra duda?{" "}
               <a
                 href="/contacto"
@@ -62,17 +63,7 @@ export default function FAQPage() {
           </section>
 
           {/* Footer — same as main page */}
-          <footer
-            className="mt-20 border-t border-gray-100 dark:border-gray-800 pt-6 animate-fade-in-up opacity-0"
-            style={{ animationDelay: "0.5s" }}
-          >
-            <div className="flex justify-center items-center mb-2">
-              <p className="text-xs text-gray-400 text-center">
-                © 2026 Federación de Estudiantes Universidad Católica de la
-                Santísima Concepción.
-              </p>
-            </div>
-          </footer>
+          <Footer />
         </div>
       </main>
     </div>

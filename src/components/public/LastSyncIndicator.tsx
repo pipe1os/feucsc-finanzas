@@ -8,7 +8,22 @@ interface LastSyncIndicatorProps {
 }
 
 function formatExactDate(isoDate: string): string {
-  const date = new Date(isoDate);
+  // Parse robustly: handle both full ISO strings and date-only strings
+  // without timezone shifts by treating the input as local time.
+  let date: Date;
+  const trimmed = isoDate.trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    // Date-only string: parse as local midnight to avoid UTC conversion
+    const [y, m, d] = trimmed.split("-").map(Number);
+    date = new Date(y, m - 1, d);
+  } else {
+    date = new Date(trimmed);
+  }
+
+  if (isNaN(date.getTime())) {
+    return isoDate;
+  }
+
   const months = [
     "ene", "feb", "mar", "abr", "may", "jun",
     "jul", "ago", "sep", "oct", "nov", "dic"

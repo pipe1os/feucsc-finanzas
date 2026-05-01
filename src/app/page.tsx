@@ -4,6 +4,7 @@ import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { LazyExpenseTrendChart } from "@/components/public/LazyCharts";
 import { supabase } from "@/lib/supabase";
 import { formatCLP, formatDate, parseISODate } from "@/lib/utils";
+import Footer from "@/components/public/Footer";
 import Link from "next/link";
 
 // ISR: revalidate every 60 seconds
@@ -250,17 +251,7 @@ export default async function Home() {
           </section>
 
           {/* Footer */}
-          <footer
-            className="mt-8 border-t border-gray-100 dark:border-gray-800 pt-6 animate-fade-in-up opacity-0"
-            style={{ animationDelay: "0.3s" }}
-          >
-            <div className="flex justify-center items-center mb-2">
-              <p className="text-xs text-gray-400 text-center">
-                © 2026 Federación de Estudiantes Universidad Católica de la
-                Santísima Concepción.
-              </p>
-            </div>
-          </footer>
+          <Footer />
         </div>
       </main>
     </div>

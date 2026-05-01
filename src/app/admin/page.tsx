@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { useTheme } from "next-themes";
+import { useState, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { SortDescriptor } from "@heroui/react";
@@ -29,455 +28,23 @@ import { parseISODate } from "@/lib/utils";
 import { deleteCloudinaryImage } from "@/app/actions/cloudinary";
 import { uploadComprobanteAction } from "@/app/actions/upload";
 import { createGasto, updateGasto, deleteGasto as deleteGastoAction, createCategoria, deleteCategoria as deleteCategoriaAction } from "@/app/actions/gastos";
-
-/* ── Icons ──────────────────────────────────────── */
-const SunIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="12" cy="12" r="4" />
-    <path d="M12 2v2" />
-    <path d="M12 20v2" />
-    <path d="m4.93 4.93 1.41 1.41" />
-    <path d="m17.66 17.66 1.41 1.41" />
-    <path d="M2 12h2" />
-    <path d="M20 12h2" />
-    <path d="m6.34 17.66-1.41 1.41" />
-    <path d="m19.07 4.93-1.41 1.41" />
-  </svg>
-);
-
-const MoonIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-  </svg>
-);
-
-const UploadIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-    <polyline points="17 8 12 3 7 8" />
-    <line x1="12" y1="3" x2="12" y2="15" />
-  </svg>
-);
-const LogOutIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-    <polyline points="16 17 21 12 16 7" />
-    <line x1="21" x2="9" y1="12" y2="12" />
-  </svg>
-);
-const PlusIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="12" x2="12" y1="5" y2="19" />
-    <line x1="5" x2="19" y1="12" y2="12" />
-  </svg>
-);
-const CheckIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="20 6 9 17 4 12" />
-  </svg>
-);
-const EyeIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-    <circle cx="12" cy="12" r="3" />
-  </svg>
-);
-const EditIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-  </svg>
-);
-const TrashIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M3 6h18" />
-    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-    <line x1="10" x2="10" y1="11" y2="17" />
-    <line x1="14" x2="14" y1="11" y2="17" />
-  </svg>
-);
-const ImageIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-    <circle cx="9" cy="9" r="2" />
-    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-  </svg>
-);
-const SearchIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="11" cy="11" r="8" />
-    <path d="m21 21-4.3-4.3" />
-  </svg>
-);
-const InboxIcon = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
-    <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
-  </svg>
-);
-const XIcon = () => (
-  <svg
-    width="12"
-    height="12"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M18 6 6 18" />
-    <path d="m6 6 12 12" />
-  </svg>
-);
-const ChevronDownIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="m6 9 6 6 6-6" />
-  </svg>
-);
-
-/* ── Theme Toggle Component ─────────────────────── */
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setMounted(true), 0);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <div className="flex items-center gap-2 rounded-xl bg-gray-100 dark:bg-white/5 p-1 h-9">
-        <div className="flex-1" />
-      </div>
-    );
-  }
-
-  const isLight = theme === "light";
-
-  return (
-    <div className="flex items-center rounded-xl bg-gray-100 dark:bg-white/5 p-1">
-      <button
-        type="button"
-        onClick={() => setTheme("light")}
-        className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200 cursor-pointer
-          ${
-            isLight
-              ? "bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm"
-              : "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
-          }`}
-      >
-        <SunIcon />
-        <span>Claro</span>
-      </button>
-      <button
-        type="button"
-        onClick={() => setTheme("dark")}
-        className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200 cursor-pointer
-          ${
-            !isLight
-              ? "bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm"
-              : "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
-          }`}
-      >
-        <MoonIcon />
-        <span>Oscuro</span>
-      </button>
-    </div>
-  );
-}
-
-/* ── ComprobanteUpload component ────────────────── */
-interface ComprobanteUploadProps {
-  // Modo creación: usamos File seleccionado
-  selectedFile: File | null;
-  setSelectedFile: (file: File | null) => void;
-  // Modo edición: URL existente + callback para marcar eliminación
-  existingUrl?: string | null;
-  onDeleteExisting?: () => void;
-  // Estado de eliminación pendiente (para UI)
-  isMarkedForDeletion?: boolean;
-  // Para ver imagen en lightbox
-  onViewImage?: (url: string) => void;
-}
-
-function ComprobanteUpload({
-  selectedFile,
-  setSelectedFile,
-  existingUrl,
-  onDeleteExisting,
-  isMarkedForDeletion,
-  onViewImage,
-}: ComprobanteUploadProps) {
-  const displayText = selectedFile
-    ? selectedFile.name
-    : existingUrl && !isMarkedForDeletion
-      ? "Imagen adjunta"
-      : "(sin archivo seleccionado)";
-
-  // Modo edición con imagen existente
-  if (existingUrl !== undefined) {
-    // Sin imagen o marcada para eliminar - mostrar input de upload
-    if (!existingUrl || isMarkedForDeletion) {
-      return (
-        <div className="flex flex-col gap-1.5 h-full justify-end">
-          <Label>Comprobante</Label>
-          <div className="flex items-center gap-3">
-            <label
-              className={`flex items-center justify-center gap-2 px-4 h-10 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 cursor-pointer text-sm font-medium shrink-0
-              ${selectedFile ? "opacity-50 cursor-not-allowed" : "hover:border-red-400 hover:text-red-600 transition-colors"}`}
-            >
-              <UploadIcon />
-              {selectedFile ? "Archivo seleccionado" : "Subir archivo"}
-              <input
-                type="file"
-                className="hidden"
-                accept="image/*"
-                disabled={!!selectedFile}
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) setSelectedFile(file);
-                }}
-              />
-            </label>
-            {selectedFile && (
-              <div className="flex items-center gap-2 text-sm text-gray-500 overflow-hidden">
-                <span className="truncate max-w-37.5 sm:max-w-50">
-                  {selectedFile.name}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setSelectedFile(null)}
-                  className="text-gray-400 hover:text-red-500 transition-colors p-1"
-                  title="Eliminar archivo"
-                >
-                  ✕
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-
-    // Tiene imagen existente - mostrar icono ver + eliminar centrado
-    return (
-      <div className="flex flex-col gap-2 h-full justify-end">
-        <Label>Comprobante</Label>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => onViewImage?.(existingUrl)}
-            className="inline-flex items-center justify-center size-8 rounded-lg bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
-            aria-label="Ver imagen actual"
-          >
-            <EyeIcon />
-          </button>
-          <Button
-            variant="ghost"
-            className="flex-1 bg-gray-200/50 dark:bg-gray-800/50 h-10 text-red-600 hover:text-red-700"
-            onPress={() => onDeleteExisting?.()}
-          >
-            Eliminar imagen
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  // Modo creación
-  return (
-    <div className="flex flex-col gap-1.5 h-full justify-end">
-      <label className="text-sm font-medium text-gray-900 dark:text-gray-100">
-        Comprobante
-      </label>
-      <div className="flex items-center gap-3">
-        <label
-          className={`flex items-center justify-center gap-2 px-4 h-10 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 cursor-pointer text-sm font-medium shrink-0
-          ${selectedFile ? "opacity-50 cursor-not-allowed" : "hover:border-red-400 hover:text-red-600 transition-colors"}`}
-        >
-          <UploadIcon />
-          {selectedFile ? "Archivo seleccionado" : "Subir archivo"}
-          <input
-            type="file"
-            className="hidden"
-            accept="image/*"
-            disabled={!!selectedFile}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) setSelectedFile(file);
-            }}
-          />
-        </label>
-
-        <div className="flex items-center gap-2 text-sm text-gray-500 overflow-hidden">
-          <span className="truncate max-w-37.5 sm:max-w-50">
-            {displayText}
-          </span>
-          {selectedFile && (
-            <button
-              type="button"
-              onClick={() => setSelectedFile(null)}
-              className="text-gray-400 hover:text-red-500 transition-colors p-1"
-              title="Eliminar archivo"
-            >
-              ✕
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ── Sortable header ─────────────────────────── */
-function SortableColumnHeader({
-  children,
-  sortDirection,
-}: {
-  children: React.ReactNode;
-  sortDirection?: "ascending" | "descending";
-}) {
-  return (
-    <span className="flex items-center gap-1 cursor-pointer">
-      {children}
-      {!!sortDirection && (
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className={`transform transition-transform duration-200 ease-out ${sortDirection === "descending" ? "rotate-180" : ""}`}
-        >
-          <path d="m18 15-6-6-6 6" />
-        </svg>
-      )}
-    </span>
-  );
-}
-
+import { useGastos } from "@/hooks/useGastos";
+import { useCategorias } from "@/hooks/useCategorias";
+import ThemeToggle from "@/components/admin/ThemeToggle";
+import ComprobanteUpload from "@/components/admin/ComprobanteUpload";
+import CategorySelect from "@/components/admin/CategorySelect";
+import SortableColumnHeader from "@/components/admin/SortableColumnHeader";
+import {
+  LogOutIcon,
+  PlusIcon,
+  EyeIcon,
+  EditIcon,
+  TrashIcon,
+  ImageIcon,
+  SearchIcon,
+  InboxIcon,
+  XIcon,
+} from "@/components/admin/Icons";
 /* ── Types ──────────────────────────────────────── */
 interface GastoDB {
   id: string;
@@ -486,12 +53,6 @@ interface GastoDB {
   categoria: string;
   monto: number;
   comprobante_url: string | null;
-  creado_el: string;
-}
-interface CategoriaDB {
-  id: string;
-  nombre: string;
-  color?: string;
   creado_el: string;
 }
 
@@ -535,183 +96,6 @@ function formatDate(d: string) {
 }
 
 
-/* ── CategorySelect — custom dropdown with inline delete ── */
-function CategorySelect({
-  categorias,
-  value,
-  onChange,
-  onDeleteCategory,
-}: {
-  categorias: string[];
-  value: string;
-  onChange: (cat: string) => void;
-  onDeleteCategory?: (cat: string) => void;
-}) {
-  const [open, setOpen] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
-  const [newCatName, setNewCatName] = useState("");
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  // Close on outside click
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-        setIsCreating(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
-  const confirmNewCategory = () => {
-    const trimmed = newCatName.trim();
-    if (trimmed) {
-      onChange(trimmed);
-      setIsCreating(false);
-      setNewCatName("");
-      setOpen(false);
-    }
-  };
-
-  return (
-    <div ref={wrapperRef} className="relative w-full">
-      {/* Trigger */}
-      <button
-        type="button"
-        onClick={() => {
-          setOpen(!open);
-          setIsCreating(false);
-        }}
-        className="flex w-full items-center justify-between rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 px-4 py-2.5
-                   text-sm text-gray-900 dark:text-white transition-all duration-200 cursor-pointer
-                   hover:border-gray-300 dark:hover:border-zinc-700 focus:border-red-300  focus:ring-2 focus:ring-red-100 outline-hidden"
-      >
-        <span>{value}</span>
-        <span
-          className={`text-gray-400 dark:text-gray-500 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-        >
-          <ChevronDownIcon />
-        </span>
-      </button>
-
-      {/* Dropdown */}
-      {open && (
-        <div
-          className="absolute z-50 mt-1.5 w-full rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-lg py-1 animate-fade-in-up"
-          style={{ animationDuration: "150ms" }}
-        >
-          <div className="max-h-60 overflow-y-auto">
-            {categorias.map((cat) => {
-              const isSelected = cat === value;
-              const isOtros = cat === "Otros";
-              return (
-                <div
-                  key={cat}
-                  className={`group flex items-center justify-between px-3 py-2 text-sm cursor-pointer transition-colors duration-150
-                ${isSelected ? "bg-red-50 text-red-600 font-medium" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800"}`}
-                >
-                  <span
-                    className="flex-1"
-                    onClick={() => {
-                      onChange(cat);
-                      setOpen(false);
-                    }}
-                  >
-                    {cat}
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    {isSelected && (
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    )}
-                    {!isOtros && onDeleteCategory && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDeleteCategory(cat);
-                          setOpen(false);
-                        }}
-                        className="inline-flex items-center justify-center size-5 rounded-full
-                                 opacity-0 group-hover:opacity-100 transition-opacity duration-150
-                                 text-red-400 hover:bg-red-100 hover:text-red-600 cursor-pointer"
-                        aria-label={`Eliminar ${cat}`}
-                      >
-                        <XIcon />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Divider + Nueva categoría */}
-          <div className="border-t border-gray-100 dark:border-zinc-800 mt-1 pt-1">
-            {isCreating ? (
-              <div className="flex items-center gap-2 px-3 py-2">
-                <input
-                  autoFocus
-                  type="text"
-                  placeholder="Nombre..."
-                  value={newCatName}
-                  onChange={(e) => setNewCatName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      confirmNewCategory();
-                    }
-                    if (e.key === "Escape") setIsCreating(false);
-                  }}
-                  className="flex-1 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-hidden focus:border-red-300 focus:ring-1 focus:ring-red-100"
-                />
-                <button
-                  type="button"
-                  onClick={confirmNewCategory}
-                  className="inline-flex items-center justify-center rounded-lg bg-red-500 px-2 py-1.5 text-white text-xs hover:bg-red-600 transition-colors cursor-pointer"
-                >
-                  <CheckIcon />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsCreating(false)}
-                  className="inline-flex items-center justify-center rounded-lg border border-gray-200 dark:border-zinc-800 px-2 py-1.5 text-gray-400 dark:text-gray-500 text-xs hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
-                >
-                  ✕
-                </button>
-              </div>
-            ) : (
-              <div
-                onClick={() => {
-                  setIsCreating(true);
-                  setNewCatName("");
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-sm text-red-500 font-medium cursor-pointer hover:bg-red-50 transition-colors duration-150"
-              >
-                <PlusIcon /> Nueva categoría
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
 /* ══════════════════════════════════════════════════
    Admin Page
    ══════════════════════════════════════════════════ */
@@ -727,9 +111,9 @@ export default function AdminPage() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
-  // ── Table ──
-  const [gastos, setGastos] = useState<GastoDB[]>([]);
-  const [loadingTable, setLoadingTable] = useState(true);
+  // ── Table ── (SWR-powered)
+  const { gastos, isLoading: loadingTable, mutateGastos } = useGastos();
+  const { categoriasDB, mutateCategorias } = useCategorias();
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
@@ -741,7 +125,6 @@ export default function AdminPage() {
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ── Categories from DB ──
-  const [categoriasDB, setCategoriasDB] = useState<CategoriaDB[]>([]);
   const [deletingCat, setDeletingCat] = useState<string | null>(null);
   const [deletingCatLoading, setDeletingCatLoading] = useState(false);
 
@@ -765,32 +148,6 @@ export default function AdminPage() {
 
   // ── Lightbox ──
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
-
-  // ── Fetch gastos ──
-  const fetchGastos = useCallback(async () => {
-    setLoadingTable(true);
-    const { data, error } = await supabase
-      .from("gastos")
-      .select("*")
-      .order("fecha", { ascending: false });
-    if (!error && data) setGastos(data);
-    setLoadingTable(false);
-  }, []);
-
-  // ── Fetch categories from DB ──
-  const fetchCategorias = useCallback(async () => {
-    const { data, error } = await supabase
-      .from("categorias")
-      .select("*")
-      .order("nombre");
-    if (!error && data) setCategoriasDB(data);
-  }, []);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchGastos();
-    fetchCategorias();
-  }, [fetchGastos, fetchCategorias]);
 
   // ── Category names sorted (Otros always last) ──
   const categorias = useMemo(() => {
@@ -821,7 +178,7 @@ export default function AdminPage() {
       const newColor = getNextPaletteColor(usedColors);
       try {
         await createCategoria(cat, newColor);
-        fetchCategorias();
+        mutateCategorias();
       } catch {
         toast.danger("Error al crear categoría");
       }
@@ -836,7 +193,7 @@ export default function AdminPage() {
       const newColor = getNextPaletteColor(usedColors);
       try {
         await createCategoria(cat, newColor);
-        fetchCategorias();
+        mutateCategorias();
       } catch {
         toast.danger("Error al crear categoría");
       }
@@ -850,8 +207,8 @@ export default function AdminPage() {
     try {
       await deleteCategoriaAction(deletingCat);
       setDeletingCat(null);
-      fetchCategorias();
-      fetchGastos();
+      mutateCategorias();
+      mutateGastos();
     } catch {
       toast.danger("Error al eliminar categoría");
     } finally {
@@ -968,9 +325,14 @@ export default function AdminPage() {
       setMonto("");
       setSelectedFile(null);
 
-      fetchGastos();
+      mutateGastos();
     } catch (err: unknown) {
-      setFormError(`Error: ${err instanceof Error ? err.message : "desconocido"}`);
+      const msg = err instanceof Error ? err.message : "";
+      // Only expose known safe messages; hide internal details
+      const safeMsg = msg === "No autorizado" || msg.includes("inválid")
+        ? msg
+        : "Ocurrió un error al registrar el gasto";
+      setFormError(safeMsg);
       toast.danger("Error al registrar gasto");
     } finally {
       setSubmitting(false);
@@ -1041,11 +403,15 @@ export default function AdminPage() {
       // Cerrar modal con delay para evitar conflicto de view transitions
       setTimeout(() => {
         setEditGasto(null);
-        fetchGastos();
+        mutateGastos();
         toast.success("Gasto actualizado exitosamente");
       }, 500);
     } catch (err: unknown) {
-      setEditError(`Error: ${err instanceof Error ? err.message : "desconocido"}`);
+      const msg = err instanceof Error ? err.message : "";
+      const safeMsg = msg === "No autorizado" || msg.includes("inválid")
+        ? msg
+        : "Ocurrió un error al actualizar el gasto";
+      setEditError(safeMsg);
       toast.danger("Error al actualizar gasto");
     } finally {
       setEditSubmitting(false);
@@ -1065,10 +431,14 @@ export default function AdminPage() {
 
       toast.success("Gasto eliminado exitosamente");
       setDeleteGasto(null);
-      fetchGastos();
+      mutateGastos();
       if (paginated.length === 1 && page > 1) setPage(page - 1);
     } catch (err: unknown) {
-      setDeleteError(`Error: ${err instanceof Error ? err.message : "desconocido"}`);
+      const msg = err instanceof Error ? err.message : "";
+      const safeMsg = msg === "No autorizado" || msg.includes("inválid")
+        ? msg
+        : "Ocurrió un error al eliminar el gasto";
+      setDeleteError(safeMsg);
       toast.danger("Error al eliminar gasto");
     } finally {
       setDeleting(false);

@@ -1,0 +1,49 @@
+import useSWR from "swr";
+import { supabase } from "@/lib/supabase";
+
+interface GastoDB {
+  id: string;
+  fecha: string;
+  descripcion: string;
+  categoria: string;
+  monto: number;
+  comprobante_url: string | null;
+  creado_el: string;
+}
+
+const GASTOS_KEY = "supabase:gastos";
+
+async function fetchGastos(): Promise<GastoDB[]> {
+  const { data, error } = await supabase
+    .from("gastos")
+    .select("*")
+    .order("fecha", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
+/**
+ * SWR hook for gastos data.
+ * – Returns cached data instantly on re-mount / tab-switch.
+ * – Silently revalidates in the background.
+ * – Use `mutate()` after create/update/delete to trigger refresh.
+ */
+export function useGastos() {
+  const { data, error, isLoading, isValidating, mutate } = useSWR<GastoDB[]>(
+    GASTOS_KEY,
+    fetchGastos,
+    {
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      dedupingInterval: 2000,
+    },
+  );
+
+  return {
+    gastos: data ?? [],
+    isLoading,
+    isValidating,
+    error,
+    mutateGastos: mutate,
+  };
+}

@@ -1,10 +1,26 @@
 "use server";
 
+import { createAuthClient } from "@/lib/supabase-auth";
+import { isAuthorizedEmail } from "@/lib/auth";
+
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
+async function requireAuth() {
+  const supabase = await createAuthClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user || !isAuthorizedEmail(user.email)) {
+    throw new Error("No autorizado");
+  }
+  return user;
+}
+
 export async function uploadComprobanteAction(formData: FormData): Promise<string | null> {
+  await requireAuth();
   const file = formData.get("file") as File | null;
   if (!file) return null;
+
 
   if (!file.type.startsWith("image/")) {
     throw new Error("Solo se permiten archivos de imagen");
