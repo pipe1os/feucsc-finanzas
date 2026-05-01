@@ -12,9 +12,6 @@ import {
   Modal,
   Tooltip,
   Pagination,
-  TextField,
-  Label,
-  Input,
   AlertDialog,
   EmptyState,
   ListBox,
@@ -23,20 +20,18 @@ import {
 } from "@heroui/react";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
-import { getNextPaletteColor, VARIOS_COLOR } from "@/lib/category-palette";
+import { VARIOS_COLOR } from "@/lib/category-palette";
 import { parseISODate } from "@/lib/utils";
 import { deleteCloudinaryImage } from "@/app/actions/cloudinary";
-import { uploadComprobanteAction } from "@/app/actions/upload";
-import { createGasto, updateGasto, deleteGasto as deleteGastoAction, createCategoria, deleteCategoria as deleteCategoriaAction } from "@/app/actions/gastos";
+import { deleteGasto as deleteGastoAction, deleteCategoria as deleteCategoriaAction } from "@/app/actions/gastos";
 import { useGastos } from "@/hooks/useGastos";
 import { useCategorias } from "@/hooks/useCategorias";
 import ThemeToggle from "@/components/admin/ThemeToggle";
-import ComprobanteUpload from "@/components/admin/ComprobanteUpload";
-import CategorySelect from "@/components/admin/CategorySelect";
 import SortableColumnHeader from "@/components/admin/SortableColumnHeader";
+import GastoForm from "@/components/admin/GastoForm";
+import EditGastoForm from "@/components/admin/EditGastoForm";
 import {
   LogOutIcon,
-  PlusIcon,
   EyeIcon,
   EditIcon,
   TrashIcon,
@@ -102,15 +97,6 @@ function formatDate(d: string) {
 export default function AdminPage() {
   const router = useRouter();
 
-  // ── Form ──
-  const [fecha, setFecha] = useState(() => new Date().toISOString().split("T")[0]);
-  const [descripcion, setDescripcion] = useState("");
-  const [categoria, setCategoria] = useState("Varios");
-  const [monto, setMonto] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
-
   // ── Table ── (SWR-powered)
   const { gastos, isLoading: loadingTable, mutateGastos } = useGastos();
   const { categoriasDB, mutateCategorias } = useCategorias();
@@ -130,16 +116,6 @@ export default function AdminPage() {
 
   // ── Edit ──
   const [editGasto, setEditGasto] = useState<GastoDB | null>(null);
-  const [editFecha, setEditFecha] = useState("");
-  const [editDescripcion, setEditDescripcion] = useState("");
-  const [editCategoria, setEditCategoria] = useState("Varios");
-  const [editMonto, setEditMonto] = useState("");
-  // Estados para manejo de imagen en edición
-  const [editSelectedFile, setEditSelectedFile] = useState<File | null>(null);
-  const [editExistingUrl, setEditExistingUrl] = useState<string | null>(null);
-  const [editImageMarkedForDeletion, setEditImageMarkedForDeletion] = useState(false);
-  const [editSubmitting, setEditSubmitting] = useState(false);
-  const [editError, setEditError] = useState<string | null>(null);
 
   // ── Delete gasto ──
   const [deleteGasto, setDeleteGasto] = useState<GastoDB | null>(null);
@@ -167,38 +143,6 @@ export default function AdminPage() {
     }
     return map;
   }, [categoriasDB]);
-
-  // ── Create category in DB if new ──
-  const handleCategoriaChange = async (cat: string) => {
-    setCategoria(cat);
-    if (!categorias.includes(cat)) {
-      const usedColors = categoriasDB
-        .map((c) => c.color)
-        .filter(Boolean) as string[];
-      const newColor = getNextPaletteColor(usedColors);
-      try {
-        await createCategoria(cat, newColor);
-        mutateCategorias();
-      } catch {
-        toast.danger("Error al crear categoría");
-      }
-    }
-  };
-  const handleEditCategoriaChange = async (cat: string) => {
-    setEditCategoria(cat);
-    if (!categorias.includes(cat)) {
-      const usedColors = categoriasDB
-        .map((c) => c.color)
-        .filter(Boolean) as string[];
-      const newColor = getNextPaletteColor(usedColors);
-      try {
-        await createCategoria(cat, newColor);
-        mutateCategorias();
-      } catch {
-        toast.danger("Error al crear categoría");
-      }
-    }
-  };
 
   // ── Delete category ──
   const handleDeleteCategory = async () => {
@@ -281,141 +225,8 @@ export default function AdminPage() {
     router.replace("/login");
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormError(null);
-    if (!fecha || !descripcion.trim() || !monto) {
-      setFormError("Completa los campos obligatorios.");
-      return;
-    }
-    const montoNum = parseInt(monto, 10);
-    if (isNaN(montoNum) || montoNum <= 0) {
-      setFormError("El monto debe ser un número positivo.");
-      return;
-    }
-    setSubmitting(true);
-    
-    // Subir imagen a Cloudinary si hay archivo seleccionado
-    let comprobanteUrl: string | null = null;
-    if (selectedFile) {
-      const uploadForm = new FormData();
-      uploadForm.append("file", selectedFile);
-      comprobanteUrl = await uploadComprobanteAction(uploadForm);
-      if (!comprobanteUrl) {
-        setSubmitting(false);
-        setFormError("Error al subir el comprobante");
-        toast.danger("Error al subir el comprobante");
-        return;
-      }
-    }
-
-    try {
-      const form = new FormData();
-      form.append("fecha", fecha);
-      form.append("descripcion", descripcion.trim());
-      form.append("categoria", categoria);
-      form.append("monto", String(montoNum));
-      if (comprobanteUrl) form.append("comprobante_url", comprobanteUrl);
-      await createGasto(form);
-
-      toast.success("Gasto registrado exitosamente");
-      setFecha(new Date().toISOString().split("T")[0]);
-      setDescripcion("");
-      setCategoria("Varios");
-      setMonto("");
-      setSelectedFile(null);
-
-      mutateGastos();
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "";
-      // Only expose known safe messages; hide internal details
-      const safeMsg = msg === "No autorizado" || msg.includes("inválid")
-        ? msg
-        : "Ocurrió un error al registrar el gasto";
-      setFormError(safeMsg);
-      toast.danger("Error al registrar gasto");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   const openEdit = (g: GastoDB) => {
     setEditGasto(g);
-    setEditFecha(g.fecha);
-    setEditDescripcion(g.descripcion);
-    setEditCategoria(g.categoria);
-    setEditMonto(String(g.monto));
-    // Resetear estados de imagen
-    setEditSelectedFile(null);
-    setEditExistingUrl(g.comprobante_url || null);
-    setEditImageMarkedForDeletion(false);
-    setEditError(null);
-  };
-  const handleEditSubmit = async () => {
-    if (!editGasto) return;
-    setEditSubmitting(true);
-    setEditError(null);
-
-    const originalUrl = editGasto.comprobante_url;
-    let finalUrl: string | null = originalUrl || null;
-
-    // Si hay nueva imagen seleccionada, subirla
-    if (editSelectedFile) {
-      const uploadForm = new FormData();
-      uploadForm.append("file", editSelectedFile);
-      const uploadedUrl = await uploadComprobanteAction(uploadForm);
-      if (uploadedUrl) {
-        finalUrl = uploadedUrl;
-      } else {
-        setEditSubmitting(false);
-        setEditError("Error al subir el comprobante");
-        toast.danger("Error al subir el comprobante");
-        return;
-      }
-    }
-
-    // Si se marcó para eliminar, establecer URL como null
-    if (editImageMarkedForDeletion) {
-      finalUrl = null;
-    }
-
-    try {
-      const form = new FormData();
-      form.append("id", editGasto.id);
-      form.append("fecha", editFecha);
-      form.append("descripcion", editDescripcion.trim());
-      form.append("categoria", editCategoria);
-      form.append("monto", editMonto);
-      form.append("comprobante_url", finalUrl || "");
-      await updateGasto(form);
-
-      // Eliminar imagen anterior de Cloudinary si:
-      // 1. Se subió una nueva imagen (reemplazo)
-      // 2. Se eliminó la imagen existente
-      if (originalUrl && originalUrl !== finalUrl) {
-        await deleteCloudinaryImage(originalUrl);
-      }
-
-      // Limpiar estados de imagen primero
-      setEditSelectedFile(null);
-      setEditExistingUrl(null);
-      setEditImageMarkedForDeletion(false);
-      // Cerrar modal con delay para evitar conflicto de view transitions
-      setTimeout(() => {
-        setEditGasto(null);
-        mutateGastos();
-        toast.success("Gasto actualizado exitosamente");
-      }, 500);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "";
-      const safeMsg = msg === "No autorizado" || msg.includes("inválid")
-        ? msg
-        : "Ocurrió un error al actualizar el gasto";
-      setEditError(safeMsg);
-      toast.danger("Error al actualizar gasto");
-    } finally {
-      setEditSubmitting(false);
-    }
   };
 
   const handleDelete = async () => {
@@ -565,91 +376,13 @@ export default function AdminPage() {
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
               Ingresar Gasto
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <TextField
-                  isRequired
-                  name="fecha"
-                  type="date"
-                  onChange={setFecha}
-                  className="w-full"
-                >
-                  <Label>Fecha</Label>
-                  <Input
-                    value={fecha}
-                    className="h-10 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60"
-                  />
-                </TextField>
-                <div className="space-y-1.5">
-                  <label className="label text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Categoría
-                  </label>
-                  <CategorySelect
-                    categorias={categorias}
-                    value={categoria}
-                    onChange={handleCategoriaChange}
-                    onDeleteCategory={setDeletingCat}
-                  />
-                </div>
-              </div>
-              <TextField
-                isRequired
-                name="descripcion"
-                onChange={setDescripcion}
-                className="w-full"
-              >
-                <Label>Descripción</Label>
-                <Input
-                  placeholder="Ej: Producción Bienvenida Mechona"
-                  value={descripcion}
-                  className="h-10 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60"
-                />
-              </TextField>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <TextField
-                  isRequired
-                  name="monto"
-                  type="number"
-                  onChange={setMonto}
-                  className="w-full"
-                >
-                  <Label>Monto</Label>
-                  <Input
-                    placeholder="850000"
-                    value={monto}
-                    className="h-10 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60"
-                  />
-                </TextField>
-                <ComprobanteUpload
-                  selectedFile={selectedFile}
-                  setSelectedFile={setSelectedFile}
-                />
-              </div>
-              {formError && (
-                <Alert status="danger" className="animate-fade-in-up">
-                  <Alert.Indicator />
-                  <Alert.Content>
-                    <Alert.Title className="text-sm">{formError}</Alert.Title>
-                  </Alert.Content>
-                </Alert>
-              )}
-
-              <div className="flex justify-end mt-2">
-                <Button
-                  type="submit"
-                  size="lg"
-                  isDisabled={submitting}
-                  className="w-full sm:w-fit px-8 rounded-2xl bg-zinc-900 text-white dark:bg-white dark:text-black font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all duration-200 h-12 shadow-sm hover:shadow-md cursor-pointer text-sm"
-                >
-                  {submitting ? (
-                    <div className="size-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                  ) : (
-                    <PlusIcon />
-                  )}
-                  {submitting ? "Guardando..." : "Registrar gasto"}
-                </Button>
-              </div>
-            </form>
+            <GastoForm
+              categorias={categorias}
+              categoriasDB={categoriasDB}
+              mutateGastos={mutateGastos}
+              mutateCategorias={mutateCategorias}
+              onDeleteCategory={setDeletingCat}
+            />
           </Card>
 
           {/* ── Gastos table ── */}
@@ -751,7 +484,7 @@ export default function AdminPage() {
                     placeholder="Buscar..."
                     defaultValue=""
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full h-9 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 pl-10 pr-4 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-hidden transition-all duration-200 focus:border-red-300 focus:ring-2 focus:ring-red-100"
+                    className="w-full h-9 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 pl-10 pr-4 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-400 outline-hidden transition-all duration-200 focus:border-red-300 focus:ring-2 focus:ring-red-100"
                   />
                 </div>
               </div>
@@ -1127,95 +860,24 @@ export default function AdminPage() {
                 Editar Gasto
               </Modal.Heading>
             </Modal.Header>
-            <Modal.Body className="space-y-5 sm:px-8 sm:pb-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <TextField
-                  isRequired
-                  name="edit_fecha"
-                  type="date"
-                  onChange={setEditFecha}
-                  className="w-full"
-                >
-                  <Label>Fecha</Label>
-                  <Input
-                    value={editFecha}
-                    className="h-10 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60"
-                  />
-                </TextField>
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Categoría
-                  </label>
-                  <CategorySelect
-                    categorias={categorias}
-                    value={editCategoria}
-                    onChange={handleEditCategoriaChange}
-                    onDeleteCategory={setDeletingCat}
-                  />
-                </div>
-              </div>
-              <TextField
-                isRequired
-                name="edit_descripcion"
-                onChange={setEditDescripcion}
-                className="w-full"
-              >
-                <Label>Descripción</Label>
-                <Input
-                  placeholder="Descripción del gasto"
-                  value={editDescripcion}
-                  className="h-10 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60"
-                />
-              </TextField>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <TextField
-                  isRequired
-                  name="edit_monto"
-                  type="number"
-                  onChange={setEditMonto}
-                  className="w-full"
-                >
-                  <Label>Monto</Label>
-                  <Input
-                    placeholder="850000"
-                    value={editMonto}
-                    className="h-10 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60"
-                  />
-                </TextField>
-                <ComprobanteUpload
-                  selectedFile={editSelectedFile}
-                  setSelectedFile={setEditSelectedFile}
-                  existingUrl={editExistingUrl}
-                  onDeleteExisting={() => setEditImageMarkedForDeletion(true)}
-                  isMarkedForDeletion={editImageMarkedForDeletion}
+            <Modal.Body className="sm:px-8 sm:pb-6">
+              {editGasto && (
+                <EditGastoForm
+                  gasto={editGasto}
+                  categorias={categorias}
+                  categoriasDB={categoriasDB}
+                  mutateCategorias={mutateCategorias}
+                  onSuccess={() => {
+                    setEditGasto(null);
+                    mutateGastos();
+                    toast.success("Gasto actualizado exitosamente");
+                  }}
+                  onCancel={() => setEditGasto(null)}
+                  onDeleteCategory={setDeletingCat}
                   onViewImage={setLightboxUrl}
                 />
-              </div>
-              {editError && (
-                <Alert status="danger">
-                  <Alert.Indicator />
-                  <Alert.Content>
-                    <Alert.Title className="text-sm">{editError}</Alert.Title>
-                  </Alert.Content>
-                </Alert>
               )}
             </Modal.Body>
-            <Modal.Footer className="sm:px-8 sm:pb-6 pt-4 border-t border-gray-100 dark:border-zinc-800/50 mt-4">
-              <Button
-                variant="secondary"
-                slot="close"
-                className="cursor-pointer"
-              >
-                Cancelar
-              </Button>
-              <Button
-                isDisabled={editSubmitting}
-                onPress={handleEditSubmit}
-                className="bg-zinc-900 text-white dark:bg-white dark:text-black hover:bg-zinc-800 dark:hover:bg-zinc-200 cursor-pointer rounded-xl px-6 font-medium shadow-sm"
-              >
-                {editSubmitting ? "Guardando..." : "Guardar cambios"}
-              </Button>
-            </Modal.Footer>
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>
@@ -1254,7 +916,7 @@ export default function AdminPage() {
               <Button
                 variant="tertiary"
                 slot="close"
-                className="cursor-pointer"
+                className="cursor-pointer text-gray-700 dark:text-gray-200"
               >
                 Cancelar
               </Button>
@@ -1301,7 +963,7 @@ export default function AdminPage() {
               <Button
                 variant="tertiary"
                 slot="close"
-                className="cursor-pointer"
+                className="cursor-pointer text-gray-700 dark:text-gray-200"
               >
                 Cancelar
               </Button>
