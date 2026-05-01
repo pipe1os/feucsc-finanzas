@@ -14,7 +14,7 @@ export const revalidate = 60;
 export default async function Home() {
   // Fetch expenses + categories in parallel
   const [gastosRes, categoriasRes] = await Promise.all([
-    supabase.from("gastos").select("*").order("fecha", { ascending: false }),
+    supabase.from("gastos").select("*").order("fecha", { ascending: false }).limit(500),
     supabase.from("categorias").select("*"),
   ]);
 

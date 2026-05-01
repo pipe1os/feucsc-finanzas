@@ -18,14 +18,17 @@ interface KPICardsProps {
 // ── Animated counter hook ──────────────────────────────
 function useCountUp(target: number, duration = 1200, delay = 0) {
   const [value, setValue] = useState(target);
-  const hasMounted = useRef(false);
+  const hasAnimated = useRef(false);
   const raf = useRef<number>(0);
 
   useEffect(() => {
-    if (!hasMounted.current) {
-      hasMounted.current = true;
-      setValue(0);
+    // Skip animation on remount; jump straight to final value
+    if (hasAnimated.current) {
+      setValue(target);
+      return;
     }
+    hasAnimated.current = true;
+    setValue(0);
 
     const timeout = setTimeout(() => {
       const start = performance.now();
@@ -51,9 +54,12 @@ function useCountUp(target: number, duration = 1200, delay = 0) {
 }
 
 export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps) {
-  const porcentajeGastado = Math.round(
-    (resumenFinanciero.totalGastado / resumenFinanciero.presupuestoTotal) * 100,
-  );
+  const porcentajeGastado =
+    resumenFinanciero.presupuestoTotal > 0
+      ? Math.round(
+          (resumenFinanciero.totalGastado / resumenFinanciero.presupuestoTotal) * 100,
+        )
+      : 0;
   const porcentajeDisponible = 100 - porcentajeGastado;
 
   const animatedGastado = useCountUp(resumenFinanciero.totalGastado, 1200, 200);

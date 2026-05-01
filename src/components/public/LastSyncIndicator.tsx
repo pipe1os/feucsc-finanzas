@@ -1,28 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Tooltip } from "@heroui/react";
 
 interface LastSyncIndicatorProps {
   lastSyncISO: string | null;
 }
 
-function formatExactDate(isoDate: string): string {
-  // Parse robustly: handle both full ISO strings and date-only strings
-  // without timezone shifts by treating the input as local time.
-  let date: Date;
+function parseRobustDate(isoDate: string): Date | null {
   const trimmed = isoDate.trim();
   if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
     // Date-only string: parse as local midnight to avoid UTC conversion
     const [y, m, d] = trimmed.split("-").map(Number);
-    date = new Date(y, m - 1, d);
-  } else {
-    date = new Date(trimmed);
+    return new Date(y, m - 1, d);
   }
+  const parsed = new Date(trimmed);
+  return isNaN(parsed.getTime()) ? null : parsed;
+}
 
-  if (isNaN(date.getTime())) {
-    return isoDate;
-  }
+function formatExactDate(isoDate: string): string {
+  const date = parseRobustDate(isoDate);
+  if (!date) return isoDate;
 
   const months = [
     "ene", "feb", "mar", "abr", "may", "jun",
@@ -63,15 +60,10 @@ function formatDistanceToNowEs(date: Date): string {
 export default function LastSyncIndicator({
   lastSyncISO,
 }: LastSyncIndicatorProps) {
-  const [mounted, setMounted] = useState(false);
+  if (!lastSyncISO) return null;
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!lastSyncISO || !mounted) return null;
-
-  const relativeTime = formatDistanceToNowEs(new Date(lastSyncISO));
+  const date = parseRobustDate(lastSyncISO);
+  const relativeTime = date ? formatDistanceToNowEs(date) : "";
   const exactDate = formatExactDate(lastSyncISO);
 
   return (
@@ -83,7 +75,7 @@ export default function LastSyncIndicator({
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500" />
           </span>
-          <span>Actualizado {relativeTime} ({exactDate})</span>
+          <span suppressHydrationWarning>Actualizado {relativeTime} ({exactDate})</span>
         </div>
       </Tooltip.Trigger>
       <Tooltip.Content className="bg-zinc-800 text-white text-xs px-3 py-1.5 rounded-lg">

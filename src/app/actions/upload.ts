@@ -19,7 +19,7 @@ async function requireAuth() {
 export async function uploadComprobanteAction(formData: FormData): Promise<string | null> {
   await requireAuth();
   const file = formData.get("file") as File | null;
-  if (!file) return null;
+  if (!file) throw new Error("No se proporcionó ningún archivo");
 
 
   if (!file.type.startsWith("image/")) {
@@ -31,21 +31,16 @@ export async function uploadComprobanteAction(formData: FormData): Promise<strin
   }
 
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-  const apiKey = process.env.CLOUDINARY_API_KEY;
-  const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-  if (!cloudName || !apiKey || !apiSecret) {
-    console.error("Cloudinary credentials missing");
-    return null;
-  }
-
   const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
+
+  if (!cloudName) {
+    throw new Error("Configuración de Cloudinary incompleta");
+  }
 
   const data = new FormData();
   data.append("file", file);
   if (uploadPreset) {
     data.append("upload_preset", uploadPreset);
-    data.append("api_key", apiKey);
   }
 
   try {
@@ -53,10 +48,17 @@ export async function uploadComprobanteAction(formData: FormData): Promise<strin
       `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
       { method: "POST", body: data }
     );
-    if (!res.ok) return null;
+    if (!res.ok) {
+      const body = await res.text().catch(() => "unknown");
+      throw new Error(`Error de Cloudinary: ${res.status} ${body}`);
+    }
     const json = await res.json();
-    return json.secure_url ?? null;
-  } catch {
-    return null;
+    if (!json.secure_url) {
+      throw new Error("Respuesta inválida de Cloudinary");
+    }
+    return json.secure_url;
+  } catch (err) {
+    if (err instanceof Error) throw err;
+    throw new Error("Error al subir el comprobante");
   }
 }
