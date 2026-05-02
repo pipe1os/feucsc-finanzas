@@ -4,6 +4,7 @@ import { formatCLP } from "@/lib/utils";
 import { useMemo } from "react";
 import { SkeletonKPICards } from "./Skeletons";
 import { NumberTicker } from "@/components/ui/number-ticker";
+import { motion } from "motion/react";
 
 interface ResumenFinanciero {
   presupuestoTotal: number;
@@ -74,13 +75,23 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
                 className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light"
               />
             </p>
-            <p className={`mt-1.5 text-sm font-medium ${spentStatusText}`}>
-              {porcentajeGastado}% del presupuesto utilizado
+            <p className={`mt-1.5 text-sm font-medium flex items-center gap-1 ${spentStatusText}`}>
+              <span>
+                <NumberTicker
+                  value={porcentajeGastado}
+                  delay={0.2}
+                  className="text-inherit tabular-nums"
+                />
+                %
+              </span>
+              <span>del presupuesto utilizado</span>
             </p>
             <div className="mt-3 h-1 w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
-              <div
-                className={`h-full rounded-full ${statusColor} transition-all duration-1000 ease-out`}
-                style={{ width: `${porcentajeGastado}%` }}
+              <motion.div
+                initial={{ width: "0%" }}
+                animate={{ width: `${porcentajeGastado}%` }}
+                transition={{ type: "spring", damping: 30, stiffness: 170, delay: 0.2 }}
+                className={`h-full rounded-full ${statusColor}`}
               />
             </div>
           </div>
@@ -114,8 +125,16 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
                   className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light"
                 />
               </p>
-              <p className={`mt-1 text-xs font-medium ${availableStatusText}`}>
-                {porcentajeDisponible}% restante
+              <p className={`mt-1 text-xs font-medium flex items-center gap-1 ${availableStatusText}`}>
+                <span>
+                  <NumberTicker
+                    value={porcentajeDisponible}
+                    delay={0.3}
+                    className="text-inherit tabular-nums"
+                  />
+                  %
+                </span>
+                <span>restante</span>
               </p>
             </div>
           </div>
