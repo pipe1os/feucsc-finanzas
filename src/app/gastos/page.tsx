@@ -3,6 +3,7 @@ import DashboardClient from "@/components/public/DashboardClient";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { supabase } from "@/lib/supabase";
 import { parseISODate } from "@/lib/utils";
+import { buildCategoryColors } from "@/lib/data-transform";
 import Footer from "@/components/public/Footer";
 import Link from "next/link";
 
@@ -30,12 +31,7 @@ export default async function GastosPage() {
   const data = gastosRes.data || [];
   const categoriasData = categoriasRes.data || [];
 
-  const categoryColors: Record<string, string> = {};
-  categoriasData.forEach((c) => {
-    if (c.color) categoryColors[c.nombre] = c.color;
-  });
-  if (!categoryColors["N/A"]) categoryColors["N/A"] = "#9CA3AF";
-  if (!categoryColors["Varios"]) categoryColors["Varios"] = "#9CA3AF";
+  const categoryColors = buildCategoryColors(categoriasData);
 
   const transacciones = data.map((g) => {
     const catName = g.categoria || "Varios";

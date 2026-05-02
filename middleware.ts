@@ -23,7 +23,12 @@ export async function middleware(request: NextRequest) {
           response = NextResponse.next({ request });
           // Update response cookies (sent back to the browser)
           cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options),
+            response.cookies.set(name, value, {
+              ...options,
+              secure: process.env.NODE_ENV === "production",
+              httpOnly: true,
+              sameSite: "lax" as const,
+            }),
           );
         },
       },
