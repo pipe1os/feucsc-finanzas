@@ -57,7 +57,7 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
   }
 
   return (
-    <div className="animate-fade-in-up opacity-0 h-full">
+    <div className=" animate-fade-in-up h-full">
       {/* Single integrated summary surface */}
       <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple p-6 sm:p-8 h-full flex flex-col">
         {/* Content stacked vertically */}
