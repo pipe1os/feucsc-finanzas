@@ -18,14 +18,6 @@ export default async function Home() {
     supabase.from("categorias").select("*"),
   ]);
 
-  if (gastosRes.error || categoriasRes.error) {
-    throw new Error(
-      gastosRes.error?.message ||
-        categoriasRes.error?.message ||
-        "Error al cargar datos",
-    );
-  }
-
   const data = gastosRes.data || [];
   const categoriasData = categoriasRes.data || [];
 
