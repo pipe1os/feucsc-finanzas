@@ -347,8 +347,8 @@ export default function Sidebar() {
             alt="Logo FEUCSC"
             width={894}
             height={307}
-            sizes="(max-width: 1024px) 0px, 260px"
-            className="h-16 w-auto object-contain dark:brightness-110 dark:contrast-110"
+            sizes="(max-width: 1024px) 200px, 260px"
+            className="h-16 w-auto max-w-full object-contain dark:brightness-110 dark:contrast-110"
             priority
           />
         </div>
