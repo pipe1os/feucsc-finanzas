@@ -1,4 +1,3 @@
-import Sidebar from "@/components/public/Sidebar";
 import KPICards from "@/components/public/KPICards";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { LazyExpenseTrendChart } from "@/components/public/LazyCharts";
@@ -109,57 +108,49 @@ export default async function Home() {
   });
 
   return (
-    <div className="flex min-h-dvh bg-transparent">
-      {/* Sidebar */}
-      <Sidebar />
-
-      {/* Main content area */}
-      <main className="flex-1 min-w-0 lg:ml-65">
-        <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
-          {/* Page header — rendered in server HTML (instant LCP) */}
-          <header className="mb-8 animate-fade-in-up">
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
-              <div>
-                <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                  Transparencia Financiera
-                </h1>
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 max-w-xl">
-                  Presupuesto, gastos y comprobantes de la Federación de
-                  Estudiantes UCSC.
-                </p>
-              </div>
-              <LastSyncIndicator lastSyncISO={lastSyncISO} />
-            </div>
-          </header>
-
-          {/* Dashboard Grid Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
-            {/* KPI Cards — rendered in server HTML (part of LCP) */}
-            <section aria-label="Indicadores financieros" className="col-span-1 lg:col-span-4 animate-fade-in-up h-full">
-              <KPICards resumenFinanciero={resumenFinanciero} />
-            </section>
-
-            {/* Trend Chart — lazy loaded (ssr: false, recharts deferred) */}
-            <section aria-label="Tendencia de gastos" className="col-span-1 lg:col-span-8 animate-fade-in-up h-full" style={{ animationDelay: "0.1s" }}>
-              <LazyExpenseTrendChart gastosPorMes={gastosPorMes} />
-            </section>
-
-            {/* Latest transactions preview */}
-            <section
-              className="col-span-1 lg:col-span-12 animate-fade-in-up"
-              style={{ animationDelay: "0.25s" }}
-            >
-              <LatestTransactionsPreview
-                transactions={latestTransactions}
-                totalCount={data.length}
-              />
-            </section>
+    <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
+      {/* Page header — rendered in server HTML (instant LCP) */}
+      <header className="mb-8 animate-fade-in-up">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+              Transparencia Financiera
+            </h1>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 max-w-xl">
+              Presupuesto, gastos y comprobantes de la Federación de
+              Estudiantes UCSC.
+            </p>
           </div>
-
-          {/* Footer */}
-          <Footer />
+          <LastSyncIndicator lastSyncISO={lastSyncISO} />
         </div>
-      </main>
+      </header>
+
+      {/* Dashboard Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
+        {/* KPI Cards — rendered in server HTML (part of LCP) */}
+        <section aria-label="Indicadores financieros" className="col-span-1 lg:col-span-4 animate-fade-in-up h-full">
+          <KPICards resumenFinanciero={resumenFinanciero} />
+        </section>
+
+        {/* Trend Chart — lazy loaded (ssr: false, recharts deferred) */}
+        <section aria-label="Tendencia de gastos" className="col-span-1 lg:col-span-8 animate-fade-in-up h-full" style={{ animationDelay: "0.1s" }}>
+          <LazyExpenseTrendChart gastosPorMes={gastosPorMes} />
+        </section>
+
+        {/* Latest transactions preview */}
+        <section
+          className="col-span-1 lg:col-span-12 animate-fade-in-up"
+          style={{ animationDelay: "0.25s" }}
+        >
+          <LatestTransactionsPreview
+            transactions={latestTransactions}
+            totalCount={data.length}
+          />
+        </section>
+      </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

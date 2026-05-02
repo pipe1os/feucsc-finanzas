@@ -1,4 +1,3 @@
-import Sidebar from "@/components/public/Sidebar";
 import DashboardClient from "@/components/public/DashboardClient";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { supabase } from "@/lib/supabase";
@@ -69,62 +68,56 @@ export default async function GastosPage() {
   }
 
   return (
-    <div className="flex min-h-dvh bg-transparent">
-      <Sidebar />
-
-      <main className="flex-1 min-w-0 lg:ml-65">
-        <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
-          {/* Page header */}
-          <header className="mb-8 animate-fade-in-up opacity-0">
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
-              <div>
-                {/* Back navigation — larger and clearer */}
-                <div className="flex items-center gap-2 mb-2">
-                  <Link
-                    href="/"
-                    className="group inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors duration-200"
+    <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
+      {/* Page header */}
+      <header className="mb-8 animate-fade-in-up opacity-0">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
+          <div>
+            {/* Back navigation — larger and clearer */}
+            <div className="flex items-center gap-2 mb-2">
+              <Link
+                href="/"
+                className="group inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors duration-200"
+              >
+                <span className="flex items-center justify-center size-7 rounded-lg bg-gray-100 dark:bg-gray-800 group-hover:bg-red-50 dark:group-hover:bg-red-500/10 transition-colors duration-200">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform duration-200 group-hover:-translate-x-0.5"
                   >
-                    <span className="flex items-center justify-center size-7 rounded-lg bg-gray-100 dark:bg-gray-800 group-hover:bg-red-50 dark:group-hover:bg-red-500/10 transition-colors duration-200">
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="transition-transform duration-200 group-hover:-translate-x-0.5"
-                      >
-                        <path d="m15 18-6-6 6-6" />
-                      </svg>
-                    </span>
-                    <span className="uppercase tracking-wider text-[11px] font-semibold">Resumen</span>
-                  </Link>
-                </div>
-                <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                  Detalle de Gastos
-                </h1>
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 max-w-xl">
-                  Todos los gastos registrados, distribución por categoría y
-                  comprobantes de respaldo.
-                </p>
-              </div>
-
-              <LastSyncIndicator lastSyncISO={lastSyncISO} />
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </span>
+                <span className="uppercase tracking-wider text-[11px] font-semibold">Resumen</span>
+              </Link>
             </div>
-          </header>
+            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+              Detalle de Gastos
+            </h1>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 max-w-xl">
+              Todos los gastos registrados, distribución por categoría y
+              comprobantes de respaldo.
+            </p>
+          </div>
 
-          {/* Table + Category Chart */}
-          <DashboardClient
-            transacciones={transacciones}
-            gastosPorCategoria={gastosPorCategoria}
-          />
-
-          {/* Footer */}
-          <Footer />
+          <LastSyncIndicator lastSyncISO={lastSyncISO} />
         </div>
-      </main>
+      </header>
+
+      {/* Table + Category Chart */}
+      <DashboardClient
+        transacciones={transacciones}
+        gastosPorCategoria={gastosPorCategoria}
+      />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
