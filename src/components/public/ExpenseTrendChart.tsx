@@ -220,7 +220,7 @@ export default function ExpenseTrendChart({
 
   return (
     <Card
-      className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple ring-0 animate-fade-in-up opacity-0 h-full flex flex-col min-h-[320px] sm:min-h-[360px] lg:min-h-[300px]"
+      className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple ring-0 animate-fade-in-up h-full flex flex-col min-h-[320px] sm:min-h-[360px] lg:min-h-[300px]"
       style={{ animationDelay: "0.2s" }}
     >
       <CardHeader className="pb-6">
