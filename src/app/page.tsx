@@ -95,8 +95,8 @@ export default async function Home() {
     }
   }
 
-  // Latest 5 transactions for preview
-  const latestTransactions = data.slice(0, 5).map((g) => {
+  // Latest 3 transactions for preview
+  const latestTransactions = data.slice(0, 3).map((g) => {
     const catName = g.categoria || "Varios";
     return {
       id: g.id,
