@@ -92,18 +92,9 @@ export default function GastoForm({
       setSelectedFile(null);
       mutateGastos();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "";
-      if (msg === "Error al subir el comprobante") {
-        setFormError(msg);
-        toast.danger(msg);
-      } else {
-        const safeMsg =
-          msg === "No autorizado" || msg.includes("inválid")
-            ? msg
-            : "Ocurrió un error al registrar el gasto";
-        setFormError(safeMsg);
-        toast.danger("Error al registrar gasto");
-      }
+      const msg = err instanceof Error ? err.message : "Error desconocido";
+      setFormError(msg);
+      toast.danger("Error al registrar gasto");
     } finally {
       setSubmitting(false);
     }
