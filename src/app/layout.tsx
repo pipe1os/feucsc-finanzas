@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { DotPattern } from "@/components/ui/dot-pattern";
+import Sidebar from "@/components/public/Sidebar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -69,7 +70,14 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased bg-transparent text-foreground`}>
         <div className="fixed inset-0 -z-10 bg-bg-secondary" />
         <DotPattern className="fixed inset-0 -z-10 text-neutral-400/15 dark:text-neutral-600/15" />
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="flex min-h-dvh bg-transparent">
+            <Sidebar />
+            <main className="flex-1 min-w-0 lg:ml-65">
+              {children}
+            </main>
+          </div>
+        </Providers>
         <Analytics />
         <SpeedInsights />
       </body>
