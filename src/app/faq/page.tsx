@@ -1,5 +1,6 @@
 import FAQContent from "@/components/public/FAQContent";
 import Footer from "@/components/public/Footer";
+import Link from "next/link";
 
 export const metadata = {
   title: "Preguntas Frecuentes | FEUCSC",
@@ -30,7 +31,7 @@ export default function FAQPage() {
       >
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900 dark:text-white leading-snug">
           ¿Tienes otra duda?{" "}
-          <a
+          <Link
             href="/contacto"
             className="inline-flex items-center gap-1.5 text-red-500 hover:text-red-600 transition-colors duration-200 group"
           >
@@ -50,7 +51,7 @@ export default function FAQPage() {
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
             </svg>
-          </a>
+          </Link>
         </h2>
       </section>
 
