@@ -110,12 +110,8 @@ export default function EditGastoForm({
         onSuccess();
       }, 500);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "";
-      const safeMsg =
-        msg === "No autorizado" || msg.includes("inválid")
-          ? msg
-          : "Ocurrió un error al actualizar el gasto";
-      setError(safeMsg);
+      const msg = err instanceof Error ? err.message : "Error desconocido";
+      setError(msg);
       toast.danger("Error al actualizar gasto");
     } finally {
       setSubmitting(false);
