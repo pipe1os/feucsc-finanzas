@@ -1,8 +1,9 @@
 "use client";
 
 import { formatCLP } from "@/lib/utils";
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { SkeletonKPICards } from "./Skeletons";
+import { NumberTicker } from "@/components/ui/number-ticker";
 
 interface ResumenFinanciero {
   presupuestoTotal: number;
@@ -15,56 +16,6 @@ interface KPICardsProps {
   isLoading?: boolean;
 }
 
-// ── Animated counter hook (ref-based, zero re-renders) ─
-function useCountUp(target: number, duration = 1200, delay = 0) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const hasAnimated = useRef(false);
-  const raf = useRef<number>(0);
-
-  useEffect(() => {
-    const prefersReducedMotion =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    // Skip animation if already animated or user prefers reduced motion
-    if (hasAnimated.current || prefersReducedMotion) {
-      if (ref.current) {
-        ref.current.textContent = formatCLP(target);
-      }
-      return;
-    }
-    hasAnimated.current = true;
-
-    // Set initial value
-    if (ref.current) {
-      ref.current.textContent = formatCLP(0);
-    }
-
-    const timeout = setTimeout(() => {
-      const start = performance.now();
-      const step = (now: number) => {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        if (ref.current) {
-          ref.current.textContent = formatCLP(Math.round(target * eased));
-        }
-        if (progress < 1) {
-          raf.current = requestAnimationFrame(step);
-        }
-      };
-      raf.current = requestAnimationFrame(step);
-    }, delay);
-
-    return () => {
-      clearTimeout(timeout);
-      cancelAnimationFrame(raf.current);
-    };
-  }, [target, duration, delay]);
-
-  return ref;
-}
-
 export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps) {
   const porcentajeGastado =
     resumenFinanciero.presupuestoTotal > 0
@@ -73,18 +24,6 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
         )
       : 0;
   const porcentajeDisponible = 100 - porcentajeGastado;
-
-  const animatedGastadoRef = useCountUp(resumenFinanciero.totalGastado, 1200, 200);
-  const animatedTotalRef = useCountUp(
-    resumenFinanciero.presupuestoTotal,
-    1200,
-    100,
-  );
-  const animatedDisponibleRef = useCountUp(
-    resumenFinanciero.saldoDisponible,
-    1200,
-    300,
-  );
 
   // Status/status text derived from percentages (memoized)
   const { statusColor, spentStatusText, availableStatusText } = useMemo(() => {
@@ -128,7 +67,12 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
               Total Gastado
             </p>
             <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light">
-              <span ref={animatedGastadoRef}>$0</span>
+              <NumberTicker
+                value={resumenFinanciero.totalGastado}
+                delay={0.2}
+                formatFn={formatCLP}
+                className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light"
+              />
             </p>
             <p className={`mt-1.5 text-sm font-medium ${spentStatusText}`}>
               {porcentajeGastado}% del presupuesto utilizado
@@ -148,7 +92,12 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
                 Presupuesto Total
               </p>
               <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light">
-                <span ref={animatedTotalRef}>$0</span>
+                <NumberTicker
+                  value={resumenFinanciero.presupuestoTotal}
+                  delay={0.1}
+                  formatFn={formatCLP}
+                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light"
+                />
               </p>
               <p className="mt-1 text-xs text-gray-400">Año académico 2026</p>
             </div>
@@ -158,7 +107,12 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
                 Presupuesto Disponible
               </p>
               <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light">
-                <span ref={animatedDisponibleRef}>$0</span>
+                <NumberTicker
+                  value={resumenFinanciero.saldoDisponible}
+                  delay={0.3}
+                  formatFn={formatCLP}
+                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light"
+                />
               </p>
               <p className={`mt-1 text-xs font-medium ${availableStatusText}`}>
                 {porcentajeDisponible}% restante
