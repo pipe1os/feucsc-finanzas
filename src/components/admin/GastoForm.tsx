@@ -66,19 +66,16 @@ export default function GastoForm({
     setSubmitting(true);
 
     let comprobanteUrl: string | null = null;
-    if (selectedFile) {
-      const uploadForm = new FormData();
-      uploadForm.append("file", selectedFile);
-      comprobanteUrl = await uploadComprobanteAction(uploadForm);
-      if (!comprobanteUrl) {
-        setSubmitting(false);
-        setFormError("Error al subir el comprobante");
-        toast.danger("Error al subir el comprobante");
-        return;
-      }
-    }
-
     try {
+      if (selectedFile) {
+        const uploadForm = new FormData();
+        uploadForm.append("file", selectedFile);
+        comprobanteUrl = await uploadComprobanteAction(uploadForm);
+        if (!comprobanteUrl) {
+          throw new Error("Error al subir el comprobante");
+        }
+      }
+
       const form = new FormData();
       form.append("fecha", fecha);
       form.append("descripcion", descripcion.trim());
@@ -96,12 +93,17 @@ export default function GastoForm({
       mutateGastos();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "";
-      const safeMsg =
-        msg === "No autorizado" || msg.includes("inválid")
-          ? msg
-          : "Ocurrió un error al registrar el gasto";
-      setFormError(safeMsg);
-      toast.danger("Error al registrar gasto");
+      if (msg === "Error al subir el comprobante") {
+        setFormError(msg);
+        toast.danger(msg);
+      } else {
+        const safeMsg =
+          msg === "No autorizado" || msg.includes("inválid")
+            ? msg
+            : "Ocurrió un error al registrar el gasto";
+        setFormError(safeMsg);
+        toast.danger("Error al registrar gasto");
+      }
     } finally {
       setSubmitting(false);
     }

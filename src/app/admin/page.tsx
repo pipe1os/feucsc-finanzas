@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import type { SortDescriptor } from "@heroui/react";
 import {
@@ -21,12 +21,12 @@ import {
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 import { VARIOS_COLOR } from "@/lib/category-palette";
-import { parseISODate } from "@/lib/utils";
-import { deleteCloudinaryImage } from "@/app/actions/cloudinary";
+import { formatCLP, formatDate, parseISODate } from "@/lib/utils";
 import { deleteGasto as deleteGastoAction, deleteCategoria as deleteCategoriaAction } from "@/app/actions/gastos";
 import { useGastos } from "@/hooks/useGastos";
 import { useCategorias } from "@/hooks/useCategorias";
 import ThemeToggle from "@/components/admin/ThemeToggle";
+import { HugeiconsMenuIcon, type HugeiconsMenuIconHandle } from "@/components/ui/hugeicons-menu";
 import SortableColumnHeader from "@/components/admin/SortableColumnHeader";
 import GastoForm from "@/components/admin/GastoForm";
 import EditGastoForm from "@/components/admin/EditGastoForm";
@@ -72,23 +72,12 @@ const MONTH_OPTIONS = [
 
 
 
-function formatCLP(n: number) {
-  return "$" + n.toLocaleString("es-CL");
-}
-
 function formatShortDate(dateStr: string) {
   const [year, month, day] = dateStr.split("-");
   return `${day}/${month}/${year}`;
 }
-function formatDate(d: string) {
-  const date = parseISODate(d);
-  if (!date) return "—";
-  return date.toLocaleDateString("es-CL", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
+
+
 
 
 /* ══════════════════════════════════════════════════
@@ -96,6 +85,20 @@ function formatDate(d: string) {
    ══════════════════════════════════════════════════ */
 export default function AdminPage() {
   const router = useRouter();
+  const pathname = usePathname();
+
+  // ── Mobile sidebar ──
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const closeSidebar = () => setSidebarOpen(false);
+  const menuIconRef = useRef<HugeiconsMenuIconHandle>(null);
+
+  useEffect(() => {
+    if (sidebarOpen) {
+      menuIconRef.current?.startAnimation();
+    } else {
+      menuIconRef.current?.stopAnimation();
+    }
+  }, [sidebarOpen]);
 
   // ── Table ── (SWR-powered)
   const { gastos, isLoading: loadingTable, mutateGastos } = useGastos();
@@ -104,7 +107,7 @@ export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [sortDescriptor] = useState<SortDescriptor>({
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "fecha",
     direction: "descending",
   });
@@ -236,10 +239,6 @@ export default function AdminPage() {
     try {
       await deleteGastoAction(deleteGasto.id);
 
-      if (deleteGasto.comprobante_url) {
-        await deleteCloudinaryImage(deleteGasto.comprobante_url);
-      }
-
       toast.success("Gasto eliminado exitosamente");
       setDeleteGasto(null);
       mutateGastos();
@@ -267,30 +266,80 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-dvh flex bg-transparent">
-      {/* ── Sidebar (Desktop) ── */}
-      <aside className="hidden lg:flex w-64 flex-col fixed inset-y-0 left-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-r border-gray-100 dark:border-gray-800 z-50">
-        <div className="flex flex-col h-full">
-          <div className="flex items-center justify-center px-5 pt-7 pb-5">
-            <Image
-              src="/logofeucsc.webp"
-              alt="Logo FEUCSC"
-              width={894}
-              height={307}
-              className="h-16 w-auto object-contain dark:brightness-110 dark:contrast-110"
-              priority
-            />
-          </div>
-          <div className="mx-5 h-px bg-gray-100 dark:bg-gray-800" />
+      {/* Mobile hamburger */}
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="fixed top-4 right-4 z-50 flex items-center justify-center
+                   size-10 rounded-xl bg-white dark:bg-gray-800 shadow-apple-lg lg:hidden
+                   transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+        aria-label={sidebarOpen ? "Cerrar menú" : "Abrir menú"}
+      >
+        <HugeiconsMenuIcon ref={menuIconRef} size={22} />
+      </button>
 
-          <nav className="flex flex-col gap-1 px-4 pt-6">
-            <span className="px-3 pb-2 pt-1 text-[11px] font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
-              Administración
-            </span>
-            <div
-              className="group flex items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-sm text-red-600 dark:text-red-400 cursor-pointer"
-              style={{ backgroundColor: "rgba(227, 7, 7, 0.07)" }}
-            >
-              <span className="flex items-center justify-center size-8 rounded-lg text-red-500 dark:text-red-400">
+      {/* Mobile backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/20 backdrop-blur-xs lg:hidden"
+          onClick={closeSidebar}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`
+          fixed top-0 left-0 z-40 h-dvh w-65
+          flex flex-col bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl
+          border-r border-gray-100 dark:border-gray-800
+          transition-transform duration-300 ease-out
+          overflow-y-auto
+          lg:translate-x-0
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
+        {/* Logo area */}
+        <div className="flex items-center justify-center px-5 pt-7 pb-5">
+          <Image
+            src="/logofeucsc.webp"
+            alt="Logo FEUCSC"
+            width={894}
+            height={307}
+            className="h-16 w-auto object-contain dark:brightness-110 dark:contrast-110"
+            priority
+          />
+        </div>
+
+        {/* Divider */}
+        <div className="mx-5 h-px bg-gray-100 dark:bg-gray-800" />
+
+        {/* Navigation */}
+        <nav className="flex flex-col gap-1 px-4 pt-6">
+          <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-zinc-400 dark:text-zinc-600 uppercase">
+            Administración
+          </span>
+          <Link
+            href="/admin"
+            onClick={closeSidebar}
+            className={`group relative flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 font-medium text-sm transition-all duration-200 cursor-pointer
+              ${
+                pathname === "/admin"
+                  ? "text-red-600 dark:text-red-400"
+                  : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200"
+              }`}
+          >
+            {/* Subtle left border accent for active state */}
+            {pathname === "/admin" && (
+              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-red-500/70 dark:bg-red-400/70" />
+            )}
+            <div className="flex items-center gap-3">
+              <span
+                className={`flex items-center justify-center size-8 rounded-lg transition-all duration-200
+                  ${
+                    pathname === "/admin"
+                      ? "text-red-500 dark:text-red-400"
+                      : "text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300"
+                  }`}
+              >
                 <svg
                   width="20"
                   height="20"
@@ -311,55 +360,29 @@ export default function AdminPage() {
               </span>
               Gestión de Gastos
             </div>
-          </nav>
+          </Link>
+        </nav>
 
-          <div className="flex-1" />
+        {/* Spacer pushes footer to bottom */}
+        <div className="flex-1" />
 
-          <div className="px-5 pb-6 pt-4 border-t border-gray-100 dark:border-gray-800">
-            <Button
-              variant="ghost"
-              onPress={handleSignOut}
-              className="w-full justify-start text-gray-600 dark:text-gray-300 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 cursor-pointer font-medium rounded-xl mb-4"
-            >
-              <LogOutIcon />
-              Cerrar sesión
-            </Button>
-            <div className="h-px bg-gray-100 dark:bg-gray-800 mb-4" />
-            <ThemeToggle />
-          </div>
+        {/* Sign out + Theme toggle */}
+        <div className="px-5 pb-6 pt-4">
+          <div className="h-px bg-gray-100 dark:bg-gray-800 mb-4" />
+          <Button
+            variant="ghost"
+            onPress={handleSignOut}
+            className="w-full justify-start text-gray-600 dark:text-gray-300 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 cursor-pointer font-medium rounded-xl mb-4"
+          >
+            <LogOutIcon />
+            Cerrar sesión
+          </Button>
+          <ThemeToggle />
         </div>
       </aside>
 
-      {/* ── Mobile Header ── */}
-      <header className="lg:hidden fixed top-0 w-full z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 h-14 flex items-center">
-        <div className="w-full flex items-center justify-between px-4">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/logofeucsc.webp"
-              alt="FEUCSC"
-              width={80}
-              height={40}
-              className="object-contain dark:brightness-110 dark:contrast-110"
-            />
-            <div className="h-4 w-px bg-gray-200 dark:bg-zinc-800" />
-            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-              Admin
-            </span>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            isIconOnly
-            onPress={handleSignOut}
-            className="text-gray-500 hover:text-red-500"
-          >
-            <LogOutIcon />
-          </Button>
-        </div>
-      </header>
-
       {/* ── Main Content ── */}
-      <main className="flex-1 lg:pl-64 pt-14 lg:pt-0">
+      <main className="flex-1 min-w-0 lg:ml-65">
         <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:py-10">
           {/* Heading */}
           <div className="mb-8 animate-fade-in-up">
@@ -648,7 +671,7 @@ export default function AdminPage() {
                   <div className="hidden md:block">
                     <Table variant="secondary" className="w-full">
                       <Table.ScrollContainer>
-                        <Table.Content aria-label="Gastos" className="w-full">
+                        <Table.Content aria-label="Gastos" className="w-full" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
                       <Table.Header>
                         <Table.Column allowsSorting isRowHeader id="fecha" className="w-27.5">
                           {({ sortDirection }) => (

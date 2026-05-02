@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { isAuthorizedEmail } from "@/lib/auth";
@@ -20,15 +20,15 @@ export default function AdminLayout({
   useEffect(() => {
     const checkAuth = async () => {
       const {
-        data: { session },
-      } = await supabase.auth.getSession();
+        data: { user },
+      } = await supabase.auth.getUser();
 
-      if (!session) {
+      if (!user) {
         router.replace("/login?error=session_expired");
         return;
       }
 
-      if (!isAuthorizedEmail(session.user.email)) {
+      if (!isAuthorizedEmail(user.email)) {
         await supabase.auth.signOut();
         router.replace("/login?error=unauthorized");
         return;
@@ -42,13 +42,51 @@ export default function AdminLayout({
     // Listen for auth state changes (e.g. sign out from another tab)
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!session) {
         router.replace("/login?error=session_expired");
+        return;
+      }
+
+      // Validate JWT on sign in / initial load
+      if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user || !isAuthorizedEmail(user.email)) {
+          await supabase.auth.signOut();
+          router.replace("/login?error=unauthorized");
+        }
       }
     });
 
     return () => subscription.unsubscribe();
+  }, [router]);
+
+  // Idle timeout: auto sign-out after 30 minutes of inactivity
+  const idleRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => {
+    const IDLE_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+
+    const startTimer = () => {
+      idleRef.current = setTimeout(() => {
+        supabase.auth.signOut();
+        router.replace("/login?error=session_expired");
+      }, IDLE_TIMEOUT);
+    };
+
+    const resetTimer = () => {
+      clearTimeout(idleRef.current);
+      startTimer();
+    };
+
+    startTimer();
+
+    const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
+    events.forEach((event) => window.addEventListener(event, resetTimer));
+
+    return () => {
+      events.forEach((event) => window.removeEventListener(event, resetTimer));
+      clearTimeout(idleRef.current);
+    };
   }, [router]);
 
   // Loading state

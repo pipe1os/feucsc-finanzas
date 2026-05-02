@@ -5,6 +5,7 @@ import { LazyExpenseTrendChart } from "@/components/public/LazyCharts";
 import LatestTransactionsPreview from "@/components/public/LatestTransactionsPreview";
 import { supabase } from "@/lib/supabase";
 import { parseISODate } from "@/lib/utils";
+import { buildCategoryColors } from "@/lib/data-transform";
 import Footer from "@/components/public/Footer";
 
 // ISR: revalidate every 60 seconds
@@ -28,13 +29,7 @@ export default async function Home() {
   const data = gastosRes.data || [];
   const categoriasData = categoriasRes.data || [];
 
-  // Build category color map
-  const categoryColors: Record<string, string> = {};
-  categoriasData.forEach((c) => {
-    if (c.color) categoryColors[c.nombre] = c.color;
-  });
-  if (!categoryColors["N/A"]) categoryColors["N/A"] = "#9CA3AF";
-  if (!categoryColors["Varios"]) categoryColors["Varios"] = "#9CA3AF";
+  const categoryColors = buildCategoryColors(categoriasData);
 
   const presupuestoTotal = Number(
     process.env.NEXT_PUBLIC_PRESUPUESTO_TOTAL || "19972000",

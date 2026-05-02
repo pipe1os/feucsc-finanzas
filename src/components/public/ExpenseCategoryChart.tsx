@@ -71,17 +71,21 @@ export default function ExpenseCategoryChart({
   onCategoryClick,
   activeCategoryFilter,
 }: ExpenseCategoryChartProps) {
-  const totalGastado = gastosPorCategoria.reduce(
-    (sum, item) => sum + item.monto,
-    0,
+  const totalGastado = React.useMemo(
+    () => gastosPorCategoria.reduce((sum, item) => sum + item.monto, 0),
+    [gastosPorCategoria],
   );
 
-  const chartData = gastosPorCategoria.map((item) => ({
-    name: item.categoria,
-    value: item.monto,
-    color: item.color,
-    fill: item.color,
-  }));
+  const chartData = React.useMemo(
+    () =>
+      gastosPorCategoria.map((item) => ({
+        name: item.categoria,
+        value: item.monto,
+        color: item.color,
+        fill: item.color,
+      })),
+    [gastosPorCategoria],
+  );
 
   const chartConfig = React.useMemo(() => {
     const config: ChartConfig = {

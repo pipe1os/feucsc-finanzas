@@ -338,7 +338,7 @@ function ExpenseTable({
   const totalPages = Math.ceil(sortedItems.length / ROWS_PER_PAGE);
 
   // Build pagination pages with ellipsis
-  const getVisiblePages = (): (number | "ellipsis")[] => {
+  const visiblePages = useMemo((): (number | "ellipsis")[] => {
     if (totalPages <= 7) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
@@ -367,8 +367,7 @@ function ExpenseTable({
       );
     }
     return pages;
-  };
-  const visiblePages = getVisiblePages();
+  }, [totalPages, page]);
 
   const paginated = useMemo(() => {
     const start = (page - 1) * ROWS_PER_PAGE;

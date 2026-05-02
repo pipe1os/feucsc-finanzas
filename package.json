@@ -41,6 +41,11 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   },
+  "pnpm": {
+    "overrides": {
+      "postcss": ">=8.5.10"
+    }
+  },
   "browserslist": [
     "last 2 Chrome versions",
     "last 2 Firefox versions",

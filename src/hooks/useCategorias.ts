@@ -30,9 +30,11 @@ export function useCategorias() {
     CATEGORIAS_KEY,
     fetchCategorias,
     {
-      revalidateOnFocus: true,
+      revalidateOnFocus: false,
       revalidateOnReconnect: true,
-      dedupingInterval: 2000,
+      dedupingInterval: 10000,
+      errorRetryCount: 3,
+      errorRetryInterval: 5000,
     },
   );
 

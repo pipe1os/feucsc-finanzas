@@ -22,7 +22,12 @@ export async function createAuthClient() {
       setAll(cookiesToSet) {
         try {
           cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options),
+            cookieStore.set(name, value, {
+              ...options,
+              secure: process.env.NODE_ENV === "production",
+              httpOnly: true,
+              sameSite: "lax" as const,
+            }),
           );
         } catch {
           // setAll called from a Server Component (read-only context).

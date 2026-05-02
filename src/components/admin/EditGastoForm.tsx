@@ -76,25 +76,23 @@ export default function EditGastoForm({
     const originalUrl = gasto.comprobante_url;
     let finalUrl: string | null = originalUrl || null;
 
-    if (selectedFile) {
-      const uploadForm = new FormData();
-      uploadForm.append("file", selectedFile);
-      const uploadedUrl = await uploadComprobanteAction(uploadForm);
-      if (uploadedUrl) {
-        finalUrl = uploadedUrl;
-      } else {
-        setSubmitting(false);
-        setError("Error al subir el comprobante");
-        toast.danger("Error al subir el comprobante");
-        return;
-      }
-    }
-
-    if (imageMarkedForDeletion) {
-      finalUrl = null;
-    }
-
     try {
+      if (selectedFile) {
+        const uploadForm = new FormData();
+        uploadForm.append("file", selectedFile);
+        const uploadedUrl = await uploadComprobanteAction(uploadForm);
+        if (uploadedUrl) {
+          finalUrl = uploadedUrl;
+        } else {
+          setError("Error al subir el comprobante");
+          toast.danger("Error al subir el comprobante");
+          return;
+        }
+      }
+
+      if (imageMarkedForDeletion) {
+        finalUrl = null;
+      }
       const form = new FormData();
       form.append("id", gasto.id);
       form.append("fecha", fecha);

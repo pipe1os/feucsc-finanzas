@@ -1,7 +1,7 @@
 "use client";
 
 import { formatCLP } from "@/lib/utils";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { SkeletonKPICards } from "./Skeletons";
 
 interface ResumenFinanciero {
@@ -15,20 +15,30 @@ interface KPICardsProps {
   isLoading?: boolean;
 }
 
-// ── Animated counter hook ──────────────────────────────
+// ── Animated counter hook (ref-based, zero re-renders) ─
 function useCountUp(target: number, duration = 1200, delay = 0) {
-  const [value, setValue] = useState(target);
+  const ref = useRef<HTMLSpanElement>(null);
   const hasAnimated = useRef(false);
   const raf = useRef<number>(0);
 
   useEffect(() => {
-    // Skip animation on remount; jump straight to final value
-    if (hasAnimated.current) {
-      setValue(target);
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Skip animation if already animated or user prefers reduced motion
+    if (hasAnimated.current || prefersReducedMotion) {
+      if (ref.current) {
+        ref.current.textContent = formatCLP(target);
+      }
       return;
     }
     hasAnimated.current = true;
-    setValue(0);
+
+    // Set initial value
+    if (ref.current) {
+      ref.current.textContent = formatCLP(0);
+    }
 
     const timeout = setTimeout(() => {
       const start = performance.now();
@@ -36,7 +46,9 @@ function useCountUp(target: number, duration = 1200, delay = 0) {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
-        setValue(Math.round(target * eased));
+        if (ref.current) {
+          ref.current.textContent = formatCLP(Math.round(target * eased));
+        }
         if (progress < 1) {
           raf.current = requestAnimationFrame(step);
         }
@@ -50,7 +62,7 @@ function useCountUp(target: number, duration = 1200, delay = 0) {
     };
   }, [target, duration, delay]);
 
-  return value;
+  return ref;
 }
 
 export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps) {
@@ -62,41 +74,43 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
       : 0;
   const porcentajeDisponible = 100 - porcentajeGastado;
 
-  const animatedGastado = useCountUp(resumenFinanciero.totalGastado, 1200, 200);
-  const animatedTotal = useCountUp(
+  const animatedGastadoRef = useCountUp(resumenFinanciero.totalGastado, 1200, 200);
+  const animatedTotalRef = useCountUp(
     resumenFinanciero.presupuestoTotal,
     1200,
     100,
   );
-  const animatedDisponible = useCountUp(
+  const animatedDisponibleRef = useCountUp(
     resumenFinanciero.saldoDisponible,
     1200,
     300,
   );
 
-  // Status color for progress bar (based on spent)
-  const statusColor =
-    porcentajeGastado <= 40
-      ? "bg-emerald-500"
-      : porcentajeGastado <= 69
-        ? "bg-amber-400"
-        : "bg-rose-500";
+  // Status/status text derived from percentages (memoized)
+  const { statusColor, spentStatusText, availableStatusText } = useMemo(() => {
+    const color =
+      porcentajeGastado <= 40
+        ? "bg-emerald-500"
+        : porcentajeGastado <= 69
+          ? "bg-amber-400"
+          : "bg-rose-500";
 
-  // Text color for spent percentage
-  const spentStatusText =
-    porcentajeGastado <= 40
-      ? "text-emerald-600 dark:text-emerald-400"
-      : porcentajeGastado <= 69
-        ? "text-amber-600 dark:text-amber-400"
-        : "text-rose-600 dark:text-rose-400";
+    const spent =
+      porcentajeGastado <= 40
+        ? "text-emerald-600 dark:text-emerald-400"
+        : porcentajeGastado <= 69
+          ? "text-amber-600 dark:text-amber-400"
+          : "text-rose-600 dark:text-rose-400";
 
-  // Text color for available percentage (inverted logic)
-  const availableStatusText =
-    porcentajeDisponible >= 60
-      ? "text-emerald-600 dark:text-emerald-400"
-      : porcentajeDisponible >= 31
-        ? "text-amber-600 dark:text-amber-400"
-        : "text-rose-600 dark:text-rose-400";
+    const available =
+      porcentajeDisponible >= 60
+        ? "text-emerald-600 dark:text-emerald-400"
+        : porcentajeDisponible >= 31
+          ? "text-amber-600 dark:text-amber-400"
+          : "text-rose-600 dark:text-rose-400";
+
+    return { statusColor: color, spentStatusText: spent, availableStatusText: available };
+  }, [porcentajeGastado, porcentajeDisponible]);
 
   if (isLoading) {
     return <SkeletonKPICards />;
@@ -107,14 +121,14 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
       {/* Single integrated summary surface */}
       <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple p-6 sm:p-8 h-full flex flex-col">
         {/* Content stacked vertically */}
-        <div className="flex flex-col flex-1 justify-between gap-5">
+        <div className="flex flex-col flex-1 justify-between gap-5 lg:justify-center">
           {/* Hero metric: Total Gastado */}
           <div>
             <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-400 dark:text-gray-500 mb-1.5">
               Total Gastado
             </p>
             <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light">
-              {formatCLP(animatedGastado)}
+              <span ref={animatedGastadoRef}>$0</span>
             </p>
             <p className={`mt-1.5 text-sm font-medium ${spentStatusText}`}>
               {porcentajeGastado}% del presupuesto utilizado
@@ -134,7 +148,7 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
                 Presupuesto Total
               </p>
               <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light">
-                {formatCLP(animatedTotal)}
+                <span ref={animatedTotalRef}>$0</span>
               </p>
               <p className="mt-1 text-xs text-gray-400">Año académico 2026</p>
             </div>
@@ -144,7 +158,7 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
                 Presupuesto Disponible
               </p>
               <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light">
-                {formatCLP(animatedDisponible)}
+                <span ref={animatedDisponibleRef}>$0</span>
               </p>
               <p className={`mt-1 text-xs font-medium ${availableStatusText}`}>
                 {porcentajeDisponible}% restante
