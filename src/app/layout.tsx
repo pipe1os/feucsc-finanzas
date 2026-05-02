@@ -30,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="es" className={inter.variable} suppressHydrationWarning>
       <head>
+        <meta name="color-scheme" content="light dark" />
         <script
           // Prevent FOUC: apply dark mode before first paint
           dangerouslySetInnerHTML={{
@@ -45,13 +46,10 @@ export default function RootLayout({
                   } else if (stored === null || stored === undefined) {
                     shouldBeDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                   }
-                  // Always set color-scheme AND class together to prevent browser UI flash
                   if (shouldBeDark) {
                     document.documentElement.classList.add('dark');
-                    document.documentElement.style.colorScheme = 'dark';
                   } else {
                     document.documentElement.classList.remove('dark');
-                    document.documentElement.style.colorScheme = 'light';
                   }
                 } catch (e) {}
               })();
