@@ -62,7 +62,7 @@ export async function createGasto(formData: FormData) {
     }
   }
 
-  const { error } = await supabaseServer.from("gastos").insert({
+  const { error } = await supabaseServer.client.from("gastos").insert({
     fecha,
     descripcion,
     categoria,
@@ -100,7 +100,7 @@ export async function updateGasto(formData: FormData) {
     }
   }
 
-  const { error } = await supabaseServer.from("gastos").update({
+  const { error } = await supabaseServer.client.from("gastos").update({
     fecha,
     descripcion,
     categoria,
@@ -136,7 +136,7 @@ export async function deleteGasto(id: string) {
   if (!validUUID(id)) throw new Error("ID inválido");
 
   // Fetch comprobante_url BEFORE deleting the DB record
-  const { data: gastoData } = await supabaseServer
+  const { data: gastoData } = await supabaseServer.client
     .from("gastos")
     .select("comprobante_url")
     .eq("id", id)
@@ -180,7 +180,7 @@ export async function deleteGasto(id: string) {
     }
   }
 
-  const { error } = await supabaseServer.from("gastos").delete().eq("id", id);
+  const { error } = await supabaseServer.client.from("gastos").delete().eq("id", id);
   if (error) throw sanitizeDbError(error);
   revalidatePath("/");
   revalidatePath("/gastos");
@@ -192,7 +192,7 @@ export async function createCategoria(nombre: string, color: string) {
   if (!n || n.length > MAX_CAT_LEN) throw new Error("Nombre de categoría inválido");
   if (!/^#[0-9a-f]{6}$/i.test(color || "")) throw new Error("Color inválido");
 
-  const { error } = await supabaseServer.from("categorias").insert({ nombre: n, color });
+  const { error } = await supabaseServer.client.from("categorias").insert({ nombre: n, color });
   if (error) throw sanitizeDbError(error);
   revalidatePath("/");
   revalidatePath("/gastos");
@@ -204,13 +204,13 @@ export async function deleteCategoria(nombre: string) {
   if (!n || n.length > MAX_CAT_LEN) throw new Error("Nombre de categoría inválido");
 
   // Re-assign gastos first; abort if this fails to avoid orphaned references
-  const { error: updateError } = await supabaseServer
+  const { error: updateError } = await supabaseServer.client
     .from("gastos")
     .update({ categoria: "N/A" })
     .eq("categoria", n);
   if (updateError) throw new Error("Error al reasignar gastos");
 
-  const { error } = await supabaseServer.from("categorias").delete().eq("nombre", n);
+  const { error } = await supabaseServer.client.from("categorias").delete().eq("nombre", n);
   if (error) throw sanitizeDbError(error);
   revalidatePath("/");
   revalidatePath("/gastos");
