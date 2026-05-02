@@ -36,11 +36,22 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('theme');
-                  if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  var stored = localStorage.getItem('theme');
+                  var shouldBeDark = false;
+                  if (stored === 'dark') {
+                    shouldBeDark = true;
+                  } else if (stored === 'light') {
+                    shouldBeDark = false;
+                  } else if (stored === null || stored === undefined) {
+                    shouldBeDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  }
+                  // Always set color-scheme AND class together to prevent browser UI flash
+                  if (shouldBeDark) {
                     document.documentElement.classList.add('dark');
-                  } else if (theme === 'light') {
+                    document.documentElement.style.colorScheme = 'dark';
+                  } else {
                     document.documentElement.classList.remove('dark');
+                    document.documentElement.style.colorScheme = 'light';
                   }
                 } catch (e) {}
               })();
