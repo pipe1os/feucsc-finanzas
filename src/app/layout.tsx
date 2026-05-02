@@ -31,6 +31,15 @@ export default function RootLayout({
     <html lang="es" className={inter.variable} suppressHydrationWarning>
       <head>
         <meta name="color-scheme" content="light dark" />
+        {/* Inline critical background: prevents white flash before React hydrates */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              html { background-color: #f5f5f7; }
+              html.dark { background-color: #141414; }
+            `,
+          }}
+        />
         <script
           // Prevent FOUC: apply dark mode before first paint
           dangerouslySetInnerHTML={{
