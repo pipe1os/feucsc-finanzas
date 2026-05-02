@@ -69,7 +69,7 @@ export async function uploadComprobanteAction(formData: FormData): Promise<strin
   }
 
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-  const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
+  const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 
   if (!cloudName) {
     throw new Error("Configuración de Cloudinary incompleta");
