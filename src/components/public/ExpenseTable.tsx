@@ -878,7 +878,7 @@ function ExpenseTable({
               )}
             </Modal.Body>
             <Modal.Footer>
-              <Button slot="close" variant="secondary" className="rounded-xl">
+              <Button slot="close" variant="secondary" className="rounded-xl text-gray-900 dark:text-white">
                 Cerrar
               </Button>
             </Modal.Footer>
