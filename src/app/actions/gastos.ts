@@ -33,10 +33,10 @@ function validUUID(id: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
 }
 
-function sanitizeDbError(error: { message?: string; code?: string }): Error {
-  // Don't leak raw Supabase messages to the client; log internally and return generic message
-  console.error("Supabase DB error:", error.code, error.message);
-  return new Error("Error al procesar la solicitud. Inténtalo de nuevo más tarde.");
+function sanitizeDbError(error: { message?: string; code?: string; details?: string; hint?: string }): Error {
+  // Log full Supabase error details for debugging, return generic message to client
+  console.error("Supabase DB error:", JSON.stringify(error));
+  return new Error(`Error DB (${error.code || 'unknown'}): Error al procesar la solicitud. Inténtalo de nuevo más tarde.`);
 }
 
 export async function createGasto(formData: FormData) {
