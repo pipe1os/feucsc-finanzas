@@ -74,12 +74,6 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-dvh items-center justify-center bg-transparent px-4">
-      {/* Background decorative elements */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-32 -right-32 size-96 rounded-full bg-red-500/5 blur-3xl" />
-        <div className="absolute -bottom-48 -left-48 size-125 rounded-full bg-red-500/3 blur-3xl" />
-      </div>
-
       {/* Login card */}
       <div className="relative z-10 w-full max-w-md animate-fade-in-up">
         <Card className="rounded-3xl shadow-apple-lg border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 sm:p-10">
