@@ -31,39 +31,21 @@ export default function RootLayout({
   return (
     <html lang="es" className={inter.variable} suppressHydrationWarning>
       <head>
-        <meta name="color-scheme" content="light dark" />
-        {/* Inline critical background: prevents white flash before React hydrates */}
+        {/* Critical inline CSS + JS: prevents white/light flash (FOUC) on reload.
+            This runs in <head> and BLOCKS rendering until the correct theme
+            class is applied to <html>. Must stay in sync with next-themes config
+            (storageKey='theme', attribute='class', defaultTheme='system'). */}
         <style
           dangerouslySetInnerHTML={{
-            __html: `
-              html { background-color: #f5f5f7; }
-              html.dark { background-color: #141414; }
-            `,
+            __html: [
+              'html{background:#f5f5f7;color-scheme:light}',
+              'html.dark{background:#141414;color-scheme:dark}',
+            ].join(''),
           }}
         />
         <script
-          // Prevent FOUC: apply dark mode before first paint
           dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var stored = localStorage.getItem('theme');
-                  var shouldBeDark = false;
-                  if (stored === 'dark') {
-                    shouldBeDark = true;
-                  } else if (stored === 'light') {
-                    shouldBeDark = false;
-                  } else if (stored === null || stored === undefined) {
-                    shouldBeDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  }
-                  if (shouldBeDark) {
-                    document.documentElement.classList.add('dark');
-                  } else {
-                    document.documentElement.classList.remove('dark');
-                  }
-                } catch (e) {}
-              })();
-            `,
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(t!=='light'&&(t==='system'||!t)&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(d)document.documentElement.classList.add('dark')}catch(e){}})()`,
           }}
         />
       </head>
