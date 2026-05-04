@@ -131,7 +131,7 @@ export default function EditGastoForm({
           <Label>Fecha</Label>
           <Input
             value={fecha}
-            className="h-10 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60"
+            className="h-10 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60"
           />
         </TextField>
         <div className="space-y-1.5">
@@ -156,7 +156,7 @@ export default function EditGastoForm({
         <Input
           placeholder="Descripción del gasto"
           value={descripcion}
-          className="h-10 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60"
+          className="h-10 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 placeholder:text-gray-400"
         />
       </TextField>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -171,7 +171,7 @@ export default function EditGastoForm({
           <Input
             placeholder="850000"
             value={monto}
-            className="h-10 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60"
+            className="h-10 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 placeholder:text-gray-400"
           />
         </TextField>
         <ComprobanteUpload
@@ -191,7 +191,7 @@ export default function EditGastoForm({
           </Alert.Content>
         </Alert>
       )}
-      <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-zinc-800/50 mt-4">
+      <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800/50 mt-4">
         <Button
           variant="secondary"
           onPress={onCancel}
@@ -202,7 +202,7 @@ export default function EditGastoForm({
         <Button
           isDisabled={submitting}
           onPress={handleSubmit}
-          className="bg-zinc-900 text-white dark:bg-white dark:text-black hover:bg-zinc-800 dark:hover:bg-zinc-200 cursor-pointer rounded-xl px-6 font-medium shadow-sm"
+          className="bg-gray-900 text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 cursor-pointer rounded-xl px-6 font-medium shadow-sm"
         >
           {submitting ? "Guardando..." : "Guardar cambios"}
         </Button>

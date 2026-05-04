@@ -32,7 +32,7 @@ export default function Error({
           <p className="text-sm font-medium text-gray-900 dark:text-white">
             No se pudieron cargar los datos
           </p>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-gray-400">
             Intenta nuevamente o contáctanos
           </p>
         </div>
@@ -45,7 +45,7 @@ export default function Error({
           </Button>
           <Link
             href="/"
-            className="text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+            className="text-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
             Volver a la página principal
           </Link>

@@ -131,14 +131,14 @@ export function DotPattern({
           cy={dot.y}
           r={cr}
           fill={glow ? `url(#${id}-gradient)` : "currentColor"}
-          initial={glow ? { opacity: 0.4, scale: 1 } : {}}
+          initial={glow ? { opacity: 0.4, scale: 1 } : { opacity: 1 }}
           animate={
             glow
               ? {
                   opacity: [0.4, 1, 0.4],
                   scale: [1, 1.5, 1],
                 }
-              : {}
+              : { opacity: 1 }
           }
           transition={
             glow

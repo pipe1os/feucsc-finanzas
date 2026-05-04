@@ -26,6 +26,7 @@ import { deleteGasto as deleteGastoAction, deleteCategoria as deleteCategoriaAct
 import { useGastos } from "@/hooks/useGastos";
 import { useCategorias } from "@/hooks/useCategorias";
 import ThemeToggle from "@/components/admin/ThemeToggle";
+import Footer from "@/components/public/Footer";
 import { HugeiconsMenuIcon, type HugeiconsMenuIconHandle } from "@/components/ui/hugeicons-menu";
 import SortableColumnHeader from "@/components/admin/SortableColumnHeader";
 import GastoForm from "@/components/admin/GastoForm";
@@ -314,7 +315,7 @@ export default function AdminPage() {
 
         {/* Navigation */}
         <nav className="flex flex-col gap-1 px-4 pt-6">
-          <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-zinc-400 dark:text-zinc-600 uppercase">
+          <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-gray-400 dark:text-gray-500 uppercase">
             Administración
           </span>
           <Link
@@ -346,7 +347,7 @@ export default function AdminPage() {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="1.5"
+                  strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
@@ -383,7 +384,7 @@ export default function AdminPage() {
 
       {/* ── Main Content ── */}
       <main className="flex-1 min-w-0 lg:ml-65">
-        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:py-10">
+        <div className="mx-auto max-w-5xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
           {/* Heading */}
           <div className="mb-8 animate-fade-in-up">
             <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -395,7 +396,7 @@ export default function AdminPage() {
           </div>
 
           {/* ── Form card ── */}
-          <Card className="overflow-visible rounded-2xl shadow-apple border border-gray-100 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-6 sm:p-8 mb-8 animate-fade-in-up stagger-1 opacity-0">
+          <Card className="overflow-visible rounded-2xl shadow-apple border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 sm:p-8 mb-8 animate-fade-in-up stagger-1 opacity-0">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
               Ingresar Gasto
             </h2>
@@ -409,8 +410,8 @@ export default function AdminPage() {
           </Card>
 
           {/* ── Gastos table ── */}
-          <Card className="rounded-2xl shadow-apple border border-gray-100 dark:border-zinc-700 bg-white dark:bg-zinc-900 animate-fade-in-up stagger-2 opacity-0">
-            <div className="p-6 pb-4 border-b border-gray-100 dark:border-zinc-800 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Card className="rounded-2xl shadow-apple border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 animate-fade-in-up stagger-2 opacity-0">
+            <div className="p-6 pb-4 border-b border-gray-100 dark:border-gray-800 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Gastos Registrados
@@ -434,7 +435,7 @@ export default function AdminPage() {
                       }
                     }}
                   >
-                    <Select.Trigger className="rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-gray-300">
+                    <Select.Trigger className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-gray-300">
                       <Select.Value>
                         {({ isPlaceholder, state }) => {
                           if (isPlaceholder) return "Mes: Todos";
@@ -446,7 +447,7 @@ export default function AdminPage() {
                       </Select.Value>
                       <Select.Indicator />
                     </Select.Trigger>
-                    <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-zinc-700 dark:bg-zinc-900 min-w-48">
+                    <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-gray-700 dark:bg-gray-900 min-w-48">
                       <ListBox>
                         {MONTH_OPTIONS.map((m) => (
                           <ListBox.Item key={m.id} id={m.id} textValue={m.label}>
@@ -471,7 +472,7 @@ export default function AdminPage() {
                       }
                     }}
                   >
-                    <Select.Trigger className="rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-gray-300">
+                    <Select.Trigger className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-gray-300">
                       <Select.Value>
                         {({ isPlaceholder, state }) => {
                           if (isPlaceholder) return "Categoría: Todas";
@@ -482,7 +483,7 @@ export default function AdminPage() {
                       </Select.Value>
                       <Select.Indicator />
                     </Select.Trigger>
-                    <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-zinc-700 dark:bg-zinc-900 min-w-56">
+                    <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-gray-700 dark:bg-gray-900 min-w-56">
                       <ListBox>
                         <ListBox.Item id="all" textValue="Todas las categorías">
                           Todas las categorías
@@ -507,7 +508,7 @@ export default function AdminPage() {
                     placeholder="Buscar..."
                     defaultValue=""
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full h-9 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 pl-10 pr-4 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-400 outline-hidden transition-all duration-200 focus:border-red-300 focus:ring-2 focus:ring-red-100"
+                    className="w-full h-9 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 pl-10 pr-4 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 outline-hidden transition-all duration-200 focus:border-red-300 focus:ring-2 focus:ring-red-100"
                   />
                 </div>
               </div>
@@ -533,7 +534,7 @@ export default function AdminPage() {
           <div className="p-6 pt-4">
               {loadingTable ? (
                 <div className="flex items-center justify-center py-16">
-                  <div className="size-8 animate-spin rounded-full border-3 border-gray-200 dark:border-zinc-800 border-t-red-500" />
+                  <div className="size-8 animate-spin rounded-full border-3 border-gray-200 dark:border-gray-800 border-t-red-500" />
                 </div>
               ) : (
                 <div>
@@ -541,7 +542,7 @@ export default function AdminPage() {
                   <div className="md:hidden">
                     {paginated.length === 0 ? (
                       <div className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-                        <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-zinc-800 text-gray-400 border border-gray-100 dark:border-zinc-800 shadow-xs">
+                        <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 border border-gray-100 dark:border-gray-800 shadow-xs">
                           <SearchIcon />
                         </div>
                         <div className="flex flex-col">
@@ -567,7 +568,7 @@ export default function AdminPage() {
                               key={g.id}
                               id={g.id}
                               textValue={g.descripcion}
-                              className="rounded-none px-0 py-3 border-b border-gray-100 dark:border-zinc-800 last:border-b-0"
+                              className="rounded-none px-0 py-3 border-b border-gray-100 dark:border-gray-800 last:border-b-0"
                             >
                               <div className="flex flex-col gap-1 w-full">
                                 <div className="flex items-start justify-between gap-2">
@@ -609,7 +610,7 @@ export default function AdminPage() {
                                         e.stopPropagation();
                                         openEdit(g);
                                       }}
-                                      className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+                                      className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                                       title="Editar"
                                     >
                                       <EditIcon />
@@ -704,7 +705,7 @@ export default function AdminPage() {
                       <Table.Body
                         renderEmptyState={() => (
                           <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-                            <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-zinc-800 text-gray-400 dark:text-gray-500 border border-gray-100 dark:border-zinc-800">
+                            <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 border border-gray-100 dark:border-gray-800">
                               {searchQuery ? <SearchIcon /> : <InboxIcon />}
                             </div>
                             <div className="flex flex-col">
@@ -761,13 +762,13 @@ export default function AdminPage() {
                                           setLightboxUrl(g.comprobante_url)
                                         }
                                         disabled={!g.comprobante_url}
-                                        className={`inline-flex items-center justify-center size-8 rounded-full transition-all duration-200 cursor-pointer ${g.comprobante_url ? "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700" : "bg-gray-50 dark:bg-zinc-800/50 text-gray-300 dark:text-gray-600 cursor-not-allowed"}`}
+                                        className={`inline-flex items-center justify-center size-8 rounded-full transition-all duration-200 cursor-pointer ${g.comprobante_url ? "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700" : "bg-gray-50 dark:bg-gray-800/50 text-gray-300 dark:text-gray-600 cursor-not-allowed"}`}
                                         aria-label="Ver comprobante"
                                       >
                                         <EyeIcon />
                                       </button>
                                     </Tooltip.Trigger>
-                                    <Tooltip.Content className="bg-zinc-800 text-white text-xs px-3 py-1.5 rounded-lg">
+                                    <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
                                       <p>
                                         {g.comprobante_url
                                           ? "Ver comprobante"
@@ -779,13 +780,13 @@ export default function AdminPage() {
                                     <Tooltip.Trigger>
                                       <button
                                         onClick={() => openEdit(g)}
-                                        className="inline-flex items-center justify-center size-8 rounded-full bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-all duration-200 cursor-pointer"
+                                        className="inline-flex items-center justify-center size-8 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 cursor-pointer"
                                         aria-label="Editar"
                                       >
                                         <EditIcon />
                                       </button>
                                     </Tooltip.Trigger>
-                                    <Tooltip.Content className="bg-zinc-800 text-white text-xs px-3 py-1.5 rounded-lg">
+                                    <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
                                       <p>Editar</p>
                                     </Tooltip.Content>
                                   </Tooltip>
@@ -799,7 +800,7 @@ export default function AdminPage() {
                                         <TrashIcon />
                                       </button>
                                     </Tooltip.Trigger>
-                                    <Tooltip.Content className="bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg">
+                                    <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
                                       <p>Eliminar</p>
                                     </Tooltip.Content>
                                   </Tooltip>
@@ -867,6 +868,8 @@ export default function AdminPage() {
               ← Ver portal público
             </Link>
           </div>
+
+          <Footer />
         </div>
       </main>
 
@@ -876,9 +879,9 @@ export default function AdminPage() {
         onOpenChange={() => setEditGasto(null)}
       >
         <Modal.Container>
-          <Modal.Dialog className="sm:max-w-lg bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 shadow-apple-lg">
-            <Modal.CloseTrigger className="hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors" />
-            <Modal.Header className="sm:px-8 sm:pt-6 border-b border-gray-100 dark:border-zinc-800/50 pb-4 mb-4">
+          <Modal.Dialog className="sm:max-w-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-apple-lg">
+            <Modal.CloseTrigger className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" />
+            <Modal.Header className="sm:px-8 sm:pt-6 border-b border-gray-100 dark:border-gray-800/50 pb-4 mb-4">
               <Modal.Heading className="text-xl font-semibold">
                 Editar Gasto
               </Modal.Heading>
@@ -911,8 +914,8 @@ export default function AdminPage() {
         onOpenChange={() => setDeleteGasto(null)}
       >
         <AlertDialog.Container>
-          <AlertDialog.Dialog className="sm:max-w-100 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 shadow-apple-lg">
-            <AlertDialog.CloseTrigger className="hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors" />
+          <AlertDialog.Dialog className="sm:max-w-100 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-apple-lg">
+            <AlertDialog.CloseTrigger className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" />
             <AlertDialog.Header>
               <AlertDialog.Icon status="danger" />
               <AlertDialog.Heading>¿Eliminar gasto?</AlertDialog.Heading>
@@ -962,8 +965,8 @@ export default function AdminPage() {
         onOpenChange={() => setDeletingCat(null)}
       >
         <AlertDialog.Container>
-          <AlertDialog.Dialog className="sm:max-w-100 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 shadow-apple-lg">
-            <AlertDialog.CloseTrigger className="hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors" />
+          <AlertDialog.Dialog className="sm:max-w-100 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-apple-lg">
+            <AlertDialog.CloseTrigger className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" />
             <AlertDialog.Header>
               <AlertDialog.Icon status="warning" />
               <AlertDialog.Heading>¿Eliminar categoría?</AlertDialog.Heading>

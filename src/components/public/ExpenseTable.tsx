@@ -98,7 +98,7 @@ const XIcon = () => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2.5"
+    strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
@@ -124,7 +124,7 @@ function SortableColumnHeader({
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2.5"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
           className={`transform transition-transform duration-200 ease-out ${sortDirection === "descending" ? "rotate-180" : ""}`}
@@ -387,7 +387,7 @@ function ExpenseTable({
   return (
     <>
       <div
-        className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-gray-900 shadow-xs dark:shadow-none overflow-hidden animate-fade-in-up opacity-0"
+        className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-white dark:bg-gray-900 shadow-apple overflow-hidden animate-fade-in-up opacity-0"
         style={{ animationDelay: "0.2s" }}
       >
         {/* Header row: title */}

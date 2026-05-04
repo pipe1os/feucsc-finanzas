@@ -69,7 +69,7 @@ export default function LastSyncIndicator({
   return (
     <Tooltip delay={0} closeDelay={0}>
       <Tooltip.Trigger>
-        <div className="flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500 cursor-help">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 cursor-help">
           {/* Animated green dot */}
           <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
@@ -78,7 +78,7 @@ export default function LastSyncIndicator({
           <span suppressHydrationWarning>Actualizado {relativeTime} ({exactDate})</span>
         </div>
       </Tooltip.Trigger>
-      <Tooltip.Content className="bg-zinc-800 text-white text-xs px-3 py-1.5 rounded-lg">
+      <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
         <p>Actualizado el {exactDate}</p>
       </Tooltip.Content>
     </Tooltip>

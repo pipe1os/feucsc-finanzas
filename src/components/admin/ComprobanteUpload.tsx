@@ -79,7 +79,7 @@ export default function ComprobanteUpload({
           <button
             type="button"
             onClick={() => onViewImage?.(existingUrl)}
-            className="inline-flex items-center justify-center size-8 rounded-lg bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+            className="inline-flex items-center justify-center size-8 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer"
             aria-label="Ver imagen actual"
           >
             <EyeIcon />
