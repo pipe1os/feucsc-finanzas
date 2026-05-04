@@ -55,9 +55,9 @@ export default function CategorySelect({
           setOpen(!open);
           setIsCreating(false);
         }}
-        className="flex w-full items-center justify-between rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 px-4 py-2.5
+        className="flex w-full items-center justify-between rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 px-4 py-2.5
                    text-sm text-gray-900 dark:text-white transition-all duration-200 cursor-pointer
-                   hover:border-gray-300 dark:hover:border-zinc-700 focus:border-red-300  focus:ring-2 focus:ring-red-100 outline-hidden"
+                   hover:border-gray-300 dark:hover:border-gray-700 focus:border-red-300  focus:ring-2 focus:ring-red-100 outline-hidden"
       >
         <span>{value}</span>
         <span
@@ -70,7 +70,7 @@ export default function CategorySelect({
       {/* Dropdown */}
       {open && (
         <div
-          className="absolute z-50 mt-1.5 w-full rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-lg py-1 animate-fade-in-up"
+          className="absolute z-50 mt-1.5 w-full rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg py-1 animate-fade-in-up"
           style={{ animationDuration: "150ms" }}
         >
           <div className="max-h-60 overflow-y-auto">
@@ -81,7 +81,7 @@ export default function CategorySelect({
                 <div
                   key={cat}
                   className={`group flex items-center justify-between px-3 py-2 text-sm cursor-pointer transition-colors duration-150
-                ${isSelected ? "bg-red-50 text-red-600 font-medium" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800"}`}
+                ${isSelected ? "bg-red-50 text-red-600 font-medium" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"}`}
                 >
                   <span
                     className="flex-1"
@@ -100,7 +100,7 @@ export default function CategorySelect({
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="2.5"
+                        strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       >
@@ -130,7 +130,7 @@ export default function CategorySelect({
           </div>
 
           {/* Divider + Nueva categoría */}
-          <div className="border-t border-gray-100 dark:border-zinc-800 mt-1 pt-1">
+          <div className="border-t border-gray-100 dark:border-gray-800 mt-1 pt-1">
             {isCreating ? (
               <div className="flex items-center gap-2 px-3 py-2">
                 <input
@@ -146,7 +146,7 @@ export default function CategorySelect({
                     }
                     if (e.key === "Escape") setIsCreating(false);
                   }}
-                  className="flex-1 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-hidden focus:border-red-300 focus:ring-1 focus:ring-red-100"
+                  className="flex-1 rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-hidden focus:border-red-300 focus:ring-1 focus:ring-red-100"
                 />
                 <button
                   type="button"
@@ -158,7 +158,7 @@ export default function CategorySelect({
                 <button
                   type="button"
                   onClick={() => setIsCreating(false)}
-                  className="inline-flex items-center justify-center rounded-lg border border-gray-200 dark:border-zinc-800 px-2 py-1.5 text-gray-400 dark:text-gray-500 text-xs hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-2 py-1.5 text-gray-400 dark:text-gray-500 text-xs hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
                 >
                   ✕
                 </button>
@@ -189,7 +189,7 @@ function PlusIcon() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >

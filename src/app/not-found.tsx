@@ -12,7 +12,7 @@ export default function NotFound() {
           <p className="text-sm font-medium text-gray-900 dark:text-white">
             Página no encontrada
           </p>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-gray-400">
             Esta URL no existe
           </p>
         </div>

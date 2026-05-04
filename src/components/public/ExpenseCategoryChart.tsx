@@ -45,7 +45,7 @@ function CustomTooltip({
     totalGastado > 0 ? Math.round((data.value / totalGastado) * 100) : 0;
 
   return (
-    <div className="rounded-xl bg-white dark:bg-gray-900 px-4 py-3 shadow-xs dark:shadow-none border border-zinc-200/80 dark:border-zinc-700/80 pointer-events-none">
+    <div className="rounded-xl bg-white dark:bg-gray-900 px-4 py-3 shadow-xs dark:shadow-none border border-gray-200/80 dark:border-gray-700/80 pointer-events-none">
       <div className="flex items-center gap-2 mb-1">
         <div
           className="size-2.5 rounded-full"
@@ -115,7 +115,7 @@ export default function ExpenseCategoryChart({
 
   return (
     <Card
-      className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-gray-900 shadow-xs dark:shadow-none ring-0 animate-fade-in-up opacity-0"
+      className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-white dark:bg-gray-900 shadow-xs dark:shadow-none ring-0 animate-fade-in-up opacity-0"
       style={{ animationDelay: "0.25s" }}
     >
       <CardHeader className="pb-4">

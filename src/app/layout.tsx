@@ -5,7 +5,8 @@ import { Providers } from "./providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { DotPattern } from "@/components/ui/dot-pattern";
-import Sidebar from "@/components/public/Sidebar";
+import SidebarWrapper from "@/components/SidebarWrapper";
+import MainWrapper from "@/components/MainWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,16 +32,69 @@ export default function RootLayout({
   return (
     <html lang="es" className={inter.variable} suppressHydrationWarning>
       <head>
-        {/* Critical FOUC prevention: blocks rendering until correct theme is applied.
-            1. The <script> runs synchronously before first paint.
-            2. It reads localStorage('theme') and matchMedia to determine dark/light.
-            3. It sets the .dark class, background-color, and color-scheme on <html>
-               all in one shot — no intermediate light frame is ever visible.
+        {/* ── FOUC prevention (production-safe) ────────────────────────
+            Problem: In production, Tailwind CSS is an external file. Before
+            it loads, <body> has the browser-default white background because
+            the `bg-transparent` class doesn't exist yet. Additionally, React
+            hydration can briefly strip the `.dark` class from <html> before
+            next-themes re-adds it.
+
+            Solution (3 layers):
+            1. Inline <style> — sets body transparent + html theme backgrounds
+               so the correct color shows even before external CSS loads.
+            2. Inline <script> — reads localStorage/matchMedia and adds .dark
+               class + inline style.background, all synchronously in <head>.
+            3. MutationObserver — guards against React hydration removing .dark
+               by re-adding it immediately if stripped.
+
             Must stay in sync with next-themes config
             (storageKey='theme', attribute='class', defaultTheme='system'). */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: [
+              /* Body must be transparent before Tailwind loads */
+              'body{background:transparent}',
+              /* Theme-responsive html backgrounds — script adds .dark */
+              'html{background:#f5f5f7;color-scheme:light}',
+              'html.dark{background:#141414;color-scheme:dark;color:#f5f5f7}',
+            ].join(''),
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var d=document.documentElement,t=localStorage.getItem('theme'),isDark=t==='dark'||(t!=='light'&&(t==='system'||!t)&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(isDark){d.classList.add('dark');d.style.colorScheme='dark';d.style.background='#141414'}else{d.style.colorScheme='light';d.style.background='#f5f5f7'}}catch(e){document.documentElement.style.colorScheme='light';document.documentElement.style.background='#f5f5f7'}})()`,
+            __html: [
+              '(function(){',
+              'try{',
+              'var d=document.documentElement,',
+              "t=localStorage.getItem('theme'),",
+              "isDark=t==='dark'||(t!=='light'&&(t==='system'||!t)&&window.matchMedia('(prefers-color-scheme:dark)').matches);",
+              'if(isDark){',
+              "d.classList.add('dark');",
+              "d.style.colorScheme='dark';",
+              "d.style.background='#141414'",
+              '}else{',
+              "d.style.colorScheme='light';",
+              "d.style.background='#f5f5f7'",
+              '}',
+              /* Guard: if React hydration strips .dark, re-add it before paint */
+              'if(isDark){',
+              'var o=new MutationObserver(function(m){',
+              "if(!d.classList.contains('dark')){",
+              "d.classList.add('dark');",
+              "d.style.colorScheme='dark';",
+              "d.style.background='#141414'",
+              '}',
+              '});',
+              "o.observe(d,{attributeFilter:['class']});",
+              /* Disconnect after hydration settles (next-themes will own it) */
+              'setTimeout(function(){o.disconnect()},2000)',
+              '}',
+              '}catch(e){',
+              "d.style.colorScheme='light';",
+              "d.style.background='#f5f5f7'",
+              '}',
+              '})()',
+            ].join(''),
           }}
         />
       </head>
@@ -49,10 +103,10 @@ export default function RootLayout({
         <DotPattern className="fixed inset-0 -z-10 text-neutral-400/15 dark:text-neutral-600/15" />
         <Providers>
           <div className="flex min-h-dvh bg-transparent">
-            <Sidebar />
-            <main className="flex-1 min-w-0 lg:ml-65">
+            <SidebarWrapper />
+            <MainWrapper>
               {children}
-            </main>
+            </MainWrapper>
           </div>
         </Providers>
         <Analytics />

@@ -17,11 +17,16 @@ interface KPICardsProps {
   isLoading?: boolean;
 }
 
-export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps) {
+export default function KPICards({
+  resumenFinanciero,
+  isLoading,
+}: KPICardsProps) {
   const porcentajeGastado =
     resumenFinanciero.presupuestoTotal > 0
       ? Math.round(
-          (resumenFinanciero.totalGastado / resumenFinanciero.presupuestoTotal) * 100,
+          (resumenFinanciero.totalGastado /
+            resumenFinanciero.presupuestoTotal) *
+            100,
         )
       : 0;
   const porcentajeDisponible = 100 - porcentajeGastado;
@@ -49,7 +54,11 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
           ? "text-amber-600 dark:text-amber-400"
           : "text-rose-600 dark:text-rose-400";
 
-    return { statusColor: color, spentStatusText: spent, availableStatusText: available };
+    return {
+      statusColor: color,
+      spentStatusText: spent,
+      availableStatusText: available,
+    };
   }, [porcentajeGastado, porcentajeDisponible]);
 
   if (isLoading) {
@@ -70,16 +79,16 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
             <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light">
               <NumberTicker
                 value={resumenFinanciero.totalGastado}
-                delay={0.2}
                 formatFn={formatCLP}
                 className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light"
               />
             </p>
-            <p className={`mt-1.5 text-sm font-medium flex items-center gap-1 ${spentStatusText}`}>
+            <p
+              className={`mt-1.5 text-sm font-medium flex items-center gap-1 ${spentStatusText}`}
+            >
               <span>
                 <NumberTicker
                   value={porcentajeGastado}
-                  delay={0.2}
                   className="text-inherit tabular-nums"
                 />
                 %
@@ -90,7 +99,12 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
               <motion.div
                 initial={{ width: "0%" }}
                 animate={{ width: `${porcentajeGastado}%` }}
-                transition={{ type: "spring", damping: 30, stiffness: 170, delay: 0.2 }}
+                transition={{
+                  type: "spring",
+                  damping: 30,
+                  stiffness: 170,
+                  delay: 0.2,
+                }}
                 className={`h-full rounded-full ${statusColor}`}
               />
             </div>
@@ -105,7 +119,6 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
               <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light">
                 <NumberTicker
                   value={resumenFinanciero.presupuestoTotal}
-                  delay={0.1}
                   formatFn={formatCLP}
                   className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light"
                 />
@@ -120,16 +133,16 @@ export default function KPICards({ resumenFinanciero, isLoading }: KPICardsProps
               <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light">
                 <NumberTicker
                   value={resumenFinanciero.saldoDisponible}
-                  delay={0.3}
                   formatFn={formatCLP}
                   className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light"
                 />
               </p>
-              <p className={`mt-1 text-xs font-medium flex items-center gap-1 ${availableStatusText}`}>
+              <p
+                className={`mt-1 text-xs font-medium flex items-center gap-1 ${availableStatusText}`}
+              >
                 <span>
                   <NumberTicker
                     value={porcentajeDisponible}
-                    delay={0.3}
                     className="text-inherit tabular-nums"
                   />
                   %

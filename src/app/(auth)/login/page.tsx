@@ -87,7 +87,7 @@ export default function LoginPage() {
               className="mb-6"
               priority
             />
-            <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
+            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-center">
               Portal de Administración
             </h1>
             <p className="mt-2 text-sm text-gray-400 dark:text-gray-500 text-center leading-relaxed max-w-xs">
