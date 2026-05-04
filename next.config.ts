@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
       "recharts",
       "@heroui/react",
       "@heroui/styles",
+      "motion/react",
+      "lucide-react",
+      "@supabase/supabase-js",
+      "swr",
     ],
   },
 

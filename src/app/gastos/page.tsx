@@ -1,6 +1,6 @@
 import DashboardClient from "@/components/public/DashboardClient";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
-import { supabase } from "@/lib/supabase";
+import { supabaseAnon } from "@/lib/supabase-anon";
 import { parseISODate } from "@/lib/utils";
 import { buildCategoryColors } from "@/lib/data-transform";
 import Footer from "@/components/public/Footer";
@@ -17,8 +17,8 @@ export const metadata = {
 export default async function GastosPage() {
   // Parallel data fetching
   const [gastosRes, categoriasRes] = await Promise.all([
-    supabase.from("gastos").select("*").order("fecha", { ascending: false }).limit(500),
-    supabase.from("categorias").select("*"),
+    supabaseAnon.from("gastos").select("*").order("fecha", { ascending: false }).limit(500),
+    supabaseAnon.from("categorias").select("*"),
   ]);
 
   const data = gastosRes.data || [];

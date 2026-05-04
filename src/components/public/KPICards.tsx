@@ -4,7 +4,6 @@ import { formatCLP } from "@/lib/utils";
 import { useMemo } from "react";
 import { SkeletonKPICards } from "./Skeletons";
 import { NumberTicker } from "@/components/ui/number-ticker";
-import { motion } from "motion/react";
 
 interface ResumenFinanciero {
   presupuestoTotal: number;
@@ -95,17 +94,11 @@ export default function KPICards({
               </span>
               <span>del presupuesto utilizado</span>
             </p>
+            {/* CSS-only animated progress bar (replaces motion.div) */}
             <div className="mt-3 h-1 w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
-              <motion.div
-                initial={{ width: "0%" }}
-                animate={{ width: `${porcentajeGastado}%` }}
-                transition={{
-                  type: "spring",
-                  damping: 30,
-                  stiffness: 170,
-                  delay: 0.2,
-                }}
-                className={`h-full rounded-full ${statusColor}`}
+              <div
+                className={`h-full rounded-full ${statusColor} animate-bar-grow`}
+                style={{ "--bar-width": `${porcentajeGastado}%` } as React.CSSProperties}
               />
             </div>
           </div>

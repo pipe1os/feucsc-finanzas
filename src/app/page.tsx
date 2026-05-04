@@ -2,7 +2,7 @@ import KPICards from "@/components/public/KPICards";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { LazyExpenseTrendChart } from "@/components/public/LazyCharts";
 import LatestTransactionsPreview from "@/components/public/LatestTransactionsPreview";
-import { supabase } from "@/lib/supabase";
+import { supabaseAnon } from "@/lib/supabase-anon";
 import { parseISODate } from "@/lib/utils";
 import { buildCategoryColors } from "@/lib/data-transform";
 import Footer from "@/components/public/Footer";
@@ -13,8 +13,8 @@ export const revalidate = 60;
 export default async function Home() {
   // Fetch expenses + categories in parallel
   const [gastosRes, categoriasRes] = await Promise.all([
-    supabase.from("gastos").select("*").order("fecha", { ascending: false }).limit(500),
-    supabase.from("categorias").select("*"),
+    supabaseAnon.from("gastos").select("*").order("fecha", { ascending: false }).limit(500),
+    supabaseAnon.from("categorias").select("*"),
   ]);
 
   const data = gastosRes.data || [];

@@ -302,7 +302,17 @@ export default function Sidebar() {
       }
     };
 
-    checkNewExpenses();
+    // Defer badge count fetch until browser is idle — not critical for initial paint
+    const schedule = typeof requestIdleCallback === "function"
+      ? requestIdleCallback
+      : (cb: () => void) => setTimeout(cb, 200);
+    const id = schedule(() => { checkNewExpenses(); });
+
+    return () => {
+      if (typeof cancelIdleCallback === "function" && typeof id === "number") {
+        cancelIdleCallback(id);
+      }
+    };
   }, [pathname]);
 
   const close = () => setIsOpen(false);

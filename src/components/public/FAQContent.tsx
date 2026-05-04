@@ -41,7 +41,7 @@ const faqCategories = [
       {
         title: "¿Cómo puedo ver en qué se gastan los fondos?",
         content:
-          "En la página de inicio de este portal puedes encontrar un desglose completo de todos los gastos realizados, incluyendo la categoría, monto, fecha y comprobante de cada transacción. Toda la información se actualiza periódicamente.",
+          "En la página de gastos de este portal puedes encontrar un desglose completo de todos los gastos realizados, incluyendo la categoría, monto, fecha y comprobante de cada transacción. Toda la información se actualiza periódicamente.",
       },
       {
         title: "¿Qué es el presupuesto total y cómo se define?",
