@@ -31,21 +31,16 @@ export default function RootLayout({
   return (
     <html lang="es" className={inter.variable} suppressHydrationWarning>
       <head>
-        {/* Critical inline CSS + JS: prevents white/light flash (FOUC) on reload.
-            This runs in <head> and BLOCKS rendering until the correct theme
-            class is applied to <html>. Must stay in sync with next-themes config
+        {/* Critical FOUC prevention: blocks rendering until correct theme is applied.
+            1. The <script> runs synchronously before first paint.
+            2. It reads localStorage('theme') and matchMedia to determine dark/light.
+            3. It sets the .dark class, background-color, and color-scheme on <html>
+               all in one shot — no intermediate light frame is ever visible.
+            Must stay in sync with next-themes config
             (storageKey='theme', attribute='class', defaultTheme='system'). */}
-        <style
-          dangerouslySetInnerHTML={{
-            __html: [
-              'html{background:#f5f5f7;color-scheme:light}',
-              'html.dark{background:#141414;color-scheme:dark}',
-            ].join(''),
-          }}
-        />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(t!=='light'&&(t==='system'||!t)&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(d)document.documentElement.classList.add('dark')}catch(e){}})()`,
+            __html: `(function(){try{var d=document.documentElement,t=localStorage.getItem('theme'),isDark=t==='dark'||(t!=='light'&&(t==='system'||!t)&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(isDark){d.classList.add('dark');d.style.colorScheme='dark';d.style.background='#141414'}else{d.style.colorScheme='light';d.style.background='#f5f5f7'}}catch(e){document.documentElement.style.colorScheme='light';document.documentElement.style.background='#f5f5f7'}})()`,
           }}
         />
       </head>
