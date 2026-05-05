@@ -27,7 +27,7 @@ export default function ThemeToggle() {
       <button
         onClick={() => setTheme("light")}
         data-active={isLight}
-        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white data-[active=true]:text-gray-900 data-[active=true]:shadow-xs data-[active=false]:text-gray-500 dark:data-[active=false]:text-gray-400"
+        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white data-[active=true]:text-gray-900 data-[active=true]:shadow-xs data-[active=false]:text-gray-600 dark:data-[active=false]:text-gray-400"
       >
         <SunIcon />
         <span>Claro</span>
@@ -35,7 +35,7 @@ export default function ThemeToggle() {
       <button
         onClick={() => setTheme("dark")}
         data-active={!isLight}
-        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white dark:data-[active=true]:bg-gray-700 data-[active=true]:text-gray-900 dark:data-[active=true]:text-white data-[active=true]:shadow-xs data-[active=false]:text-gray-500 dark:data-[active=false]:text-gray-400"
+        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white dark:data-[active=true]:bg-gray-700 data-[active=true]:text-gray-900 dark:data-[active=true]:text-white data-[active=true]:shadow-xs data-[active=false]:text-gray-600 dark:data-[active=false]:text-gray-400"
       >
         <MoonIcon />
         <span>Oscuro</span>
