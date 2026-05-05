@@ -95,7 +95,7 @@ export default function FAQContent() {
               {category.items.map((item, index) => (
                 <Accordion.Item key={index}>
                   <Accordion.Heading>
-                    <Accordion.Trigger className="px-5! py-4! text-left hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors duration-150">
+                    <Accordion.Trigger className="px-5! py-4! text-left hover:bg-gray-50/50 dark:hover:bg-white/2 transition-colors duration-150">
                       <span className="text-[15px] font-medium tracking-tight text-gray-900 dark:text-white pr-4">
                         {item.title}
                       </span>

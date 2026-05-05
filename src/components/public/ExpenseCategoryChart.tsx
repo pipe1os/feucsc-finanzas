@@ -119,7 +119,7 @@ export default function ExpenseCategoryChart({
       style={{ animationDelay: "0.25s" }}
     >
       <CardHeader className="pb-4">
-        <CardTitle className="text-base font-semibold text-gray-900 dark:text-white">
+        <CardTitle className="text-base font-semibold text-gray-900 dark:text-white font-heading">
           Distribución de Gastos
         </CardTitle>
         <CardDescription className="text-xs text-gray-400">

@@ -31,7 +31,7 @@ export default function ContactoPage() {
     <div className="mx-auto max-w-3xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
       {/* Page header */}
       <header className="mb-10 animate-fade-in-up opacity-0 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
           Contacto
         </h1>
         <p className="mt-2 text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto">

@@ -75,11 +75,11 @@ export default function KPICards({
             <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-400 dark:text-gray-500 mb-1.5">
               Total Gastado
             </p>
-            <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light">
+            <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light font-heading">
               <NumberTicker
                 value={resumenFinanciero.totalGastado}
                 formatFn={formatCLP}
-                className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light"
+                className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light font-heading"
               />
             </p>
             <p
@@ -109,11 +109,11 @@ export default function KPICards({
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-400 dark:text-gray-500 mb-1">
                 Presupuesto Total
               </p>
-              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light">
+              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light font-heading">
                 <NumberTicker
                   value={resumenFinanciero.presupuestoTotal}
                   formatFn={formatCLP}
-                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light"
+                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light font-heading"
                 />
               </p>
               <p className="mt-1 text-xs text-gray-400">Año académico 2026</p>
@@ -123,11 +123,11 @@ export default function KPICards({
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-400 dark:text-gray-500 mb-1">
                 Presupuesto Disponible
               </p>
-              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light">
+              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light font-heading">
                 <NumberTicker
                   value={resumenFinanciero.saldoDisponible}
                   formatFn={formatCLP}
-                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light"
+                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light font-heading"
                 />
               </p>
               <p

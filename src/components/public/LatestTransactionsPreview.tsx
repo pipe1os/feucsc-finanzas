@@ -26,7 +26,7 @@ export default function LatestTransactionsPreview({
     <div className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-white dark:bg-gray-900 shadow-xs dark:shadow-none overflow-hidden">
       {/* Preview header */}
       <div className="px-6 pt-5 pb-4">
-        <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-base font-semibold text-gray-900 dark:text-white font-heading">
           Últimos Gastos
         </h2>
       </div>
@@ -131,17 +131,17 @@ export default function LatestTransactionsPreview({
                     key={txn.id}
                     className="border-t border-gray-50 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-white/3 transition-colors duration-150"
                   >
-                    <Table.Cell className="px-4 py-3.5">
+                    <Table.Cell className="px-4 py-2">
                       <span className="text-gray-500 whitespace-nowrap">
                         {formatDate(txn.fecha)}
                       </span>
                     </Table.Cell>
-                    <Table.Cell className="px-6 py-3.5">
+                    <Table.Cell className="px-6 py-2">
                       <span className="font-medium text-gray-900 dark:text-white">
                         {txn.concepto}
                       </span>
                     </Table.Cell>
-                    <Table.Cell className="px-4 py-3.5">
+                    <Table.Cell className="px-4 py-2">
                       <span
                         className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
                         style={{
@@ -152,7 +152,7 @@ export default function LatestTransactionsPreview({
                         {txn.categoria}
                       </span>
                     </Table.Cell>
-                    <Table.Cell className="px-6 py-3.5 text-right">
+                    <Table.Cell className="px-6 py-2 text-right">
                       <span className="font-semibold text-gray-900 dark:text-white tabular-nums">
                         {formatCLP(txn.monto)}
                       </span>
