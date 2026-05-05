@@ -113,7 +113,7 @@ export default async function Home() {
       <header className="mb-8 animate-fade-in-up">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
               Transparencia Financiera
             </h1>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 max-w-xl">

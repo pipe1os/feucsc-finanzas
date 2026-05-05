@@ -387,7 +387,7 @@ export default function AdminPage() {
         <div className="mx-auto max-w-5xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
           {/* Heading */}
           <div className="mb-8 animate-fade-in-up">
-            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
               Gestión de Gastos
             </h1>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -397,7 +397,7 @@ export default function AdminPage() {
 
           {/* ── Form card ── */}
           <Card className="overflow-visible rounded-2xl shadow-apple border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 sm:p-8 mb-8 animate-fade-in-up stagger-1 opacity-0">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 font-heading">
               Ingresar Gasto
             </h2>
             <GastoForm
@@ -413,7 +413,7 @@ export default function AdminPage() {
           <Card className="rounded-2xl shadow-apple border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 animate-fade-in-up stagger-2 opacity-0">
             <div className="p-6 pb-4 border-b border-gray-100 dark:border-gray-800 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white font-heading">
                   Gastos Registrados
                 </h2>
                 <p className="text-sm text-gray-400 dark:text-gray-500 mt-0.5">
@@ -882,7 +882,7 @@ export default function AdminPage() {
           <Modal.Dialog className="sm:max-w-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-apple-lg">
             <Modal.CloseTrigger className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" />
             <Modal.Header className="sm:px-8 sm:pt-6 border-b border-gray-100 dark:border-gray-800/50 pb-4 mb-4">
-              <Modal.Heading className="text-xl font-semibold">
+              <Modal.Heading className="text-xl font-semibold font-heading">
                 Editar Gasto
               </Modal.Heading>
             </Modal.Header>

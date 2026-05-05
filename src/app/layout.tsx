@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -7,12 +6,6 @@ import { Analytics } from "@vercel/analytics/next";
 import { DotPattern } from "@/components/ui/dot-pattern";
 import SidebarWrapper from "@/components/SidebarWrapper";
 import MainWrapper from "@/components/MainWrapper";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
 
 export const metadata: Metadata = {
   title: "FEUCSC - Federacion de Estudiantes UCSC",
@@ -30,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={inter.variable} suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <head>
         {/* ── FOUC prevention (production-safe) ────────────────────────
             Problem: In production, Tailwind CSS is an external file. Before
@@ -98,7 +91,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.className} antialiased bg-transparent text-foreground`}>
+      <body className="antialiased bg-transparent text-foreground font-sans">
         <div className="fixed inset-0 -z-10 bg-bg-secondary" />
         <DotPattern className="fixed inset-0 -z-10 text-neutral-400/15 dark:text-neutral-600/15" />
         <Providers>

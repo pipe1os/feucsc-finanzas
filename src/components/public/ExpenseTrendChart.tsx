@@ -224,7 +224,7 @@ export default function ExpenseTrendChart({
       style={{ animationDelay: "0.2s" }}
     >
       <CardHeader className="pb-6">
-        <CardTitle className="text-base font-semibold text-gray-900 dark:text-white">
+        <CardTitle className="text-base font-semibold text-gray-900 dark:text-white font-heading">
           Tendencia de Gastos
         </CardTitle>
         <CardDescription className="text-xs text-gray-400 dark:text-gray-500">
