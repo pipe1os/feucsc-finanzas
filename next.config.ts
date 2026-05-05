@@ -19,6 +19,8 @@ const nextConfig: NextConfig = {
       "@supabase/supabase-js",
       "swr",
     ],
+    // Inline critical CSS to eliminate render-blocking request
+    inlineCss: true,
   },
 
   // ── Image optimization ────────────────────────────────
@@ -61,6 +63,8 @@ const nextConfig: NextConfig = {
       ? { exclude: ["error", "warn"] }
       : false,
   },
+
+
 };
 
 export default nextConfig;
