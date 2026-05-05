@@ -109,7 +109,7 @@ export default async function Home() {
   return (
     <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
       {/* Page header — rendered in server HTML (instant LCP) */}
-      <header className="mb-8 animate-fade-in-up">
+      <header className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
@@ -127,20 +127,17 @@ export default async function Home() {
       {/* Dashboard Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
         {/* KPI Cards — rendered in server HTML (part of LCP) */}
-        <section aria-label="Indicadores financieros" className="col-span-1 lg:col-span-4 animate-fade-in-up h-full">
+        <section aria-label="Indicadores financieros" className="col-span-1 lg:col-span-4 h-full">
           <KPICards resumenFinanciero={resumenFinanciero} />
         </section>
 
         {/* Trend Chart — lazy loaded (ssr: false, recharts deferred) */}
-        <section aria-label="Tendencia de gastos" className="col-span-1 lg:col-span-8 animate-fade-in-up h-full" style={{ animationDelay: "0.1s" }}>
+        <section aria-label="Tendencia de gastos" className="col-span-1 lg:col-span-8 h-full">
           <LazyExpenseTrendChart gastosPorMes={gastosPorMes} />
         </section>
 
         {/* Latest transactions preview */}
-        <section
-          className="col-span-1 lg:col-span-12 animate-fade-in-up"
-          style={{ animationDelay: "0.25s" }}
-        >
+        <section className="col-span-1 lg:col-span-12">
           <LazyLatestTransactionsPreview
             transactions={latestTransactions}
             totalCount={data.length}
