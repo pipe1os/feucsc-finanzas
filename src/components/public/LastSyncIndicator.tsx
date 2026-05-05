@@ -69,7 +69,7 @@ export default function LastSyncIndicator({
   return (
     <Tooltip delay={0} closeDelay={0}>
       <Tooltip.Trigger>
-        <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 cursor-help">
+        <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-500 cursor-help">
           {/* Animated green dot */}
           <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />

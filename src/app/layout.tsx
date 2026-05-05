@@ -25,6 +25,28 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
+        {/* Preload critical fonts to eliminate render-blocking and improve LCP */}
+        <link
+          rel="preload"
+          href="/fonts/SF-Pro-Text-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/SF-Pro-Display-Semibold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/SF-Pro-Display-Light.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         {/* ── FOUC prevention (production-safe) ────────────────────────
             Problem: In production, Tailwind CSS is an external file. Before
             it loads, <body> has the browser-default white background because
@@ -32,64 +54,16 @@ export default function RootLayout({
             hydration can briefly strip the `.dark` class from <html> before
             next-themes re-adds it.
 
-            Solution (3 layers):
+            Solution (2 layers):
             1. Inline <style> — sets body transparent + html theme backgrounds
                so the correct color shows even before external CSS loads.
             2. Inline <script> — reads localStorage/matchMedia and adds .dark
                class + inline style.background, all synchronously in <head>.
-            3. MutationObserver — guards against React hydration removing .dark
-               by re-adding it immediately if stripped.
 
             Must stay in sync with next-themes config
             (storageKey='theme', attribute='class', defaultTheme='system'). */}
-        <style
-          dangerouslySetInnerHTML={{
-            __html: [
-              /* Body must be transparent before Tailwind loads */
-              'body{background:transparent}',
-              /* Theme-responsive html backgrounds — script adds .dark */
-              'html{background:#f5f5f7;color-scheme:light}',
-              'html.dark{background:#141414;color-scheme:dark;color:#f5f5f7}',
-            ].join(''),
-          }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: [
-              '(function(){',
-              'try{',
-              'var d=document.documentElement,',
-              "t=localStorage.getItem('theme'),",
-              "isDark=t==='dark'||(t!=='light'&&(t==='system'||!t)&&window.matchMedia('(prefers-color-scheme:dark)').matches);",
-              'if(isDark){',
-              "d.classList.add('dark');",
-              "d.style.colorScheme='dark';",
-              "d.style.background='#141414'",
-              '}else{',
-              "d.style.colorScheme='light';",
-              "d.style.background='#f5f5f7'",
-              '}',
-              /* Guard: if React hydration strips .dark, re-add it before paint */
-              'if(isDark){',
-              'var o=new MutationObserver(function(m){',
-              "if(!d.classList.contains('dark')){",
-              "d.classList.add('dark');",
-              "d.style.colorScheme='dark';",
-              "d.style.background='#141414'",
-              '}',
-              '});',
-              "o.observe(d,{attributeFilter:['class']});",
-              /* Disconnect after hydration settles (next-themes will own it) */
-              'setTimeout(function(){o.disconnect()},2000)',
-              '}',
-              '}catch(e){',
-              "d.style.colorScheme='light';",
-              "d.style.background='#f5f5f7'",
-              '}',
-              '})()',
-            ].join(''),
-          }}
-        />
+        <style>{`body{background:transparent}html{background:#f5f5f7;color-scheme:light}html.dark{background:#141414;color-scheme:dark;color:#f5f5f7}`}</style>
+        <script>{`(function(){try{var d=document.documentElement,t=localStorage.getItem('theme'),isDark=t==='dark'||(t!=='light'&&(t==='system'||!t)&&window.matchMedia('(prefers-color-scheme:dark)').matches);if(isDark){d.classList.add('dark');d.style.colorScheme='dark';d.style.background='#141414'}else{d.style.colorScheme='light';d.style.background='#f5f5f7'}}catch(e){d.style.colorScheme='light';d.style.background='#f5f5f7'}})()`}</script>
       </head>
       <body className="antialiased bg-transparent text-foreground font-sans">
         <div className="fixed inset-0 -z-10 bg-bg-secondary" />
