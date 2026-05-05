@@ -227,7 +227,7 @@ export default function ExpenseTrendChart({
         <CardTitle className="text-base font-semibold text-gray-900 dark:text-white font-heading">
           Tendencia de Gastos
         </CardTitle>
-        <CardDescription className="text-xs text-gray-400 dark:text-gray-500">
+        <CardDescription className="text-xs text-gray-500 dark:text-gray-500">
           Gasto mensual a lo largo del año
         </CardDescription>
       </CardHeader>
