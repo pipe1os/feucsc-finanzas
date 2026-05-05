@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { SkeletonChart } from "./Skeletons";
+import { SkeletonChart, SkeletonLatestTransactions } from "./Skeletons";
 
 // ── Lazy-load chart components (ssr: false defers hydration) ────
 // Recharts (~128 KiB) will only load AFTER the initial paint,
@@ -20,5 +20,13 @@ export const LazyExpenseCategoryChart = dynamic(
   {
     ssr: false,
     loading: () => <SkeletonChart type="category" />,
+  }
+);
+
+export const LazyLatestTransactionsPreview = dynamic(
+  () => import("./LatestTransactionsPreview"),
+  {
+    ssr: false,
+    loading: () => <SkeletonLatestTransactions rows={3} />,
   }
 );

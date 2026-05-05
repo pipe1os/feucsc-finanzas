@@ -1,7 +1,6 @@
 import KPICards from "@/components/public/KPICards";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
-import { LazyExpenseTrendChart } from "@/components/public/LazyCharts";
-import LatestTransactionsPreview from "@/components/public/LatestTransactionsPreview";
+import { LazyExpenseTrendChart, LazyLatestTransactionsPreview } from "@/components/public/LazyCharts";
 import { supabaseAnon } from "@/lib/supabase-anon";
 import { parseISODate } from "@/lib/utils";
 import { buildCategoryColors } from "@/lib/data-transform";
@@ -142,7 +141,7 @@ export default async function Home() {
           className="col-span-1 lg:col-span-12 animate-fade-in-up"
           style={{ animationDelay: "0.25s" }}
         >
-          <LatestTransactionsPreview
+          <LazyLatestTransactionsPreview
             transactions={latestTransactions}
             totalCount={data.length}
           />
