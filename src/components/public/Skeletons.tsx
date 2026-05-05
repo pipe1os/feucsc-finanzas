@@ -110,31 +110,58 @@ export function SkeletonTable({ rows = 5 }: { rows?: number }) {
 // ── Latest Transactions Skeleton (Home page mini table) ──────────
 export function SkeletonLatestTransactions({ rows = 3 }: { rows?: number }) {
   return (
-    <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple overflow-hidden">
-      {/* Header */}
+    <div className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-white dark:bg-gray-900 shadow-xs dark:shadow-none overflow-hidden">
+      {/* Header — matches real: px-6 pt-5 pb-4 */}
       <div className="px-6 pt-5 pb-4">
-        <Skeleton className="h-5 w-36 rounded-lg" />
+        <Skeleton className="h-5 w-28 rounded-lg" />
       </div>
 
-      {/* Rows */}
-      <div className="px-5 space-y-0">
+      {/* Mobile rows — matches ListBox: md:hidden px-5 */}
+      <div className="md:hidden px-5">
         {Array.from({ length: rows }).map((_, index) => (
           <div
-            key={index}
-            className="grid grid-cols-[100px_1fr_100px_100px] gap-4 items-center py-3.5 border-t border-gray-50 dark:border-gray-800"
+            key={`mobile-${index}`}
+            className="flex flex-col gap-1 py-3 border-t border-gray-100 dark:border-gray-800"
           >
-            <Skeleton className="h-4 w-16 rounded" />
-            <Skeleton className="h-4 w-3/4 rounded" />
-            <Skeleton className="h-5 w-20 rounded-lg" />
-            <Skeleton className="h-4 w-20 rounded ml-auto" />
+            <div className="flex items-start justify-between gap-2">
+              <Skeleton className="h-4 w-3/4 rounded" />
+              <Skeleton className="h-4 w-20 rounded" />
+            </div>
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-5 w-20 rounded-lg" />
+              <Skeleton className="h-3 w-16 rounded" />
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Footer */}
+      {/* Desktop table rows — matches Table: hidden md:block */}
+      <div className="hidden md:block px-5">
+        {/* Table header row */}
+        <div className="grid grid-cols-[auto_1fr_auto_auto] items-center border-b border-gray-100 dark:border-gray-800">
+          <div className="px-4 py-2"><Skeleton className="h-3 w-10 rounded" /></div>
+          <div className="px-6 py-2"><Skeleton className="h-3 w-20 rounded" /></div>
+          <div className="px-4 py-2"><Skeleton className="h-3 w-16 rounded" /></div>
+          <div className="px-6 py-2 text-right"><Skeleton className="h-3 w-12 rounded ml-auto" /></div>
+        </div>
+        {/* Table body rows */}
+        {Array.from({ length: rows }).map((_, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-[auto_1fr_auto_auto] items-center border-t border-gray-50 dark:border-gray-800"
+          >
+            <div className="px-4 py-2"><Skeleton className="h-4 w-20 rounded" /></div>
+            <div className="px-6 py-2"><Skeleton className="h-4 w-3/5 rounded" /></div>
+            <div className="px-4 py-2"><Skeleton className="h-5 w-20 rounded-lg" /></div>
+            <div className="px-6 py-2 text-right"><Skeleton className="h-4 w-16 rounded ml-auto" /></div>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer — matches real: px-6 py-4 */}
       <div className="px-6 py-4 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
-        <Skeleton className="h-3 w-32 rounded" />
-        <Skeleton className="h-4 w-32 rounded" />
+        <Skeleton className="h-3 w-28 rounded" />
+        <Skeleton className="h-4 w-36 rounded" />
       </div>
     </div>
   );
