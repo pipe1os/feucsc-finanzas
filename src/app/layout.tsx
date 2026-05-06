@@ -48,8 +48,9 @@ export default function RootLayout({
           type="font/woff2"
           crossOrigin="anonymous"
         />
-        {/* FOUC prevention — CSS-only, no script modifying <html> before hydration */}
-        <style>{`body{background:transparent}html{background:#f5f5f7;color-scheme:light dark}@media(prefers-color-scheme:dark){html{background:#141414;color-scheme:dark;color:#f5f5f7}}`}</style>
+        {/* FOUC prevention — blocking script sets .dark class before first paint */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches))document.documentElement.classList.add("dark")}catch(e){}})()` }} />
+        <style>{`body{background:transparent}html{background:#f5f5f7;color-scheme:light}html.dark{background:#141414;color-scheme:dark;color:#f5f5f7}@media(prefers-color-scheme:dark){html:not(.light){background:#141414;color-scheme:dark;color:#f5f5f7}}`}</style>
       </head>
       <body className="antialiased bg-transparent text-foreground font-sans">
         <div className="fixed inset-0 -z-10 bg-bg-secondary" />
