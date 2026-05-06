@@ -72,7 +72,7 @@ export default function KPICards({
         <div className="flex flex-col flex-1 justify-between gap-5 lg:justify-center">
           {/* Hero metric: Total Gastado */}
           <div>
-            <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-500 mb-1.5">
+            <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-400 mb-1.5">
               Total Gastado
             </p>
             <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-light font-heading">
@@ -106,7 +106,7 @@ export default function KPICards({
           {/* Sub-metrics: Total y Disponible */}
           <div className="flex items-end justify-between gap-4 pt-4 border-t border-gray-50 dark:border-gray-800">
             <div>
-              <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-500 mb-1">
+              <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-400 mb-1">
                 Presupuesto Total
               </p>
               <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light font-heading">
@@ -116,11 +116,11 @@ export default function KPICards({
                   className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light font-heading"
                 />
               </p>
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">Año académico 2026</p>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Año académico 2026</p>
             </div>
 
             <div>
-              <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-500 mb-1">
+              <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-400 mb-1">
                 Presupuesto Disponible
               </p>
               <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light font-heading">

@@ -57,7 +57,7 @@ export default function LatestTransactionsPreview({
                 <span className="text-sm font-semibold text-gray-900 dark:text-white">
                   Sin resultados
                 </span>
-                <span className="text-xs text-gray-500 mt-0.5">
+                <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                   No hay transacciones recientes.
                 </span>
               </div>
@@ -92,7 +92,7 @@ export default function LatestTransactionsPreview({
                     >
                       {txn.categoria}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
                       {formatDate(txn.fecha)}
                     </span>
                   </div>
@@ -111,17 +111,17 @@ export default function LatestTransactionsPreview({
               <Table.Header>
                 <Table.Column
                   isRowHeader
-                  className="text-left text-[11px] font-semibold tracking-wider text-gray-500 uppercase"
+                  className="text-left text-[11px] font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase"
                 >
                   Fecha
                 </Table.Column>
-                <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
+                <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase">
                   Descripción
                 </Table.Column>
-                <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
+                <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase">
                   Categoría
                 </Table.Column>
-                <Table.Column className="text-right text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
+                <Table.Column className="text-right text-[11px] font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase">
                   Monto
                 </Table.Column>
               </Table.Header>
@@ -132,7 +132,7 @@ export default function LatestTransactionsPreview({
                     className="border-t border-gray-50 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-white/3 transition-colors duration-150"
                   >
                     <Table.Cell className="px-4 py-2">
-                      <span className="text-gray-500 whitespace-nowrap">
+                      <span className="text-gray-500 dark:text-gray-400 whitespace-nowrap">
                         {formatDate(txn.fecha)}
                       </span>
                     </Table.Cell>
@@ -167,12 +167,12 @@ export default function LatestTransactionsPreview({
 
       {/* Footer with CTA */}
       <div className="px-6 py-4 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-gray-500 dark:text-gray-400">
           {totalCount} registros en total
         </span>
         <Link
           href="/gastos"
-          className="group inline-flex items-center gap-1.5 text-sm font-medium text-red-500 hover:text-red-600 transition-colors duration-200"
+          className="group inline-flex items-center gap-1.5 text-sm font-medium text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors duration-200"
         >
           Ver todos los gastos
           <svg
