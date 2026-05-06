@@ -1,7 +1,7 @@
 "use client";
 
 import { formatCLP } from "@/lib/utils";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { SkeletonKPICards } from "./Skeletons";
 import { NumberTicker } from "@/components/ui/number-ticker";
 
@@ -20,13 +20,6 @@ export default function KPICards({
   resumenFinanciero,
   isLoading,
 }: KPICardsProps) {
-  // Show skeleton briefly on mount, then reveal with animation
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    const raf = requestAnimationFrame(() => setHydrated(true));
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
   const porcentajeGastado =
     resumenFinanciero.presupuestoTotal > 0
       ? Math.round(
@@ -67,7 +60,7 @@ export default function KPICards({
     };
   }, [porcentajeGastado, porcentajeDisponible]);
 
-  if (isLoading || !hydrated) {
+  if (isLoading) {
     return <SkeletonKPICards />;
   }
 
