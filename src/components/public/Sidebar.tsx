@@ -188,7 +188,7 @@ function NavItem({
               ${
                 isActive
                   ? "text-red-500 dark:text-red-400"
-                  : "text-gray-500 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300"
+                  : "text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"
               }`}
           >
             {icon}
@@ -209,7 +209,7 @@ function NavItem({
 
 function NavCategory({ label }: { label: string }) {
   return (
-    <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-gray-500 dark:text-gray-500 uppercase">
+    <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-gray-500 dark:text-gray-400 uppercase">
       {label}
     </span>
   );
