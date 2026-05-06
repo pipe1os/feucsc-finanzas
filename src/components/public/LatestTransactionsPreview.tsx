@@ -87,7 +87,7 @@ export default function LatestTransactionsPreview({
                       className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
                       style={{
                         backgroundColor: `${catColor}18`,
-                        color: catColor,
+                        color: `light-dark(color-mix(in srgb, ${catColor} 60%, black), ${catColor})`,
                       }}
                     >
                       {txn.categoria}
@@ -111,17 +111,17 @@ export default function LatestTransactionsPreview({
               <Table.Header>
                 <Table.Column
                   isRowHeader
-                  className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase"
+                  className="text-left text-[11px] font-semibold tracking-wider text-gray-500 uppercase"
                 >
                   Fecha
                 </Table.Column>
-                <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
+                <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
                   Descripción
                 </Table.Column>
-                <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
+                <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
                   Categoría
                 </Table.Column>
-                <Table.Column className="text-right text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
+                <Table.Column className="text-right text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
                   Monto
                 </Table.Column>
               </Table.Header>
@@ -146,7 +146,7 @@ export default function LatestTransactionsPreview({
                         className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
                         style={{
                           backgroundColor: `${txn.color}18`,
-                          color: txn.color,
+                          color: `light-dark(color-mix(in srgb, ${txn.color} 60%, black), ${txn.color})`,
                         }}
                       >
                         {txn.categoria}
@@ -167,7 +167,7 @@ export default function LatestTransactionsPreview({
 
       {/* Footer with CTA */}
       <div className="px-6 py-4 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
-        <span className="text-xs text-gray-400">
+        <span className="text-xs text-gray-500">
           {totalCount} registros en total
         </span>
         <Link

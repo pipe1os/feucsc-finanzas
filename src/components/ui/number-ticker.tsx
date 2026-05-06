@@ -54,10 +54,11 @@ export function NumberTicker({
   const isInView = useInViewOnce(ref);
 
   const skipAnimation = hasAnimatedThisSession;
-  const initialValue = skipAnimation
-    ? direction === "down" ? startValue : value
-    : direction === "down" ? value : startValue;
 
+  // SSR-safe: always use animation-start value for initial render.
+  // Server always has hasAnimatedThisSession=false; client may differ on nav.
+  // The useEffect below handles jumping to final value when skip is true.
+  const initialValue = direction === "down" ? value : startValue;
   const [displayValue, setDisplayValue] = useState(initialValue);
 
   useEffect(() => {
@@ -105,6 +106,7 @@ export function NumberTicker({
     <span
       ref={ref}
       className={cn("inline-block tabular-nums", className)}
+      suppressHydrationWarning
       {...props}
     >
       {formatted}
