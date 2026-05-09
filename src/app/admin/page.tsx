@@ -21,13 +21,19 @@ import {
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 import { VARIOS_COLOR } from "@/lib/category-palette";
-import { formatCLP, formatDate, parseISODate } from "@/lib/utils";
-import { deleteGasto as deleteGastoAction, deleteCategoria as deleteCategoriaAction } from "@/app/actions/gastos";
+import { formatCLP, formatDate } from "@/lib/utils";
+import {
+  deleteGasto as deleteGastoAction,
+  deleteCategoria as deleteCategoriaAction,
+} from "@/app/actions/gastos";
 import { useGastos } from "@/hooks/useGastos";
 import { useCategorias } from "@/hooks/useCategorias";
 import ThemeToggle from "@/components/admin/ThemeToggle";
 import Footer from "@/components/public/Footer";
-import { HugeiconsMenuIcon, type HugeiconsMenuIconHandle } from "@/components/ui/hugeicons-menu";
+import {
+  HugeiconsMenuIcon,
+  type HugeiconsMenuIconHandle,
+} from "@/components/ui/hugeicons-menu";
 import SortableColumnHeader from "@/components/admin/SortableColumnHeader";
 import GastoForm from "@/components/admin/GastoForm";
 import EditGastoForm from "@/components/admin/EditGastoForm";
@@ -71,15 +77,10 @@ const MONTH_OPTIONS = [
   { id: "12", label: "Diciembre" },
 ];
 
-
-
 function formatShortDate(dateStr: string) {
   const [year, month, day] = dateStr.split("-");
   return `${day}/${month}/${year}`;
 }
-
-
-
 
 /* ══════════════════════════════════════════════════
    Admin Page
@@ -246,9 +247,10 @@ export default function AdminPage() {
       if (paginated.length === 1 && page > 1) setPage(page - 1);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "";
-      const safeMsg = msg === "No autorizado" || msg.includes("inválid")
-        ? msg
-        : "Ocurrió un error al eliminar el gasto";
+      const safeMsg =
+        msg === "No autorizado" || msg.includes("inválid")
+          ? msg
+          : "Ocurrió un error al eliminar el gasto";
       setDeleteError(safeMsg);
       toast.danger("Error al eliminar gasto");
     } finally {
@@ -450,7 +452,11 @@ export default function AdminPage() {
                     <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-gray-700 dark:bg-gray-900 min-w-48">
                       <ListBox>
                         {MONTH_OPTIONS.map((m) => (
-                          <ListBox.Item key={m.id} id={m.id} textValue={m.label}>
+                          <ListBox.Item
+                            key={m.id}
+                            id={m.id}
+                            textValue={m.label}
+                          >
                             {m.label}
                             <ListBox.ItemIndicator />
                           </ListBox.Item>
@@ -490,7 +496,11 @@ export default function AdminPage() {
                           <ListBox.ItemIndicator />
                         </ListBox.Item>
                         {categoriasDB.map((cat) => (
-                          <ListBox.Item key={cat.nombre} id={cat.nombre} textValue={cat.nombre}>
+                          <ListBox.Item
+                            key={cat.nombre}
+                            id={cat.nombre}
+                            textValue={cat.nombre}
+                          >
                             {cat.nombre}
                             <ListBox.ItemIndicator />
                           </ListBox.Item>
@@ -500,38 +510,38 @@ export default function AdminPage() {
                   </Select>
 
                   <div className="relative w-full sm:w-48">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400 dark:text-gray-500">
-                    <SearchIcon />
-                  </span>
-                  <input
-                    type="text"
-                    placeholder="Buscar..."
-                    defaultValue=""
-                    onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full h-9 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 pl-10 pr-4 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 outline-hidden transition-all duration-200 focus:border-red-300 focus:ring-2 focus:ring-red-100"
-                  />
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400 dark:text-gray-500">
+                      <SearchIcon />
+                    </span>
+                    <input
+                      type="text"
+                      placeholder="Buscar..."
+                      defaultValue=""
+                      onChange={(e) => handleSearch(e.target.value)}
+                      className="w-full h-9 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 pl-10 pr-4 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 outline-hidden transition-all duration-200 focus:border-red-300 focus:ring-2 focus:ring-red-100"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {/* Limpiar filtros - aparece debajo */}
-              {(selectedMonth !== "all" || selectedCategory !== "all") && (
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 transition-all duration-200 hover:bg-red-100 cursor-pointer h-9 w-fit"
-                  onPress={() => {
-                    setSelectedMonth("all");
-                    setSelectedCategory("all");
-                    setPage(1);
-                  }}
-                >
-                  <XIcon />
-                  Limpiar filtros
-                </Button>
-              )}
+                {/* Limpiar filtros - aparece debajo */}
+                {(selectedMonth !== "all" || selectedCategory !== "all") && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 transition-all duration-200 hover:bg-red-100 cursor-pointer h-9 w-fit"
+                    onPress={() => {
+                      setSelectedMonth("all");
+                      setSelectedCategory("all");
+                      setPage(1);
+                    }}
+                  >
+                    <XIcon />
+                    Limpiar filtros
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-          <div className="p-6 pt-4">
+            <div className="p-6 pt-4">
               {loadingTable ? (
                 <div className="flex items-center justify-center py-16">
                   <div className="size-8 animate-spin rounded-full border-3 border-gray-200 dark:border-gray-800 border-t-red-500" />
@@ -562,7 +572,8 @@ export default function AdminPage() {
                         className="divide-y divide-gray-100 dark:divide-gray-800"
                       >
                         {paginated.map((g) => {
-                          const catColor = catColors[g.categoria] || VARIOS_COLOR;
+                          const catColor =
+                            catColors[g.categoria] || VARIOS_COLOR;
                           return (
                             <ListBox.Item
                               key={g.id}
@@ -644,7 +655,9 @@ export default function AdminPage() {
                             <Pagination.Item>
                               <Pagination.Previous
                                 isDisabled={page === 1}
-                                onPress={() => setPage((p) => Math.max(1, p - 1))}
+                                onPress={() =>
+                                  setPage((p) => Math.max(1, p - 1))
+                                }
                               >
                                 <Pagination.PreviousIcon />
                               </Pagination.Previous>
@@ -672,187 +685,218 @@ export default function AdminPage() {
                   <div className="hidden md:block">
                     <Table variant="secondary" className="w-full">
                       <Table.ScrollContainer>
-                        <Table.Content aria-label="Gastos" className="w-full" sortDescriptor={sortDescriptor} onSortChange={setSortDescriptor}>
-                      <Table.Header>
-                        <Table.Column allowsSorting isRowHeader id="fecha" className="w-27.5">
-                          {({ sortDirection }) => (
-                            <SortableColumnHeader sortDirection={sortDirection}>
-                              Fecha
-                            </SortableColumnHeader>
-                          )}
-                        </Table.Column>
-                        <Table.Column id="desc" className="min-w-50">
-                          Descripción
-                        </Table.Column>
-                        <Table.Column allowsSorting id="cat" className="w-30">
-                          {({ sortDirection }) => (
-                            <SortableColumnHeader sortDirection={sortDirection}>
-                              Categoría
-                            </SortableColumnHeader>
-                          )}
-                        </Table.Column>
-                        <Table.Column allowsSorting id="monto" className="w-30">
-                          {({ sortDirection }) => (
-                            <SortableColumnHeader sortDirection={sortDirection}>
-                              Monto
-                            </SortableColumnHeader>
-                          )}
-                        </Table.Column>
-                        <Table.Column id="actions" className="w-35 text-center">
-                          Acciones
-                        </Table.Column>
-                      </Table.Header>
-                      <Table.Body
-                        renderEmptyState={() => (
-                          <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-                            <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 border border-gray-100 dark:border-gray-800">
-                              {searchQuery ? <SearchIcon /> : <InboxIcon />}
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                                {searchQuery ? "Sin resultados" : "Sin gastos"}
-                              </span>
-                              <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                {searchQuery
-                                  ? "Intenta con otro término."
-                                  : "Ingresa un gasto usando el formulario."}
-                              </span>
-                            </div>
-                          </EmptyState>
-                        )}
-                      >
-                        {paginated.map((g) => {
-                          const catColor =
-                            catColors[g.categoria] || VARIOS_COLOR;
-                          return (
-                            <Table.Row key={g.id}>
-                              <Table.Cell>
-                                <span className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
-                                  {formatDate(g.fecha)}
-                                </span>
-                              </Table.Cell>
-                              <Table.Cell>
-                                <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                  {g.descripcion}
-                                </span>
-                              </Table.Cell>
-                              <Table.Cell>
-                                <span
-                                  className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
-                                  style={{
-                                    backgroundColor: `${catColor}1A`,
-                                    color: catColor,
-                                  }}
+                        <Table.Content
+                          aria-label="Gastos"
+                          className="w-full"
+                          sortDescriptor={sortDescriptor}
+                          onSortChange={setSortDescriptor}
+                        >
+                          <Table.Header>
+                            <Table.Column
+                              allowsSorting
+                              isRowHeader
+                              id="fecha"
+                              className="w-27.5"
+                            >
+                              {({ sortDirection }) => (
+                                <SortableColumnHeader
+                                  sortDirection={sortDirection}
                                 >
-                                  {g.categoria}
-                                </span>
-                              </Table.Cell>
-                              <Table.Cell>
-                                <span className="text-sm font-semibold text-gray-900 dark:text-white tabular-nums">
-                                  {formatCLP(g.monto)}
-                                </span>
-                              </Table.Cell>
-                              <Table.Cell>
-                                <div className="flex items-center justify-center gap-1.5">
-                                  <Tooltip delay={0}>
-                                    <Tooltip.Trigger>
-                                      <button
-                                        onClick={() =>
-                                          g.comprobante_url &&
-                                          setLightboxUrl(g.comprobante_url)
-                                        }
-                                        disabled={!g.comprobante_url}
-                                        className={`inline-flex items-center justify-center size-8 rounded-full transition-all duration-200 cursor-pointer ${g.comprobante_url ? "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700" : "bg-gray-50 dark:bg-gray-800/50 text-gray-300 dark:text-gray-600 cursor-not-allowed"}`}
-                                        aria-label="Ver comprobante"
-                                      >
-                                        <EyeIcon />
-                                      </button>
-                                    </Tooltip.Trigger>
-                                    <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
-                                      <p>
-                                        {g.comprobante_url
-                                          ? "Ver comprobante"
-                                          : "Sin comprobante"}
-                                      </p>
-                                    </Tooltip.Content>
-                                  </Tooltip>
-                                  <Tooltip delay={0}>
-                                    <Tooltip.Trigger>
-                                      <button
-                                        onClick={() => openEdit(g)}
-                                        className="inline-flex items-center justify-center size-8 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 cursor-pointer"
-                                        aria-label="Editar"
-                                      >
-                                        <EditIcon />
-                                      </button>
-                                    </Tooltip.Trigger>
-                                    <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
-                                      <p>Editar</p>
-                                    </Tooltip.Content>
-                                  </Tooltip>
-                                  <Tooltip delay={0}>
-                                    <Tooltip.Trigger>
-                                      <button
-                                        onClick={() => setDeleteGasto(g)}
-                                        className="inline-flex items-center justify-center size-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-all duration-200 cursor-pointer"
-                                        aria-label="Eliminar"
-                                      >
-                                        <TrashIcon />
-                                      </button>
-                                    </Tooltip.Trigger>
-                                    <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
-                                      <p>Eliminar</p>
-                                    </Tooltip.Content>
-                                  </Tooltip>
+                                  Fecha
+                                </SortableColumnHeader>
+                              )}
+                            </Table.Column>
+                            <Table.Column id="desc" className="min-w-50">
+                              Descripción
+                            </Table.Column>
+                            <Table.Column
+                              allowsSorting
+                              id="cat"
+                              className="w-30"
+                            >
+                              {({ sortDirection }) => (
+                                <SortableColumnHeader
+                                  sortDirection={sortDirection}
+                                >
+                                  Categoría
+                                </SortableColumnHeader>
+                              )}
+                            </Table.Column>
+                            <Table.Column
+                              allowsSorting
+                              id="monto"
+                              className="w-30"
+                            >
+                              {({ sortDirection }) => (
+                                <SortableColumnHeader
+                                  sortDirection={sortDirection}
+                                >
+                                  Monto
+                                </SortableColumnHeader>
+                              )}
+                            </Table.Column>
+                            <Table.Column
+                              id="actions"
+                              className="w-35 text-center"
+                            >
+                              Acciones
+                            </Table.Column>
+                          </Table.Header>
+                          <Table.Body
+                            renderEmptyState={() => (
+                              <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
+                                <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 border border-gray-100 dark:border-gray-800">
+                                  {searchQuery ? <SearchIcon /> : <InboxIcon />}
                                 </div>
-                              </Table.Cell>
-                            </Table.Row>
-                          );
-                        })}
-                      </Table.Body>
-                    </Table.Content>
-                  </Table.ScrollContainer>
-                  {filtered.length > 0 && (
-                    <Table.Footer>
-                      <Pagination size="sm">
-                        <Pagination.Summary>
-                          {pStart} a {pEnd} de {filtered.length} gastos
-                        </Pagination.Summary>
-                        <Pagination.Content>
-                          <Pagination.Item>
-                            <Pagination.Previous
-                              isDisabled={page === 1}
-                              onPress={() => setPage((p) => Math.max(1, p - 1))}
-                            >
-                              <Pagination.PreviousIcon />
-                              Ant.
-                            </Pagination.Previous>
-                          </Pagination.Item>
-                          {pages.map((p) => (
-                            <Pagination.Item key={p}>
-                              <Pagination.Link
-                                isActive={p === page}
-                                onPress={() => setPage(p)}
-                              >
-                                {p}
-                              </Pagination.Link>
-                            </Pagination.Item>
-                          ))}
-                          <Pagination.Item>
-                            <Pagination.Next
-                              isDisabled={page === totalPages}
-                              onPress={() =>
-                                setPage((p) => Math.min(totalPages, p + 1))
-                              }
-                            >
-                              Sig.
-                              <Pagination.NextIcon />
-                            </Pagination.Next>
-                          </Pagination.Item>
-                        </Pagination.Content>
-                      </Pagination>
-                    </Table.Footer>
-                  )}
+                                <div className="flex flex-col">
+                                  <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                                    {searchQuery
+                                      ? "Sin resultados"
+                                      : "Sin gastos"}
+                                  </span>
+                                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                    {searchQuery
+                                      ? "Intenta con otro término."
+                                      : "Ingresa un gasto usando el formulario."}
+                                  </span>
+                                </div>
+                              </EmptyState>
+                            )}
+                          >
+                            {paginated.map((g) => {
+                              const catColor =
+                                catColors[g.categoria] || VARIOS_COLOR;
+                              return (
+                                <Table.Row key={g.id}>
+                                  <Table.Cell>
+                                    <span className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
+                                      {formatDate(g.fecha)}
+                                    </span>
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                      {g.descripcion}
+                                    </span>
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <span
+                                      className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
+                                      style={{
+                                        backgroundColor: `${catColor}1A`,
+                                        color: catColor,
+                                      }}
+                                    >
+                                      {g.categoria}
+                                    </span>
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <span className="text-sm font-semibold text-gray-900 dark:text-white tabular-nums">
+                                      {formatCLP(g.monto)}
+                                    </span>
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <div className="flex items-center justify-center gap-1.5">
+                                      <Tooltip delay={0}>
+                                        <Tooltip.Trigger>
+                                          <button
+                                            onClick={() =>
+                                              g.comprobante_url &&
+                                              setLightboxUrl(g.comprobante_url)
+                                            }
+                                            disabled={!g.comprobante_url}
+                                            className={`inline-flex items-center justify-center size-8 rounded-full transition-all duration-200 cursor-pointer ${g.comprobante_url ? "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700" : "bg-gray-50 dark:bg-gray-800/50 text-gray-300 dark:text-gray-600 cursor-not-allowed"}`}
+                                            aria-label="Ver comprobante"
+                                          >
+                                            <EyeIcon />
+                                          </button>
+                                        </Tooltip.Trigger>
+                                        <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
+                                          <p>
+                                            {g.comprobante_url
+                                              ? "Ver comprobante"
+                                              : "Sin comprobante"}
+                                          </p>
+                                        </Tooltip.Content>
+                                      </Tooltip>
+                                      <Tooltip delay={0}>
+                                        <Tooltip.Trigger>
+                                          <button
+                                            onClick={() => openEdit(g)}
+                                            className="inline-flex items-center justify-center size-8 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 cursor-pointer"
+                                            aria-label="Editar"
+                                          >
+                                            <EditIcon />
+                                          </button>
+                                        </Tooltip.Trigger>
+                                        <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
+                                          <p>Editar</p>
+                                        </Tooltip.Content>
+                                      </Tooltip>
+                                      <Tooltip delay={0}>
+                                        <Tooltip.Trigger>
+                                          <button
+                                            onClick={() => setDeleteGasto(g)}
+                                            className="inline-flex items-center justify-center size-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-all duration-200 cursor-pointer"
+                                            aria-label="Eliminar"
+                                          >
+                                            <TrashIcon />
+                                          </button>
+                                        </Tooltip.Trigger>
+                                        <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
+                                          <p>Eliminar</p>
+                                        </Tooltip.Content>
+                                      </Tooltip>
+                                    </div>
+                                  </Table.Cell>
+                                </Table.Row>
+                              );
+                            })}
+                          </Table.Body>
+                        </Table.Content>
+                      </Table.ScrollContainer>
+                      {filtered.length > 0 && (
+                        <Table.Footer>
+                          <Pagination size="sm">
+                            <Pagination.Summary>
+                              {pStart} a {pEnd} de {filtered.length} gastos
+                            </Pagination.Summary>
+                            <Pagination.Content>
+                              <Pagination.Item>
+                                <Pagination.Previous
+                                  isDisabled={page === 1}
+                                  onPress={() =>
+                                    setPage((p) => Math.max(1, p - 1))
+                                  }
+                                >
+                                  <Pagination.PreviousIcon />
+                                  Ant.
+                                </Pagination.Previous>
+                              </Pagination.Item>
+                              {pages.map((p) => (
+                                <Pagination.Item key={p}>
+                                  <Pagination.Link
+                                    isActive={p === page}
+                                    onPress={() => setPage(p)}
+                                  >
+                                    {p}
+                                  </Pagination.Link>
+                                </Pagination.Item>
+                              ))}
+                              <Pagination.Item>
+                                <Pagination.Next
+                                  isDisabled={page === totalPages}
+                                  onPress={() =>
+                                    setPage((p) => Math.min(totalPages, p + 1))
+                                  }
+                                >
+                                  Sig.
+                                  <Pagination.NextIcon />
+                                </Pagination.Next>
+                              </Pagination.Item>
+                            </Pagination.Content>
+                          </Pagination>
+                        </Table.Footer>
+                      )}
                     </Table>
                   </div>
                 </div>
