@@ -24,14 +24,12 @@ export default function LatestTransactionsPreview({
 }: LatestTransactionsPreviewProps) {
   return (
     <div className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-white dark:bg-gray-900 shadow-xs dark:shadow-none overflow-hidden">
-      {/* Preview header */}
       <div className="px-6 pt-5 pb-4">
         <h2 className="text-base font-semibold text-gray-900 dark:text-white font-heading">
           Últimos Gastos
         </h2>
       </div>
 
-      {/* Mobile ListBox view - hidden on desktop */}
       <div className="md:hidden px-5">
         <ListBox
           aria-label="Últimos gastos"
@@ -103,7 +101,6 @@ export default function LatestTransactionsPreview({
         </ListBox>
       </div>
 
-      {/* Desktop Table - hidden on mobile */}
       <div className="hidden md:block">
         <Table variant="secondary" className="w-full px-5">
           <Table.ScrollContainer>
@@ -165,7 +162,6 @@ export default function LatestTransactionsPreview({
         </Table>
       </div>
 
-      {/* Footer with CTA */}
       <div className="px-6 py-4 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
         <span className="text-xs text-gray-500 dark:text-gray-400">
           {totalCount} registros en total

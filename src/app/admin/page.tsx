@@ -47,7 +47,7 @@ import {
   InboxIcon,
   XIcon,
 } from "@/components/admin/Icons";
-/* ── Types ──────────────────────────────────────── */
+
 interface GastoDB {
   id: string;
   fecha: string;
@@ -60,7 +60,6 @@ interface GastoDB {
 
 const ROWS_PER_PAGE = 10;
 
-// Opciones de mes para filtrado (solo meses de 2026)
 const MONTH_OPTIONS = [
   { id: "all", label: "Todos los meses" },
   { id: "01", label: "Enero" },
@@ -82,14 +81,10 @@ function formatShortDate(dateStr: string) {
   return `${day}/${month}/${year}`;
 }
 
-/* ══════════════════════════════════════════════════
-   Admin Page
-   ══════════════════════════════════════════════════ */
 export default function AdminPage() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // ── Mobile sidebar ──
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const closeSidebar = () => setSidebarOpen(false);
   const menuIconRef = useRef<HugeiconsMenuIconHandle>(null);
@@ -102,7 +97,6 @@ export default function AdminPage() {
     }
   }, [sidebarOpen]);
 
-  // ── Table ── (SWR-powered)
   const { gastos, isLoading: loadingTable, mutateGastos } = useGastos();
   const { categoriasDB, mutateCategorias } = useCategorias();
   const [page, setPage] = useState(1);
@@ -115,22 +109,17 @@ export default function AdminPage() {
   });
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // ── Categories from DB ──
   const [deletingCat, setDeletingCat] = useState<string | null>(null);
   const [deletingCatLoading, setDeletingCatLoading] = useState(false);
 
-  // ── Edit ──
   const [editGasto, setEditGasto] = useState<GastoDB | null>(null);
 
-  // ── Delete gasto ──
   const [deleteGasto, setDeleteGasto] = useState<GastoDB | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
-  // ── Lightbox ──
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
 
-  // ── Category names sorted (Varios always last) ──
   const categorias = useMemo(() => {
     const names = categoriasDB.map((c) => c.nombre);
     return names.sort((a, b) => {
@@ -140,7 +129,6 @@ export default function AdminPage() {
     });
   }, [categoriasDB]);
 
-  // ── Compute category colors map ──
   const catColors = useMemo(() => {
     const map: Record<string, string> = {};
     for (const c of categoriasDB) {
@@ -149,7 +137,6 @@ export default function AdminPage() {
     return map;
   }, [categoriasDB]);
 
-  // ── Delete category ──
   const handleDeleteCategory = async () => {
     if (!deletingCat) return;
     setDeletingCatLoading(true);
@@ -165,11 +152,9 @@ export default function AdminPage() {
     }
   };
 
-  // ── Search + Sort + Paginate ──
   const filtered = useMemo(() => {
     let result = [...gastos];
 
-    // Filtro por mes
     if (selectedMonth !== "all") {
       result = result.filter((g) => {
         const month = g.fecha.substring(5, 7);
@@ -177,12 +162,10 @@ export default function AdminPage() {
       });
     }
 
-    // Filtro por categoría
     if (selectedCategory !== "all") {
       result = result.filter((g) => g.categoria === selectedCategory);
     }
 
-    // Filtro por búsqueda
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       result = result.filter(
@@ -224,7 +207,6 @@ export default function AdminPage() {
     }, 250);
   };
 
-  // ── Handlers ──
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     router.replace("/login");
@@ -258,7 +240,6 @@ export default function AdminPage() {
     }
   };
 
-  // Count gastos per category for the manager panel
   const catCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     gastos.forEach((g) => {
@@ -269,7 +250,6 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-dvh flex bg-transparent">
-      {/* Mobile hamburger */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
         className="fixed top-4 right-4 z-50 flex items-center justify-center
@@ -279,16 +259,12 @@ export default function AdminPage() {
       >
         <HugeiconsMenuIcon ref={menuIconRef} size={22} />
       </button>
-
-      {/* Mobile backdrop */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-30 bg-black/20 backdrop-blur-xs lg:hidden"
           onClick={closeSidebar}
         />
       )}
-
-      {/* Sidebar */}
       <aside
         className={`
           fixed top-0 left-0 z-40 h-dvh w-65
@@ -300,7 +276,6 @@ export default function AdminPage() {
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        {/* Logo area */}
         <div className="flex items-center justify-center px-5 pt-7 pb-5">
           <Image
             src="/logofeucsc.webp"
@@ -311,11 +286,7 @@ export default function AdminPage() {
             priority
           />
         </div>
-
-        {/* Divider */}
         <div className="mx-5 h-px bg-gray-100 dark:bg-gray-800" />
-
-        {/* Navigation */}
         <nav className="flex flex-col gap-1 px-4 pt-6">
           <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-gray-400 dark:text-gray-500 uppercase">
             Administración
@@ -330,7 +301,6 @@ export default function AdminPage() {
                   : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200"
               }`}
           >
-            {/* Subtle left border accent for active state */}
             {pathname === "/admin" && (
               <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-red-500/70 dark:bg-red-400/70" />
             )}
@@ -365,11 +335,7 @@ export default function AdminPage() {
             </div>
           </Link>
         </nav>
-
-        {/* Spacer pushes footer to bottom */}
         <div className="flex-1" />
-
-        {/* Sign out + Theme toggle */}
         <div className="px-5 pb-6 pt-4">
           <div className="h-px bg-gray-100 dark:bg-gray-800 mb-4" />
           <Button
@@ -383,11 +349,8 @@ export default function AdminPage() {
           <ThemeToggle />
         </div>
       </aside>
-
-      {/* ── Main Content ── */}
       <main className="flex-1 min-w-0 lg:ml-65">
         <div className="mx-auto max-w-5xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
-          {/* Heading */}
           <div className="mb-8 animate-fade-in-up">
             <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
               Gestión de Gastos
@@ -396,8 +359,6 @@ export default function AdminPage() {
               Ingresa, edita o elimina gastos de la base de datos.
             </p>
           </div>
-
-          {/* ── Form card ── */}
           <Card className="overflow-visible rounded-2xl shadow-apple border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 sm:p-8 mb-8 animate-fade-in-up stagger-1 opacity-0">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 font-heading">
               Ingresar Gasto
@@ -410,8 +371,6 @@ export default function AdminPage() {
               onDeleteCategory={setDeletingCat}
             />
           </Card>
-
-          {/* ── Gastos table ── */}
           <Card className="rounded-2xl shadow-apple border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 animate-fade-in-up stagger-2 opacity-0">
             <div className="p-6 pb-4 border-b border-gray-100 dark:border-gray-800 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -424,7 +383,6 @@ export default function AdminPage() {
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex flex-wrap items-center gap-2">
-                  {/* Filtro por mes */}
                   <Select
                     className="w-44"
                     placeholder="Mes"
@@ -464,8 +422,6 @@ export default function AdminPage() {
                       </ListBox>
                     </Select.Popover>
                   </Select>
-
-                  {/* Filtro por categoría */}
                   <Select
                     className="w-56"
                     placeholder="Categoría"
@@ -522,8 +478,6 @@ export default function AdminPage() {
                     />
                   </div>
                 </div>
-
-                {/* Limpiar filtros - aparece debajo */}
                 {(selectedMonth !== "all" || selectedCategory !== "all") && (
                   <Button
                     size="sm"
@@ -548,7 +502,6 @@ export default function AdminPage() {
                 </div>
               ) : (
                 <div>
-                  {/* ListBox para mobile */}
                   <div className="md:hidden">
                     {paginated.length === 0 ? (
                       <div className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
@@ -644,7 +597,6 @@ export default function AdminPage() {
                         })}
                       </ListBox>
                     )}
-                    {/* Mobile pagination */}
                     {totalPages > 0 && (
                       <div className="mt-4 flex flex-col gap-3">
                         <span className="text-xs text-gray-500 text-center">
@@ -680,8 +632,6 @@ export default function AdminPage() {
                       </div>
                     )}
                   </div>
-
-                  {/* Tabla para desktop */}
                   <div className="hidden md:block">
                     <Table variant="secondary" className="w-full">
                       <Table.ScrollContainer>
@@ -916,8 +866,6 @@ export default function AdminPage() {
           <Footer />
         </div>
       </main>
-
-      {/* ── Edit Modal ── */}
       <Modal.Backdrop
         isOpen={!!editGasto}
         onOpenChange={() => setEditGasto(null)}
@@ -951,8 +899,6 @@ export default function AdminPage() {
           </Modal.Dialog>
         </Modal.Container>
       </Modal.Backdrop>
-
-      {/* ── Delete Gasto AlertDialog ── */}
       <AlertDialog.Backdrop
         isOpen={!!deleteGasto}
         onOpenChange={() => setDeleteGasto(null)}
@@ -1002,8 +948,6 @@ export default function AdminPage() {
           </AlertDialog.Dialog>
         </AlertDialog.Container>
       </AlertDialog.Backdrop>
-
-      {/* ── Delete Category AlertDialog ── */}
       <AlertDialog.Backdrop
         isOpen={!!deletingCat}
         onOpenChange={() => setDeletingCat(null)}
@@ -1048,8 +992,6 @@ export default function AdminPage() {
           </AlertDialog.Dialog>
         </AlertDialog.Container>
       </AlertDialog.Backdrop>
-
-      {/* ── Lightbox Modal ── */}
       <Modal.Backdrop
         isOpen={!!lightboxUrl}
         onOpenChange={() => setLightboxUrl(null)}

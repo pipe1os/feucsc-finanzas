@@ -5,10 +5,6 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { isAuthorizedEmail } from "@/lib/auth";
 
-/**
- * Admin layout — protects all /admin/* routes.
- * Checks for an active Supabase session and verifies the email is authorized.
- */
 export default function AdminLayout({
   children,
 }: {
@@ -39,7 +35,6 @@ export default function AdminLayout({
 
     checkAuth();
 
-    // Listen for auth state changes (e.g. sign out from another tab)
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -48,9 +43,10 @@ export default function AdminLayout({
         return;
       }
 
-      // Validate JWT on sign in / initial load
       if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
         if (!user || !isAuthorizedEmail(user.email)) {
           await supabase.auth.signOut();
           router.replace("/login?error=unauthorized");
@@ -61,10 +57,9 @@ export default function AdminLayout({
     return () => subscription.unsubscribe();
   }, [router]);
 
-  // Idle timeout: auto sign-out after 30 minutes of inactivity
   const idleRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   useEffect(() => {
-    const IDLE_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+    const IDLE_TIMEOUT = 30 * 60 * 1000;
 
     const startTimer = () => {
       idleRef.current = setTimeout(() => {
@@ -89,7 +84,6 @@ export default function AdminLayout({
     };
   }, [router]);
 
-  // Loading state
   if (loading) {
     return (
       <div className="flex min-h-dvh items-center justify-center bg-transparent">

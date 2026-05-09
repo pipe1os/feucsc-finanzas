@@ -22,12 +22,6 @@ async function fetchGastos(): Promise<GastoDB[]> {
   return data ?? [];
 }
 
-/**
- * SWR hook for gastos data.
- * – Returns cached data instantly on re-mount / tab-switch.
- * – Silently revalidates in the background.
- * – Use `mutate()` after create/update/delete to trigger refresh.
- */
 export function useGastos() {
   const { data, error, isLoading, isValidating, mutate } = useSWR<GastoDB[]>(
     GASTOS_KEY,

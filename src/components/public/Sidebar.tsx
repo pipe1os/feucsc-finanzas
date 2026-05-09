@@ -7,9 +7,10 @@ import { useState, useEffect, useSyncExternalStore, useRef } from "react";
 import { useTheme } from "next-themes";
 import { supabase } from "@/lib/supabase";
 import { Badge } from "@heroui/react";
-import { HugeiconsMenuIcon, type HugeiconsMenuIconHandle } from "@/components/ui/hugeicons-menu";
-
-/* ── Apple-style minimalist icons (SF Symbols inspired) ── */
+import {
+  HugeiconsMenuIcon,
+  type HugeiconsMenuIconHandle,
+} from "@/components/ui/hugeicons-menu";
 
 const ChartIcon = () => (
   <svg
@@ -177,7 +178,7 @@ function NavItem({
             : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200"
         }`}
     >
-      {/* Subtle left border accent for active state */}
+      {}
       {isActive && (
         <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-red-500/70 dark:bg-red-400/70" />
       )}
@@ -194,7 +195,12 @@ function NavItem({
             {icon}
           </span>
           {!!badgeCount && badgeCount > 0 && (
-            <Badge color="danger" size="sm" variant="primary" placement="top-right">
+            <Badge
+              color="danger"
+              size="sm"
+              variant="primary"
+              placement="top-right"
+            >
               <Badge.Label className="text-[10px] font-bold">
                 {badgeCount > 99 ? "99+" : badgeCount}
               </Badge.Label>
@@ -270,10 +276,8 @@ export default function Sidebar() {
   }, [isOpen]);
 
   useEffect(() => {
-    // Determine the number of new expenses since last visit
     const checkNewExpenses = async () => {
       try {
-        // If we are currently ON the gastos page, reset the count and update lastVisited
         if (pathname === "/gastos") {
           localStorage.setItem("lastVisitedGastos", new Date().toISOString());
           setNewExpensesCount(0);
@@ -282,12 +286,10 @@ export default function Sidebar() {
 
         const lastVisited = localStorage.getItem("lastVisitedGastos");
         if (!lastVisited) {
-          // If they have never visited, initialize with current time to avoid showing everything
           localStorage.setItem("lastVisitedGastos", new Date().toISOString());
           return;
         }
 
-        // Query Supabase for count of expenses newer than lastVisited
         const { count } = await supabase
           .from("gastos")
           .select("*", { count: "exact", head: true })
@@ -297,16 +299,17 @@ export default function Sidebar() {
           setNewExpensesCount(count);
         }
       } catch {
-        // Silently fail if localStorage is unavailable (private mode, restricted contexts)
         setNewExpensesCount(0);
       }
     };
 
-    // Defer badge count fetch until browser is idle — not critical for initial paint
-    const schedule = typeof requestIdleCallback === "function"
-      ? requestIdleCallback
-      : (cb: () => void) => setTimeout(cb, 200);
-    const id = schedule(() => { checkNewExpenses(); });
+    const schedule =
+      typeof requestIdleCallback === "function"
+        ? requestIdleCallback
+        : (cb: () => void) => setTimeout(cb, 200);
+    const id = schedule(() => {
+      checkNewExpenses();
+    });
 
     return () => {
       if (typeof cancelIdleCallback === "function" && typeof id === "number") {
@@ -319,7 +322,6 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile toggle button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-4 right-4 z-50 flex items-center justify-center
@@ -330,7 +332,6 @@ export default function Sidebar() {
         <HugeiconsMenuIcon ref={menuIconRef} size={22} />
       </button>
 
-      {/* Mobile backdrop */}
       {isOpen && (
         <div
           className="fixed inset-0 z-30 bg-black/20 backdrop-blur-xs lg:hidden"
@@ -338,7 +339,6 @@ export default function Sidebar() {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`
           fixed top-0 left-0 z-40 h-dvh w-65
@@ -350,7 +350,6 @@ export default function Sidebar() {
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        {/* Logo area */}
         <div className="flex items-center justify-center px-5 pt-7 pb-5">
           <Image
             src="/logofeucsc.webp"
@@ -363,12 +362,9 @@ export default function Sidebar() {
           />
         </div>
 
-        {/* Divider */}
         <div className="mx-5 h-px bg-gray-100 dark:bg-gray-800" />
 
-        {/* Navigation */}
         <nav className="flex flex-col gap-1 px-4 pt-6">
-          {/* ── Finanzas ── */}
           <NavCategory label="Finanzas" />
           <NavItem
             href="/"
@@ -386,10 +382,8 @@ export default function Sidebar() {
             badgeCount={newExpensesCount}
           />
 
-          {/* Spacer between groups */}
           <div className="mt-4" />
 
-          {/* ── Soporte ── */}
           <NavCategory label="Soporte" />
           <NavItem
             href="/faq"
@@ -407,10 +401,8 @@ export default function Sidebar() {
           />
         </nav>
 
-        {/* Spacer pushes footer to bottom */}
         <div className="flex-1" />
 
-        {/* Theme toggle */}
         <div className="px-5 pb-6">
           <div className="h-px bg-gray-100 dark:bg-gray-800 mb-4" />
           <ThemeToggle />

@@ -7,7 +7,6 @@ import { Card, Button, Alert } from "@heroui/react";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 
-/* ── Google icon (official multicolor) ───────────── */
 const GoogleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24">
     <path
@@ -29,7 +28,6 @@ const GoogleIcon = () => (
   </svg>
 );
 
-/* ── Error message component (reads ?error= param) ─ */
 function LoginError() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
@@ -54,7 +52,6 @@ function LoginError() {
   );
 }
 
-/* ── Login page ──────────────────────────────────── */
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
@@ -74,10 +71,8 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-dvh items-center justify-center bg-transparent px-4">
-      {/* Login card */}
       <div className="relative z-10 w-full max-w-md animate-fade-in-up">
         <Card className="rounded-3xl shadow-apple-lg border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 sm:p-10">
-          {/* Logo + branding */}
           <div className="flex flex-col items-center mb-8">
             <Image
               src="/logofeucsc.webp"
@@ -95,7 +90,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Divider */}
           <div className="flex items-center gap-3">
             <div className="h-px flex-1 bg-gray-100 dark:bg-gray-800" />
             <span className="text-xs text-gray-300 dark:text-gray-600 font-medium uppercase tracking-wider">
@@ -104,14 +98,12 @@ export default function LoginPage() {
             <div className="h-px flex-1 bg-gray-100 dark:bg-gray-800" />
           </div>
 
-          {/* Error alert (from query params) */}
           <Suspense fallback={null}>
             <div className="mb-4">
               <LoginError />
             </div>
           </Suspense>
 
-          {/* Google sign-in button */}
           <Button
             variant="outline"
             size="lg"
@@ -129,7 +121,6 @@ export default function LoginPage() {
             {loading ? "Redirigiendo..." : "Continuar con Google"}
           </Button>
 
-          {/* Security note */}
           <div className="mt-8 flex items-start gap-2.5 rounded-xl bg-gray-50 dark:bg-black border border-gray-100 dark:border-gray-800 px-4 py-3">
             <svg
               width="16"
@@ -151,8 +142,6 @@ export default function LoginPage() {
             </p>
           </div>
         </Card>
-
-        {/* Back to portal link */}
         <div className="mt-6 text-center">
           <Link
             href="/"

@@ -28,7 +28,6 @@ interface ExpenseCategoryChartProps {
   activeCategoryFilter?: string | null;
 }
 
-// Custom tooltip that matches the Apple design
 function CustomTooltip({
   active,
   payload,
@@ -104,9 +103,8 @@ export default function ExpenseCategoryChart({
 
   const handlePieClick = (data: { name?: string }) => {
     if (onCategoryClick && data.name) {
-      // If clicking the already-active filter, clear it
       if (activeCategoryFilter === data.name) {
-        onCategoryClick(""); // Will be treated as clear
+        onCategoryClick("");
       } else {
         onCategoryClick(data.name);
       }
@@ -137,7 +135,6 @@ export default function ExpenseCategoryChart({
               <ChartTooltip
                 cursor={false}
                 content={<CustomTooltip totalGastado={totalGastado} />}
-                /* Añadido zIndex: 100 para forzar que el tooltip flote por encima del texto absoluto */
                 wrapperStyle={{ outline: "none", zIndex: 100 }}
               />
               <Pie
@@ -175,7 +172,6 @@ export default function ExpenseCategoryChart({
               </Pie>
             </PieChart>
           </ChartContainer>
-          {/* Añadido z-0 para asegurar que se quede por debajo del tooltip */}
           <div
             className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center z-0 animate-scale-in"
             style={{ animationDelay: "0.6s" }}
@@ -189,7 +185,6 @@ export default function ExpenseCategoryChart({
           </div>
         </div>
 
-        {/* Percentage breakdown */}
         <div className="w-full space-y-3">
           {gastosPorCategoria.map((item, index) => {
             const pct =

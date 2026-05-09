@@ -21,7 +21,7 @@ export default function CategorySelect({
   const [newCatName, setNewCatName] = useState("");
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // Close on outside click
+
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (
@@ -48,7 +48,7 @@ export default function CategorySelect({
 
   return (
     <div ref={wrapperRef} className="relative w-full">
-      {/* Trigger */}
+      {}
       <button
         type="button"
         onClick={() => {
@@ -67,7 +67,7 @@ export default function CategorySelect({
         </span>
       </button>
 
-      {/* Dropdown */}
+      {}
       {open && (
         <div
           className="absolute z-50 mt-1.5 w-full rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg py-1 animate-fade-in-up"
@@ -129,7 +129,7 @@ export default function CategorySelect({
             })}
           </div>
 
-          {/* Divider + Nueva categoría */}
+          {}
           <div className="border-t border-gray-100 dark:border-gray-800 mt-1 pt-1">
             {isCreating ? (
               <div className="flex items-center gap-2 px-3 py-2">

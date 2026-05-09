@@ -15,9 +15,12 @@ export const metadata = {
 };
 
 export default async function GastosPage() {
-  // Parallel data fetching
   const [gastosRes, categoriasRes] = await Promise.all([
-    supabaseAnon.from("gastos").select("*").order("fecha", { ascending: false }).limit(500),
+    supabaseAnon
+      .from("gastos")
+      .select("*")
+      .order("fecha", { ascending: false })
+      .limit(500),
     supabaseAnon.from("categorias").select("*"),
   ]);
 
@@ -54,7 +57,6 @@ export default async function GastosPage() {
     }))
     .sort((a, b) => b.monto - a.monto);
 
-  // Determine last sync time
   let lastSyncISO: string | null = null;
   if (data.length > 0) {
     const timestamps = data
@@ -69,11 +71,9 @@ export default async function GastosPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
-      {/* Page header */}
       <header className="mb-8 animate-fade-in-up opacity-0">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
           <div>
-            {/* Back navigation — larger and clearer */}
             <div className="flex items-center gap-2 mb-2">
               <Link
                 href="/"
@@ -94,7 +94,9 @@ export default async function GastosPage() {
                     <path d="m15 18-6-6 6-6" />
                   </svg>
                 </span>
-                <span className="uppercase tracking-wider text-[11px] font-semibold">Resumen</span>
+                <span className="uppercase tracking-wider text-[11px] font-semibold">
+                  Resumen
+                </span>
               </Link>
             </div>
             <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
@@ -109,14 +111,10 @@ export default async function GastosPage() {
           <LastSyncIndicator lastSyncISO={lastSyncISO} />
         </div>
       </header>
-
-      {/* Table + Category Chart */}
       <DashboardClient
         transacciones={transacciones}
         gastosPorCategoria={gastosPorCategoria}
       />
-
-      {/* Footer */}
       <Footer />
     </div>
   );

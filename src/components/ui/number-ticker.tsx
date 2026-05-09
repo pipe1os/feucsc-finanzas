@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, type ComponentPropsWithoutRef } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ComponentPropsWithoutRef,
+} from "react";
 import { cn } from "@/lib/utils";
 
-// Global session flag: once any NumberTicker has animated, never re-animate
-// on client-side navigation (e.g. /faq -> /).
 let hasAnimatedThisSession = false;
 
 interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
@@ -28,7 +31,7 @@ function useInViewOnce(ref: React.RefObject<Element | null>, margin = "0px") {
           observer.disconnect();
         }
       },
-      { rootMargin: margin, threshold: 0 }
+      { rootMargin: margin, threshold: 0 },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -36,10 +39,6 @@ function useInViewOnce(ref: React.RefObject<Element | null>, margin = "0px") {
   return inView;
 }
 
-/**
- * Animated number ticker — counts up/down to a target value using rAF.
- * Zero dependency on motion libraries. Animates only when scrolled into view (once).
- */
 export function NumberTicker({
   value,
   startValue = 0,
@@ -55,9 +54,6 @@ export function NumberTicker({
 
   const skipAnimation = hasAnimatedThisSession;
 
-  // SSR-safe: always use animation-start value for initial render.
-  // Server always has hasAnimatedThisSession=false; client may differ on nav.
-  // The useEffect below handles jumping to final value when skip is true.
   const initialValue = direction === "down" ? value : startValue;
   const [displayValue, setDisplayValue] = useState(initialValue);
 
@@ -79,7 +75,7 @@ export function NumberTicker({
       const tick = (now: number) => {
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        // easeOutQuad
+
         const eased = 1 - (1 - progress) * (1 - progress);
         const current = start + (end - start) * eased;
         setDisplayValue(current);
