@@ -35,14 +35,12 @@ interface ExpenseTrendChartProps {
 
 function formatCompact(value: number): string {
   if (value >= 1000000) {
-    // Formato CLP: $1,5M (coma como separador decimal)
     const millions = (value / 1000000)
       .toFixed(1)
       .replace(".", ",")
       .replace(/,0$/, "");
     return `$${millions}M`;
   } else if (value >= 1000) {
-    // Formato CLP: $750K (miles con punto, K mayúscula)
     const thousands = Math.round(value / 1000).toLocaleString("es-CL");
     return `$${thousands}K`;
   }
@@ -100,7 +98,6 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
   return null;
 }
 
-// Tooltip manual para móvil (click)
 interface ManualTooltipProps {
   data: TrendDataPoint | null;
   position: { x: number; y: number } | null;
@@ -194,14 +191,12 @@ export default function ExpenseTrendChart({
   const chartRef = useRef<HTMLDivElement>(null);
 
   const handleChartClick = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (state: any) => {
       const index = state?.activeTooltipIndex;
       if (typeof index === "number" && chartRef.current) {
         const data = gastosPorMes[index];
         const rect = chartRef.current.getBoundingClientRect();
 
-        // Calcular posición aproximada basada en el índice
         const xPercent = index / (gastosPorMes.length - 1 || 1);
         const x = rect.left + rect.width * xPercent;
         const y = rect.top + rect.height / 2;
@@ -271,14 +266,12 @@ export default function ExpenseTrendChart({
                 tick={{ fontSize: 11, fill: "#9CA3AF" }}
                 tickFormatter={(value) => {
                   if (value >= 1000000) {
-                    // Formato CLP: $1,5M (coma como separador decimal)
                     const millions = (value / 1000000)
                       .toFixed(1)
                       .replace(".", ",")
                       .replace(/,0$/, "");
                     return `$${millions}M`;
                   } else if (value > 0) {
-                    // Formato CLP: $750K (miles con punto, K mayúscula)
                     const thousands = Math.round(value / 1000).toLocaleString(
                       "es-CL",
                     );

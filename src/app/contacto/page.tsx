@@ -10,7 +10,6 @@ export default function ContactoPage() {
       navigator.clipboard.writeText(text);
       toast.success("Correo copiado al portapapeles");
     } else {
-      // Fallback para HTTP o navegadores sin clipboard API
       const textarea = document.createElement("textarea");
       textarea.value = text;
       textarea.style.position = "fixed";
@@ -29,7 +28,6 @@ export default function ContactoPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
-      {/* Page header */}
       <header className="mb-10 animate-fade-in-up opacity-0 text-center">
         <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
           Contacto
@@ -39,12 +37,10 @@ export default function ContactoPage() {
         </p>
       </header>
 
-      {/* Contact items — clean, card-less layout */}
       <div
         className="mb-12 animate-fade-in-up opacity-0 flex flex-col gap-4"
         style={{ animationDelay: "0.1s" }}
       >
-        {/* Email — click to copy */}
         <button
           type="button"
           onClick={handleCopyEmail}
@@ -79,7 +75,6 @@ export default function ContactoPage() {
           </span>
         </button>
 
-        {/* Location */}
         <div className="flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-apple">
           <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500">
             <svg
@@ -107,7 +102,6 @@ export default function ContactoPage() {
           </div>
         </div>
 
-        {/* Instagram */}
         <a
           href="https://instagram.com/feucsc_"
           target="_blank"
@@ -142,7 +136,6 @@ export default function ContactoPage() {
         </a>
       </div>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

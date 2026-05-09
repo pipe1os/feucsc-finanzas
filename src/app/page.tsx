@@ -7,13 +7,15 @@ import { parseISODate } from "@/lib/utils";
 import { buildCategoryColors } from "@/lib/data-transform";
 import Footer from "@/components/public/Footer";
 
-// ISR: revalidate every 60 seconds
 export const revalidate = 60;
 
 export default async function Home() {
-  // Fetch expenses + categories in parallel
   const [gastosRes, categoriasRes] = await Promise.all([
-    supabaseAnon.from("gastos").select("*").order("fecha", { ascending: false }).limit(500),
+    supabaseAnon
+      .from("gastos")
+      .select("*")
+      .order("fecha", { ascending: false })
+      .limit(500),
     supabaseAnon.from("categorias").select("*"),
   ]);
 
@@ -29,7 +31,6 @@ export default async function Home() {
   const saldoDisponible = presupuestoTotal - totalGastado;
   const resumenFinanciero = { presupuestoTotal, totalGastado, saldoDisponible };
 
-  // Monthly trend data with per-month category breakdown
   const months = [
     "Ene",
     "Feb",
@@ -81,7 +82,6 @@ export default async function Home() {
     };
   });
 
-  // Determine last sync time
   let lastSyncISO: string | null = null;
   if (data.length > 0) {
     const timestamps = data
@@ -94,7 +94,6 @@ export default async function Home() {
     }
   }
 
-  // Latest 3 transactions for preview
   const latestTransactions = data.slice(0, 3).map((g) => {
     const catName = g.categoria || "Varios";
     return {
@@ -109,7 +108,6 @@ export default async function Home() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
-      {/* Page header — rendered in server HTML (instant LCP) */}
       <header className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
           <div>
@@ -117,27 +115,27 @@ export default async function Home() {
               Transparencia Financiera
             </h1>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 max-w-xl">
-              Presupuesto, gastos y comprobantes de la Federación de
-              Estudiantes UCSC.
+              Presupuesto, gastos y comprobantes de la Federación de Estudiantes
+              UCSC.
             </p>
           </div>
           <LastSyncIndicator lastSyncISO={lastSyncISO} />
         </div>
       </header>
 
-      {/* Dashboard Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
-        {/* KPI Cards — rendered in server HTML (part of LCP) */}
-        <section aria-label="Indicadores financieros" className="col-span-1 lg:col-span-4 h-full">
+        <section
+          aria-label="Indicadores financieros"
+          className="col-span-1 lg:col-span-4 h-full"
+        >
           <KPICards resumenFinanciero={resumenFinanciero} />
         </section>
-
-        {/* Trend Chart — lazy loaded (ssr: false, recharts deferred) */}
-        <section aria-label="Tendencia de gastos" className="col-span-1 lg:col-span-8 h-full">
+        <section
+          aria-label="Tendencia de gastos"
+          className="col-span-1 lg:col-span-8 h-full"
+        >
           <LazyExpenseTrendChart gastosPorMes={gastosPorMes} />
         </section>
-
-        {/* Latest transactions preview */}
         <section className="col-span-1 lg:col-span-12">
           <LatestTransactionsPreview
             transactions={latestTransactions}
@@ -145,8 +143,6 @@ export default async function Home() {
           />
         </section>
       </div>
-
-      {/* Footer */}
       <Footer />
     </div>
   );

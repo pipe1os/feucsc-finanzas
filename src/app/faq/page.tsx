@@ -11,7 +11,7 @@ export const metadata = {
 export default function FAQPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
-      {/* Page header */}
+      {}
       <header className="mb-8 animate-fade-in-up opacity-0">
         <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
           Preguntas Frecuentes
@@ -21,10 +21,10 @@ export default function FAQPage() {
         </p>
       </header>
 
-      {/* FAQ Accordion Content (client component) */}
+      {}
       <FAQContent />
 
-      {/* CTA Section */}
+      {}
       <section
         className="mt-12 mb-0 text-center animate-fade-in-up opacity-0"
         style={{ animationDelay: "0.4s" }}
@@ -55,7 +55,7 @@ export default function FAQPage() {
         </h2>
       </section>
 
-      {/* Footer — same as main page */}
+      {}
       <Footer />
     </div>
   );

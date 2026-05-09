@@ -4,13 +4,6 @@ import { cookies } from "next/headers";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-/**
- * Creates a Supabase server client that reads auth cookies from the request.
- * Use this in Server Actions and Server Components to verify the user's session.
- *
- * IMPORTANT: This must be called per-request (not cached as a singleton)
- * because it reads from `cookies()` which is request-scoped.
- */
 export async function createAuthClient() {
   const cookieStore = await cookies();
 
@@ -29,10 +22,7 @@ export async function createAuthClient() {
               sameSite: "lax" as const,
             }),
           );
-        } catch {
-          // setAll called from a Server Component (read-only context).
-          // Middleware handles token refresh, so this is safe to ignore.
-        }
+        } catch {}
       },
     },
   });

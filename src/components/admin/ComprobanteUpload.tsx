@@ -26,9 +26,9 @@ export default function ComprobanteUpload({
       ? "Imagen adjunta"
       : "(sin archivo seleccionado)";
 
-  // Modo edición con imagen existente
+
   if (existingUrl !== undefined) {
-    // Sin imagen o marcada para eliminar - mostrar input de upload
+
     if (!existingUrl || isMarkedForDeletion) {
       return (
         <div className="flex flex-col gap-1.5 h-full justify-end">
@@ -71,7 +71,7 @@ export default function ComprobanteUpload({
       );
     }
 
-    // Tiene imagen existente - mostrar icono ver + eliminar centrado
+
     return (
       <div className="flex flex-col gap-2 h-full justify-end">
         <Label>Comprobante</Label>
@@ -96,7 +96,7 @@ export default function ComprobanteUpload({
     );
   }
 
-  // Modo creación
+
   return (
     <div className="flex flex-col gap-1.5 h-full justify-end">
       <label className="text-sm font-medium text-gray-900 dark:text-gray-100">

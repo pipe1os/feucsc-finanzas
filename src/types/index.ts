@@ -1,7 +1,3 @@
-// ──────────────────────────────────────────────
-// Tipos centrales del Portal de Transparencia
-// ──────────────────────────────────────────────
-
 export interface Gasto {
   id: string;
   fecha: string;
@@ -11,10 +7,6 @@ export interface Gasto {
   comprobante: string | null;
 }
 
-/**
- * Categorías dinámicas — el admin puede crear nuevas.
- * "Varios" siempre existe como default.
- */
 export type CategoriaGasto = string;
 
 export interface ResumenFinanciero {

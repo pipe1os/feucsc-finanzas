@@ -40,21 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# --- AI  ---
-AGENTS.md
-CLAUDE.md
-.vibeskills/
-.heroui-docs/
-docs/
-outputs/
-.opencode/
-.sisyphus
-.claude/
-.agents/
-.dgrep/
-opencode.json
-skills-lock.json
-
 # Certificates / keys
 *.key
 *.pfx
@@ -90,3 +75,19 @@ temp/
 *.backup
 *.gz
 *.zip
+
+# --- AI  ---
+AGENTS.md
+CLAUDE.md
+PRODUCT.md
+.vibeskills/
+.heroui-docs/
+docs/
+outputs/
+.opencode/
+.sisyphus
+.claude/
+.agents/
+.dgrep/
+opencode.json
+skills-lock.json

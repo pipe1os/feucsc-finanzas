@@ -19,24 +19,16 @@ async function fetchCategorias(): Promise<CategoriaDB[]> {
   return data ?? [];
 }
 
-/**
- * SWR hook for categorias data.
- * – Returns cached data instantly on re-mount / tab-switch.
- * – Silently revalidates in the background.
- * – Use `mutate()` after create/delete to trigger refresh.
- */
 export function useCategorias() {
-  const { data, error, isLoading, isValidating, mutate } = useSWR<CategoriaDB[]>(
-    CATEGORIAS_KEY,
-    fetchCategorias,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: true,
-      dedupingInterval: 10000,
-      errorRetryCount: 3,
-      errorRetryInterval: 5000,
-    },
-  );
+  const { data, error, isLoading, isValidating, mutate } = useSWR<
+    CategoriaDB[]
+  >(CATEGORIAS_KEY, fetchCategorias, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: true,
+    dedupingInterval: 10000,
+    errorRetryCount: 3,
+    errorRetryInterval: 5000,
+  });
 
   return {
     categoriasDB: data ?? [],

@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <head>
         <meta name="color-scheme" content="light dark" />
-        {/* Preload critical fonts to eliminate render-blocking and improve LCP */}
+        {}
         <link
           rel="preload"
           href="/fonts/SF-Pro-Text-Regular.woff2"
@@ -48,7 +48,7 @@ export default function RootLayout({
           type="font/woff2"
           crossOrigin="anonymous"
         />
-        {/* FOUC prevention — blocking script + MutationObserver to survive React hydration */}
+        {}
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem("theme"),d=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d){var h=document.documentElement;h.classList.add("dark");h.style.background="#141414";h.style.colorScheme="dark";var o=new MutationObserver(function(){if(!h.classList.contains("dark")){h.classList.add("dark")}});o.observe(h,{attributes:true,attributeFilter:["class"]});setTimeout(function(){o.disconnect()},3000)}}catch(e){}})()` }} />
         <style>{`body{background:transparent}html{background:#f5f5f7;color-scheme:light}html.dark{background:#141414;color-scheme:dark;color:#f5f5f7}@media(prefers-color-scheme:dark){html:not(.light){background:#141414;color-scheme:dark;color:#f5f5f7}}`}</style>
       </head>

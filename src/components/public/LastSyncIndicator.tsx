@@ -9,7 +9,6 @@ interface LastSyncIndicatorProps {
 function parseRobustDate(isoDate: string): Date | null {
   const trimmed = isoDate.trim();
   if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
-    // Date-only string: parse as local midnight to avoid UTC conversion
     const [y, m, d] = trimmed.split("-").map(Number);
     return new Date(y, m - 1, d);
   }
@@ -22,8 +21,18 @@ function formatExactDate(isoDate: string): string {
   if (!date) return isoDate;
 
   const months = [
-    "ene", "feb", "mar", "abr", "may", "jun",
-    "jul", "ago", "sep", "oct", "nov", "dic"
+    "ene",
+    "feb",
+    "mar",
+    "abr",
+    "may",
+    "jun",
+    "jul",
+    "ago",
+    "sep",
+    "oct",
+    "nov",
+    "dic",
   ];
 
   const day = date.getDate();
@@ -70,12 +79,13 @@ export default function LastSyncIndicator({
     <Tooltip delay={0} closeDelay={0}>
       <Tooltip.Trigger>
         <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 cursor-help">
-          {/* Animated green dot */}
           <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500" />
           </span>
-          <span suppressHydrationWarning>Actualizado {relativeTime} ({exactDate})</span>
+          <span suppressHydrationWarning>
+            Actualizado {relativeTime} ({exactDate})
+          </span>
         </div>
       </Tooltip.Trigger>
       <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">

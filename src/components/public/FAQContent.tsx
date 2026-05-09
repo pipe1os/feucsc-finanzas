@@ -2,7 +2,6 @@
 
 import { Accordion } from "@heroui/react";
 
-/* ── SVG chevron icon (no external dep) ──────────── */
 const ChevronDown = () => (
   <svg
     width="16"
@@ -18,7 +17,6 @@ const ChevronDown = () => (
   </svg>
 );
 
-/* ── FAQ data organised by category ──────────────── */
 const faqCategories = [
   {
     title: "Sobre la Federación",
@@ -81,12 +79,10 @@ export default function FAQContent() {
           className="animate-fade-in-up opacity-0"
           style={{ animationDelay: `${0.1 + catIndex * 0.08}s` }}
         >
-          {/* Category label */}
           <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-3 px-1">
             {category.title}
           </p>
 
-          {/* Lighter accordion without heavy card container */}
           <div className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden">
             <Accordion
               allowsMultipleExpanded

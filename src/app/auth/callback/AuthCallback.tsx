@@ -6,13 +6,6 @@ import { Spinner } from "@heroui/react";
 import { supabase } from "@/lib/supabase";
 import { isAuthorizedEmail } from "@/lib/auth";
 
-/**
- * OAuth Callback — relies on createBrowserClient's automatic PKCE handling.
- *
- * createBrowserClient (from @supabase/ssr) detects the ?code=... in the URL
- * on mount and exchanges it automatically. We only listen for the resulting
- * auth state change and verify the email is authorized.
- */
 export default function AuthCallback() {
   const router = useRouter();
   const [status, setStatus] = useState("Verificando acceso...");
@@ -38,7 +31,6 @@ export default function AuthCallback() {
       redirectTo("/admin");
     };
 
-    // ── Immediate check: auto-exchange may already be done ──
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!mounted) return;
       if (session?.user?.email) {
@@ -46,20 +38,18 @@ export default function AuthCallback() {
       }
     });
 
-    // ── Listen for the automatic PKCE exchange result ──
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, newSession) => {
-        if (!mounted) return;
-        if (
-          (event === "SIGNED_IN" || event === "INITIAL_SESSION") &&
-          newSession?.user?.email
-        ) {
-          verifyAndRedirect(newSession.user.email);
-        }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, newSession) => {
+      if (!mounted) return;
+      if (
+        (event === "SIGNED_IN" || event === "INITIAL_SESSION") &&
+        newSession?.user?.email
+      ) {
+        verifyAndRedirect(newSession.user.email);
       }
-    );
+    });
 
-    // ── Timeout fallback ──
     timeoutId = setTimeout(() => {
       if (mounted) redirectTo("/login?error=unauthorized");
     }, 12000);

@@ -15,17 +15,14 @@ async function requireAuth() {
   return user;
 }
 
-
-// Extracts public_id from Cloudinary URL
 function extractPublicId(url: string) {
-  // e.g. https://res.cloudinary.com/<cloud_name>/image/upload/v1234567890/my_folder/my_image.jpg
   const parts = url.split("/upload/");
   if (parts.length < 2) return null;
-  
+
   const path = parts[1];
   const segments = path.split("/");
   if (segments[0].match(/^v\d+$/)) {
-    segments.shift(); // remove version
+    segments.shift();
   }
   const publicIdWithExt = segments.join("/");
   const lastDot = publicIdWithExt.lastIndexOf(".");
@@ -56,9 +53,11 @@ export async function deleteCloudinaryImage(url: string) {
 
     const timestamp = Math.floor(new Date().getTime() / 1000).toString();
 
-    // Create signature
     const stringToSign = `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
-    const signature = crypto.createHash('sha1').update(stringToSign).digest('hex');
+    const signature = crypto
+      .createHash("sha1")
+      .update(stringToSign)
+      .digest("hex");
 
     const formData = new FormData();
     formData.append("public_id", publicId);
@@ -66,10 +65,13 @@ export async function deleteCloudinaryImage(url: string) {
     formData.append("timestamp", timestamp);
     formData.append("signature", signature);
 
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/destroy`, {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/destroy`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
 
     if (!response.ok) {
       const errData = await response.json();

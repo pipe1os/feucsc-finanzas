@@ -175,7 +175,6 @@ function ExpenseTable({
   });
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Cleanup debounce timer on unmount to prevent memory leaks
   useEffect(() => {
     return () => {
       if (debounceTimer.current) {
@@ -199,7 +198,6 @@ function ExpenseTable({
     return "all";
   });
 
-  // Sync state changes to URL
   useEffect(() => {
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
@@ -240,14 +238,12 @@ function ExpenseTable({
     concepto: string;
   } | null>(null);
 
-  // Extract unique categories from data
   const uniqueCategories = useMemo(() => {
     const cats = new Set<string>();
     transacciones.forEach((t) => cats.add(t.categoria));
     return Array.from(cats).sort();
   }, [transacciones]);
 
-  // Sync chart filter to the local category select
   useEffect(() => {
     if (chartCategoryFilter) {
       const timer = setTimeout(() => {
@@ -287,21 +283,18 @@ function ExpenseTable({
   const filtered = useMemo(() => {
     let result = transacciones;
 
-    // Month filter
     if (selectedMonth !== "all") {
       result = result.filter((t) => {
         if (!t.fecha) return false;
-        const month = t.fecha.substring(5, 7); // "YYYY-MM-DD" → "MM"
+        const month = t.fecha.substring(5, 7);
         return month === selectedMonth;
       });
     }
 
-    // Category filter (local select OR chart click)
     if (selectedCategory !== "all") {
       result = result.filter((t) => t.categoria === selectedCategory);
     }
 
-    // Text search
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       result = result.filter(
@@ -337,7 +330,6 @@ function ExpenseTable({
 
   const totalPages = Math.ceil(sortedItems.length / ROWS_PER_PAGE);
 
-  // Build pagination pages with ellipsis
   const visiblePages = useMemo((): (number | "ellipsis")[] => {
     if (totalPages <= 7) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -390,7 +382,6 @@ function ExpenseTable({
         className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-white dark:bg-gray-900 shadow-apple overflow-hidden animate-fade-in-up opacity-0"
         style={{ animationDelay: "0.2s" }}
       >
-        {/* Header row: title */}
         <div className="p-6 pb-0">
           <h3 className="text-base font-semibold text-gray-900 dark:text-white">
             Gastos Recientes
@@ -401,9 +392,7 @@ function ExpenseTable({
           </p>
         </div>
 
-        {/* Filter row: search + month + category selects */}
         <div className="flex flex-wrap items-center gap-3 px-6 pt-3">
-          {/* Search input */}
           <div className="relative w-full sm:w-56">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
               <SearchIcon />
@@ -420,7 +409,7 @@ function ExpenseTable({
               id="search-transactions"
             />
           </div>
-          {/* Month filter */}
+
           <Select
             className="w-44"
             placeholder="Mes"
@@ -459,7 +448,6 @@ function ExpenseTable({
             </Select.Popover>
           </Select>
 
-          {/* Category filter */}
           <Select
             className="w-56"
             placeholder="Categoría"
@@ -504,7 +492,6 @@ function ExpenseTable({
             </Select.Popover>
           </Select>
 
-          {/* Active filter indicator + clear */}
           {hasActiveFilters && (
             <button
               onClick={handleClearAllFilters}
@@ -517,7 +504,6 @@ function ExpenseTable({
         </div>
 
         <div className="p-6 pt-4">
-          {/* Mobile ListBox view - hidden on desktop */}
           <div className="md:hidden">
             <ListBox
               aria-label="Gastos recientes"
@@ -606,7 +592,7 @@ function ExpenseTable({
                 );
               }}
             </ListBox>
-            {/* Mobile pagination */}
+
             {totalPages > 0 && (
               <div className="mt-4 flex flex-col gap-3">
                 <span className="text-xs text-gray-500 text-center">
@@ -647,7 +633,6 @@ function ExpenseTable({
             )}
           </div>
 
-          {/* Desktop Table - hidden on mobile */}
           <div className="hidden md:block">
             <Table variant="secondary">
               <Table.ScrollContainer>
@@ -657,40 +642,40 @@ function ExpenseTable({
                   sortDescriptor={sortDescriptor}
                   onSortChange={setSortDescriptor}
                 >
-                <Table.Header>
-                  <Table.Column
-                    allowsSorting
-                    isRowHeader
-                    id="fecha"
-                    className="w-30"
-                  >
-                    {({ sortDirection }) => (
-                      <SortableColumnHeader sortDirection={sortDirection}>
-                        Fecha
-                      </SortableColumnHeader>
-                    )}
-                  </Table.Column>
-                  <Table.Column id="concepto" className="min-w-60">
-                    Descripción
-                  </Table.Column>
-                  <Table.Column allowsSorting id="categoria" className="w-30">
-                    {({ sortDirection }) => (
-                      <SortableColumnHeader sortDirection={sortDirection}>
-                        Categoría
-                      </SortableColumnHeader>
-                    )}
-                  </Table.Column>
-                  <Table.Column allowsSorting id="monto" className="w-32.5">
-                    {({ sortDirection }) => (
-                      <SortableColumnHeader sortDirection={sortDirection}>
-                        Monto
-                      </SortableColumnHeader>
-                    )}
-                  </Table.Column>
-                  <Table.Column id="boleta" className="w-25 text-center">
-                    Boleta
-                  </Table.Column>
-                </Table.Header>
+                  <Table.Header>
+                    <Table.Column
+                      allowsSorting
+                      isRowHeader
+                      id="fecha"
+                      className="w-30"
+                    >
+                      {({ sortDirection }) => (
+                        <SortableColumnHeader sortDirection={sortDirection}>
+                          Fecha
+                        </SortableColumnHeader>
+                      )}
+                    </Table.Column>
+                    <Table.Column id="concepto" className="min-w-60">
+                      Descripción
+                    </Table.Column>
+                    <Table.Column allowsSorting id="categoria" className="w-30">
+                      {({ sortDirection }) => (
+                        <SortableColumnHeader sortDirection={sortDirection}>
+                          Categoría
+                        </SortableColumnHeader>
+                      )}
+                    </Table.Column>
+                    <Table.Column allowsSorting id="monto" className="w-32.5">
+                      {({ sortDirection }) => (
+                        <SortableColumnHeader sortDirection={sortDirection}>
+                          Monto
+                        </SortableColumnHeader>
+                      )}
+                    </Table.Column>
+                    <Table.Column id="boleta" className="w-25 text-center">
+                      Boleta
+                    </Table.Column>
+                  </Table.Header>
                   <Table.Body
                     items={paginated}
                     renderEmptyState={() => (
@@ -878,7 +863,11 @@ function ExpenseTable({
               )}
             </Modal.Body>
             <Modal.Footer>
-              <Button slot="close" variant="secondary" className="rounded-xl text-gray-900 dark:text-white">
+              <Button
+                slot="close"
+                variant="secondary"
+                className="rounded-xl text-gray-900 dark:text-white"
+              >
                 Cerrar
               </Button>
             </Modal.Footer>

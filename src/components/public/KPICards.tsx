@@ -30,7 +30,6 @@ export default function KPICards({
       : 0;
   const porcentajeDisponible = 100 - porcentajeGastado;
 
-  // Status/status text derived from percentages (memoized)
   const { statusColor, spentStatusText, availableStatusText } = useMemo(() => {
     const color =
       porcentajeGastado <= 40
@@ -47,11 +46,11 @@ export default function KPICards({
           : "text-rose-600 dark:text-rose-400";
 
     const available =
-        porcentajeDisponible >= 60
-          ? "text-emerald-600 dark:text-emerald-400"
-          : porcentajeDisponible >= 31
-            ? "text-amber-700 dark:text-amber-400"
-            : "text-rose-600 dark:text-rose-400";
+      porcentajeDisponible >= 60
+        ? "text-emerald-600 dark:text-emerald-400"
+        : porcentajeDisponible >= 31
+          ? "text-amber-700 dark:text-amber-400"
+          : "text-rose-600 dark:text-rose-400";
 
     return {
       statusColor: color,
@@ -66,11 +65,8 @@ export default function KPICards({
 
   return (
     <div className="h-full">
-      {/* Single integrated summary surface */}
       <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple p-6 sm:p-8 h-full flex flex-col">
-        {/* Content stacked vertically */}
         <div className="flex flex-col flex-1 justify-between gap-5 lg:justify-center">
-          {/* Hero metric: Total Gastado */}
           <div>
             <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-400 mb-1.5">
               Total Gastado
@@ -94,16 +90,19 @@ export default function KPICards({
               </span>
               <span>del presupuesto utilizado</span>
             </p>
-            {/* CSS-only animated progress bar (replaces motion.div) */}
+
             <div className="mt-3 h-1 w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
               <div
                 className={`h-full rounded-full ${statusColor} animate-bar-grow`}
-                style={{ "--bar-width": `${porcentajeGastado}%` } as React.CSSProperties}
+                style={
+                  {
+                    "--bar-width": `${porcentajeGastado}%`,
+                  } as React.CSSProperties
+                }
               />
             </div>
           </div>
 
-          {/* Sub-metrics: Total y Disponible */}
           <div className="flex items-end justify-between gap-4 pt-4 border-t border-gray-50 dark:border-gray-800">
             <div>
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-400 mb-1">
@@ -116,7 +115,9 @@ export default function KPICards({
                   className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-light font-heading"
                 />
               </p>
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Año académico 2026</p>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                Año académico 2026
+              </p>
             </div>
 
             <div>
