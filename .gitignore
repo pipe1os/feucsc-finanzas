@@ -39,8 +39,54 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-# heroui-agents-md
-.heroui-docs/
+
+# --- AI  ---
+AGENTS.md
+CLAUDE.md
 .vibeskills/
+.heroui-docs/
 docs/
 outputs/
+.opencode/
+.sisyphus
+.claude/
+.agents/
+.dgrep/
+opencode.json
+skills-lock.json
+
+# Certificates / keys
+*.key
+*.pfx
+*.p12
+*.crt
+*.cer
+*.csr
+*.jks
+*.keystore
+
+# SSH / cloud creds
+.ssh/
+**/.ssh/
+aws-credentials*
+.gcp/
+.azure/
+
+# Local DB / uploads / server runtime data
+data/
+db-data/
+uploads/
+storage/
+logs/
+tmp/
+temp/
+
+# Backups / dumps
+*.sql
+*.sqlite
+*.sqlite3
+*.dump
+*.bak
+*.backup
+*.gz
+*.zip

@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          // Update request cookies (for downstream server components)
+          // Update request cookies
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value),
           );
@@ -35,8 +35,6 @@ export async function middleware(request: NextRequest) {
     },
   );
 
-  // Refresh the session — this validates the JWT and refreshes expired tokens.
-  // IMPORTANT: Use getUser() not getSession() for server-side validation.
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -54,9 +52,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    // Only run on routes that actually need auth checking
-    "/admin/:path*",
-    "/login",
-  ],
+  matcher: ["/admin/:path*", "/login"],
 };

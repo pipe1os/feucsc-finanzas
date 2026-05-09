@@ -219,9 +219,7 @@ export default function ExpenseTrendChart({
   }, []);
 
   return (
-    <Card
-      className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple ring-0 h-full flex flex-col min-h-[320px] sm:min-h-[360px] lg:min-h-[300px]"
-    >
+    <Card className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-apple ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
       <CardHeader className="pb-6">
         <CardTitle className="text-base font-semibold text-gray-900 dark:text-white font-heading">
           Tendencia de Gastos
@@ -232,7 +230,10 @@ export default function ExpenseTrendChart({
       </CardHeader>
 
       <CardContent className="flex-1 flex flex-col min-h-0">
-        <div ref={chartRef} className="flex-1 w-full relative **:outline-none min-h-0">
+        <div
+          ref={chartRef}
+          className="flex-1 w-full relative **:outline-none min-h-0"
+        >
           <ChartContainer
             config={chartConfig}
             className="aspect-auto h-full w-full flex-1"
