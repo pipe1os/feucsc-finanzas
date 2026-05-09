@@ -27,7 +27,8 @@ The goal is that students should be able to quickly understand where the federat
 - Google sign-in (Supabase Auth)
 - Email allowlist (only approved accounts can access)
 - Manage expenses and categories
-- Upload receipt images to Cloudinary and attach them to expenses
+- Secure receipt uploads to Cloudinary
+- Receipt preview and deletion support
 
 ---
 
@@ -37,7 +38,41 @@ The goal is that students should be able to quickly understand where the federat
 - Supabase (Postgres + Auth)
 - Cloudinary (receipt storage)
 - SWR (admin data fetching/cache)
-- Tailwind + HeroUI
+- Tailwind CSS
+- HeroUI
+
+---
+
+## Security highlights
+
+The app uses multiple layers of protection for admin actions and file uploads.
+
+### Authentication & authorization
+
+- Google OAuth via Supabase Auth
+- Email allowlist enforced both client-side and server-side
+- Protected admin routes via `middleware.ts`
+- Server Actions require authenticated + authorized users
+
+### Secure uploads
+
+Receipt uploads are fully server-side.
+
+Security measures include:
+
+- Uploads never go directly from browser → Cloudinary
+- Cloudinary API secrets are never exposed to the client
+- Magic-byte file validation (not only MIME type)
+- File type restrictions (JPEG, PNG, GIF, WebP)
+- Max upload size: 5MB
+- Cloudinary folder restriction (`comprobantes/`)
+- Signed uploads using Cloudinary SDK
+
+### Secure deletions
+
+- Receipt deletion requires authentication
+- Only assets inside the configured Cloudinary folder can be deleted
+- Cloudinary deletions are server-side signed requests
 
 ---
 
@@ -45,19 +80,20 @@ The goal is that students should be able to quickly understand where the federat
 
 - `src/app/` — routes (public + admin)
 - `src/app/actions/` — Server Actions for DB writes + uploads
-- `src/lib/` — Supabase clients, auth helpers, small utilities
+- `src/lib/` — Supabase clients, auth helpers, Cloudinary config, utilities
 - `src/components/` — UI components
+- `src/hooks/` — SWR data hooks
 
 ---
 
 ## Routes
 
-Public:
+### Public
 
 - `/` — dashboard
 - `/gastos` — all expenses
 
-Auth/Admin:
+### Auth/Admin
 
 - `/login` — Google OAuth entry
 - `/auth/callback` — OAuth callback
@@ -71,22 +107,30 @@ The app expects two tables:
 
 ### `gastos`
 
-- `id` (uuid)
-- `fecha` (`YYYY-MM-DD`)
-- `descripcion`
-- `categoria`
-- `monto`
-- `comprobante_url` (nullable)
-- `creado_el` (timestamp; used for “last sync”)
+| Column | Type |
+|---|---|
+| `id` | uuid |
+| `fecha` | `YYYY-MM-DD` |
+| `descripcion` | text |
+| `categoria` | text |
+| `monto` | numeric |
+| `comprobante_url` | nullable text |
+| `creado_el` | timestamp |
+
+`creado_el` is used for "last sync" indicators and cache invalidation.
+
+---
 
 ### `categorias`
 
-- `id` (uuid)
-- `nombre` (unique)
-- `color` (optional hex `#RRGGBB`)
-- `creado_el`
+| Column | Type |
+|---|---|
+| `id` | uuid |
+| `nombre` | unique text |
+| `color` | optional hex `#RRGGBB` |
+| `creado_el` | timestamp |
 
-When you delete a category, existing expenses are reassigned to `N/A`.
+When deleting a category, existing expenses are reassigned to `N/A`.
 
 ---
 
@@ -95,62 +139,139 @@ When you delete a category, existing expenses are reassigned to `N/A`.
 There are multiple guardrails (by design):
 
 1. `middleware.ts` blocks `/admin/*` if there is no session or the email is not allowed.
-2. `src/app/admin/layout.tsx` checks the session client-side as a second line of defense.
-3. Server Actions require an authenticated session **and** an allowlisted email before mutating anything.
+2. `src/app/admin/layout.tsx` validates the session client-side as a secondary check.
+3. Server Actions require:
+   - authenticated session
+   - allowlisted email
+   - valid request payloads
 
-The allowlist lives in `src/lib/auth.ts` (`AUTHORIZED_EMAILS`).
+The allowlist lives in:
+
+```txt
+src/lib/auth.ts
+```
+
+via the `AUTHORIZED_EMAILS` constant.
 
 ---
 
 ## Receipt uploads (Cloudinary)
 
-Uploads are done server-side.
+Uploads are processed entirely server-side using the Cloudinary SDK.
 
-- Only images are accepted (validated using magic bytes + MIME type)
-- Max size: 5MB
-- The returned Cloudinary `secure_url` is stored in `gastos.comprobante_url`
+### Upload flow
 
-On expense deletion, the app attempts to delete the Cloudinary image as best effort.
+```txt
+Browser → Next.js Server Action → Cloudinary
+```
+
+The browser never receives:
+- Cloudinary API secret
+- Signed upload credentials
+
+### Upload validations
+
+Before uploading, the server validates:
+
+- Authentication
+- File size
+- MIME type
+- Magic bytes / file signatures
+
+Allowed image formats:
+
+- JPEG
+- PNG
+- GIF
+- WebP
+
+Maximum size:
+
+```txt
+5 MB
+```
+
+Uploaded files are stored inside:
+
+```txt
+comprobantes/
+```
+
+in Cloudinary.
+
+The resulting `secure_url` is stored in:
+
+```txt
+gastos.comprobante_url
+```
+
+---
+
+## Receipt deletion
+
+When deleting an expense, the app attempts to delete the corresponding Cloudinary image as best effort.
+
+Deletion protections:
+
+- Auth required
+- Server-side signed requests
+- Folder-restricted deletion (`comprobantes/` only)
 
 ---
 
 ## Environment variables
 
-Create `.env.local` in `feucsc-finanzas/`.
+Create:
 
-Required:
+```txt
+.env.local
+```
 
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY` (server-only)
-- `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`
-
-Optional (depending on your Cloudinary setup):
-
-- `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET`
-- `CLOUDINARY_API_KEY` (server-only; required for Cloudinary delete)
-- `CLOUDINARY_API_SECRET` (server-only; required for Cloudinary delete)
-
-App config:
-
-- `NEXT_PUBLIC_PRESUPUESTO_TOTAL` (defaults to `19972000`)
+inside the project root.
 
 ---
 
-## Run locally
+### Required
 
-```/dev/null/terminal
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+SUPABASE_SERVICE_ROLE_KEY=
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
+
+---
+
+### Optional app config
+
+```env
+NEXT_PUBLIC_PRESUPUESTO_TOTAL=19972000
+```
+
+---
+
+## Local development
+
+```bash
 pnpm install
 pnpm dev
 ```
 
-Then open http://localhost:3000.
+Then open:
+
+```txt
+http://localhost:3000
+```
 
 ---
 
-## Build
+## Production build
 
-```/dev/null/terminal
+```bash
 pnpm build
 pnpm start
 ```
@@ -159,5 +280,8 @@ pnpm start
 
 ## Notes
 
-- Public pages use ISR (revalidated periodically) and are also revalidated after admin writes.
+- Public pages use ISR and are revalidated after admin writes.
 - Security headers and CSP are configured in `next.config.ts`.
+- Cloudinary uploads use signed server-side uploads only.
+- Upload presets are no longer required.
+- The project intentionally favors simple architecture and explicit server-side validation.
