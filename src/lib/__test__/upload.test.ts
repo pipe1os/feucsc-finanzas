@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { UploadApiResponse } from "cloudinary";
 
 vi.mock("@/lib/supabase-auth", () => ({
   createAuthClient: vi.fn(),
@@ -38,13 +39,13 @@ beforeEach(() => {
         data: { user: { email: "admin@feucsc.cl" } },
       }),
     },
-  } as any);
+  } as unknown as Awaited<ReturnType<typeof createAuthClient>>);
 
   vi.mocked(isAuthorizedEmail).mockResolvedValue(true);
 
   vi.mocked(cloudinary.uploader.upload).mockResolvedValue({
     secure_url: "https://res.cloudinary.com/test/comprobantes/test.jpg",
-  } as any);
+  } as unknown as UploadApiResponse);
 });
 
 describe("uploadComprobanteAction", () => {
@@ -89,7 +90,7 @@ describe("uploadComprobanteAction", () => {
       auth: {
         getUser: vi.fn().mockResolvedValue({ data: { user: null } }),
       },
-    } as any);
+    } as unknown as Awaited<ReturnType<typeof createAuthClient>>);
 
     const file = makeFile(JPEG_BYTES);
     const formData = new FormData();
@@ -121,7 +122,9 @@ describe("uploadComprobanteAction", () => {
   });
 
   it(" error si Cloudinary no retorna secure_url", async () => {
-    vi.mocked(cloudinary.uploader.upload).mockResolvedValue({} as any);
+    vi.mocked(cloudinary.uploader.upload).mockResolvedValue(
+      {} as unknown as UploadApiResponse,
+    );
 
     const file = makeFile(JPEG_BYTES);
     const formData = new FormData();

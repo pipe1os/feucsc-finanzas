@@ -21,7 +21,7 @@ beforeEach(() => {
         }),
       }),
     }),
-  } as any);
+  } as unknown as ReturnType<typeof createClient>);
 });
 
 describe("isAuthorizedEmail", () => {

@@ -107,7 +107,9 @@ interface ManualTooltipProps {
 function ManualTooltip({ data, position, onClose }: ManualTooltipProps) {
   const tooltipRef = useRef<HTMLDivElement>(null);
   const stableOnClose = useRef(onClose);
-  stableOnClose.current = onClose;
+  useEffect(() => {
+    stableOnClose.current = onClose;
+  });
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent | TouchEvent) => {
