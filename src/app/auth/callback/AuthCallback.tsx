@@ -21,7 +21,7 @@ export default function AuthCallback() {
     const verifyAndRedirect = async (email: string | undefined) => {
       if (!mounted) return;
 
-      if (!isAuthorizedEmail(email)) {
+      if (!(await isAuthorizedEmail(email))) {
         setStatus("Cuenta no autorizada. Redirigiendo...");
         await supabase.auth.signOut();
         redirectTo("/login?error=unauthorized");

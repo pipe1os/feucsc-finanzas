@@ -38,7 +38,7 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   if (request.nextUrl.pathname.startsWith("/admin")) {
-    if (!user || !isAuthorizedEmail(user.email)) {
+    if (!user || !(await isAuthorizedEmail(user.email))) {
       return NextResponse.redirect(
         new URL("/login?error=unauthorized", request.url),
       );
