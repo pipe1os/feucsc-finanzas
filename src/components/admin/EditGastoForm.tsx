@@ -45,7 +45,7 @@ export default function EditGastoForm({
   const [categoria, setCategoria] = useState(gasto.categoria);
   const [monto, setMonto] = useState(String(gasto.monto));
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [existingUrl, setExistingUrl] = useState<string | null>(gasto.comprobante_url || null);
+  const [existingUrl] = useState<string | null>(gasto.comprobante_url || null);
   const [imageMarkedForDeletion, setImageMarkedForDeletion] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,8 +55,7 @@ export default function EditGastoForm({
       setCategoria(cat);
       if (!categorias.includes(cat)) {
         const usedColors = categoriasDB
-          .map((c) => c.color)
-          .filter(Boolean) as string[];
+          .flatMap((c) => c.color ? [c.color] : []) as string[];
         const newColor = getNextPaletteColor(usedColors);
         try {
           await createCategoria(cat, newColor);
@@ -66,7 +65,7 @@ export default function EditGastoForm({
         }
       }
     },
-    [categorias, categoriasDB]
+    [categorias, categoriasDB, mutateCategorias],
   );
 
   const handleSubmit = async () => {
@@ -131,14 +130,18 @@ export default function EditGastoForm({
           <Label>Fecha</Label>
           <Input
             value={fecha}
-            className="h-10 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60"
+            className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60"
           />
         </TextField>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label
+            htmlFor="edit-gasto-categoria"
+            className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          >
             Categoría
           </label>
           <CategorySelect
+            id="edit-gasto-categoria"
             categorias={categorias}
             value={categoria}
             onChange={handleCategoriaChange}
@@ -156,7 +159,7 @@ export default function EditGastoForm({
         <Input
           placeholder="Descripción del gasto"
           value={descripcion}
-          className="h-10 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 placeholder:text-gray-400"
+          className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 placeholder:text-zinc-400"
         />
       </TextField>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -171,7 +174,7 @@ export default function EditGastoForm({
           <Input
             placeholder="850000"
             value={monto}
-            className="h-10 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 placeholder:text-gray-400"
+            className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 placeholder:text-zinc-400"
           />
         </TextField>
         <ComprobanteUpload
@@ -191,18 +194,18 @@ export default function EditGastoForm({
           </Alert.Content>
         </Alert>
       )}
-      <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800/50 mt-4">
+      <div className="flex justify-end gap-3 pt-4 border-t border-zinc-100 dark:border-zinc-800/50 mt-4">
         <Button
           variant="secondary"
           onPress={onCancel}
-          className="cursor-pointer text-gray-700 dark:text-gray-200"
+          className="cursor-pointer text-zinc-700 dark:text-zinc-200"
         >
           Cancelar
         </Button>
         <Button
           isDisabled={submitting}
           onPress={handleSubmit}
-          className="bg-gray-900 text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 cursor-pointer rounded-xl px-6 font-medium shadow-sm"
+          className="bg-zinc-900 text-white dark:bg-white dark:text-black hover:bg-zinc-800 dark:hover:bg-zinc-200 cursor-pointer rounded-xl px-6 font-medium shadow-sm"
         >
           {submitting ? "Guardando..." : "Guardar cambios"}
         </Button>

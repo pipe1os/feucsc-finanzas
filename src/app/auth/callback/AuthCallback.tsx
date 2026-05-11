@@ -7,22 +7,22 @@ import { supabase } from "@/lib/supabase";
 import { isAuthorizedEmail } from "@/lib/auth";
 
 export default function AuthCallback() {
-  const router = useRouter();
-  const [status, setStatus] = useState("Verificando acceso...");
+  const { replace } = useRouter();
+  const [status, setStatus] = useState("Verificando acceso…");
 
   useEffect(() => {
     let mounted = true;
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     const redirectTo = (path: string) => {
-      if (mounted) router.replace(path);
+      if (mounted) replace(path);
     };
 
     const verifyAndRedirect = async (email: string | undefined) => {
       if (!mounted) return;
 
       if (!(await isAuthorizedEmail(email))) {
-        setStatus("Cuenta no autorizada. Redirigiendo...");
+        setStatus("Cuenta no autorizada. Redirigiendo…");
         await supabase.auth.signOut();
         redirectTo("/login?error=unauthorized");
         return;
@@ -59,7 +59,7 @@ export default function AuthCallback() {
       subscription.unsubscribe();
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [router]);
+  }, [replace]);
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-transparent">

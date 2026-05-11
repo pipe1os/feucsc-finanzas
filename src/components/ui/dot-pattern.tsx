@@ -23,6 +23,7 @@ export function DotPattern({
   glow: _glow,
   ...props
 }: DotPatternProps) {
+  void _glow;
   const id = "dot-pattern-bg";
 
   return (

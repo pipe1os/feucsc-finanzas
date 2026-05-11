@@ -85,10 +85,12 @@ export default async function Home() {
   let lastSyncISO: string | null = null;
   if (data.length > 0) {
     const timestamps = data
-      .map((g) => g.creado_el || g.fecha)
-      .filter(Boolean)
-      .map((ts: string) => new Date(ts).getTime())
-      .filter((t: number) => !isNaN(t));
+      .flatMap((g) => {
+        const ts = g.creado_el || g.fecha;
+        if (!ts) return [];
+        const t = new Date(ts).getTime();
+        return isNaN(t) ? [] : [t];
+      });
     if (timestamps.length > 0) {
       lastSyncISO = new Date(Math.max(...timestamps)).toISOString();
     }
@@ -111,10 +113,10 @@ export default async function Home() {
       <header className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
+            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white font-heading">
               Transparencia Financiera
             </h1>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 max-w-xl">
+            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400 max-w-xl">
               Presupuesto, gastos y comprobantes de la Federación de Estudiantes
               UCSC.
             </p>

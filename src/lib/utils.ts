@@ -5,12 +5,20 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+const clpFormatter = new Intl.NumberFormat("es-CL", {
+  style: "currency",
+  currency: "CLP",
+  minimumFractionDigits: 0,
+});
+
+const shortDateFormatter = new Intl.DateTimeFormat("es-CL", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+});
+
 export function formatCLP(monto: number): string {
-  return new Intl.NumberFormat("es-CL", {
-    style: "currency",
-    currency: "CLP",
-    minimumFractionDigits: 0,
-  }).format(monto);
+  return clpFormatter.format(monto);
 }
 
 export function parseISODate(dateStr: string | null | undefined): Date | null {
@@ -23,9 +31,5 @@ export function parseISODate(dateStr: string | null | undefined): Date | null {
 export function formatDate(dateStr: string): string {
   const date = parseISODate(dateStr);
   if (!date) return "—";
-  return new Intl.DateTimeFormat("es-CL", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  }).format(date);
+  return shortDateFormatter.format(date);
 }

@@ -79,30 +79,30 @@ export default function FAQContent() {
           className="animate-fade-in-up opacity-0"
           style={{ animationDelay: `${0.1 + catIndex * 0.08}s` }}
         >
-          <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-3 px-1">
+          <p className="text-xs font-semibold tracking-widest text-zinc-400 uppercase mb-3 px-1">
             {category.title}
           </p>
 
-          <div className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden">
+          <div className="rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-apple overflow-hidden">
             <Accordion
               allowsMultipleExpanded
               className="w-full **:data-[slot=separator]:opacity-[0.04]"
             >
-              {category.items.map((item, index) => (
-                <Accordion.Item key={index}>
+              {category.items.map((item) => (
+                <Accordion.Item key={item.title}>
                   <Accordion.Heading>
-                    <Accordion.Trigger className="px-5! py-4! text-left hover:bg-gray-50/50 dark:hover:bg-white/2 transition-colors duration-150">
-                      <span className="text-[15px] font-medium tracking-tight text-gray-900 dark:text-white pr-4">
+                    <Accordion.Trigger className="px-5! py-4! text-left hover:bg-zinc-50/50 dark:hover:bg-white/2 transition-colors duration-150">
+                      <span className="text-[15px] font-medium tracking-tight text-zinc-900 dark:text-white pr-4">
                         {item.title}
                       </span>
-                      <Accordion.Indicator className="text-gray-400 [&>svg]:size-5 shrink-0">
+                      <Accordion.Indicator className="text-zinc-400 [&>svg]:size-5 shrink-0">
                         <ChevronDown />
                       </Accordion.Indicator>
                     </Accordion.Trigger>
                   </Accordion.Heading>
                   <Accordion.Panel>
                     <Accordion.Body className="px-5! pb-5! pt-0!">
-                      <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed pr-4">
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed pr-4">
                         {item.content}
                       </p>
                     </Accordion.Body>

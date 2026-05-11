@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { DotPattern } from "@/components/ui/dot-pattern";
 import SidebarWrapper from "@/components/SidebarWrapper";
 import MainWrapper from "@/components/MainWrapper";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "FEUCSC - Federacion de Estudiantes UCSC",
@@ -49,7 +50,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         {}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem("theme"),d=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d){var h=document.documentElement;h.classList.add("dark");h.style.background="#141414";h.style.colorScheme="dark";var o=new MutationObserver(function(){if(!h.classList.contains("dark")){h.classList.add("dark")}});o.observe(h,{attributes:true,attributeFilter:["class"]});setTimeout(function(){o.disconnect()},3000)}}catch(e){}})()` }} />
+        <Script id="theme-init" strategy="beforeInteractive">{`(function(){try{var t=localStorage.getItem("theme"),d=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d){var h=document.documentElement;h.classList.add("dark");h.style.background="#141414";h.style.colorScheme="dark";var o=new MutationObserver(function(){if(!h.classList.contains("dark")){h.classList.add("dark")}});o.observe(h,{attributes:true,attributeFilter:["class"]});setTimeout(function(){o.disconnect()},3000)}}catch(e){}})()`}</Script>
         <style>{`body{background:transparent}html{background:#f5f5f7;color-scheme:light}html.dark{background:#141414;color-scheme:dark;color:#f5f5f7}@media(prefers-color-scheme:dark){html:not(.light){background:#141414;color-scheme:dark;color:#f5f5f7}}`}</style>
       </head>
       <body className="antialiased bg-transparent text-foreground font-sans">

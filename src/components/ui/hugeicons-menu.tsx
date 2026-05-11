@@ -1,9 +1,9 @@
 'use client';
 
 import type { Variants } from 'motion/react';
-import type { HTMLAttributes } from 'react';
-import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
-import { motion, useAnimation } from 'motion/react';
+import type { HTMLAttributes, Ref } from 'react';
+import { useCallback, useImperativeHandle, useRef } from 'react';
+import { LazyMotion, m, useAnimation, domAnimation } from 'motion/react';
 
 import { cn } from '@/lib/utils';
 
@@ -14,6 +14,7 @@ export interface HugeiconsMenuIconHandle {
 
 interface HugeiconsMenuIconProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
+  ref?: Ref<HugeiconsMenuIconHandle>;
 }
 
 const LINE_VARIANTS: Variants = {
@@ -34,10 +35,7 @@ const LINE_VARIANTS: Variants = {
   }),
 };
 
-const HugeiconsMenuIcon = forwardRef<
-  HugeiconsMenuIconHandle,
-  HugeiconsMenuIconProps
->(({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
+function HugeiconsMenuIcon({ onMouseEnter, onMouseLeave, className, size = 28, ref, ...props }: HugeiconsMenuIconProps) {
   const controls = useAnimation();
   const isControlledRef = useRef(false);
 
@@ -79,43 +77,43 @@ const HugeiconsMenuIcon = forwardRef<
       onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <motion.path
-          d="M4 5L20 5"
-          variants={LINE_VARIANTS}
-          animate={controls}
-          custom={1}
-          style={{ transformOrigin: '12px 5px' }}
-        />
-        <motion.path
-          d="M4 12L20 12"
-          variants={LINE_VARIANTS}
-          animate={controls}
-          custom={2}
-          style={{ transformOrigin: '12px 12px' }}
-        />
-        <motion.path
-          d="M4 19L20 19"
-          variants={LINE_VARIANTS}
-          animate={controls}
-          custom={3}
-          style={{ transformOrigin: '12px 19px' }}
-        />
-      </svg>
+      <LazyMotion features={domAnimation}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <m.path
+            d="M4 5L20 5"
+            variants={LINE_VARIANTS}
+            animate={controls}
+            custom={1}
+            style={{ transformOrigin: '12px 5px' }}
+          />
+          <m.path
+            d="M4 12L20 12"
+            variants={LINE_VARIANTS}
+            animate={controls}
+            custom={2}
+            style={{ transformOrigin: '12px 12px' }}
+          />
+          <m.path
+            d="M4 19L20 19"
+            variants={LINE_VARIANTS}
+            animate={controls}
+            custom={3}
+            style={{ transformOrigin: '12px 19px' }}
+          />
+        </svg>
+      </LazyMotion>
     </div>
   );
-});
-
-HugeiconsMenuIcon.displayName = 'HugeiconsMenuIcon';
+}
 
 export { HugeiconsMenuIcon };

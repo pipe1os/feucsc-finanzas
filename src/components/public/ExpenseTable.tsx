@@ -309,7 +309,7 @@ function ExpenseTable({
   }, [searchQuery, selectedMonth, selectedCategory, transacciones]);
 
   const sortedItems = useMemo(() => {
-    return [...filtered].sort((a, b) => {
+    return filtered.toSorted((a, b) => {
       const col = sortDescriptor.column as keyof typeof a;
       const first = a[col];
       const second = b[col];
@@ -379,14 +379,14 @@ function ExpenseTable({
   return (
     <>
       <div
-        className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-white dark:bg-gray-900 shadow-apple overflow-hidden animate-fade-in-up opacity-0"
+        className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-900 shadow-apple overflow-hidden animate-fade-in-up opacity-0"
         style={{ animationDelay: "0.2s" }}
       >
         <div className="p-6 pb-0">
-          <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
             Gastos Recientes
           </h3>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+          <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">
             {filtered.length} {filtered.length === 1 ? "registro" : "registros"}{" "}
             encontrados
           </p>
@@ -394,7 +394,7 @@ function ExpenseTable({
 
         <div className="flex flex-wrap items-center gap-3 px-6 pt-3">
           <div className="relative w-full sm:w-56">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
               <SearchIcon />
             </div>
             <input
@@ -402,10 +402,10 @@ function ExpenseTable({
               placeholder="Buscar gasto..."
               defaultValue=""
               onChange={handleSearchChange}
-              className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 py-2 pl-9 pr-4
-                         text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500
+              className="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 py-2 pl-9 pr-4
+                         text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500
                          outline-hidden transition-all duration-200
-                         focus:border-red-300 dark:focus:border-red-500/50 focus:bg-white dark:focus:bg-gray-800 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-500/20 h-9"
+                         focus:border-red-300 dark:focus:border-red-500/50 focus:bg-white dark:focus:bg-zinc-800 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-500/20 h-9"
               id="search-transactions"
             />
           </div>
@@ -424,7 +424,7 @@ function ExpenseTable({
               }
             }}
           >
-            <Select.Trigger className="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-gray-300">
+            <Select.Trigger className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-zinc-300">
               <Select.Value>
                 {({ isPlaceholder, state }) => {
                   if (isPlaceholder) return "Mes: Todos";
@@ -434,9 +434,9 @@ function ExpenseTable({
                   return `Mes: ${found?.label ?? "Todos"}`;
                 }}
               </Select.Value>
-              <Select.Indicator className="text-gray-400 dark:text-gray-500" />
+              <Select.Indicator className="text-zinc-400 dark:text-zinc-500" />
             </Select.Trigger>
-            <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-gray-800 dark:bg-gray-900 min-w-48">
+            <Select.Popover className="rounded-xl shadow-apple-lg border border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 min-w-48">
               <ListBox>
                 {MONTH_OPTIONS.map((m) => (
                   <ListBox.Item key={m.id} id={m.id} textValue={m.label}>
@@ -465,7 +465,7 @@ function ExpenseTable({
               }
             }}
           >
-            <Select.Trigger className="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-gray-300">
+            <Select.Trigger className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-zinc-300">
               <Select.Value>
                 {({ isPlaceholder, state }) => {
                   if (isPlaceholder) return "Categoría: Todas";
@@ -474,9 +474,9 @@ function ExpenseTable({
                   return `Categoría: ${String(key ?? "Todas")}`;
                 }}
               </Select.Value>
-              <Select.Indicator className="text-gray-400 dark:text-gray-500" />
+              <Select.Indicator className="text-zinc-400 dark:text-zinc-500" />
             </Select.Trigger>
-            <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-gray-800 dark:bg-gray-900 min-w-56">
+            <Select.Popover className="rounded-xl shadow-apple-lg border border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 min-w-56">
               <ListBox>
                 <ListBox.Item id="all" textValue="Todas las categorías">
                   Todas las categorías
@@ -510,14 +510,14 @@ function ExpenseTable({
               items={paginated}
               renderEmptyState={() => (
                 <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-                  <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 border border-gray-100 dark:border-gray-700 shadow-xs">
+                  <div className="flex size-12 items-center justify-center rounded-full bg-zinc-50 dark:bg-zinc-800 text-zinc-400 border border-zinc-100 dark:border-zinc-700 shadow-xs">
                     <SearchIcon />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                    <span className="text-sm font-semibold text-zinc-900 dark:text-white">
                       Sin resultados
                     </span>
-                    <span className="text-xs text-gray-500 mt-0.5">
+                    <span className="text-xs text-zinc-500 mt-0.5">
                       {hasActiveFilters
                         ? "No hay transacciones con los filtros seleccionados."
                         : "La búsqueda no arrojó coincidencias."}
@@ -533,14 +533,14 @@ function ExpenseTable({
                     key={txn.id}
                     id={txn.id}
                     textValue={txn.concepto}
-                    className="rounded-none px-0 py-3 border-b border-gray-100 dark:border-gray-800 last:border-b-0"
+                    className="rounded-none px-0 py-3 border-b border-zinc-100 dark:border-zinc-800 last:border-b-0"
                   >
                     <div className="flex flex-col gap-1 w-full">
                       <div className="flex items-start justify-between gap-2">
-                        <span className="text-sm font-medium text-gray-900 dark:text-white line-clamp-2">
+                        <span className="text-sm font-medium text-zinc-900 dark:text-white line-clamp-2">
                           {txn.concepto}
                         </span>
-                        <span className="text-sm font-semibold text-gray-900 dark:text-white tabular-nums shrink-0">
+                        <span className="text-sm font-semibold text-zinc-900 dark:text-white tabular-nums shrink-0">
                           {formatCLP(txn.monto)}
                         </span>
                       </div>
@@ -554,7 +554,7 @@ function ExpenseTable({
                         >
                           {txn.categoria}
                         </span>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-zinc-500">
                           {formatDate(txn.fecha)}
                         </span>
                         {isNew(txn.creado_el) && (
@@ -579,7 +579,7 @@ function ExpenseTable({
                             Ver comprobante
                           </button>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-xs text-gray-400">
+                          <span className="inline-flex items-center gap-1 text-xs text-zinc-400">
                             <span className="size-3.5">
                               <EyeOffIcon />
                             </span>
@@ -595,7 +595,7 @@ function ExpenseTable({
 
             {totalPages > 0 && (
               <div className="mt-4 flex flex-col gap-3">
-                <span className="text-xs text-gray-500 text-center">
+                <span className="text-xs text-zinc-500 text-center">
                   {start} a {end} de {filtered.length} resultados
                 </span>
                 <Pagination size="sm">
@@ -612,7 +612,7 @@ function ExpenseTable({
                         <Pagination.PreviousIcon />
                       </Pagination.Previous>
                     </Pagination.Item>
-                    <span className="text-sm text-gray-600 dark:text-gray-300">
+                    <span className="text-sm text-zinc-600 dark:text-zinc-300">
                       {page} / {totalPages}
                     </span>
                     <Pagination.Item>
@@ -680,14 +680,14 @@ function ExpenseTable({
                     items={paginated}
                     renderEmptyState={() => (
                       <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-                        <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 border border-gray-100 dark:border-gray-700 shadow-xs">
+                        <div className="flex size-12 items-center justify-center rounded-full bg-zinc-50 dark:bg-zinc-800 text-zinc-400 border border-zinc-100 dark:border-zinc-700 shadow-xs">
                           <SearchIcon />
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                          <span className="text-sm font-semibold text-zinc-900 dark:text-white">
                             Sin resultados
                           </span>
-                          <span className="text-xs text-gray-500 mt-0.5">
+                          <span className="text-xs text-zinc-500 mt-0.5">
                             {hasActiveFilters
                               ? "No hay transacciones con los filtros seleccionados."
                               : "La búsqueda no arrojó coincidencias."}
@@ -701,13 +701,13 @@ function ExpenseTable({
                       return (
                         <Table.Row key={txn.id}>
                           <Table.Cell>
-                            <span className="text-sm text-gray-600 whitespace-nowrap">
+                            <span className="text-sm text-zinc-600 whitespace-nowrap">
                               {formatDate(txn.fecha)}
                             </span>
                           </Table.Cell>
                           <Table.Cell>
                             <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-gray-900 dark:text-white">
+                              <span className="text-sm font-medium text-zinc-900 dark:text-white">
                                 {txn.concepto}
                               </span>
                               {isNew(txn.creado_el) && (
@@ -729,7 +729,7 @@ function ExpenseTable({
                             </span>
                           </Table.Cell>
                           <Table.Cell>
-                            <span className="text-sm font-semibold text-gray-900 dark:text-white tabular-nums">
+                            <span className="text-sm font-semibold text-zinc-900 dark:text-white tabular-nums">
                               {formatCLP(txn.monto)}
                             </span>
                           </Table.Cell>
@@ -751,18 +751,18 @@ function ExpenseTable({
                                       <EyeIcon />
                                     </button>
                                   </Tooltip.Trigger>
-                                  <Tooltip.Content className="bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
+                                  <Tooltip.Content className="bg-zinc-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
                                     <p>Ver comprobante</p>
                                   </Tooltip.Content>
                                 </Tooltip>
                               ) : (
                                 <Tooltip delay={0}>
                                   <Tooltip.Trigger>
-                                    <span className="inline-flex items-center justify-center size-8 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-400 cursor-not-allowed border border-gray-100 dark:border-gray-700">
+                                    <span className="inline-flex items-center justify-center size-8 rounded-lg bg-zinc-50 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed border border-zinc-100 dark:border-zinc-700">
                                       <EyeOffIcon />
                                     </span>
                                   </Tooltip.Trigger>
-                                  <Tooltip.Content className="bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
+                                  <Tooltip.Content className="bg-zinc-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
                                     <p>Comprobante pendiente</p>
                                   </Tooltip.Content>
                                 </Tooltip>
@@ -798,7 +798,7 @@ function ExpenseTable({
                       {visiblePages.map((p, idx) =>
                         p === "ellipsis" ? (
                           <Pagination.Item key={`ellipsis-${idx}`}>
-                            <span className="px-2 text-gray-400 text-sm select-none">
+                            <span className="px-2 text-zinc-400 text-sm select-none">
                               …
                             </span>
                           </Pagination.Item>
@@ -842,16 +842,16 @@ function ExpenseTable({
         }}
       >
         <Modal.Container placement="center" size="lg">
-          <Modal.Dialog className="sm:max-w-2xl bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-apple-lg">
+          <Modal.Dialog className="sm:max-w-2xl bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-apple-lg">
             <Modal.CloseTrigger />
             <Modal.Header>
-              <Modal.Heading className="text-sm font-semibold text-gray-900 dark:text-white">
+              <Modal.Heading className="text-sm font-semibold text-zinc-900 dark:text-white">
                 {lightboxImage?.concepto ?? "Comprobante"}
               </Modal.Heading>
             </Modal.Header>
             <Modal.Body className="p-4">
               {lightboxImage && (
-                <div className="flex justify-center rounded-xl bg-gray-50 dark:bg-gray-800 p-4">
+                <div className="flex justify-center rounded-xl bg-zinc-50 dark:bg-zinc-800 p-4">
                   <Image
                     src={lightboxImage.src}
                     alt={`Comprobante: ${lightboxImage.concepto}`}
@@ -866,7 +866,7 @@ function ExpenseTable({
               <Button
                 slot="close"
                 variant="secondary"
-                className="rounded-xl text-gray-900 dark:text-white"
+                className="rounded-xl text-zinc-900 dark:text-white"
               >
                 Cerrar
               </Button>

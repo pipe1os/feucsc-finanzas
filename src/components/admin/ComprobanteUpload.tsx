@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Label } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { UploadIcon, EyeIcon } from "./Icons";
 
 interface ComprobanteUploadProps {
@@ -26,16 +26,16 @@ export default function ComprobanteUpload({
       ? "Imagen adjunta"
       : "(sin archivo seleccionado)";
 
-
   if (existingUrl !== undefined) {
-
     if (!existingUrl || isMarkedForDeletion) {
       return (
         <div className="flex flex-col gap-1.5 h-full justify-end">
-          <Label>Comprobante</Label>
+          <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            Comprobante
+          </span>
           <div className="flex items-center gap-3">
             <label
-              className={`flex items-center justify-center gap-2 px-4 h-10 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 cursor-pointer text-sm font-medium shrink-0
+              className={`flex items-center justify-center gap-2 px-4 h-10 rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 cursor-pointer text-sm font-medium shrink-0
               ${selectedFile ? "opacity-50 cursor-not-allowed" : "hover:border-red-400 hover:text-red-600 transition-colors"}`}
             >
               <UploadIcon />
@@ -52,14 +52,14 @@ export default function ComprobanteUpload({
               />
             </label>
             {selectedFile && (
-              <div className="flex items-center gap-2 text-sm text-gray-500 overflow-hidden">
+              <div className="flex items-center gap-2 text-sm text-zinc-500 overflow-hidden">
                 <span className="truncate max-w-37.5 sm:max-w-50">
                   {selectedFile.name}
                 </span>
                 <button
                   type="button"
                   onClick={() => setSelectedFile(null)}
-                  className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                  className="text-zinc-400 hover:text-red-500 transition-colors p-1"
                   title="Eliminar archivo"
                 >
                   ✕
@@ -71,22 +71,23 @@ export default function ComprobanteUpload({
       );
     }
 
-
     return (
       <div className="flex flex-col gap-2 h-full justify-end">
-        <Label>Comprobante</Label>
+        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          Comprobante
+        </span>
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => onViewImage?.(existingUrl)}
-            className="inline-flex items-center justify-center size-8 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+            className="inline-flex items-center justify-center size-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
             aria-label="Ver imagen actual"
           >
             <EyeIcon />
           </button>
           <Button
             variant="ghost"
-            className="flex-1 bg-gray-200/50 dark:bg-gray-800/50 h-10 text-red-600 hover:text-red-700"
+            className="flex-1 bg-zinc-200/50 dark:bg-zinc-800/50 h-10 text-red-600 hover:text-red-700"
             onPress={() => onDeleteExisting?.()}
           >
             Eliminar imagen
@@ -96,15 +97,14 @@ export default function ComprobanteUpload({
     );
   }
 
-
   return (
     <div className="flex flex-col gap-1.5 h-full justify-end">
-      <label className="text-sm font-medium text-gray-900 dark:text-gray-100">
+      <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
         Comprobante
-      </label>
+      </span>
       <div className="flex items-center gap-3">
         <label
-          className={`flex items-center justify-center gap-2 px-4 h-10 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 cursor-pointer text-sm font-medium shrink-0
+          className={`flex items-center justify-center gap-2 px-4 h-10 rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 cursor-pointer text-sm font-medium shrink-0
           ${selectedFile ? "opacity-50 cursor-not-allowed" : "hover:border-red-400 hover:text-red-600 transition-colors"}`}
         >
           <UploadIcon />
@@ -121,15 +121,13 @@ export default function ComprobanteUpload({
           />
         </label>
 
-        <div className="flex items-center gap-2 text-sm text-gray-500 overflow-hidden">
-          <span className="truncate max-w-37.5 sm:max-w-50">
-            {displayText}
-          </span>
+        <div className="flex items-center gap-2 text-sm text-zinc-500 overflow-hidden">
+          <span className="truncate max-w-37.5 sm:max-w-50">{displayText}</span>
           {selectedFile && (
             <button
               type="button"
               onClick={() => setSelectedFile(null)}
-              className="text-gray-400 hover:text-red-500 transition-colors p-1"
+              className="text-zinc-400 hover:text-red-500 transition-colors p-1"
               title="Eliminar archivo"
             >
               ✕
