@@ -5,6 +5,8 @@
 [![Supabase](https://img.shields.io/badge/Supabase-3ecf8e)](https://supabase.com/)
 [![Cloudinary](https://img.shields.io/badge/Cloudinary-3448c5)](https://cloudinary.com/)
 [![React Doctor](https://www.react.doctor/share/badge?p=feucsc-finanzas&s=98&e=1&w=1&f=2)](https://www.react.doctor/share?p=feucsc-finanzas&s=98&e=1&w=1&f=2)
+[![CI](https://img.shields.io/badge/CI-passing-brightgreen)](https://github.com/pipe1os/FEUCSC-FINANZAS/actions/workflows/ci.yml)
+[![Lighthouse CI](https://img.shields.io/badge/Lighthouse_CI-passing-brightgreen)](https://github.com/pipe1os/FEUCSC-FINANZAS/actions/workflows/lighthouse.yml)
 
 Este proyecto es un portal de transparencia enfocado para la **FEUCSC** (Federación de Estudiantes UCSC).
 
@@ -39,6 +41,9 @@ La idea es que cualquier estudiante pueda ver en qué se gasta el presupuesto de
 - SWR (fetch/caché en admin)
 - Tailwind CSS
 - HeroUI
+- Vitest
+- GitHub Actions CI
+- Lighthouse CI
 
 ---
 
@@ -76,6 +81,37 @@ Protecciones implementadas:
 
 ---
 
+## Calidad y Testing
+
+El proyecto incluye testing automatizado y workflows de CI enfocados en confiabilidad, seguridad y calidad frontend.
+
+### Tests automatizados
+
+La cobertura actual incluye:
+
+- Helpers de autenticación
+- Lógica de validación de uploads
+- Validación de firmas de imagen / magic bytes
+
+Archivos de test:
+
+```txt
+src/app/lib/__test__/
+```
+
+- `auth.test.ts`
+- `upload.test.ts`
+- `validate-image.test.ts`
+
+Ejecutar tests localmente:
+
+```bash
+pnpm test
+```
+
+---
+
+
 ## Estructura del proyecto
 
 - `src/app/` — rutas (público + admin)
@@ -83,6 +119,43 @@ Protecciones implementadas:
 - `src/lib/` — clientes Supabase, auth, configuración Cloudinary y utilidades
 - `src/components/` — componentes UI
 - `src/hooks/` — hooks SWR
+
+---
+
+## CI/CD
+
+GitHub Actions está configurado para ejecutar validaciones automáticas de calidad.
+
+### Workflow principal de CI
+
+El pipeline principal se ejecuta en cada push a `main` e incluye:
+
+- Instalación de dependencias
+- Validación de build de producción
+- Ejecución automática de tests
+
+Workflow:
+
+```txt
+.github/workflows/ci.yml
+```
+
+### Lighthouse CI
+
+El rendimiento frontend es auditado automáticamente usando Lighthouse CI.
+
+Las validaciones incluyen:
+
+- Performance
+- Accessibility
+- Best Practices
+- SEO
+
+Workflow:
+
+```txt
+.github/workflows/lighthouse.yml
+```
 
 ---
 
@@ -298,3 +371,5 @@ pnpm start
 - Los uploads a Cloudinary son firmados server-side.
 - Ya no se utilizan upload presets públicos.
 - El proyecto prioriza arquitectura simple y validaciones explícitas server-side, junto con políticas estrictas de RLS en Postgres.
+- Lighthouse CI se utiliza para auditorías automáticas de rendimiento frontend.
+- Los tests automatizados validan flujos críticos de autenticación y seguridad de uploads.
