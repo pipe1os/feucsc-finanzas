@@ -5,6 +5,8 @@
 [![Supabase](https://img.shields.io/badge/Supabase-3ecf8e)](https://supabase.com/)
 [![Cloudinary](https://img.shields.io/badge/Cloudinary-3448c5)](https://cloudinary.com/)
 [![React Doctor](https://www.react.doctor/share/badge?p=feucsc-finanzas&s=98&e=1&w=1&f=2)](https://www.react.doctor/share?p=feucsc-finanzas&s=98&e=1&w=1&f=2)
+[![CI](https://img.shields.io/badge/CI-passing-brightgreen)](https://github.com/pipe1os/FEUCSC-FINANZAS/actions/workflows/ci.yml)
+[![Lighthouse CI](https://img.shields.io/badge/Lighthouse_CI-passing-brightgreen)](https://github.com/pipe1os/FEUCSC-FINANZAS/actions/workflows/lighthouse.yml)
 
 [Leer en Español →](./README_es.md)
 
@@ -41,6 +43,9 @@ The goal is that students should be able to quickly understand where the federat
 - SWR (admin data fetching/cache)
 - Tailwind CSS
 - HeroUI
+- Vitest
+- GitHub Actions CI
+- Lighthouse CI
 
 ---
 
@@ -78,11 +83,78 @@ Security measures include:
 
 ---
 
+## Quality & Testing
+
+The project includes automated testing and CI workflows focused on reliability, security and frontend quality.
+
+### Automated tests
+
+Current test coverage includes:
+
+- Authentication helpers
+- Upload validation logic
+- Image signature / magic-byte validation
+
+Test files:
+
+```txt
+src/app/lib/__test__/
+```
+
+- `auth.test.ts`
+- `upload.test.ts`
+- `validate-image.test.ts`
+
+Run tests locally:
+
+```bash
+pnpm test
+```
+
+---
+
+## CI/CD
+
+GitHub Actions workflows are configured for automated quality checks.
+
+### CI workflow
+
+The main CI pipeline runs on every push to `main` and includes:
+
+- Dependency installation
+- Production build validation
+- Automated test execution
+
+Workflow:
+
+```txt
+.github/workflows/ci.yml
+```
+
+### Lighthouse CI
+
+Frontend performance auditing is automated using Lighthouse CI.
+
+Checks include:
+
+- Performance
+- Accessibility
+- Best Practices
+- SEO
+
+Workflow:
+
+```txt
+.github/workflows/lighthouse.yml
+```
+
+---
+
 ## Project structure
 
 - `src/app/` — routes (public + admin)
 - `src/app/actions/` — Server Actions for DB writes + uploads
-- `src/lib/` — Supabase clients, auth helpers, Cloudinary config, utilities
+- `src/lib/` — Supabase clients, auth helpers, Cloudinary config, utilities, test utilities
 - `src/components/` — UI components
 - `src/hooks/` — SWR data hooks
 
@@ -300,3 +372,5 @@ pnpm start
 - Cloudinary uploads use signed server-side uploads only.
 - Upload presets are no longer required.
 - The project intentionally favors simple architecture and explicit server-side validation alongside strict Postgres RLS.
+- Lighthouse CI is used for automated frontend performance auditing.
+- Automated tests validate critical authentication and upload security flows.
