@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@heroui/react";
 import { supabase } from "@/lib/supabase";
-import { isAuthorizedEmail } from "@/lib/auth";
+import { checkAuthorizedEmail } from "@/app/actions/auth";
 
 export default function AuthCallback() {
   const { replace } = useRouter();
@@ -21,7 +21,7 @@ export default function AuthCallback() {
     const verifyAndRedirect = async (email: string | undefined) => {
       if (!mounted) return;
 
-      if (!(await isAuthorizedEmail(email))) {
+      if (!(await checkAuthorizedEmail(email))) {
         setStatus("Cuenta no autorizada. Redirigiendo…");
         await supabase.auth.signOut();
         redirectTo("/login?error=unauthorized");
