@@ -60,8 +60,10 @@ export function NumberTicker({
   useEffect(() => {
     if (!isInView) return;
     if (skipAnimation) {
-      setDisplayValue(direction === "down" ? startValue : value);
-      return;
+      const timer = setTimeout(() => {
+        setDisplayValue(direction === "down" ? startValue : value);
+      }, 0);
+      return () => clearTimeout(timer);
     }
 
     const timer = setTimeout(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import type { SortDescriptor } from "@heroui/react";
@@ -82,20 +82,21 @@ function formatShortDate(dateStr: string) {
 }
 
 export default function AdminPage() {
-  const router = useRouter();
+  const { replace } = useRouter();
   const pathname = usePathname();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const closeSidebar = () => setSidebarOpen(false);
   const menuIconRef = useRef<HugeiconsMenuIconHandle>(null);
 
-  useEffect(() => {
-    if (sidebarOpen) {
+  const toggleSidebar = (open: boolean) => {
+    setSidebarOpen(open);
+    if (open) {
       menuIconRef.current?.startAnimation();
     } else {
       menuIconRef.current?.stopAnimation();
     }
-  }, [sidebarOpen]);
+  };
+  const closeSidebar = () => toggleSidebar(false);
 
   const { gastos, isLoading: loadingTable, mutateGastos } = useGastos();
   const { categoriasDB, mutateCategorias } = useCategorias();
@@ -209,7 +210,7 @@ export default function AdminPage() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    router.replace("/login");
+    replace("/login");
   };
 
   const openEdit = (g: GastoDB) => {
@@ -226,7 +227,9 @@ export default function AdminPage() {
       toast.success("Gasto eliminado exitosamente");
       setDeleteGasto(null);
       mutateGastos();
-      if (paginated.length === 1 && page > 1) setPage(page - 1);
+      if (paginated.length === 1) {
+        setPage((currentPage) => Math.max(1, currentPage - 1));
+      }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "";
       const safeMsg =
@@ -251,25 +254,27 @@ export default function AdminPage() {
   return (
     <div className="min-h-dvh flex bg-transparent">
       <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
+        onClick={() => toggleSidebar(!sidebarOpen)}
         className="fixed top-4 right-4 z-50 flex items-center justify-center
-                   size-10 rounded-xl bg-white dark:bg-gray-800 shadow-apple-lg lg:hidden
-                   transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+                   size-10 rounded-xl bg-white dark:bg-zinc-800 shadow-apple-lg lg:hidden
+                   transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-700 cursor-pointer"
         aria-label={sidebarOpen ? "Cerrar menú" : "Abrir menú"}
       >
         <HugeiconsMenuIcon ref={menuIconRef} size={22} />
       </button>
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/20 backdrop-blur-xs lg:hidden"
+        <button
+          type="button"
+          className="fixed inset-0 z-30 bg-black/20 backdrop-blur-xs lg:hidden cursor-default"
           onClick={closeSidebar}
+          aria-label="Cerrar menú"
         />
       )}
       <aside
         className={`
           fixed top-0 left-0 z-40 h-dvh w-65
-          flex flex-col bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl
-          border-r border-gray-100 dark:border-gray-800
+          flex flex-col bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl
+          border-r border-zinc-100 dark:border-zinc-800
           transition-transform duration-300 ease-out
           overflow-y-auto
           lg:translate-x-0
@@ -286,9 +291,9 @@ export default function AdminPage() {
             priority
           />
         </div>
-        <div className="mx-5 h-px bg-gray-100 dark:bg-gray-800" />
+        <div className="mx-5 h-px bg-zinc-100 dark:bg-zinc-800" />
         <nav className="flex flex-col gap-1 px-4 pt-6">
-          <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-gray-400 dark:text-gray-500 uppercase">
+          <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-zinc-400 dark:text-zinc-500 uppercase">
             Administración
           </span>
           <Link
@@ -298,7 +303,7 @@ export default function AdminPage() {
               ${
                 pathname === "/admin"
                   ? "text-red-600 dark:text-red-400"
-                  : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200"
+                  : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-200"
               }`}
           >
             {pathname === "/admin" && (
@@ -310,7 +315,7 @@ export default function AdminPage() {
                   ${
                     pathname === "/admin"
                       ? "text-red-500 dark:text-red-400"
-                      : "text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300"
+                      : "text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-600 dark:group-hover:text-zinc-300"
                   }`}
               >
                 <svg
@@ -337,11 +342,11 @@ export default function AdminPage() {
         </nav>
         <div className="flex-1" />
         <div className="px-5 pb-6 pt-4">
-          <div className="h-px bg-gray-100 dark:bg-gray-800 mb-4" />
+          <div className="h-px bg-zinc-100 dark:bg-zinc-800 mb-4" />
           <Button
             variant="ghost"
             onPress={handleSignOut}
-            className="w-full justify-start text-gray-600 dark:text-gray-300 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 cursor-pointer font-medium rounded-xl mb-4"
+            className="w-full justify-start text-zinc-600 dark:text-zinc-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/10 cursor-pointer font-medium rounded-xl mb-4"
           >
             <LogOutIcon />
             Cerrar sesión
@@ -352,15 +357,15 @@ export default function AdminPage() {
       <main className="flex-1 min-w-0 lg:ml-65">
         <div className="mx-auto max-w-5xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
           <div className="mb-8 animate-fade-in-up">
-            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
+            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white font-heading">
               Gestión de Gastos
             </h1>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
               Ingresa, edita o elimina gastos de la base de datos.
             </p>
           </div>
-          <Card className="overflow-visible rounded-2xl shadow-apple border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 sm:p-8 mb-8 animate-fade-in-up stagger-1 opacity-0">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 font-heading">
+          <Card className="overflow-visible rounded-2xl shadow-apple border border-zinc-100 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-6 sm:p-8 mb-8 animate-fade-in-up stagger-1 opacity-0">
+            <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-6 font-heading">
               Ingresar Gasto
             </h2>
             <GastoForm
@@ -371,13 +376,13 @@ export default function AdminPage() {
               onDeleteCategory={setDeletingCat}
             />
           </Card>
-          <Card className="rounded-2xl shadow-apple border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 animate-fade-in-up stagger-2 opacity-0">
-            <div className="p-6 pb-4 border-b border-gray-100 dark:border-gray-800 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Card className="rounded-2xl shadow-apple border border-zinc-100 dark:border-zinc-700 bg-white dark:bg-zinc-900 animate-fade-in-up stagger-2 opacity-0">
+            <div className="p-6 pb-4 border-b border-zinc-100 dark:border-zinc-800 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white font-heading">
+                <h2 className="text-lg font-semibold text-zinc-900 dark:text-white font-heading">
                   Gastos Registrados
                 </h2>
-                <p className="text-sm text-gray-400 dark:text-gray-500 mt-0.5">
+                <p className="text-sm text-zinc-400 dark:text-zinc-500 mt-0.5">
                   {filtered.length} de {gastos.length} gastos
                 </p>
               </div>
@@ -395,7 +400,7 @@ export default function AdminPage() {
                       }
                     }}
                   >
-                    <Select.Trigger className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-gray-300">
+                    <Select.Trigger className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-zinc-300">
                       <Select.Value>
                         {({ isPlaceholder, state }) => {
                           if (isPlaceholder) return "Mes: Todos";
@@ -407,7 +412,7 @@ export default function AdminPage() {
                       </Select.Value>
                       <Select.Indicator />
                     </Select.Trigger>
-                    <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-gray-700 dark:bg-gray-900 min-w-48">
+                    <Select.Popover className="rounded-xl shadow-apple-lg border border-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 min-w-48">
                       <ListBox>
                         {MONTH_OPTIONS.map((m) => (
                           <ListBox.Item
@@ -434,7 +439,7 @@ export default function AdminPage() {
                       }
                     }}
                   >
-                    <Select.Trigger className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-gray-300">
+                    <Select.Trigger className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-zinc-300">
                       <Select.Value>
                         {({ isPlaceholder, state }) => {
                           if (isPlaceholder) return "Categoría: Todas";
@@ -445,7 +450,7 @@ export default function AdminPage() {
                       </Select.Value>
                       <Select.Indicator />
                     </Select.Trigger>
-                    <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-gray-700 dark:bg-gray-900 min-w-56">
+                    <Select.Popover className="rounded-xl shadow-apple-lg border border-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 min-w-56">
                       <ListBox>
                         <ListBox.Item id="all" textValue="Todas las categorías">
                           Todas las categorías
@@ -466,7 +471,7 @@ export default function AdminPage() {
                   </Select>
 
                   <div className="relative w-full sm:w-48">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400 dark:text-gray-500">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-zinc-400 dark:text-zinc-500">
                       <SearchIcon />
                     </span>
                     <input
@@ -474,7 +479,7 @@ export default function AdminPage() {
                       placeholder="Buscar..."
                       defaultValue=""
                       onChange={(e) => handleSearch(e.target.value)}
-                      className="w-full h-9 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 pl-10 pr-4 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 outline-hidden transition-all duration-200 focus:border-red-300 focus:ring-2 focus:ring-red-100"
+                      className="w-full h-9 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 pl-10 pr-4 py-2 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-400 outline-hidden transition-all duration-200 focus:border-red-300 focus:ring-2 focus:ring-red-100"
                     />
                   </div>
                 </div>
@@ -498,21 +503,21 @@ export default function AdminPage() {
             <div className="p-6 pt-4">
               {loadingTable ? (
                 <div className="flex items-center justify-center py-16">
-                  <div className="size-8 animate-spin rounded-full border-3 border-gray-200 dark:border-gray-800 border-t-red-500" />
+                  <div className="size-8 animate-spin rounded-full border-3 border-zinc-200 dark:border-zinc-800 border-t-red-500" />
                 </div>
               ) : (
                 <div>
                   <div className="md:hidden">
                     {paginated.length === 0 ? (
                       <div className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-                        <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 border border-gray-100 dark:border-gray-800 shadow-xs">
+                        <div className="flex size-12 items-center justify-center rounded-full bg-zinc-50 dark:bg-zinc-800 text-zinc-400 border border-zinc-100 dark:border-zinc-800 shadow-xs">
                           <SearchIcon />
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                          <span className="text-sm font-semibold text-zinc-900 dark:text-white">
                             {searchQuery ? "Sin resultados" : "Sin gastos"}
                           </span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                          <span className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
                             {searchQuery
                               ? "Intenta con otro término."
                               : "Ingresa un gasto usando el formulario."}
@@ -522,7 +527,7 @@ export default function AdminPage() {
                     ) : (
                       <ListBox
                         aria-label="Gastos"
-                        className="divide-y divide-gray-100 dark:divide-gray-800"
+                        className="divide-y divide-zinc-100 dark:divide-zinc-800"
                       >
                         {paginated.map((g) => {
                           const catColor =
@@ -532,18 +537,18 @@ export default function AdminPage() {
                               key={g.id}
                               id={g.id}
                               textValue={g.descripcion}
-                              className="rounded-none px-0 py-3 border-b border-gray-100 dark:border-gray-800 last:border-b-0"
+                              className="rounded-none px-0 py-3 border-b border-zinc-100 dark:border-zinc-800 last:border-b-0"
                             >
                               <div className="flex flex-col gap-1 w-full">
                                 <div className="flex items-start justify-between gap-2">
-                                  <span className="font-medium text-sm text-gray-900 dark:text-white line-clamp-2">
+                                  <span className="font-medium text-sm text-zinc-900 dark:text-white line-clamp-2">
                                     {g.descripcion}
                                   </span>
-                                  <span className="font-semibold text-sm text-gray-900 dark:text-white tabular-nums shrink-0">
+                                  <span className="font-semibold text-sm text-zinc-900 dark:text-white tabular-nums shrink-0">
                                     {formatCLP(g.monto)}
                                   </span>
                                 </div>
-                                <div className="flex items-center justify-between gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                <div className="flex items-center justify-between gap-2 text-xs text-zinc-500 dark:text-zinc-400">
                                   <div className="flex items-center gap-2">
                                     <span
                                       className="inline-flex items-center rounded-lg px-2.5 py-1 text-[10px] font-medium"
@@ -574,7 +579,7 @@ export default function AdminPage() {
                                         e.stopPropagation();
                                         openEdit(g);
                                       }}
-                                      className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                      className="p-1.5 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                                       title="Editar"
                                     >
                                       <EditIcon />
@@ -599,7 +604,7 @@ export default function AdminPage() {
                     )}
                     {totalPages > 0 && (
                       <div className="mt-4 flex flex-col gap-3">
-                        <span className="text-xs text-gray-500 text-center">
+                        <span className="text-xs text-zinc-500 text-center">
                           {pStart} a {pEnd} de {filtered.length} resultados
                         </span>
                         <Pagination size="sm">
@@ -614,7 +619,7 @@ export default function AdminPage() {
                                 <Pagination.PreviousIcon />
                               </Pagination.Previous>
                             </Pagination.Item>
-                            <span className="text-sm text-gray-600 dark:text-gray-300">
+                            <span className="text-sm text-zinc-600 dark:text-zinc-300">
                               {page} / {totalPages}
                             </span>
                             <Pagination.Item>
@@ -695,16 +700,16 @@ export default function AdminPage() {
                           <Table.Body
                             renderEmptyState={() => (
                               <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-                                <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 border border-gray-100 dark:border-gray-800">
+                                <div className="flex size-12 items-center justify-center rounded-full bg-zinc-50 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 border border-zinc-100 dark:border-zinc-800">
                                   {searchQuery ? <SearchIcon /> : <InboxIcon />}
                                 </div>
                                 <div className="flex flex-col">
-                                  <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                                  <span className="text-sm font-semibold text-zinc-900 dark:text-white">
                                     {searchQuery
                                       ? "Sin resultados"
                                       : "Sin gastos"}
                                   </span>
-                                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                  <span className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
                                     {searchQuery
                                       ? "Intenta con otro término."
                                       : "Ingresa un gasto usando el formulario."}
@@ -719,12 +724,12 @@ export default function AdminPage() {
                               return (
                                 <Table.Row key={g.id}>
                                   <Table.Cell>
-                                    <span className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
+                                    <span className="text-sm text-zinc-600 dark:text-zinc-400 whitespace-nowrap">
                                       {formatDate(g.fecha)}
                                     </span>
                                   </Table.Cell>
                                   <Table.Cell>
-                                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                    <span className="text-sm font-medium text-zinc-900 dark:text-white">
                                       {g.descripcion}
                                     </span>
                                   </Table.Cell>
@@ -740,7 +745,7 @@ export default function AdminPage() {
                                     </span>
                                   </Table.Cell>
                                   <Table.Cell>
-                                    <span className="text-sm font-semibold text-gray-900 dark:text-white tabular-nums">
+                                    <span className="text-sm font-semibold text-zinc-900 dark:text-white tabular-nums">
                                       {formatCLP(g.monto)}
                                     </span>
                                   </Table.Cell>
@@ -754,13 +759,13 @@ export default function AdminPage() {
                                               setLightboxUrl(g.comprobante_url)
                                             }
                                             disabled={!g.comprobante_url}
-                                            className={`inline-flex items-center justify-center size-8 rounded-full transition-all duration-200 cursor-pointer ${g.comprobante_url ? "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700" : "bg-gray-50 dark:bg-gray-800/50 text-gray-300 dark:text-gray-600 cursor-not-allowed"}`}
+                                            className={`inline-flex items-center justify-center size-8 rounded-full transition-all duration-200 cursor-pointer ${g.comprobante_url ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700" : "bg-zinc-50 dark:bg-zinc-800/50 text-zinc-300 dark:text-zinc-600 cursor-not-allowed"}`}
                                             aria-label="Ver comprobante"
                                           >
                                             <EyeIcon />
                                           </button>
                                         </Tooltip.Trigger>
-                                        <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
+                                        <Tooltip.Content className="bg-zinc-800 text-white text-xs px-3 py-1.5 rounded-lg">
                                           <p>
                                             {g.comprobante_url
                                               ? "Ver comprobante"
@@ -772,13 +777,13 @@ export default function AdminPage() {
                                         <Tooltip.Trigger>
                                           <button
                                             onClick={() => openEdit(g)}
-                                            className="inline-flex items-center justify-center size-8 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 cursor-pointer"
+                                            className="inline-flex items-center justify-center size-8 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all duration-200 cursor-pointer"
                                             aria-label="Editar"
                                           >
                                             <EditIcon />
                                           </button>
                                         </Tooltip.Trigger>
-                                        <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
+                                        <Tooltip.Content className="bg-zinc-800 text-white text-xs px-3 py-1.5 rounded-lg">
                                           <p>Editar</p>
                                         </Tooltip.Content>
                                       </Tooltip>
@@ -792,7 +797,7 @@ export default function AdminPage() {
                                             <TrashIcon />
                                           </button>
                                         </Tooltip.Trigger>
-                                        <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
+                                        <Tooltip.Content className="bg-zinc-800 text-white text-xs px-3 py-1.5 rounded-lg">
                                           <p>Eliminar</p>
                                         </Tooltip.Content>
                                       </Tooltip>
@@ -857,7 +862,7 @@ export default function AdminPage() {
           <div className="mt-6 text-center">
             <Link
               href="/"
-              className="text-xs text-gray-400 dark:text-gray-500 hover:text-red-500 transition-colors duration-200"
+              className="text-xs text-zinc-400 dark:text-zinc-500 hover:text-red-500 transition-colors duration-200"
             >
               ← Ver portal público
             </Link>
@@ -871,9 +876,9 @@ export default function AdminPage() {
         onOpenChange={() => setEditGasto(null)}
       >
         <Modal.Container>
-          <Modal.Dialog className="sm:max-w-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-apple-lg">
-            <Modal.CloseTrigger className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" />
-            <Modal.Header className="sm:px-8 sm:pt-6 border-b border-gray-100 dark:border-gray-800/50 pb-4 mb-4">
+          <Modal.Dialog className="sm:max-w-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 shadow-apple-lg">
+            <Modal.CloseTrigger className="hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" />
+            <Modal.Header className="sm:px-8 sm:pt-6 border-b border-zinc-100 dark:border-zinc-800/50 pb-4 mb-4">
               <Modal.Heading className="text-xl font-semibold font-heading">
                 Editar Gasto
               </Modal.Heading>
@@ -881,6 +886,7 @@ export default function AdminPage() {
             <Modal.Body className="sm:px-8 sm:pb-6">
               {editGasto && (
                 <EditGastoForm
+                  key={editGasto.id}
                   gasto={editGasto}
                   categorias={categorias}
                   categoriasDB={categoriasDB}
@@ -904,14 +910,14 @@ export default function AdminPage() {
         onOpenChange={() => setDeleteGasto(null)}
       >
         <AlertDialog.Container>
-          <AlertDialog.Dialog className="sm:max-w-100 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-apple-lg">
-            <AlertDialog.CloseTrigger className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" />
+          <AlertDialog.Dialog className="sm:max-w-100 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 shadow-apple-lg">
+            <AlertDialog.CloseTrigger className="hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" />
             <AlertDialog.Header>
               <AlertDialog.Icon status="danger" />
               <AlertDialog.Heading>¿Eliminar gasto?</AlertDialog.Heading>
             </AlertDialog.Header>
             <AlertDialog.Body>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
                 Estás por eliminar{" "}
                 <strong>&ldquo;{deleteGasto?.descripcion}&rdquo;</strong> por{" "}
                 <strong>
@@ -932,7 +938,7 @@ export default function AdminPage() {
               <Button
                 variant="tertiary"
                 slot="close"
-                className="cursor-pointer text-gray-700 dark:text-gray-200"
+                className="cursor-pointer text-zinc-700 dark:text-zinc-200"
               >
                 Cancelar
               </Button>
@@ -953,14 +959,14 @@ export default function AdminPage() {
         onOpenChange={() => setDeletingCat(null)}
       >
         <AlertDialog.Container>
-          <AlertDialog.Dialog className="sm:max-w-100 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-apple-lg">
-            <AlertDialog.CloseTrigger className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" />
+          <AlertDialog.Dialog className="sm:max-w-100 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 shadow-apple-lg">
+            <AlertDialog.CloseTrigger className="hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" />
             <AlertDialog.Header>
               <AlertDialog.Icon status="warning" />
               <AlertDialog.Heading>¿Eliminar categoría?</AlertDialog.Heading>
             </AlertDialog.Header>
             <AlertDialog.Body>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
                 Vas a eliminar la categoría{" "}
                 <strong>&ldquo;{deletingCat}&rdquo;</strong>.
                 {(catCounts[deletingCat || ""] || 0) > 0 && (
@@ -977,7 +983,7 @@ export default function AdminPage() {
               <Button
                 variant="tertiary"
                 slot="close"
-                className="cursor-pointer text-gray-700 dark:text-gray-200"
+                className="cursor-pointer text-zinc-700 dark:text-zinc-200"
               >
                 Cancelar
               </Button>

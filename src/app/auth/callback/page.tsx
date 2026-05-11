@@ -12,7 +12,7 @@ export default function AuthCallbackPage() {
           <div className="flex flex-col items-center gap-4 animate-fade-in-up">
             <Spinner size="md" color="danger" />
             <p className="text-sm text-muted font-medium">
-              Verificando acceso...
+              Verificando acceso…
             </p>
           </div>
         </div>

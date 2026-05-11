@@ -24,7 +24,9 @@ export default function GastoForm({
   mutateCategorias,
   onDeleteCategory,
 }: GastoFormProps) {
-  const [fecha, setFecha] = useState(() => new Date().toISOString().split("T")[0]);
+  const [fecha, setFecha] = useState(
+    () => new Date().toISOString().split("T")[0],
+  );
   const [descripcion, setDescripcion] = useState("");
   const [categoria, setCategoria] = useState("Varios");
   const [monto, setMonto] = useState("");
@@ -37,8 +39,7 @@ export default function GastoForm({
       setCategoria(cat);
       if (!categorias.includes(cat)) {
         const usedColors = categoriasDB
-          .map((c) => c.color)
-          .filter(Boolean) as string[];
+          .flatMap((c) => c.color ? [c.color] : []) as string[];
         const newColor = getNextPaletteColor(usedColors);
         try {
           await createCategoria(cat, newColor);
@@ -48,7 +49,7 @@ export default function GastoForm({
         }
       }
     },
-    [categorias, categoriasDB, mutateCategorias]
+    [categorias, categoriasDB, mutateCategorias],
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -113,14 +114,18 @@ export default function GastoForm({
           <Label>Fecha</Label>
           <Input
             value={fecha}
-            className="h-10 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60"
+            className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60"
           />
         </TextField>
         <div className="space-y-1.5">
-          <label className="label text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label
+            htmlFor="gasto-categoria"
+            className="label text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          >
             Categoría
           </label>
           <CategorySelect
+            id="gasto-categoria"
             categorias={categorias}
             value={categoria}
             onChange={handleCategoriaChange}
@@ -138,7 +143,7 @@ export default function GastoForm({
         <Input
           placeholder="Ej: Producción Bienvenida Mechona"
           value={descripcion}
-          className="h-10 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 placeholder:text-gray-400"
+          className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 placeholder:text-zinc-400"
         />
       </TextField>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -153,7 +158,7 @@ export default function GastoForm({
           <Input
             placeholder="850000"
             value={monto}
-            className="h-10 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 placeholder:text-gray-400"
+            className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 placeholder:text-zinc-400"
           />
         </TextField>
         <ComprobanteUpload
@@ -175,7 +180,7 @@ export default function GastoForm({
           type="submit"
           size="lg"
           isDisabled={submitting}
-          className="w-full sm:w-fit px-8 rounded-2xl bg-gray-900 text-white dark:bg-white dark:text-black font-semibold hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200 h-12 shadow-sm hover:shadow-md cursor-pointer text-sm"
+          className="w-full sm:w-fit px-8 rounded-2xl bg-zinc-900 text-white dark:bg-white dark:text-black font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all duration-200 h-12 shadow-sm hover:shadow-md cursor-pointer text-sm"
         >
           {submitting ? (
             <div className="size-5 animate-spin rounded-full border-2 border-current border-t-transparent" />

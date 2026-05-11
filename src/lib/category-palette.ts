@@ -1,4 +1,4 @@
-export const CATEGORY_PALETTE = [
+const CATEGORY_PALETTE = [
   "#C41E3A",
   "#D4595E",
   "#B83232",

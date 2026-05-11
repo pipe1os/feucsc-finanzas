@@ -44,23 +44,23 @@ function CustomTooltip({
     totalGastado > 0 ? Math.round((data.value / totalGastado) * 100) : 0;
 
   return (
-    <div className="rounded-xl bg-white dark:bg-gray-900 px-4 py-3 shadow-xs dark:shadow-none border border-gray-200/80 dark:border-gray-700/80 pointer-events-none">
+    <div className="rounded-xl bg-white dark:bg-zinc-900 px-4 py-3 shadow-xs dark:shadow-none border border-zinc-200/80 dark:border-zinc-700/80 pointer-events-none">
       <div className="flex items-center gap-2 mb-1">
         <div
           className="size-2.5 rounded-full"
           style={{ backgroundColor: data.payload.color }}
         />
-        <span className="text-xs font-semibold text-gray-900 dark:text-white">
+        <span className="text-xs font-semibold text-zinc-900 dark:text-white">
           {data.name}
         </span>
       </div>
       <div className="flex items-baseline gap-2">
-        <span className="text-sm font-bold text-gray-900 dark:text-white">
+        <span className="text-sm font-bold text-zinc-900 dark:text-white">
           {formatCLP(data.value)}
         </span>
-        <span className="text-[10px] font-medium text-gray-400">{pct}%</span>
+        <span className="text-[10px] font-medium text-zinc-400">{pct}%</span>
       </div>
-      <p className="text-[10px] text-gray-400 mt-1">Clic para filtrar</p>
+      <p className="text-[10px] text-zinc-400 mt-1">Clic para filtrar</p>
     </div>
   );
 }
@@ -113,23 +113,23 @@ export default function ExpenseCategoryChart({
 
   return (
     <Card
-      className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-white dark:bg-gray-900 shadow-xs dark:shadow-none ring-0 animate-fade-in-up opacity-0"
+      className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-900 shadow-xs dark:shadow-none ring-0 animate-fade-in-up opacity-0"
       style={{ animationDelay: "0.25s" }}
     >
       <CardHeader className="pb-4">
-        <CardTitle className="text-base font-semibold text-gray-900 dark:text-white font-heading">
+        <CardTitle className="text-base font-semibold text-zinc-900 dark:text-white font-heading">
           Distribución de Gastos
         </CardTitle>
-        <CardDescription className="text-xs text-gray-400">
+        <CardDescription className="text-xs text-zinc-400">
           Por categoría
         </CardDescription>
       </CardHeader>
 
       <CardContent className="flex flex-col items-center gap-6">
-        <div className="relative h-48 w-48 **:outline-none">
+        <div className="relative size-48 **:outline-none">
           <ChartContainer
             config={chartConfig}
-            className="aspect-square h-48 w-48"
+            className="aspect-square size-48"
           >
             <PieChart>
               <ChartTooltip
@@ -154,13 +154,13 @@ export default function ExpenseCategoryChart({
                 cursor="pointer"
                 className="outline-none"
               >
-                {chartData.map((entry, index) => {
+                {chartData.map((entry) => {
                   const isActive = activeCategoryFilter === entry.name;
                   const isDimmed =
                     activeCategoryFilter && activeCategoryFilter !== entry.name;
                   return (
                     <Cell
-                      key={`cell-${index}`}
+                      key={entry.name}
                       fill={entry.color}
                       opacity={isDimmed ? 0.3 : 1}
                       stroke={isActive ? entry.color : "none"}
@@ -176,10 +176,10 @@ export default function ExpenseCategoryChart({
             className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center z-0 animate-scale-in"
             style={{ animationDelay: "0.6s" }}
           >
-            <span className="text-sm font-bold text-gray-900 dark:text-white">
+            <span className="text-sm font-bold text-zinc-900 dark:text-white">
               {formatCLP(totalGastado)}
             </span>
-            <span className="text-[9px] font-medium text-gray-400 uppercase tracking-wider">
+            <span className="text-[9px] font-medium text-zinc-400 uppercase tracking-wider">
               Total
             </span>
           </div>
@@ -201,7 +201,7 @@ export default function ExpenseCategoryChart({
                   onCategoryClick?.(isActive ? "" : item.categoria)
                 }
                 className={`flex items-center gap-3 w-full animate-fade-in-up opacity-0 cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-all duration-200
-                  ${isActive ? "bg-gray-50 dark:bg-white/5" : "hover:bg-gray-50/60 dark:hover:bg-white/3"}
+                  ${isActive ? "bg-zinc-50 dark:bg-white/5" : "hover:bg-zinc-50/60 dark:hover:bg-white/3"}
                   ${isDimmed ? "opacity-40" : ""}`}
                 style={{ animationDelay: `${0.6 + index * 0.08}s` }}
               >
@@ -209,11 +209,11 @@ export default function ExpenseCategoryChart({
                   className="size-2.5 rounded-full shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="flex-1 text-xs text-gray-600 dark:text-gray-400 text-left">
+                <span className="flex-1 text-xs text-zinc-600 dark:text-zinc-400 text-left">
                   {item.categoria}
                 </span>
                 <div className="flex items-center gap-2 shrink-0">
-                  <div className="hidden sm:block h-1.5 w-16 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                  <div className="hidden sm:block h-1.5 w-16 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
                     <div
                       className="h-full rounded-full animate-bar-grow"
                       style={{
@@ -223,7 +223,7 @@ export default function ExpenseCategoryChart({
                       }}
                     />
                   </div>
-                  <span className="text-xs font-semibold text-gray-900 dark:text-white w-8 text-right">
+                  <span className="text-xs font-semibold text-zinc-900 dark:text-white w-8 text-right">
                     {pct}%
                   </span>
                 </div>

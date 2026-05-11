@@ -12,8 +12,7 @@ export default function ContactoPage() {
     } else {
       const textarea = document.createElement("textarea");
       textarea.value = text;
-      textarea.style.position = "fixed";
-      textarea.style.opacity = "0";
+      textarea.style.cssText = "position: fixed; opacity: 0;";
       document.body.appendChild(textarea);
       textarea.select();
       try {
@@ -29,10 +28,10 @@ export default function ContactoPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
       <header className="mb-10 animate-fade-in-up opacity-0 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white font-heading">
           Contacto
         </h1>
-        <p className="mt-2 text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+        <p className="mt-2 text-base text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
           ¿Tienes dudas? Ponte en contacto con nosotros.
         </p>
       </header>
@@ -44,9 +43,9 @@ export default function ContactoPage() {
         <button
           type="button"
           onClick={handleCopyEmail}
-          className="group flex items-center gap-5 p-5 sm:p-6 text-left cursor-pointer transition-all duration-200 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-apple hover:shadow-apple-lg hover:border-gray-200 dark:hover:border-gray-700"
+          className="group flex items-center gap-5 p-5 sm:p-6 text-left cursor-pointer transition-all duration-200 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-apple hover:shadow-apple-lg hover:border-zinc-200 dark:hover:border-zinc-700"
         >
-          <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500">
+          <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -63,20 +62,20 @@ export default function ContactoPage() {
             </svg>
           </div>
           <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-            <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+            <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
               Correo institucional
             </span>
-            <span className="text-base sm:text-lg font-semibold tracking-tight text-gray-900 dark:text-white break-all">
+            <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-white break-all">
               feucsc@ucsc.cl
             </span>
           </div>
-          <span className="text-[11px] font-medium text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
+          <span className="text-[11px] font-medium text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
             Copiar
           </span>
         </button>
 
-        <div className="flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-apple">
-          <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500">
+        <div className="flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-apple">
+          <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -93,10 +92,10 @@ export default function ContactoPage() {
             </svg>
           </div>
           <div className="flex flex-col gap-0.5 min-w-0">
-            <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+            <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
               Sala FEUCSC
             </span>
-            <span className="text-base sm:text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
+            <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-white">
               Avenida Alonso de Ribera 2850, Concepción
             </span>
           </div>
@@ -106,9 +105,9 @@ export default function ContactoPage() {
           href="https://instagram.com/feucsc_"
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-apple transition-all duration-200 hover:shadow-apple-lg hover:border-gray-200 dark:hover:border-gray-700"
+          className="group flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-apple transition-all duration-200 hover:shadow-apple-lg hover:border-zinc-200 dark:hover:border-zinc-700"
         >
-          <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500">
+          <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -126,10 +125,10 @@ export default function ContactoPage() {
             </svg>
           </div>
           <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-            <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+            <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
               Síguenos en Instagram
             </span>
-            <span className="text-base sm:text-lg font-semibold tracking-tight text-gray-900 dark:text-white group-hover:text-red-500 transition-colors duration-200">
+            <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-white group-hover:text-red-500 transition-colors duration-200">
               @feucsc_
             </span>
           </div>

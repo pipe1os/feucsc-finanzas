@@ -1,7 +1,7 @@
 import DashboardClient from "@/components/public/DashboardClient";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { supabaseAnon } from "@/lib/supabase-anon";
-import { parseISODate } from "@/lib/utils";
+
 import { buildCategoryColors } from "@/lib/data-transform";
 import Footer from "@/components/public/Footer";
 import Link from "next/link";
@@ -60,10 +60,12 @@ export default async function GastosPage() {
   let lastSyncISO: string | null = null;
   if (data.length > 0) {
     const timestamps = data
-      .map((g) => g.creado_el || g.fecha)
-      .filter(Boolean)
-      .map((ts: string) => new Date(ts).getTime())
-      .filter((t: number) => !isNaN(t));
+      .flatMap((g) => {
+        const ts = g.creado_el || g.fecha;
+        if (!ts) return [];
+        const t = new Date(ts).getTime();
+        return isNaN(t) ? [] : [t];
+      });
     if (timestamps.length > 0) {
       lastSyncISO = new Date(Math.max(...timestamps)).toISOString();
     }
@@ -77,9 +79,9 @@ export default async function GastosPage() {
             <div className="flex items-center gap-2 mb-2">
               <Link
                 href="/"
-                className="group inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors duration-200"
+                className="group inline-flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-red-500 dark:text-zinc-400 dark:hover:text-red-400 transition-colors duration-200"
               >
-                <span className="flex items-center justify-center size-7 rounded-lg bg-gray-100 dark:bg-gray-800 group-hover:bg-red-50 dark:group-hover:bg-red-500/10 transition-colors duration-200">
+                <span className="flex items-center justify-center size-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 group-hover:bg-red-50 dark:group-hover:bg-red-500/10 transition-colors duration-200">
                   <svg
                     width="14"
                     height="14"
@@ -99,10 +101,10 @@ export default async function GastosPage() {
                 </span>
               </Link>
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
+            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white font-heading">
               Detalle de Gastos
             </h1>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 max-w-xl">
+            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400 max-w-xl">
               Todos los gastos registrados, distribución por categoría y
               comprobantes de respaldo.
             </p>

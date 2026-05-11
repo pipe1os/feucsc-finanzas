@@ -13,10 +13,10 @@ export default function FAQPage() {
     <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
       {}
       <header className="mb-8 animate-fade-in-up opacity-0">
-        <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white font-heading">
           Preguntas Frecuentes
         </h1>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 max-w-xl">
+        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400 max-w-xl">
           Respuestas a las preguntas más frecuentes sobre la FEUCSC.
         </p>
       </header>
@@ -29,7 +29,7 @@ export default function FAQPage() {
         className="mt-12 mb-0 text-center animate-fade-in-up opacity-0"
         style={{ animationDelay: "0.4s" }}
       >
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900 dark:text-white leading-snug font-heading">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white leading-snug font-heading">
           ¿Tienes otra duda?{" "}
           <Link
             href="/contacto"
