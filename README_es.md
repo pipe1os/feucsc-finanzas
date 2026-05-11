@@ -23,7 +23,7 @@ La idea es que cualquier estudiante pueda ver en qué se gasta el presupuesto de
 ### Panel de administración (restringido)
 
 - Login con Google (Supabase Auth)
-- Lista blanca de correos (solo cuentas autorizadas)
+- Lista blanca de correos dinámica en base de datos (solo cuentas aprobadas)
 - Gestión de gastos y categorías
 - Subida segura de comprobantes a Cloudinary
 - Vista previa y eliminación de comprobantes
@@ -48,9 +48,10 @@ La aplicación utiliza múltiples capas de protección para administración y up
 ### Auth y autorización
 
 - OAuth con Google mediante Supabase Auth
-- Lista blanca de correos autorizados
+- **Row Level Security (RLS):** Las operaciones de base de datos están restringidas explícitamente a correos administradores mediante políticas de Supabase.
+- Lista blanca dinámica validada tanto en Next.js (middleware/Server Actions) como en la base de datos.
 - Protección de rutas admin vía `middleware.ts`
-- Server Actions protegidas server-side
+- Server Actions protegidas exigiendo usuarios autenticados y autorizados
 
 ### Uploads seguros
 
@@ -132,28 +133,37 @@ Al eliminar una categoría, los gastos existentes se reasignan a `N/A`.
 
 ---
 
+### `admins`
+
+| Columna | Tipo |
+|---|---|
+| `id` | uuid |
+| `email` | unique text |
+| `creado_el` | timestamp |
+
+Usada para control de acceso dinámico. Las políticas RLS y el middleware de Next.js consultan esta tabla para conceder o denegar el acceso al panel de administración y a las modificaciones de datos.
+
+---
+
 ## Auth y control de acceso
 
-Hay múltiples capas de protección (intencionalmente):
+Hay múltiples capas de protección (por diseño):
 
-1. `middleware.ts` bloquea `/admin/*` si no hay sesión o el correo no está autorizado.
-2. `src/app/admin/layout.tsx` valida sesión también en cliente como segunda barrera.
-3. Las Server Actions exigen:
+1. **RLS en Base de Datos:** Supabase aplica Row Level Security. Solo los usuarios cuyo `auth.jwt() ->> 'email'` exista en la tabla `admins` pueden hacer INSERT, UPDATE o DELETE en los registros.
+2. `middleware.ts` bloquea `/admin/*` si no hay sesión o el correo no se encuentra en la lista de `admins`.
+3. `src/app/admin/layout.tsx` valida la sesión server-side como segunda barrera antes de renderizar la interfaz.
+4. Las Server Actions exigen:
    - sesión autenticada
-   - correo autorizado
+   - correo autorizado (verificado contra la DB)
    - payload válido
 
-La whitelist vive en:
+La lógica de validación de la lista blanca vive en:
 
 ```txt
 src/lib/auth.ts
 ```
 
-mediante la constante:
-
-```txt
-AUTHORIZED_EMAILS
-```
+la cual consulta la tabla admins de forma segura utilizando la Service Role Key, evitando dependencias circulares de RLS durante las verificaciones de acceso.
 
 ---
 
@@ -286,4 +296,4 @@ pnpm start
 - Los headers de seguridad y CSP están configurados en `next.config.ts`.
 - Los uploads a Cloudinary son firmados server-side.
 - Ya no se utilizan upload presets públicos.
-- El proyecto prioriza arquitectura simple y validaciones explícitas server-side.
+- El proyecto prioriza arquitectura simple y validaciones explícitas server-side, junto con políticas estrictas de RLS en Postgres.

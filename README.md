@@ -25,7 +25,7 @@ The goal is that students should be able to quickly understand where the federat
 ### Admin panel (restricted)
 
 - Google sign-in (Supabase Auth)
-- Email allowlist (only approved accounts can access)
+- Dynamic database email allowlist (only approved accounts can access)
 - Manage expenses and categories
 - Secure receipt uploads to Cloudinary
 - Receipt preview and deletion support
@@ -50,7 +50,8 @@ The app uses multiple layers of protection for admin actions and file uploads.
 ### Authentication & authorization
 
 - Google OAuth via Supabase Auth
-- Email allowlist enforced both client-side and server-side
+- **Row Level Security (RLS):** Database operations are explicitly restricted to authorized admin emails via Supabase policies.
+- Dynamic email allowlist enforced both in Next.js (middleware/Server Actions) and the database.
 - Protected admin routes via `middleware.ts`
 - Server Actions require authenticated + authorized users
 
@@ -103,7 +104,7 @@ Security measures include:
 
 ## Data model (Supabase)
 
-The app expects two tables:
+The app expects three tables:
 
 ### `gastos`
 
@@ -134,24 +135,37 @@ When deleting a category, existing expenses are reassigned to `N/A`.
 
 ---
 
+### `admins`
+
+| Column | Type |
+|---|---|
+| `id` | uuid |
+| `email` | unique text |
+| `creado_el` | timestamp |
+
+Used for dynamic access control. RLS policies and Next.js middleware check this table to grant or deny access to the admin panel and mutations.
+
+---
+
 ## Auth & access control
 
 There are multiple guardrails (by design):
 
-1. `middleware.ts` blocks `/admin/*` if there is no session or the email is not allowed.
-2. `src/app/admin/layout.tsx` validates the session client-side as a secondary check.
-3. Server Actions require:
+1. **Database RLS:** Supabase enforces Row Level Security. Only users whose `auth.jwt() ->> 'email'` exists in the `admins` table can INSERT, UPDATE, or DELETE records.
+2. `middleware.ts` blocks `/admin/*` if there is no session or the email is not found in the `admins` allowlist.
+3. `src/app/admin/layout.tsx` validates the session server-side as a secondary check before rendering UI.
+4. Server Actions require:
    - authenticated session
-   - allowlisted email
+   - authorized email (verified against the DB)
    - valid request payloads
 
-The allowlist lives in:
+The allowlist validation logic lives in:
 
 ```txt
 src/lib/auth.ts
 ```
 
-via the `AUTHORIZED_EMAILS` constant.
+which queries the admins table securely using the Service Role Key to avoid RLS circular dependencies during access checks.
 
 ---
 
@@ -284,4 +298,4 @@ pnpm start
 - Security headers and CSP are configured in `next.config.ts`.
 - Cloudinary uploads use signed server-side uploads only.
 - Upload presets are no longer required.
-- The project intentionally favors simple architecture and explicit server-side validation.
+- The project intentionally favors simple architecture and explicit server-side validation alongside strict Postgres RLS.
