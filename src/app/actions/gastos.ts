@@ -14,7 +14,7 @@ async function requireAuth() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user || !isAuthorizedEmail(user.email)) {
+  if (!user || !(await isAuthorizedEmail(user.email))) {
     throw new Error("No autorizado");
   }
   return user;

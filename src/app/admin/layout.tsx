@@ -24,7 +24,7 @@ export default function AdminLayout({
         return;
       }
 
-      if (!isAuthorizedEmail(user.email)) {
+      if (!(await isAuthorizedEmail(user.email))) {
         await supabase.auth.signOut();
         router.replace("/login?error=unauthorized");
         return;
@@ -47,7 +47,7 @@ export default function AdminLayout({
         const {
           data: { user },
         } = await supabase.auth.getUser();
-        if (!user || !isAuthorizedEmail(user.email)) {
+        if (!user || !(await isAuthorizedEmail(user.email))) {
           await supabase.auth.signOut();
           router.replace("/login?error=unauthorized");
         }
