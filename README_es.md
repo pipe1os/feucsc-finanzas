@@ -102,7 +102,7 @@ Protecciones implementadas:
 
 ## Modelo de datos (Supabase)
 
-La app espera dos tablas:
+La app espera tres tablas:
 
 ### `gastos`
 
