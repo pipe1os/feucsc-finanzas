@@ -29,8 +29,8 @@ const GoogleIcon = () => (
 );
 
 function LoginError() {
-  const { get } = useSearchParams();
-  const error = get("error");
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
 
   if (!error) return null;
 

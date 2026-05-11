@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { isAuthorizedEmail } from "@/lib/auth";
+import { checkAuthorizedEmail } from "@/app/actions/auth";
 
 export default function AdminLayout({
   children,
@@ -24,7 +24,7 @@ export default function AdminLayout({
         return;
       }
 
-      if (!(await isAuthorizedEmail(user.email))) {
+      if (!(await checkAuthorizedEmail(user.email))) {
         await supabase.auth.signOut();
         replace("/login?error=unauthorized");
         return;
@@ -47,7 +47,7 @@ export default function AdminLayout({
         const {
           data: { user },
         } = await supabase.auth.getUser();
-        if (!user || !(await isAuthorizedEmail(user.email))) {
+        if (!user || !(await checkAuthorizedEmail(user.email))) {
           await supabase.auth.signOut();
           replace("/login?error=unauthorized");
         }
