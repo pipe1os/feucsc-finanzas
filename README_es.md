@@ -111,9 +111,6 @@ pnpm test
 
 ---
 
-
-## Estructura del proyecto
-
 - `src/app/` — rutas (público + admin)
 - `src/app/actions/` — Server Actions (DB + uploads)
 - `src/lib/` — clientes Supabase, auth, configuración Cloudinary y utilidades
@@ -180,15 +177,15 @@ La app espera tres tablas:
 
 ### `gastos`
 
-| Columna | Tipo |
-|---|---|
-| `id` | uuid |
-| `fecha` | `YYYY-MM-DD` |
-| `descripcion` | text |
-| `categoria` | text |
-| `monto` | numeric |
+| Columna           | Tipo          |
+| ----------------- | ------------- |
+| `id`              | uuid          |
+| `fecha`           | `YYYY-MM-DD`  |
+| `descripcion`     | text          |
+| `categoria`       | text          |
+| `monto`           | numeric       |
 | `comprobante_url` | nullable text |
-| `creado_el` | timestamp |
+| `creado_el`       | timestamp     |
 
 `creado_el` se usa para indicadores de sincronización y revalidación.
 
@@ -196,12 +193,12 @@ La app espera tres tablas:
 
 ### `categorias`
 
-| Columna | Tipo |
-|---|---|
-| `id` | uuid |
-| `nombre` | unique text |
-| `color` | opcional `#RRGGBB` |
-| `creado_el` | timestamp |
+| Columna     | Tipo               |
+| ----------- | ------------------ |
+| `id`        | uuid               |
+| `nombre`    | unique text        |
+| `color`     | opcional `#RRGGBB` |
+| `creado_el` | timestamp          |
 
 Al eliminar una categoría, los gastos existentes se reasignan a `N/A`.
 
@@ -209,11 +206,11 @@ Al eliminar una categoría, los gastos existentes se reasignan a `N/A`.
 
 ### `admins`
 
-| Columna | Tipo |
-|---|---|
-| `id` | uuid |
-| `email` | unique text |
-| `creado_el` | timestamp |
+| Columna     | Tipo        |
+| ----------- | ----------- |
+| `id`        | uuid        |
+| `email`     | unique text |
+| `creado_el` | timestamp   |
 
 Usada para control de acceso dinámico. Las políticas RLS y el middleware de Next.js consultan esta tabla para conceder o denegar el acceso al panel de administración y a las modificaciones de datos.
 
@@ -252,6 +249,7 @@ Navegador → Server Action → Cloudinary
 ```
 
 El cliente nunca recibe:
+
 - API secret de Cloudinary
 - credenciales firmadas
 
