@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import ExpenseTable from "./ExpenseTable";
 import { LazyExpenseCategoryChart } from "./LazyCharts";
 
@@ -35,6 +35,14 @@ export default function DashboardClient({
     null,
   );
 
+  const handleClearChartFilter = useCallback(() => {
+    setChartCategoryFilter(null);
+  }, []);
+
+  const handleCategoryClick = useCallback((cat: string) => {
+    setChartCategoryFilter(cat);
+  }, []);
+
   return (
     <section
       aria-label="Detalle de gastos"
@@ -44,14 +52,14 @@ export default function DashboardClient({
         <ExpenseTable
           transacciones={transacciones}
           chartCategoryFilter={chartCategoryFilter}
-          onClearChartFilter={() => setChartCategoryFilter(null)}
+          onClearChartFilter={handleClearChartFilter}
           isLoading={isLoading}
         />
       </div>
       <div className="xl:col-span-1">
         <LazyExpenseCategoryChart
           gastosPorCategoria={gastosPorCategoria}
-          onCategoryClick={(cat: string) => setChartCategoryFilter(cat)}
+          onCategoryClick={handleCategoryClick}
           activeCategoryFilter={chartCategoryFilter}
         />
       </div>
