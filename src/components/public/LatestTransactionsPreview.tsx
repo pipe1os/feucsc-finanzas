@@ -85,7 +85,7 @@ export default function LatestTransactionsPreview({
                       className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
                       style={{
                         backgroundColor: `${catColor}18`,
-                        color: `light-dark(color-mix(in srgb, ${catColor} 60%, black), ${catColor})`,
+                        color: catColor,
                       }}
                     >
                       {txn.categoria}
@@ -143,7 +143,7 @@ export default function LatestTransactionsPreview({
                         className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
                         style={{
                           backgroundColor: `${txn.color}18`,
-                          color: `light-dark(color-mix(in srgb, ${txn.color} 60%, black), ${txn.color})`,
+                          color: txn.color,
                         }}
                       >
                         {txn.categoria}
