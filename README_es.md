@@ -162,6 +162,8 @@ Workflow:
 
 - `/` — dashboard
 - `/gastos` — todos los gastos
+- `/faq` — lista de preguntas frecuentes dinámica
+- `/contacto` — formulario y datos de contacto
 
 ### Auth/Admin
 
