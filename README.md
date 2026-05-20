@@ -166,6 +166,8 @@ Workflow:
 
 - `/` — dashboard
 - `/gastos` — all expenses
+- `/faq` — dynamic FAQ list
+- `/contacto` — contact form and details
 
 ### Auth/Admin
 
