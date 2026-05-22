@@ -189,7 +189,7 @@ function NavCategory({ label }: { label: string }) {
 }
 
 function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -204,7 +204,7 @@ function ThemeToggle() {
     );
   }
 
-  const isLight = theme === "light";
+  const isLight = resolvedTheme === "light";
 
   return (
     <div className="flex items-center rounded-lg bg-zinc-100 dark:bg-zinc-800 p-0.5">
