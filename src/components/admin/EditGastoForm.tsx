@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useReducer, useCallback } from "react";
 import { TextField, Label, Input, Button, Alert, toast } from "@heroui/react";
 import { updateGasto, createCategoria } from "@/app/actions/gastos";
 import { uploadComprobanteAction } from "@/app/actions/upload";
@@ -40,19 +40,24 @@ export default function EditGastoForm({
   onDeleteCategory,
   onViewImage,
 }: EditGastoFormProps) {
-  const [fecha, setFecha] = useState(gasto.fecha);
-  const [descripcion, setDescripcion] = useState(gasto.descripcion);
-  const [categoria, setCategoria] = useState(gasto.categoria);
-  const [monto, setMonto] = useState(String(gasto.monto));
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [existingUrl] = useState<string | null>(gasto.comprobante_url || null);
-  const [imageMarkedForDeletion, setImageMarkedForDeletion] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [state, setState] = useReducer(
+    (prev: any, next: any) => ({ ...prev, ...next }),
+    {
+      fecha: gasto.fecha,
+      descripcion: gasto.descripcion,
+      categoria: gasto.categoria,
+      monto: String(gasto.monto),
+      selectedFile: null as File | null,
+      imageMarkedForDeletion: false,
+      submitting: false,
+      error: null as string | null,
+    }
+  );
+  const existingUrl = gasto.comprobante_url || null;
 
   const handleCategoriaChange = useCallback(
     async (cat: string) => {
-      setCategoria(cat);
+      setState({ categoria: cat });
       if (!categorias.includes(cat)) {
         const usedColors = categoriasDB
           .flatMap((c) => c.color ? [c.color] : []) as string[];
@@ -69,35 +74,34 @@ export default function EditGastoForm({
   );
 
   const handleSubmit = async () => {
-    setSubmitting(true);
-    setError(null);
+    setState({ submitting: true, error: null });
 
     const originalUrl = gasto.comprobante_url;
     let finalUrl: string | null = originalUrl || null;
 
     try {
-      if (selectedFile) {
+      if (state.selectedFile) {
         const uploadForm = new FormData();
-        uploadForm.append("file", selectedFile);
+        uploadForm.append("file", state.selectedFile);
         const uploadedUrl = await uploadComprobanteAction(uploadForm);
         if (uploadedUrl) {
           finalUrl = uploadedUrl;
         } else {
-          setError("Error al subir el comprobante");
+          setState({ error: "Error al subir el comprobante" });
           toast.danger("Error al subir el comprobante");
           return;
         }
       }
 
-      if (imageMarkedForDeletion) {
+      if (state.imageMarkedForDeletion) {
         finalUrl = null;
       }
       const form = new FormData();
       form.append("id", gasto.id);
-      form.append("fecha", fecha);
-      form.append("descripcion", descripcion.trim());
-      form.append("categoria", categoria);
-      form.append("monto", monto);
+      form.append("fecha", state.fecha);
+      form.append("descripcion", state.descripcion.trim());
+      form.append("categoria", state.categoria);
+      form.append("monto", state.monto);
       form.append("comprobante_url", finalUrl || "");
       await updateGasto(form);
 
@@ -110,10 +114,10 @@ export default function EditGastoForm({
       }, 500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Error desconocido";
-      setError(msg);
+      setState({ error: msg });
       toast.danger("Error al actualizar gasto");
     } finally {
-      setSubmitting(false);
+      setState({ submitting: false });
     }
   };
 
@@ -124,12 +128,12 @@ export default function EditGastoForm({
           isRequired
           name="edit_fecha"
           type="date"
-          onChange={setFecha}
+          onChange={(val) => setState({ fecha: val })}
           className="w-full"
         >
           <Label>Fecha</Label>
           <Input
-            value={fecha}
+            value={state.fecha}
             className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60"
           />
         </TextField>
@@ -143,7 +147,7 @@ export default function EditGastoForm({
           <CategorySelect
             id="edit-gasto-categoria"
             categorias={categorias}
-            value={categoria}
+            value={state.categoria}
             onChange={handleCategoriaChange}
             onDeleteCategory={onDeleteCategory}
           />
@@ -152,13 +156,13 @@ export default function EditGastoForm({
       <TextField
         isRequired
         name="edit_descripcion"
-        onChange={setDescripcion}
+        onChange={(val) => setState({ descripcion: val })}
         className="w-full"
       >
         <Label>Descripción</Label>
         <Input
           placeholder="Descripción del gasto"
-          value={descripcion}
+          value={state.descripcion}
           className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 placeholder:text-zinc-400"
         />
       </TextField>
@@ -167,30 +171,30 @@ export default function EditGastoForm({
           isRequired
           name="edit_monto"
           type="number"
-          onChange={setMonto}
+          onChange={(val) => setState({ monto: val })}
           className="w-full"
         >
           <Label>Monto</Label>
           <Input
             placeholder="850000"
-            value={monto}
+            value={state.monto}
             className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 placeholder:text-zinc-400"
           />
         </TextField>
         <ComprobanteUpload
-          selectedFile={selectedFile}
-          setSelectedFile={setSelectedFile}
+          selectedFile={state.selectedFile}
+          setSelectedFile={(val) => setState({ selectedFile: val })}
           existingUrl={existingUrl}
-          onDeleteExisting={() => setImageMarkedForDeletion(true)}
-          isMarkedForDeletion={imageMarkedForDeletion}
+          onDeleteExisting={() => setState({ imageMarkedForDeletion: true })}
+          isMarkedForDeletion={state.imageMarkedForDeletion}
           onViewImage={onViewImage}
         />
       </div>
-      {error && (
+      {state.error && (
         <Alert status="danger">
           <Alert.Indicator />
           <Alert.Content>
-            <Alert.Title className="text-sm">{error}</Alert.Title>
+            <Alert.Title className="text-sm">{state.error}</Alert.Title>
           </Alert.Content>
         </Alert>
       )}
@@ -203,11 +207,11 @@ export default function EditGastoForm({
           Cancelar
         </Button>
         <Button
-          isDisabled={submitting}
+          isDisabled={state.submitting}
           onPress={handleSubmit}
           className="bg-zinc-900 text-white dark:bg-white dark:text-black hover:bg-zinc-800 dark:hover:bg-zinc-200 cursor-pointer rounded-xl px-6 font-medium shadow-sm"
         >
-          {submitting ? "Guardando..." : "Guardar cambios"}
+          {state.submitting ? "Guardando..." : "Guardar cambios"}
         </Button>
       </div>
     </div>
