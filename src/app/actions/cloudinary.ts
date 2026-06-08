@@ -34,13 +34,14 @@ function extractPublicId(url: string) {
 
 export async function deleteCloudinaryImage(url: string) {
   try {
-    await requireAuth();
     if (!url || !url.startsWith("https://res.cloudinary.com/")) {
       return { success: false, error: "Invalid Cloudinary URL" };
     }
 
     const publicId = extractPublicId(url);
     if (!publicId) return { success: false, error: "Invalid Cloudinary URL" };
+
+    await requireAuth();
 
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
     const apiKey = process.env.CLOUDINARY_API_KEY;
