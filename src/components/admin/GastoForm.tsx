@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useReducer, useCallback } from "react";
 import { TextField, Label, Input, Button, Alert, toast } from "@heroui/react";
 import { createGasto, createCategoria } from "@/app/actions/gastos";
 import { uploadComprobanteAction } from "@/app/actions/upload";
@@ -24,19 +24,22 @@ export default function GastoForm({
   mutateCategorias,
   onDeleteCategory,
 }: GastoFormProps) {
-  const [fecha, setFecha] = useState(
-    () => new Date().toISOString().split("T")[0],
+  const [state, setState] = useReducer(
+    (prev: any, next: any) => ({ ...prev, ...next }),
+    {
+      fecha: new Date().toISOString().split("T")[0],
+      descripcion: "",
+      categoria: "Varios",
+      monto: "",
+      selectedFile: null as File | null,
+      submitting: false,
+      formError: null as string | null,
+    }
   );
-  const [descripcion, setDescripcion] = useState("");
-  const [categoria, setCategoria] = useState("Varios");
-  const [monto, setMonto] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
 
   const handleCategoriaChange = useCallback(
     async (cat: string) => {
-      setCategoria(cat);
+      setState({ categoria: cat });
       if (!categorias.includes(cat)) {
         const usedColors = categoriasDB
           .flatMap((c) => c.color ? [c.color] : []) as string[];
@@ -54,23 +57,23 @@ export default function GastoForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError(null);
-    if (!fecha || !descripcion.trim() || !monto) {
-      setFormError("Completa los campos obligatorios.");
+    setState({ formError: null });
+    if (!state.fecha || !state.descripcion.trim() || !state.monto) {
+      setState({ formError: "Completa los campos obligatorios." });
       return;
     }
-    const montoNum = parseInt(monto, 10);
+    const montoNum = parseInt(state.monto, 10);
     if (isNaN(montoNum) || montoNum <= 0) {
-      setFormError("El monto debe ser un número positivo.");
+      setState({ formError: "El monto debe ser un número positivo." });
       return;
     }
-    setSubmitting(true);
+    setState({ submitting: true });
 
     let comprobanteUrl: string | null = null;
     try {
-      if (selectedFile) {
+      if (state.selectedFile) {
         const uploadForm = new FormData();
-        uploadForm.append("file", selectedFile);
+        uploadForm.append("file", state.selectedFile);
         comprobanteUrl = await uploadComprobanteAction(uploadForm);
         if (!comprobanteUrl) {
           throw new Error("Error al subir el comprobante");
@@ -78,26 +81,28 @@ export default function GastoForm({
       }
 
       const form = new FormData();
-      form.append("fecha", fecha);
-      form.append("descripcion", descripcion.trim());
-      form.append("categoria", categoria);
+      form.append("fecha", state.fecha);
+      form.append("descripcion", state.descripcion.trim());
+      form.append("categoria", state.categoria);
       form.append("monto", String(montoNum));
       if (comprobanteUrl) form.append("comprobante_url", comprobanteUrl);
       await createGasto(form);
 
       toast.success("Gasto registrado exitosamente");
-      setFecha(new Date().toISOString().split("T")[0]);
-      setDescripcion("");
-      setCategoria("Varios");
-      setMonto("");
-      setSelectedFile(null);
+      setState({
+        fecha: new Date().toISOString().split("T")[0],
+        descripcion: "",
+        categoria: "Varios",
+        monto: "",
+        selectedFile: null,
+      });
       mutateGastos();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Error desconocido";
-      setFormError(msg);
+      setState({ formError: msg });
       toast.danger("Error al registrar gasto");
     } finally {
-      setSubmitting(false);
+      setState({ submitting: false });
     }
   };
 
@@ -108,12 +113,12 @@ export default function GastoForm({
           isRequired
           name="fecha"
           type="date"
-          onChange={setFecha}
+          onChange={(val) => setState({ fecha: val })}
           className="w-full"
         >
           <Label>Fecha</Label>
           <Input
-            value={fecha}
+            value={state.fecha}
             className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60"
           />
         </TextField>
@@ -127,7 +132,7 @@ export default function GastoForm({
           <CategorySelect
             id="gasto-categoria"
             categorias={categorias}
-            value={categoria}
+            value={state.categoria}
             onChange={handleCategoriaChange}
             onDeleteCategory={onDeleteCategory}
           />
@@ -136,13 +141,13 @@ export default function GastoForm({
       <TextField
         isRequired
         name="descripcion"
-        onChange={setDescripcion}
+        onChange={(val) => setState({ descripcion: val })}
         className="w-full"
       >
         <Label>Descripción</Label>
         <Input
           placeholder="Ej: Producción Bienvenida Mechona"
-          value={descripcion}
+          value={state.descripcion}
           className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 placeholder:text-zinc-400"
         />
       </TextField>
@@ -151,26 +156,26 @@ export default function GastoForm({
           isRequired
           name="monto"
           type="number"
-          onChange={setMonto}
+          onChange={(val) => setState({ monto: val })}
           className="w-full"
         >
           <Label>Monto</Label>
           <Input
             placeholder="850000"
-            value={monto}
+            value={state.monto}
             className="h-10 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 placeholder:text-zinc-400"
           />
         </TextField>
         <ComprobanteUpload
-          selectedFile={selectedFile}
-          setSelectedFile={setSelectedFile}
+          selectedFile={state.selectedFile}
+          setSelectedFile={(val) => setState({ selectedFile: val })}
         />
       </div>
-      {formError && (
+      {state.formError && (
         <Alert status="danger" className="animate-fade-in-up">
           <Alert.Indicator />
           <Alert.Content>
-            <Alert.Title className="text-sm">{formError}</Alert.Title>
+            <Alert.Title className="text-sm">{state.formError}</Alert.Title>
           </Alert.Content>
         </Alert>
       )}
@@ -179,15 +184,15 @@ export default function GastoForm({
         <Button
           type="submit"
           size="lg"
-          isDisabled={submitting}
+          isDisabled={state.submitting}
           className="w-full sm:w-fit px-8 rounded-2xl bg-zinc-900 text-white dark:bg-white dark:text-black font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all duration-200 h-12 shadow-sm hover:shadow-md cursor-pointer text-sm"
         >
-          {submitting ? (
+          {state.submitting ? (
             <div className="size-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
           ) : (
             <PlusIcon />
           )}
-          {submitting ? "Guardando..." : "Registrar gasto"}
+          {state.submitting ? "Guardando..." : "Registrar gasto"}
         </Button>
       </div>
     </form>

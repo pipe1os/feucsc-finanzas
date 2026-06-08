@@ -84,6 +84,8 @@ export default function AdminPage() {
 
   const { gastos, isLoading: loadingTable, mutateGastos } = useGastos();
   const { categoriasDB, mutateCategorias } = useCategorias();
+
+  // eslint-disable-next-line react-doctor/prefer-useReducer
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
