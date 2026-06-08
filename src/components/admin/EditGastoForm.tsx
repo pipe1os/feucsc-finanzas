@@ -40,18 +40,20 @@ export default function EditGastoForm({
   onDeleteCategory,
   onViewImage,
 }: EditGastoFormProps) {
+  const initialState = {
+    fecha: gasto.fecha,
+    descripcion: gasto.descripcion,
+    categoria: gasto.categoria,
+    monto: String(gasto.monto),
+    selectedFile: null as File | null,
+    imageMarkedForDeletion: false,
+    submitting: false,
+    error: null as string | null,
+  };
+
   const [state, setState] = useReducer(
-    (prev: any, next: any) => ({ ...prev, ...next }),
-    {
-      fecha: gasto.fecha,
-      descripcion: gasto.descripcion,
-      categoria: gasto.categoria,
-      monto: String(gasto.monto),
-      selectedFile: null as File | null,
-      imageMarkedForDeletion: false,
-      submitting: false,
-      error: null as string | null,
-    }
+    (prev: typeof initialState, next: Partial<typeof initialState>) => ({ ...prev, ...next }),
+    initialState
   );
   const existingUrl = gasto.comprobante_url || null;
 
