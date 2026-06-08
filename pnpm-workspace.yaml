@@ -1,4 +1,5 @@
 allowBuilds:
+  msgpackr-extract: true
   msw: true
   sharp: true
   unrs-resolver: true
@@ -8,3 +9,4 @@ ignoredBuiltDependencies:
 overrides:
   "postcss": ">=8.5.10"
   tmp: ^0.2.4
+minimumReleaseAge: 10080
