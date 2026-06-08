@@ -80,12 +80,13 @@ temp/
 AGENTS.md
 CLAUDE.md
 PRODUCT.md
-.vibeskills/
+DESIGN.md
+.windsurf/
+.trae/
 .heroui-docs/
 docs/
 outputs/
 .opencode/
-.sisyphus
 .claude/
 .agents/
 .dgrep/

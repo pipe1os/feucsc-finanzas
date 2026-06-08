@@ -189,7 +189,7 @@ function NavCategory({ label }: { label: string }) {
 }
 
 function ThemeToggle() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -208,7 +208,7 @@ function ThemeToggle() {
 
   return (
     <div className="flex items-center rounded-lg bg-zinc-100 dark:bg-zinc-800 p-0.5">
-      <button
+      <button type="button"
         onClick={() => setTheme("light")}
         data-active={isLight}
         className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white data-[active=true]:text-zinc-900 data-[active=true]:shadow-xs data-[active=false]:text-zinc-600 dark:data-[active=false]:text-zinc-400"
@@ -216,7 +216,7 @@ function ThemeToggle() {
         <SunIcon />
         <span>Claro</span>
       </button>
-      <button
+      <button type="button"
         onClick={() => setTheme("dark")}
         data-active={!isLight}
         className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white dark:data-[active=true]:bg-zinc-700 data-[active=true]:text-zinc-900 dark:data-[active=true]:text-white data-[active=true]:shadow-xs data-[active=false]:text-zinc-600 dark:data-[active=false]:text-zinc-400"
@@ -298,7 +298,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <button
+      <button type="button"
         onClick={() => toggleSidebar(!isOpen)}
         className="fixed top-4 right-4 z-50 flex items-center justify-center
                    size-10 rounded-xl bg-white dark:bg-zinc-800 shadow-apple-lg lg:hidden

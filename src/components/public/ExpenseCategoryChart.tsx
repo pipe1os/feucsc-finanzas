@@ -195,7 +195,7 @@ export default function ExpenseCategoryChart({
             const isDimmed =
               activeCategoryFilter && activeCategoryFilter !== item.categoria;
             return (
-              <button
+              <button type="button"
                 key={item.categoria}
                 onClick={() =>
                   onCategoryClick?.(isActive ? "" : item.categoria)

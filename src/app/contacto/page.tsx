@@ -3,28 +3,28 @@
 import { toast } from "@heroui/react";
 import Footer from "@/components/public/Footer";
 
-export default function ContactoPage() {
-  const handleCopyEmail = () => {
-    const text = "feucsc@ucsc.cl";
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(text);
+const handleCopyEmail = () => {
+  const text = "feucsc@ucsc.cl";
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text);
+    toast.success("Correo copiado al portapapeles");
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.cssText = "position: fixed; opacity: 0;";
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand("copy");
       toast.success("Correo copiado al portapapeles");
-    } else {
-      const textarea = document.createElement("textarea");
-      textarea.value = text;
-      textarea.style.cssText = "position: fixed; opacity: 0;";
-      document.body.appendChild(textarea);
-      textarea.select();
-      try {
-        document.execCommand("copy");
-        toast.success("Correo copiado al portapapeles");
-      } catch {
-        toast.danger("No se pudo copiar el correo");
-      }
-      document.body.removeChild(textarea);
+    } catch {
+      toast.danger("No se pudo copiar el correo");
     }
-  };
+    document.body.removeChild(textarea);
+  }
+};
 
+export default function ContactoPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
       <header className="mb-10 animate-fade-in-up opacity-0 text-center">

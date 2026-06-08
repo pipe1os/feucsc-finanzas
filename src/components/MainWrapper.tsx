@@ -2,9 +2,10 @@
 
 import { usePathname } from "next/navigation";
 
+const noSidebarPaths = ["/login", "/auth/callback", "/admin"];
+
 export default function MainWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const noSidebarPaths = ["/login", "/auth/callback", "/admin"];
   const hasSidebar = !noSidebarPaths.includes(pathname);
 
   return (
