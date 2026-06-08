@@ -1,6 +1,7 @@
 "use server";
 
 import crypto from "crypto";
+import { z } from "zod";
 
 // CRUD de gastos/categorías. Acá validamos todo porque esto termina en la DB.
 import { supabaseServer } from "@/lib/supabase-server";
@@ -22,19 +23,6 @@ async function requireAuth() {
   return user;
 }
 
-const MAX_DESC_LEN = 255;
-const MAX_CAT_LEN = 100;
-
-function validDate(d: string): boolean {
-  return /^\d{4}-\d{2}-\d{2}$/.test(d) && !isNaN(Date.parse(d));
-}
-
-function validUUID(id: string): boolean {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-    id,
-  );
-}
-
 function sanitizeDbError(error: PostgrestError): Error {
   console.error("Supabase DB error:", JSON.stringify(error));
   return new Error(
@@ -42,39 +30,69 @@ function sanitizeDbError(error: PostgrestError): Error {
   );
 }
 
-export async function createGasto(formData: FormData) {
-  await requireAuth();
-  const fecha = formData.get("fecha") as string;
-  const descripcion = ((formData.get("descripcion") as string) || "").trim();
-  const categoria = ((formData.get("categoria") as string) || "").trim();
-  const montoRaw = formData.get("monto") as string;
-  if (montoRaw === null || montoRaw === undefined)
-    throw new Error("Monto es requerido");
-  const monto = Number(montoRaw);
-  const comprobante_url = (formData.get("comprobante_url") as string) || null;
+const GastoSchema = z.object({
+  fecha: z
+    .string({ message: "Fecha es requerida" })
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida")
+    .refine((d) => !isNaN(Date.parse(d)), "Fecha inválida"),
+  descripcion: z
+    .string({ message: "Descripción es requerida" })
+    .min(1, "Descripción inválida")
+    .max(255, "Descripción inválida"),
+  categoria: z
+    .string({ message: "Categoría es requerida" })
+    .min(1, "Categoría inválida")
+    .max(100, "Categoría inválida"),
+  monto: z.coerce
+    .number({ message: "Monto es requerido" })
+    .min(0, "Monto inválido")
+    .max(1_000_000_000, "Monto inválido")
+    .finite("Monto inválido"),
+  comprobante_url: z.preprocess(
+    (val) => (val === "" ? null : val),
+    z.string().url("URL de comprobante inválida").refine((url) => {
+      try {
+        return new URL(url).hostname === "res.cloudinary.com";
+      } catch {
+        return false;
+      }
+    }, "URL de comprobante inválida").nullable().optional()
+  ),
+});
 
-  if (!validDate(fecha)) throw new Error("Fecha inválida");
-  if (!descripcion || descripcion.length > MAX_DESC_LEN)
-    throw new Error("Descripción inválida");
-  if (!categoria || categoria.length > MAX_CAT_LEN)
-    throw new Error("Categoría inválida");
-  if (!Number.isFinite(monto) || monto < 0 || monto > 1_000_000_000)
-    throw new Error("Monto inválido");
-  if (comprobante_url) {
-    try {
-      const parsed = new URL(comprobante_url);
-      if (parsed.hostname !== "res.cloudinary.com") throw new Error();
-    } catch {
-      throw new Error("URL de comprobante inválida");
-    }
+const GastoUpdateSchema = GastoSchema.extend({
+  id: z.string({ message: "ID es requerido" }).uuid("ID inválido"),
+});
+
+const CategoriaSchema = z.object({
+  nombre: z.string({ message: "Nombre es requerido" }).min(1, "Nombre de categoría inválido").max(100, "Nombre de categoría inválido"),
+  color: z.string({ message: "Color es requerido" }).regex(/^#[0-9a-f]{6}$/i, "Color inválido"),
+});
+
+export async function createGasto(formData: FormData) {
+  const rawData = {
+    fecha: formData.get("fecha"),
+    descripcion: typeof formData.get("descripcion") === "string" ? (formData.get("descripcion") as string).trim() : formData.get("descripcion"),
+    categoria: typeof formData.get("categoria") === "string" ? (formData.get("categoria") as string).trim() : formData.get("categoria"),
+    monto: formData.get("monto"),
+    comprobante_url: formData.get("comprobante_url"),
+  };
+
+  const parsed = GastoSchema.safeParse(rawData);
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || "Datos inválidos");
   }
+
+  const { fecha, descripcion, categoria, monto, comprobante_url } = parsed.data;
+
+  await requireAuth();
 
   const { error } = await supabaseServer.client.from("gastos").insert({
     fecha,
     descripcion,
     categoria,
     monto,
-    comprobante_url,
+    comprobante_url: comprobante_url || null,
   });
 
   if (error) throw sanitizeDbError(error);
@@ -83,33 +101,23 @@ export async function createGasto(formData: FormData) {
 }
 
 export async function updateGasto(formData: FormData) {
-  await requireAuth();
-  const id = formData.get("id") as string;
-  const fecha = formData.get("fecha") as string;
-  const descripcion = ((formData.get("descripcion") as string) || "").trim();
-  const categoria = ((formData.get("categoria") as string) || "").trim();
-  const montoRaw = formData.get("monto") as string;
-  if (montoRaw === null || montoRaw === undefined)
-    throw new Error("Monto es requerido");
-  const monto = Number(montoRaw);
-  const comprobante_url = (formData.get("comprobante_url") as string) || null;
+  const rawData = {
+    id: formData.get("id"),
+    fecha: formData.get("fecha"),
+    descripcion: typeof formData.get("descripcion") === "string" ? (formData.get("descripcion") as string).trim() : formData.get("descripcion"),
+    categoria: typeof formData.get("categoria") === "string" ? (formData.get("categoria") as string).trim() : formData.get("categoria"),
+    monto: formData.get("monto"),
+    comprobante_url: formData.get("comprobante_url"),
+  };
 
-  if (!validUUID(id)) throw new Error("ID inválido");
-  if (!validDate(fecha)) throw new Error("Fecha inválida");
-  if (!descripcion || descripcion.length > MAX_DESC_LEN)
-    throw new Error("Descripción inválida");
-  if (!categoria || categoria.length > MAX_CAT_LEN)
-    throw new Error("Categoría inválida");
-  if (!Number.isFinite(monto) || monto < 0 || monto > 1_000_000_000)
-    throw new Error("Monto inválido");
-  if (comprobante_url) {
-    try {
-      const parsed = new URL(comprobante_url);
-      if (parsed.hostname !== "res.cloudinary.com") throw new Error();
-    } catch {
-      throw new Error("URL de comprobante inválida");
-    }
+  const parsed = GastoUpdateSchema.safeParse(rawData);
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || "Datos inválidos");
   }
+
+  const { id, fecha, descripcion, categoria, monto, comprobante_url } = parsed.data;
+
+  await requireAuth();
 
   const { error } = await supabaseServer.client
     .from("gastos")
@@ -118,7 +126,7 @@ export async function updateGasto(formData: FormData) {
       descripcion,
       categoria,
       monto,
-      comprobante_url,
+      comprobante_url: comprobante_url || null,
     })
     .eq("id", id);
 
@@ -145,8 +153,10 @@ function extractPublicId(url: string) {
 }
 
 export async function deleteGasto(id: string) {
+  const parsed = z.string().uuid("ID inválido").safeParse(id);
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message || "ID inválido");
+  
   await requireAuth();
-  if (!validUUID(id)) throw new Error("ID inválido");
 
   const { data: gastoData } = await supabaseServer.client
     .from("gastos")
@@ -206,25 +216,33 @@ export async function deleteGasto(id: string) {
 }
 
 export async function createCategoria(nombre: string, color: string) {
+  const rawData = {
+    nombre: typeof nombre === "string" ? nombre.trim() : nombre,
+    color,
+  };
+  
+  const parsed = CategoriaSchema.safeParse(rawData);
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || "Datos inválidos");
+  }
+
   await requireAuth();
-  const n = (nombre || "").trim();
-  if (!n || n.length > MAX_CAT_LEN)
-    throw new Error("Nombre de categoría inválido");
-  if (!/^#[0-9a-f]{6}$/i.test(color || "")) throw new Error("Color inválido");
 
   const { error } = await supabaseServer.client
     .from("categorias")
-    .insert({ nombre: n, color });
+    .insert({ nombre: parsed.data.nombre, color: parsed.data.color });
   if (error) throw sanitizeDbError(error);
   revalidatePath("/");
   revalidatePath("/gastos");
 }
 
 export async function deleteCategoria(nombre: string) {
+  const parsed = z.string().min(1, "Nombre de categoría inválido").max(100, "Nombre de categoría inválido").safeParse(typeof nombre === "string" ? nombre.trim() : nombre);
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message || "Nombre de categoría inválido");
+  
+  const n = parsed.data;
+
   await requireAuth();
-  const n = (nombre || "").trim();
-  if (!n || n.length > MAX_CAT_LEN)
-    throw new Error("Nombre de categoría inválido");
 
   const { error: updateError } = await supabaseServer.client
     .from("gastos")
