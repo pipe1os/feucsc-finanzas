@@ -28,16 +28,16 @@ const GoogleIcon = () => (
   </svg>
 );
 
+const errorMessages: Record<string, string> = {
+  unauthorized: "Cuenta no autorizada",
+  session_expired: "Tu sesión ha expirado. Inicia sesión nuevamente.",
+};
+
 function LoginError() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
 
   if (!error) return null;
-
-  const errorMessages: Record<string, string> = {
-    unauthorized: "Cuenta no autorizada",
-    session_expired: "Tu sesión ha expirado. Inicia sesión nuevamente.",
-  };
 
   const message =
     errorMessages[error] || "Ha ocurrido un error. Intenta nuevamente.";

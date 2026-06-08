@@ -71,17 +71,17 @@ export default function KPICards({
             <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-zinc-500 dark:text-zinc-400 mb-1.5">
               Total Gastado
             </p>
-            <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-zinc-900 dark:text-white font-light font-heading">
+            <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-zinc-900 dark:text-white font-bold font-heading">
               <NumberTicker
                 value={resumenFinanciero.totalGastado}
                 formatFn={formatCLP}
-                className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-zinc-900 dark:text-white font-light font-heading"
+                className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-zinc-900 dark:text-white font-bold font-heading"
               />
             </p>
             <p
               className={`mt-1.5 text-sm font-medium flex items-center gap-1 ${spentStatusText}`}
             >
-              <span>
+              <span className="font-bold">
                 <NumberTicker
                   value={porcentajeGastado}
                   className="text-inherit tabular-nums"
@@ -108,11 +108,11 @@ export default function KPICards({
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-zinc-500 dark:text-zinc-400 mb-1">
                 Presupuesto Total
               </p>
-              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-zinc-900 dark:text-white font-light font-heading">
+              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-zinc-900 dark:text-white font-semibold font-heading">
                 <NumberTicker
                   value={resumenFinanciero.presupuestoTotal}
                   formatFn={formatCLP}
-                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-zinc-900 dark:text-white font-light font-heading"
+                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-zinc-900 dark:text-white font-semibold font-heading"
                 />
               </p>
               <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
@@ -124,17 +124,17 @@ export default function KPICards({
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-zinc-500 dark:text-zinc-400 mb-1">
                 Presupuesto Disponible
               </p>
-              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-zinc-900 dark:text-white font-light font-heading">
+              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-zinc-900 dark:text-white font-semibold font-heading">
                 <NumberTicker
                   value={resumenFinanciero.saldoDisponible}
                   formatFn={formatCLP}
-                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-zinc-900 dark:text-white font-light font-heading"
+                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-zinc-900 dark:text-white font-semibold font-heading"
                 />
               </p>
               <p
                 className={`mt-1 text-xs font-medium flex items-center gap-1 ${availableStatusText}`}
               >
-                <span>
+                <span className="font-semibold">
                   <NumberTicker
                     value={porcentajeDisponible}
                     className="text-inherit tabular-nums"

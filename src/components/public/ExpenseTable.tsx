@@ -400,6 +400,7 @@ function ExpenseTable({
             <input
               type="text"
               placeholder="Buscar gasto..."
+              aria-label="Buscar gastos"
               defaultValue=""
               onChange={handleSearchChange}
               className="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 py-2 pl-9 pr-4
@@ -493,7 +494,7 @@ function ExpenseTable({
           </Select>
 
           {hasActiveFilters && (
-            <button
+            <button type="button"
               onClick={handleClearAllFilters}
               className="inline-flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 transition-all duration-200 hover:bg-red-100 cursor-pointer"
             >
@@ -563,7 +564,7 @@ function ExpenseTable({
                           </span>
                         )}
                         {txn.comprobante ? (
-                          <button
+                          <button type="button"
                             onClick={() =>
                               setLightboxImage({
                                 src: txn.comprobante,
@@ -738,7 +739,7 @@ function ExpenseTable({
                               {txn.comprobante ? (
                                 <Tooltip delay={0}>
                                   <Tooltip.Trigger>
-                                    <button
+                                    <button type="button"
                                       onClick={() =>
                                         setLightboxImage({
                                           src: txn.comprobante,

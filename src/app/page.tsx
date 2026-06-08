@@ -7,6 +7,13 @@ import { parseISODate } from "@/lib/utils";
 import { buildCategoryColors } from "@/lib/data-transform";
 import Footer from "@/components/public/Footer";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Transparencia Financiera | FEUCSC",
+  description: "Presupuesto, gastos y comprobantes de la Federación de Estudiantes UCSC.",
+};
+
 export const revalidate = 60;
 
 export default async function Home() {
