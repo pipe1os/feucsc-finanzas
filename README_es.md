@@ -8,32 +8,28 @@
 [![CI](https://img.shields.io/badge/CI-passing-brightgreen)](https://github.com/pipe1os/FEUCSC-FINANZAS/actions/workflows/ci.yaml)
 [![Lighthouse CI](https://img.shields.io/badge/Lighthouse_CI-passing-brightgreen)](https://github.com/pipe1os/FEUCSC-FINANZAS/actions/workflows/lighthouse.yml)
 
-Este proyecto es un portal de transparencia enfocado para la **FEUCSC** (Federación de Estudiantes UCSC).
+[Read in English →](./README.md)
 
-La idea es que cualquier estudiante pueda ver en qué se gasta el presupuesto de la federación y, cuando corresponda, abrir el comprobante para verificar.
+Portal de transparencia financiera para la FEUCSC (Federación de Estudiantes UCSC). Los estudiantes rastrean los gastos de la federación y verifican los comprobantes.
 
----
-
-## Qué incluye
+## Características
 
 ### Portal público
 
 - Dashboard resumen (presupuesto, gastado, saldo)
-- Tendencia mensual de gasto
+- Tendencia mensual de gastos
 - Vista de últimas transacciones
-- Página de gastos completa con breakdown por categoría y links a comprobantes
+- Página de gastos completa con desglose por categoría y enlaces a comprobantes
 
 ### Panel de administración (restringido)
 
-- Login con Google (Supabase Auth)
-- Lista blanca de correos dinámica en base de datos (solo cuentas aprobadas)
+- Inicio de sesión con Google (Supabase Auth)
+- Lista blanca de correos dinámica en la base de datos (solo cuentas aprobadas tienen acceso)
 - Gestión de gastos y categorías
 - Subida segura de comprobantes a Cloudinary
 - Vista previa y eliminación de comprobantes
 
----
-
-## Stack
+## Tecnologías
 
 - Next.js (App Router)
 - Supabase (Postgres + Auth)
@@ -41,335 +37,184 @@ La idea es que cualquier estudiante pueda ver en qué se gasta el presupuesto de
 - SWR (fetch/caché en admin)
 - Tailwind CSS
 - HeroUI
+- Zod (validación en el servidor)
 - Vitest
 - GitHub Actions CI
 - Lighthouse CI
 
----
-
 ## Seguridad
 
-La aplicación utiliza múltiples capas de protección para administración y uploads.
+Múltiples capas protegen las acciones administrativas y la subida de archivos.
 
-### Auth y autorización
+### Autenticación y autorización
 
 - OAuth con Google mediante Supabase Auth
-- **Row Level Security (RLS):** Las operaciones de base de datos están restringidas explícitamente a correos administradores mediante políticas de Supabase.
-- Lista blanca dinámica validada tanto en Next.js (middleware/Server Actions) como en la base de datos.
-- Protección de rutas admin vía `middleware.ts`
-- Server Actions protegidas exigiendo usuarios autenticados y autorizados
+- **Row Level Security (RLS):** Las operaciones en la base de datos están restringidas a correos administradores autorizados mediante políticas de Supabase.
+- La lista blanca dinámica restringe el acceso en Next.js (middleware/Server Actions) y en la base de datos.
+- Rutas de administración protegidas vía `middleware.ts`
+- Las Server Actions requieren usuarios autenticados y autorizados
 
-### Uploads seguros
+### Subidas seguras
 
-La subida de comprobantes es completamente server-side.
+Las subidas de comprobantes ocurren completamente del lado del servidor.
 
-Protecciones implementadas:
+- Las subidas evitan el navegador; van desde Next.js hacia Cloudinary.
+- Los secretos de la API de Cloudinary permanecen en el servidor.
+- La validación por "magic-bytes" verifica las firmas reales de los archivos.
+- Formatos soportados: JPEG, PNG, GIF, WebP.
+- Tamaño máximo de subida: 5MB.
+- Cloudinary restringe los archivos a la carpeta `comprobantes/`.
+- Las subidas utilizan el Cloudinary SDK con firmas en el servidor.
 
-- Los uploads nunca van directo desde navegador → Cloudinary
-- El secreto de Cloudinary nunca se expone al cliente
-- Validación por magic bytes
-- Restricción de tipos de archivo (JPEG, PNG, GIF, WebP)
-- Límite de tamaño: 5MB
-- Restricción de carpeta Cloudinary (`comprobantes/`)
-- Uploads firmados usando Cloudinary SDK
+### Eliminaciones seguras
 
-### Eliminación segura
+- La eliminación de comprobantes requiere autenticación.
+- Las eliminaciones en Cloudinary usan peticiones firmadas en el servidor.
+- Los usuarios solo pueden eliminar recursos dentro de la carpeta `comprobantes/`.
 
-- El borrado requiere autenticación
-- Solo se pueden eliminar archivos dentro de `comprobantes/`
-- Las requests de borrado son firmadas server-side
+## Instalación
 
----
+### Prerrequisitos
 
-## Calidad y Testing
+- Node.js (v18+)
+- pnpm (v9+)
+- Un proyecto en Supabase
+- Una cuenta en Cloudinary
 
-El proyecto incluye testing automatizado y workflows de CI enfocados en confiabilidad, seguridad y calidad frontend.
+### Configuración
 
-### Tests automatizados
-
-La cobertura actual incluye:
-
-- Helpers de autenticación
-- Lógica de validación de uploads
-- Validación de firmas de imagen / magic bytes
-
-Archivos de test:
-
-```txt
-src/app/lib/__test__/
-```
-
-- `auth.test.ts`
-- `upload.test.ts`
-- `validate-image.test.ts`
-
-Ejecutar tests localmente:
+1. Clona el repositorio e instala las dependencias:
 
 ```bash
-pnpm test
+pnpm install
 ```
 
----
-
-- `src/app/` — rutas (público + admin)
-- `src/app/actions/` — Server Actions (DB + uploads)
-- `src/lib/` — clientes Supabase, auth, configuración Cloudinary y utilidades
-- `src/components/` — componentes UI
-- `src/hooks/` — hooks SWR
-
----
-
-## CI/CD
-
-GitHub Actions está configurado para ejecutar validaciones automáticas de calidad.
-
-### Workflow principal de CI
-
-El pipeline principal se ejecuta en cada push a `main` e incluye:
-
-- Instalación de dependencias
-- Validación de build de producción
-- Ejecución automática de tests
-
-Workflow:
-
-```txt
-.github/workflows/ci.yml
-```
-
-### Lighthouse CI
-
-El rendimiento frontend es auditado automáticamente usando Lighthouse CI.
-
-Las validaciones incluyen:
-
-- Performance
-- Accessibility
-- Best Practices
-- SEO
-
-Workflow:
-
-```txt
-.github/workflows/lighthouse.yml
-```
-
----
-
-## Rutas
-
-### Público
-
-- `/` — dashboard
-- `/gastos` — todos los gastos
-- `/faq` — lista de preguntas frecuentes dinámica
-- `/contacto` — formulario y datos de contacto
-
-### Auth/Admin
-
-- `/login` — inicio OAuth
-- `/auth/callback` — callback OAuth
-- `/admin` — panel admin
-
----
-
-## Modelo de datos (Supabase)
-
-La app espera tres tablas:
-
-### `gastos`
-
-| Columna           | Tipo          |
-| ----------------- | ------------- |
-| `id`              | uuid          |
-| `fecha`           | `YYYY-MM-DD`  |
-| `descripcion`     | text          |
-| `categoria`       | text          |
-| `monto`           | numeric       |
-| `comprobante_url` | nullable text |
-| `creado_el`       | timestamp     |
-
-`creado_el` se usa para indicadores de sincronización y revalidación.
-
----
-
-### `categorias`
-
-| Columna     | Tipo               |
-| ----------- | ------------------ |
-| `id`        | uuid               |
-| `nombre`    | unique text        |
-| `color`     | opcional `#RRGGBB` |
-| `creado_el` | timestamp          |
-
-Al eliminar una categoría, los gastos existentes se reasignan a `N/A`.
-
----
-
-### `admins`
-
-| Columna     | Tipo        |
-| ----------- | ----------- |
-| `id`        | uuid        |
-| `email`     | unique text |
-| `creado_el` | timestamp   |
-
-Usada para control de acceso dinámico. Las políticas RLS y el middleware de Next.js consultan esta tabla para conceder o denegar el acceso al panel de administración y a las modificaciones de datos.
-
----
-
-## Auth y control de acceso
-
-Hay múltiples capas de protección (por diseño):
-
-1. **RLS en Base de Datos:** Supabase aplica Row Level Security. Solo los usuarios cuyo `auth.jwt() ->> 'email'` exista en la tabla `admins` pueden hacer INSERT, UPDATE o DELETE en los registros.
-2. `middleware.ts` bloquea `/admin/*` si no hay sesión o el correo no se encuentra en la lista de `admins`.
-3. `src/app/admin/layout.tsx` valida la sesión server-side como segunda barrera antes de renderizar la interfaz.
-4. Las Server Actions exigen:
-   - sesión autenticada
-   - correo autorizado (verificado contra la DB)
-   - payload válido
-
-La lógica de validación de la lista blanca vive en:
-
-```txt
-src/lib/auth.ts
-```
-
-la cual consulta la tabla admins de forma segura utilizando la Service Role Key, evitando dependencias circulares de RLS durante las verificaciones de acceso.
-
----
-
-## Subida de comprobantes (Cloudinary)
-
-Los uploads se procesan completamente server-side usando Cloudinary SDK.
-
-### Flujo de upload
-
-```txt
-Navegador → Server Action → Cloudinary
-```
-
-El cliente nunca recibe:
-
-- API secret de Cloudinary
-- credenciales firmadas
-
-### Validaciones de upload
-
-Antes de subir un archivo se valida:
-
-- Autenticación
-- Tamaño
-- MIME type
-- Magic bytes / firma del archivo
-
-Formatos permitidos:
-
-- JPEG
-- PNG
-- GIF
-- WebP
-
-Tamaño máximo:
-
-```txt
-5 MB
-```
-
-Los archivos se almacenan en:
-
-```txt
-comprobantes/
-```
-
-en Cloudinary.
-
-La URL pública (`secure_url`) se guarda en:
-
-```txt
-gastos.comprobante_url
-```
-
----
-
-## Eliminación de comprobantes
-
-Al eliminar un gasto, la aplicación intenta eliminar el archivo asociado en Cloudinary.
-
-Protecciones:
-
-- Requiere auth
-- Requests firmadas server-side
-- Restricción por carpeta (`comprobantes/`)
-
----
-
-## Variables de entorno
-
-Crea:
-
-```txt
-.env.local
-```
-
-en la raíz del proyecto.
-
----
-
-### Requeridas
+2. Crea `.env.local` en la raíz del proyecto:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
-
 SUPABASE_SERVICE_ROLE_KEY=
-
 CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
-```
-
----
-
-### Configuración opcional
-
-```env
 NEXT_PUBLIC_PRESUPUESTO_TOTAL=19972000
 ```
 
----
+## Uso
 
-## Ejecutar localmente
+### Desarrollo local
+
+Inicia el servidor de desarrollo:
 
 ```bash
-pnpm install
 pnpm dev
 ```
 
-Luego abre:
+Abre `http://localhost:3000`.
 
-```txt
-http://localhost:3000
-```
-
----
-
-## Build producción
+### Build de producción
 
 ```bash
 pnpm build
 pnpm start
 ```
 
----
+### Rutas
+
+**Público:**
+- `/`: dashboard
+- `/gastos`: todos los gastos
+- `/faq`: lista dinámica de preguntas frecuentes
+- `/contacto`: formulario y detalles de contacto
+
+**Auth/Admin:**
+- `/login`: inicio con Google OAuth
+- `/auth/callback`: callback de OAuth
+- `/admin`: panel de administración
+
+## Calidad y Testing
+
+Las pruebas automatizadas y los flujos de CI aseguran confiabilidad, seguridad y calidad del frontend.
+
+### Pruebas automatizadas
+
+La cobertura incluye helpers de autenticación, lógica de validación de subidas y validación de firmas/magic-bytes de imágenes.
+
+Ejecuta las pruebas localmente:
+
+```bash
+pnpm test
+```
+
+## CI/CD
+
+Los workflows de GitHub Actions se ejecutan en cada push a `main`:
+
+- Instalación de dependencias
+- Validación del build de producción
+- Ejecución de pruebas automatizadas
+- Auditoría de rendimiento frontend con Lighthouse CI (Performance, Accesibilidad, Mejores Prácticas, SEO)
+
+## Estructura del proyecto
+
+- `src/app/`: rutas (público y admin)
+- `src/app/actions/`: Server Actions para escrituras en la DB y subidas
+- `src/lib/`: clientes de Supabase, helpers de autenticación, configuración de Cloudinary, utilidades, utilidades de prueba
+- `src/components/`: componentes de la interfaz
+- `src/hooks/`: hooks de datos de SWR
+
+## Modelo de datos (Supabase)
+
+### `gastos`
+
+| Columna | Tipo |
+|---|---|
+| `id` | uuid |
+| `fecha` | `YYYY-MM-DD` |
+| `descripcion` | text |
+| `categoria` | text |
+| `monto` | numeric |
+| `comprobante_url` | nullable text |
+| `creado_el` | timestamp |
+
+### `categorias`
+
+| Columna | Tipo |
+|---|---|
+| `id` | uuid |
+| `nombre` | unique text |
+| `color` | optional hex `#RRGGBB` |
+| `creado_el` | timestamp |
+
+Cuando los usuarios eliminan una categoría, los gastos existentes se reasignan a `N/A`.
+
+### `admins`
+
+| Columna | Tipo |
+|---|---|
+| `id` | uuid |
+| `email` | unique text |
+| `creado_el` | timestamp |
+
+Las políticas de RLS y el middleware de Next.js consultan esta tabla para conceder acceso.
+
+## Control de acceso y Autenticación
+
+1. **RLS en Base de Datos:** Supabase aplica "Row Level Security". Solo los usuarios con correos en la tabla `admins` pueden realizar operaciones INSERT, UPDATE o DELETE.
+2. `middleware.ts` bloquea `/admin/*` si el correo de la sesión no se encuentra en la lista de `admins`.
+3. `src/app/admin/layout.tsx` valida la sesión del lado del servidor antes de renderizar la interfaz de usuario.
+4. Las Server Actions requieren una sesión autenticada, un correo autorizado y payloads válidos.
+
+`src/lib/auth.ts` consulta la tabla de administradores usando la Service Role Key para evitar dependencias circulares de RLS durante las verificaciones de acceso.
 
 ## Notas
 
-- Las páginas públicas usan ISR y también se revalidan después de cambios desde admin.
-- Los headers de seguridad y CSP están configurados en `next.config.ts`.
-- Los uploads a Cloudinary son firmados server-side.
-- Ya no se utilizan upload presets públicos.
-- El proyecto prioriza arquitectura simple y validaciones explícitas server-side, junto con políticas estrictas de RLS en Postgres.
-- Lighthouse CI se utiliza para auditorías automáticas de rendimiento frontend.
-- Los tests automatizados validan flujos críticos de autenticación y seguridad de uploads.
+- Las páginas públicas usan ISR y revalidan después de escrituras desde administración.
+- `next.config.ts` configura cabeceras de seguridad y CSP.
+- Las subidas a Cloudinary usan exclusivamente subidas firmadas en el servidor.
+- El proyecto prefiere la validación explícita del lado del servidor junto con políticas estrictas de Postgres RLS.
+
+## Licencia
+
+Propiedad privada - Todos los derechos reservados.
