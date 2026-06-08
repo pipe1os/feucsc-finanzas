@@ -1,0 +1,323 @@
+React Doctor v0.4.2
+
+✔ Select projects › feucsc-finanzas
+[?25l? Choose what to scan › - Use arrow-keys. Return to submit.
+❯   Full codebase - Scan every source file
+    Uncommitted changes (3)
+[2K[1G✔ Choose what to scan › Full codebase
+[?25h  
+✔ Scanned 61 files in 4.4s [~12 workers]
+
+  ✖ Bugs: Server action without auth check
+    Learn more: https://react.doctor/docs/rules/react-doctor/server-auth-actions
+    → Add `const session = await auth()` at the top, and throw
+    or redirect if the user isn't allowed before touching any
+    data.
+
+    src/app/actions/auth.ts:5
+    ┌──────────────────────────────────────────────────────────────┐
+    │   4 |                                                        │
+    │ > 5 | export async function checkAuthorizedEmail(            │
+    │     |                       ^                                │
+    │   6 |   email: string | undefined | null,                    │
+    └──────────────────────────────────────────────────────────────┘
+
+  ✖ Accessibility: react-doctor/require-reduced-motion
+    → Add `useReducedMotion()` from your animation library, or
+    a `@media (prefers-reduced-motion: reduce)` CSS query
+
+    package.json
+
+  ⚠ Bugs: Missing effect dependencies ×2
+    Learn more: https://react.doctor/docs/rules/react-doctor/exhaustive-deps
+    → Don't blindly add missing dependencies. Read the hook
+    callback first.
+    
+    Bad:
+    useEffect(() => {
+      setCount(count + 1);
+    }, [count]);
+    
+    Better:
+    useEffect(() => {
+      setCount((currentCount) => currentCount + 1);
+    }, []);
+    
+    If the missing value is recreated every render, move it
+    inside the hook or stabilize it before adding it to deps.
+
+    src/app/admin/layout.tsx:61
+
+    src/components/public/ExpenseTable.tsx:178
+
+  ⚠ Bugs: Array index used as a key
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-array-index-as-key
+    → Use a stable id from the item, like `key={item.id}` or
+    `key={item.slug}`. Index keys break when the list reorders
+    or filters.
+
+    src/components/public/ExpenseTable.tsx:800
+
+  ⚠ Security: react-doctor/require-pnpm-hardening ×2
+    → Add `minimumReleaseAge: 10080` (7 days) to
+    pnpm-workspace.yaml to delay installs until releases have
+    had time to be vetted
+
+    pnpm-workspace.yaml
+
+  ⚠ Security: Use of dangerouslySetInnerHTML
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-danger
+    → Render trusted content as React children rather than
+    injecting raw HTML.
+
+    src/components/ui/chart.tsx:94
+
+  ⚠ Performance: Heavy library loaded eagerly ×3
+    Learn more: https://react.doctor/docs/rules/react-doctor/prefer-dynamic-import
+    → Load it only when needed: `const Component = dynamic(()
+    => import('library'), { ssr: false })` from next/dynamic,
+    or React.lazy().
+
+    src/components/public/ExpenseCategoryChart.tsx:16
+
+    src/components/public/ExpenseTrendChart.tsx:18
+
+    src/components/ui/chart.tsx:4
+
+  ⚠ Bugs: Prop derived into useState ×3
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-derived-useState
+    → Remove useState and compute the value inline: `const
+    value = transform(propName)`
+
+    src/components/admin/EditGastoForm.tsx:43-45
+
+  ⚠ Performance: Unstable context provider value
+    Learn more: https://react.doctor/docs/rules/react-doctor/jsx-no-constructed-context-values
+    → Wrap the context value in `useMemo`, or move it outside
+    the component.
+
+    src/components/ui/chart.tsx:62
+
+  ⚠ Bugs: Page missing metadata ×3
+    Learn more: https://react.doctor/docs/rules/react-doctor/nextjs-missing-metadata
+    → Add `export const metadata = { title: '...', description:
+    '...' }` or `export async function generateMetadata()`
+
+    src/app/contacto/page.tsx:1
+
+    src/app/page.tsx:1
+
+    src/app/auth/callback/page.tsx:1
+
+  ⚠ Accessibility: Control missing accessible label ×3
+    Learn more: https://react.doctor/docs/rules/react-doctor/control-has-associated-label
+    → Give every interactive control a label screen readers can
+    read.
+
+    src/app/admin/page.tsx:477
+
+    src/components/public/ExpenseTable.tsx:400
+
+    src/components/admin/CategorySelect.tsx:149
+
+  ⚠ Accessibility: Role used instead of HTML tag ×2
+    Learn more: https://react.doctor/docs/rules/react-doctor/prefer-tag-over-role
+    → Replace `role` with the matching HTML element when one
+    exists.
+
+    src/components/admin/CategorySelect.tsx:84
+
+    src/components/admin/CategorySelect.tsx:95
+
+  ⚠ Bugs: Button missing explicit type ×16
+    Learn more: https://react.doctor/docs/rules/react-doctor/button-has-type
+    → Always set a `type` on a `<button>`: `type="button"`,
+    `"submit"`, or `"reset"`.
+
+    src/components/public/ExpenseCategoryChart.tsx:198
+
+    src/components/admin/ThemeToggle.tsx:27
+
+    src/components/admin/ThemeToggle.tsx:35
+
+    src/app/admin/page.tsx:256
+
+    src/app/admin/page.tsx:566
+
+    src/app/admin/page.tsx:577
+
+    src/app/admin/page.tsx:587
+
+    src/app/admin/page.tsx:756
+
+    src/app/admin/page.tsx:778
+
+    src/app/admin/page.tsx:792
+
+    src/components/public/ExpenseTable.tsx:496
+
+    src/components/public/ExpenseTable.tsx:566
+
+    src/components/public/ExpenseTable.tsx:741
+
+    src/components/public/Sidebar.tsx:211
+
+    src/components/public/Sidebar.tsx:219
+
+    src/components/public/Sidebar.tsx:301
+
+  ⚠ Bugs: Event logic handled in an effect ×2
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-event-handler
+    → Run the side effect in the event handler that triggers
+    it, instead of watching its state from a useEffect. See
+    https://react.dev/learn/you-might-not-need-an-effect#sharing-logic-between-event-handlers
+
+    src/components/public/ExpenseTable.tsx:212
+
+    src/components/public/ExpenseTable.tsx:224
+
+  ⚠ Performance: await before an early-return guard ×2
+    Learn more: https://react.doctor/docs/rules/react-doctor/async-defer-await
+    → Move the `await` below the early-return guard so the skip
+    path stays fast
+
+    src/app/actions/cloudinary.ts:37
+
+    src/app/actions/gastos.ts:148
+
+  ⚠ Maintainability: Static value rebuilt every render ×4
+    Learn more: https://react.doctor/docs/rules/react-doctor/prefer-module-scope-static-value
+    → Move the value above the component, at the top of the
+    file. It doesn't use local state, so rebuilding it each
+    update is wasted and makes it look new every time.
+
+    src/components/MainWrapper.tsx:7
+
+    src/components/SidebarWrapper.tsx:8
+
+    src/app/(auth)/login/page.tsx:37
+
+    src/app/page.tsx:34
+
+  ⚠ Performance: useMemo before an early return
+    Learn more: https://react.doctor/docs/rules/react-doctor/rerender-memo-before-early-return
+    → Move the JSX into a child component wrapped in memo, so
+    the parent's early return skips it
+
+    src/components/ui/chart.tsx:148
+
+  ⚠ Accessibility: Gray text on colored background
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-gray-on-colored-background
+    → Use white or near-white text, or a darker shade of the
+    background color. Gray text on colored backgrounds looks
+    washed out.
+
+    src/app/admin/page.tsx:346
+
+  ⚠ Maintainability: Pure function rebuilt every render
+    Learn more: https://react.doctor/docs/rules/react-doctor/prefer-module-scope-pure-function
+    → Move the function above the component, at the top of the
+    file. It doesn't use local state, so rebuilding it each
+    update is wasted work.
+
+    src/app/contacto/page.tsx:7
+
+  ⚠ Maintainability: Component is too large ×2
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-giant-component
+    → Pull each section into its own component, like
+    `<UserHeader />` and `<UserActions />`.
+
+    src/app/admin/page.tsx:84
+
+    src/components/public/ExpenseTable.tsx:163
+
+  ⚠ Maintainability: deslop/unused-dependency ×3
+    → Remove the dependency from package.json if it is
+    genuinely unused.
+
+    package.json
+
+  ⚠ Maintainability: deslop/unused-dev-dependency
+    → Remove the dependency from package.json if it is
+    genuinely unused.
+
+    package.json
+
+  ⚠ Bugs: Many related useState calls ×4
+    Learn more: https://react.doctor/docs/rules/react-doctor/prefer-useReducer
+    → Group related state: `const [state, dispatch] =
+    useReducer(reducer, { field1, field2, ... })`
+
+    src/app/admin/page.tsx:84
+
+    src/components/public/ExpenseTable.tsx:168
+
+    src/components/admin/GastoForm.tsx:26
+
+    src/components/admin/EditGastoForm.tsx:42
+
+  ⚠ Maintainability: Multiple components in one file ×7
+    Learn more: https://react.doctor/docs/rules/react-doctor/no-multi-comp
+    → Move secondary components into their own files.
+
+    src/components/public/Skeletons.tsx:34
+
+    src/components/public/Skeletons.tsx:102
+
+    src/components/public/ExpenseTable.tsx:60
+
+    src/components/public/ExpenseTable.tsx:76
+
+    src/components/public/ExpenseTable.tsx:94
+
+    src/components/public/ExpenseTable.tsx:110
+
+    src/components/public/ExpenseTable.tsx:163
+
+  ⚠ Maintainability: JSX nested too deeply ×6
+    Learn more: https://react.doctor/docs/rules/react-doctor/jsx-max-depth
+    → Pull deeply nested JSX into smaller components so it's
+    easier to read.
+
+    src/app/admin/page.tsx:765
+
+    src/app/admin/page.tsx:769
+
+    src/app/admin/page.tsx:783
+
+    src/app/admin/page.tsx:787
+
+    src/app/admin/page.tsx:797
+
+    src/app/admin/page.tsx:801
+
+
+  ────────────────────────────────────────────────────────────
+
+  All 73 issues
+
+  Security › 3 warnings
+  Bugs › 1 error, 31 warnings
+  Performance › 7 warnings
+  Accessibility › 1 error, 6 warnings
+  Maintainability › 24 warnings
+
+  ┌─────┐  43 / 100 Critical
+  │ x x │  ██████████████████████▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░
+  │  ▽  │  React Doctor (https://react.doctor)
+  └─────┘
+
+  You could improve +21% by fixing the top 3 issues
+  Full diagnostics written to /tmp/react-doctor-34e959fc-f30f-42aa-9d49-bfc0bb3f4fe8
+
+  ────────────────────────────────────────────────────────────
+
+  Share: https://react.doctor/share?p=feucsc-finanzas&s=43&e=2&w=71&f=23
+  Tell others how you did on socials
+
+  Docs: https://react.doctor/docs
+  Learn more about fixing issues, setting up CI/CD, and configuring rules with a config file
+
+  GitHub: https://github.com/millionco/react-doctor
+  Report issues and star the repository!
+
