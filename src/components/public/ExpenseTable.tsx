@@ -166,7 +166,7 @@ function ExpenseTable({
   onClearChartFilter,
   isLoading,
 }: ExpenseTableProps) {
-  // eslint-disable-next-line react-doctor/prefer-useReducer
+  // react-doctor-disable-next-line react-doctor/prefer-useReducer
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const [, startTransition] = useTransition();

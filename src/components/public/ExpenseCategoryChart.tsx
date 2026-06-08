@@ -13,8 +13,8 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { formatCLP } from "@/lib/utils";
-// eslint-disable-next-line react-doctor/prefer-dynamic-import
-import { PieChart, Pie, Cell } from "recharts";
+// react-doctor-disable-next-line react-doctor/prefer-dynamic-import
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import * as React from "react";
 
 interface CategoriaData {

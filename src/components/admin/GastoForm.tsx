@@ -24,17 +24,19 @@ export default function GastoForm({
   mutateCategorias,
   onDeleteCategory,
 }: GastoFormProps) {
+  const initialState = {
+    fecha: new Date().toISOString().split("T")[0],
+    descripcion: "",
+    categoria: "Varios",
+    monto: "",
+    selectedFile: null as File | null,
+    submitting: false,
+    formError: null as string | null,
+  };
+
   const [state, setState] = useReducer(
-    (prev: any, next: any) => ({ ...prev, ...next }),
-    {
-      fecha: new Date().toISOString().split("T")[0],
-      descripcion: "",
-      categoria: "Varios",
-      monto: "",
-      selectedFile: null as File | null,
-      submitting: false,
-      formError: null as string | null,
-    }
+    (prev: typeof initialState, next: Partial<typeof initialState>) => ({ ...prev, ...next }),
+    initialState
   );
 
   const handleCategoriaChange = useCallback(
