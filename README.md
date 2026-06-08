@@ -4,7 +4,6 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-3ecf8e)](https://supabase.com/)
 [![Cloudinary](https://img.shields.io/badge/Cloudinary-3448c5)](https://cloudinary.com/)
-[![React Doctor](https://www.react.doctor/share/badge?p=feucsc-finanzas&s=98&e=1&w=1&f=2)](https://www.react.doctor/share?p=feucsc-finanzas&s=98&e=1&w=1&f=2)
 [![CI](https://img.shields.io/badge/CI-passing-brightgreen)](https://github.com/pipe1os/FEUCSC-FINANZAS/actions/workflows/ci.yaml)
 [![Lighthouse CI](https://img.shields.io/badge/Lighthouse_CI-passing-brightgreen)](https://github.com/pipe1os/FEUCSC-FINANZAS/actions/workflows/lighthouse.yml)
 
