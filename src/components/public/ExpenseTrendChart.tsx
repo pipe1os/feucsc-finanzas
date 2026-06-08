@@ -15,6 +15,7 @@ import {
   ChartTooltip,
   type ChartConfig,
 } from "@/components/ui/chart";
+// eslint-disable-next-line react-doctor/prefer-dynamic-import
 import { AreaChart, Area, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface CategoryBreakdown {

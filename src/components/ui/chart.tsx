@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+// eslint-disable-next-line react-doctor/prefer-dynamic-import
 import * as RechartsPrimitive from "recharts";
 import type { TooltipValueType } from "recharts";
 

@@ -13,6 +13,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { formatCLP } from "@/lib/utils";
+// eslint-disable-next-line react-doctor/prefer-dynamic-import
 import { PieChart, Pie, Cell } from "recharts";
 import * as React from "react";
 
