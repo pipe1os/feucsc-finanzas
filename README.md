@@ -148,12 +148,13 @@ pnpm test
 
 ## CI/CD
 
-GitHub Actions workflows run on every push to `main`:
+GitHub Actions workflows run on every push to `main` and Pull Requests:
 
-- Dependency installation
+- Code linting (`eslint`)
+- Static type checking (`tsc`)
+- Automated test execution (`vitest`)
 - Production build validation
-- Automated test execution
-- Lighthouse CI frontend performance auditing (Performance, Accessibility, Best Practices, SEO)
+- Lighthouse CI frontend performance auditing
 
 ## Project structure
 

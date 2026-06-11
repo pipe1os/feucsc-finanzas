@@ -147,12 +147,13 @@ pnpm test
 
 ## CI/CD
 
-Los workflows de GitHub Actions se ejecutan en cada push a `main`:
+Los workflows de GitHub Actions se ejecutan en cada push a `main` y en los Pull Requests:
 
-- Instalación de dependencias
+- Linting de código (`eslint`)
+- Verificación estática de tipos (`tsc`)
+- Ejecución de pruebas automatizadas (`vitest`)
 - Validación del build de producción
-- Ejecución de pruebas automatizadas
-- Auditoría de rendimiento frontend con Lighthouse CI (Performance, Accesibilidad, Mejores Prácticas, SEO)
+- Auditoría de rendimiento frontend con Lighthouse CI
 
 ## Estructura del proyecto
 
