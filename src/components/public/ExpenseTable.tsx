@@ -353,6 +353,7 @@ function ExpenseTable({
                     alt={`Comprobante: ${lightboxImage.concepto}`}
                     width={500}
                     height={700}
+                    sizes="(max-width: 768px) 100vw, 500px"
                     className="max-h-[70vh] w-auto rounded-lg object-contain"
                   />
                 </div>
