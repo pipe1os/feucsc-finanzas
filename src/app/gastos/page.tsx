@@ -14,20 +14,65 @@ export const metadata = {
     "Detalle de gastos, tabla completa y distribución por categoría de la Federación de Estudiantes UCSC.",
 };
 
-export default async function GastosPage() {
-  const [gastosRes, categoriasRes] = await Promise.all([
-    supabaseAnon
-      .from("gastos")
-      .select("*")
-      .order("fecha", { ascending: false })
-      .limit(500),
+export default async function GastosPage(props: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParams = await props.searchParams;
+  const page = Number(searchParams?.page) || 1;
+  const search = typeof searchParams?.search === "string" ? searchParams.search : "";
+  const categoria = typeof searchParams?.categoria === "string" ? searchParams.categoria : "";
+  const mes = typeof searchParams?.mes === "string" ? searchParams.mes : "";
+  const sortCol = typeof searchParams?.sort === "string" ? searchParams.sort : "fecha";
+  const sortDir = typeof searchParams?.direction === "string" ? searchParams.direction : "descending";
+
+  let query = supabaseAnon.from("gastos").select("*", { count: "exact" });
+  let chartQuery = supabaseAnon.from("gastos").select("categoria, monto, fecha, creado_el").limit(500);
+
+  if (search) {
+    const q = `%${search}%`;
+    const orStr = `descripcion.ilike.${q},categoria.ilike.${q},id.ilike.${q}`;
+    query = query.or(orStr);
+    chartQuery = chartQuery.or(orStr);
+  }
+
+  if (categoria && categoria !== "all") {
+    query = query.eq("categoria", categoria);
+    chartQuery = chartQuery.eq("categoria", categoria);
+  }
+
+  if (mes && mes !== "all") {
+    query = query.like("fecha", `____-${mes}-__`);
+    chartQuery = chartQuery.like("fecha", `____-${mes}-__`);
+  }
+
+  const validSortCols = ["fecha", "monto", "descripcion", "categoria"];
+  const mappedSortCol = sortCol === "concepto" ? "descripcion" : sortCol;
+  const orderCol = validSortCols.includes(mappedSortCol) ? mappedSortCol : "fecha";
+  const ascending = sortDir === "ascending";
+
+  query = query.order(orderCol, { ascending });
+  if (orderCol !== "id") {
+    query = query.order("id", { ascending: true });
+  }
+
+  const ROWS_PER_PAGE = 10;
+  const from = (page - 1) * ROWS_PER_PAGE;
+  const to = from + ROWS_PER_PAGE - 1;
+  query = query.range(from, to);
+
+  const [gastosRes, chartRes, categoriasRes] = await Promise.all([
+    query,
+    chartQuery,
     supabaseAnon.from("categorias").select("*"),
   ]);
 
   const data = gastosRes.data || [];
+  const chartData = chartRes.data || [];
   const categoriasData = categoriasRes.data || [];
+  const totalRecords = gastosRes.count || 0;
 
   const categoryColors = buildCategoryColors(categoriasData);
+  const uniqueCategories = categoriasData.map((c) => c.nombre || "Varios");
 
   const transacciones = data.map((g) => {
     const catName = g.categoria || "Varios";
@@ -44,28 +89,27 @@ export default async function GastosPage() {
   });
 
   const categoriasMap = new Map<string, number>();
-  data.forEach((g) => {
+  chartData.forEach((g) => {
     const cat = g.categoria || "Varios";
     categoriasMap.set(cat, (categoriasMap.get(cat) || 0) + g.monto);
   });
 
   const gastosPorCategoria = Array.from(categoriasMap.entries())
-    .map(([categoria, monto]) => ({
-      categoria,
+    .map(([cat, monto]) => ({
+      categoria: cat,
       monto,
-      color: categoryColors[categoria] || "#E30707",
+      color: categoryColors[cat] || "#E30707",
     }))
     .sort((a, b) => b.monto - a.monto);
 
   let lastSyncISO: string | null = null;
-  if (data.length > 0) {
-    const timestamps = data
-      .flatMap((g) => {
-        const ts = g.creado_el || g.fecha;
-        if (!ts) return [];
-        const t = new Date(ts).getTime();
-        return isNaN(t) ? [] : [t];
-      });
+  if (chartData.length > 0) {
+    const timestamps = chartData.flatMap((g) => {
+      const ts = g.creado_el || g.fecha;
+      if (!ts) return [];
+      const t = new Date(ts).getTime();
+      return isNaN(t) ? [] : [t];
+    });
     if (timestamps.length > 0) {
       lastSyncISO = new Date(Math.max(...timestamps)).toISOString();
     }
@@ -116,6 +160,8 @@ export default async function GastosPage() {
       <DashboardClient
         transacciones={transacciones}
         gastosPorCategoria={gastosPorCategoria}
+        totalRecords={totalRecords}
+        uniqueCategories={uniqueCategories}
       />
       <Footer />
     </div>
