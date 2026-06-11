@@ -9,7 +9,7 @@
 
 [Leer en Español →](./README_es.md)
 
-Financial transparency portal for FEUCSC (Federación de Estudiantes UCSC). Students track federation spending and verify receipts.
+Financial transparency portal for FEUCSC (Federación de Estudiantes UCSC).
 
 ## Features
 
