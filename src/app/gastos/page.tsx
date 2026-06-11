@@ -1,7 +1,7 @@
 import DashboardClient from "@/components/public/DashboardClient";
 import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { supabaseAnon } from "@/lib/supabase-anon";
-
+import { Suspense } from "react";
 import { buildCategoryColors } from "@/lib/data-transform";
 import Footer from "@/components/public/Footer";
 import Link from "next/link";
@@ -158,12 +158,14 @@ export default async function GastosPage(props: {
           <LastSyncIndicator lastSyncISO={lastSyncISO} />
         </div>
       </header>
-      <DashboardClient
-        transacciones={transacciones}
-        gastosPorCategoria={gastosPorCategoria}
-        totalRecords={totalRecords}
-        uniqueCategories={uniqueCategories}
-      />
+      <Suspense fallback={null}>
+        <DashboardClient
+          transacciones={transacciones}
+          gastosPorCategoria={gastosPorCategoria}
+          totalRecords={totalRecords}
+          uniqueCategories={uniqueCategories}
+        />
+      </Suspense>
       <Footer />
     </div>
   );
