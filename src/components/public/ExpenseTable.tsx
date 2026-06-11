@@ -176,14 +176,14 @@ function ExpenseTable({
   return (
     <>
       <div
-        className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-900 shadow-apple overflow-hidden animate-fade-in-up opacity-0"
+        className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-surface shadow-apple overflow-hidden animate-fade-in-up opacity-0"
         style={{ animationDelay: "0.2s" }}
       >
         <div className="p-6 pb-0">
-          <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">
             Gastos Recientes
           </h3>
-          <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
             {totalRecords} {totalRecords === 1 ? "registro" : "registros"} encontrados
           </p>
         </div>
@@ -240,16 +240,16 @@ function ExpenseTable({
         }}
       >
         <Modal.Container placement="center" size="lg">
-          <Modal.Dialog className="sm:max-w-2xl bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-apple-lg">
+          <Modal.Dialog className="sm:max-w-2xl bg-surface rounded-2xl overflow-hidden shadow-apple-lg">
             <Modal.CloseTrigger />
             <Modal.Header>
-              <Modal.Heading className="text-sm font-semibold text-zinc-900 dark:text-white">
+              <Modal.Heading className="text-sm font-semibold text-gray-900 dark:text-white">
                 {lightboxImage?.concepto ?? "Comprobante"}
               </Modal.Heading>
             </Modal.Header>
             <Modal.Body className="p-4">
               {lightboxImage && (
-                <div className="flex justify-center rounded-xl bg-zinc-50 dark:bg-zinc-800 p-4">
+                <div className="flex justify-center rounded-xl bg-gray-50 dark:bg-gray-800 p-4">
                   <Image
                     src={lightboxImage.src}
                     alt={`Comprobante: ${lightboxImage.concepto}`}
@@ -265,7 +265,7 @@ function ExpenseTable({
               <Button
                 slot="close"
                 variant="secondary"
-                className="rounded-xl text-zinc-900 dark:text-white"
+                className="rounded-xl text-gray-900 dark:text-white"
               >
                 Cerrar
               </Button>

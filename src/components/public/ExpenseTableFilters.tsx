@@ -17,7 +17,7 @@ const XIcon = () => (
   </svg>
 );
 
-export const MONTH_OPTIONS = [
+const MONTH_OPTIONS = [
   { id: "all", label: "Todos los meses" },
   { id: "01", label: "Enero" },
   { id: "02", label: "Febrero" },
@@ -59,7 +59,7 @@ export function ExpenseTableFilters({
   return (
     <div className="flex flex-wrap items-center gap-3 px-6 pt-3">
       <div className="relative w-full sm:w-56">
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
           <SearchIcon />
         </div>
         <input
@@ -68,10 +68,10 @@ export function ExpenseTableFilters({
           aria-label="Buscar gastos"
           defaultValue={searchQuery}
           onChange={onSearchChange}
-          className="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 py-2 pl-9 pr-4
-                     text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500
+          className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 py-2 pl-9 pr-4
+                     text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500
                      outline-hidden transition-all duration-200
-                     focus:border-red-300 dark:focus:border-red-500/50 focus:bg-white dark:focus:bg-zinc-800 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-500/20 h-9"
+                     focus:border-red-300 dark:focus:border-red-500/50 focus:bg-surface dark:focus:bg-gray-800 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-500/20 h-9"
           id="search-transactions"
         />
       </div>
@@ -85,7 +85,7 @@ export function ExpenseTableFilters({
           if (key !== null) onMonthChange(key as string);
         }}
       >
-        <Select.Trigger className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-zinc-300">
+        <Select.Trigger className="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-gray-300">
           <Select.Value>
             {({ isPlaceholder, state }) => {
               if (isPlaceholder) return "Mes: Todos";
@@ -95,9 +95,9 @@ export function ExpenseTableFilters({
               return `Mes: ${found?.label ?? "Todos"}`;
             }}
           </Select.Value>
-          <Select.Indicator className="text-zinc-400 dark:text-zinc-500" />
+          <Select.Indicator className="text-gray-400 dark:text-gray-500" />
         </Select.Trigger>
-        <Select.Popover className="rounded-xl shadow-apple-lg border border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 min-w-48">
+        <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-gray-800 dark:bg-gray-900 min-w-48">
           <ListBox>
             {MONTH_OPTIONS.map((m) => (
               <ListBox.Item key={m.id} id={m.id} textValue={m.label}>
@@ -118,7 +118,7 @@ export function ExpenseTableFilters({
           if (key !== null) onCategoryChange(key as string);
         }}
       >
-        <Select.Trigger className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-zinc-300">
+        <Select.Trigger className="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-gray-300">
           <Select.Value>
             {({ isPlaceholder, state }) => {
               if (isPlaceholder) return "Categoría: Todas";
@@ -127,9 +127,9 @@ export function ExpenseTableFilters({
               return `Categoría: ${String(key ?? "Todas")}`;
             }}
           </Select.Value>
-          <Select.Indicator className="text-zinc-400 dark:text-zinc-500" />
+          <Select.Indicator className="text-gray-400 dark:text-gray-500" />
         </Select.Trigger>
-        <Select.Popover className="rounded-xl shadow-apple-lg border border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 min-w-56">
+        <Select.Popover className="rounded-xl shadow-apple-lg border border-gray-100 dark:border-gray-800 dark:bg-gray-900 min-w-56">
           <ListBox>
             <ListBox.Item id="all" textValue="Todas las categorías">
               Todas las categorías

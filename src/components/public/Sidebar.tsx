@@ -142,7 +142,7 @@ function NavItem({
         ${
           isActive
             ? "text-red-600 dark:text-red-400"
-            : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-zinc-200"
+            : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200"
         }`}
     >
       {}
@@ -156,7 +156,7 @@ function NavItem({
               ${
                 isActive
                   ? "text-red-500 dark:text-red-400"
-                  : "text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300"
+                  : "text-gray-500 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"
               }`}
           >
             {icon}
@@ -182,7 +182,7 @@ function NavItem({
 
 function NavCategory({ label }: { label: string }) {
   return (
-    <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-zinc-500 dark:text-zinc-400 uppercase">
+    <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-gray-500 dark:text-gray-400 uppercase">
       {label}
     </span>
   );
@@ -198,7 +198,7 @@ function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="flex items-center rounded-lg bg-zinc-100 dark:bg-zinc-800 p-0.5 h-8">
+      <div className="flex items-center rounded-lg bg-gray-100 dark:bg-gray-800 p-0.5 h-8">
         <div className="flex-1" />
       </div>
     );
@@ -207,11 +207,11 @@ function ThemeToggle() {
   const isLight = resolvedTheme === "light";
 
   return (
-    <div className="flex items-center rounded-lg bg-zinc-100 dark:bg-zinc-800 p-0.5">
+    <div className="flex items-center rounded-lg bg-gray-100 dark:bg-gray-800 p-0.5">
       <button type="button"
         onClick={() => setTheme("light")}
         data-active={isLight}
-        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white data-[active=true]:text-zinc-900 data-[active=true]:shadow-xs data-[active=false]:text-zinc-600 dark:data-[active=false]:text-zinc-400"
+        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-surface data-[active=true]:text-gray-900 data-[active=true]:shadow-xs data-[active=false]:text-gray-600 dark:data-[active=false]:text-gray-400"
       >
         <SunIcon />
         <span>Claro</span>
@@ -219,7 +219,7 @@ function ThemeToggle() {
       <button type="button"
         onClick={() => setTheme("dark")}
         data-active={!isLight}
-        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-white dark:data-[active=true]:bg-zinc-700 data-[active=true]:text-zinc-900 dark:data-[active=true]:text-white data-[active=true]:shadow-xs data-[active=false]:text-zinc-600 dark:data-[active=false]:text-zinc-400"
+        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-surface dark:data-[active=true]:bg-gray-700 data-[active=true]:text-gray-900 dark:data-[active=true]:text-white data-[active=true]:shadow-xs data-[active=false]:text-gray-600 dark:data-[active=false]:text-gray-400"
       >
         <MoonIcon />
         <span>Oscuro</span>
@@ -301,8 +301,8 @@ export default function Sidebar() {
       <button type="button"
         onClick={() => toggleSidebar(!isOpen)}
         className="fixed top-4 right-4 z-50 flex items-center justify-center
-                   size-10 rounded-xl bg-white dark:bg-zinc-800 shadow-apple-lg lg:hidden
-                   transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-700 cursor-pointer"
+                   size-10 rounded-xl bg-surface dark:bg-gray-800 shadow-apple-lg lg:hidden
+                   transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
         aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
       >
         <HugeiconsMenuIcon ref={menuIconRef} size={22} />
@@ -311,7 +311,7 @@ export default function Sidebar() {
       {isOpen && (
         <button
           type="button"
-          className="fixed inset-0 z-30 bg-black/20 backdrop-blur-xs lg:hidden cursor-default"
+          className="fixed inset-0 z-30 bg-gray-900/20 backdrop-blur-xs lg:hidden cursor-default"
           onClick={close}
           aria-label="Cerrar menú"
         />
@@ -320,8 +320,8 @@ export default function Sidebar() {
       <aside
         className={`
           fixed top-0 left-0 z-40 h-dvh w-65
-          flex flex-col bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl
-          border-r border-zinc-100 dark:border-zinc-800
+          flex flex-col bg-surface/80 dark:bg-gray-900/80 backdrop-blur-xl
+          border-r border-gray-100 dark:border-gray-800
           transition-transform duration-300 ease-out
           overflow-y-auto
           lg:translate-x-0
@@ -340,7 +340,7 @@ export default function Sidebar() {
           />
         </div>
 
-        <div className="mx-5 h-px bg-zinc-100 dark:bg-zinc-800" />
+        <div className="mx-5 h-px bg-gray-100 dark:bg-gray-800" />
 
         <nav className="flex flex-col gap-1 px-4 pt-6">
           <NavCategory label="Finanzas" />
@@ -382,7 +382,7 @@ export default function Sidebar() {
         <div className="flex-1" />
 
         <div className="px-5 pb-6">
-          <div className="h-px bg-zinc-100 dark:bg-zinc-800 mb-4" />
+          <div className="h-px bg-gray-100 dark:bg-gray-800 mb-4" />
           <ThemeToggle />
         </div>
       </aside>
