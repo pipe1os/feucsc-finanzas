@@ -5,7 +5,7 @@
 [![Supabase](https://img.shields.io/badge/Supabase-3ecf8e)](https://supabase.com/)
 [![Cloudinary](https://img.shields.io/badge/Cloudinary-3448c5)](https://cloudinary.com/)
 [![CI](https://img.shields.io/badge/CI-passing-brightgreen)](https://github.com/pipe1os/FEUCSC-FINANZAS/actions/workflows/ci.yaml)
-[![Lighthouse CI](https://img.shields.io/badge/Lighthouse_CI-passing-brightgreen)](https://github.com/pipe1os/FEUCSC-FINANZAS/actions/workflows/lighthouse.yml)
+
 
 [Leer en Español →](./README_es.md)
 
@@ -148,12 +148,13 @@ pnpm test
 
 ## CI/CD
 
-GitHub Actions workflows run on every push to `main`:
+GitHub Actions workflows run on every push to `main` and Pull Requests:
 
-- Dependency installation
+- Code linting (`eslint`)
+- Static type checking (`tsc`)
+- Automated test execution (`vitest`)
 - Production build validation
-- Automated test execution
-- Lighthouse CI frontend performance auditing (Performance, Accessibility, Best Practices, SEO)
+- Lighthouse CI frontend performance auditing
 
 ## Project structure
 
