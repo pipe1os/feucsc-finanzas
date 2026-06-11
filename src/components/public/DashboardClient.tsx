@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import ExpenseTable from "./ExpenseTable";
 import { LazyExpenseCategoryChart } from "./LazyCharts";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 interface Transaccion {
   id: string;
@@ -23,25 +24,37 @@ interface CategoriaData {
 interface DashboardClientProps {
   transacciones: Transaccion[];
   gastosPorCategoria: CategoriaData[];
+  totalRecords: number;
+  uniqueCategories: string[];
   isLoading?: boolean;
 }
 
 export default function DashboardClient({
   transacciones,
   gastosPorCategoria,
+  totalRecords,
+  uniqueCategories,
   isLoading,
 }: DashboardClientProps) {
-  const [chartCategoryFilter, setChartCategoryFilter] = useState<string | null>(
-    null,
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const activeCategoryFilter = searchParams.get("categoria") || null;
+
+  const handleCategoryClick = useCallback(
+    (cat: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (activeCategoryFilter === cat) {
+        params.delete("categoria");
+      } else {
+        params.set("categoria", cat);
+      }
+      params.set("page", "1");
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [activeCategoryFilter, pathname, router, searchParams]
   );
-
-  const handleClearChartFilter = useCallback(() => {
-    setChartCategoryFilter(null);
-  }, []);
-
-  const handleCategoryClick = useCallback((cat: string) => {
-    setChartCategoryFilter(cat);
-  }, []);
 
   return (
     <section
@@ -51,8 +64,8 @@ export default function DashboardClient({
       <div className="xl:col-span-2">
         <ExpenseTable
           transacciones={transacciones}
-          chartCategoryFilter={chartCategoryFilter}
-          onClearChartFilter={handleClearChartFilter}
+          totalRecords={totalRecords}
+          uniqueCategories={uniqueCategories}
           isLoading={isLoading}
         />
       </div>
@@ -60,7 +73,7 @@ export default function DashboardClient({
         <LazyExpenseCategoryChart
           gastosPorCategoria={gastosPorCategoria}
           onCategoryClick={handleCategoryClick}
-          activeCategoryFilter={chartCategoryFilter}
+          activeCategoryFilter={activeCategoryFilter}
         />
       </div>
     </section>

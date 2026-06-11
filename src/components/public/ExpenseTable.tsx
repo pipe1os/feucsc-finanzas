@@ -5,11 +5,11 @@ import React, {
   useMemo,
   useRef,
   useEffect,
-  useTransition,
   useCallback,
 } from "react";
 import { Modal, Button, SortDescriptor } from "@heroui/react";
 import Image from "next/image";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SkeletonTable } from "./Skeletons";
 import { ExpenseTableFilters } from "./ExpenseTableFilters";
 import { ExpenseTableMobile } from "./ExpenseTableMobile";
@@ -28,8 +28,8 @@ export interface TransaccionItem {
 
 interface ExpenseTableProps {
   transacciones: TransaccionItem[];
-  chartCategoryFilter?: string | null;
-  onClearChartFilter?: () => void;
+  totalRecords: number;
+  uniqueCategories: string[];
   isLoading?: boolean;
 }
 
@@ -37,98 +37,62 @@ const ROWS_PER_PAGE = 10;
 
 function ExpenseTable({
   transacciones,
-  chartCategoryFilter,
-  onClearChartFilter,
+  totalRecords,
+  uniqueCategories,
   isLoading,
 }: ExpenseTableProps) {
-  // react-doctor-disable-next-line react-doctor/prefer-useReducer
-  const [searchQuery, setSearchQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [, startTransition] = useTransition();
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "fecha",
-    direction: "descending",
-  });
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const searchQuery = searchParams.get("search") || "";
+  const page = Number(searchParams.get("page")) || 1;
+  const selectedMonth = searchParams.get("mes") || "all";
+  const selectedCategory = searchParams.get("categoria") || "all";
+  const sortCol = searchParams.get("sort") || "fecha";
+  const sortDir = searchParams.get("direction") || "descending";
+
+  const sortDescriptor: SortDescriptor = {
+    column: sortCol as string,
+    direction: sortDir as "ascending" | "descending",
+  };
+
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    const timerRef = debounceTimer;
     return () => {
-      if (debounceTimer.current) {
-        clearTimeout(debounceTimer.current);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
       }
     };
   }, []);
 
-  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
-    if (typeof window !== "undefined") {
-      return new URLSearchParams(window.location.search).get("mes") || "all";
-    }
-    return "all";
-  });
-  const [selectedCategory, setSelectedCategory] = useState<string>(() => {
-    if (typeof window !== "undefined") {
-      return (
-        new URLSearchParams(window.location.search).get("categoria") || "all"
-      );
-    }
-    return "all";
-  });
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href);
+  const setURLParams = useCallback(
+    (updates: Record<string, string | null>) => {
+      const params = new URLSearchParams(searchParams.toString());
       let changed = false;
-
-      if (selectedCategory === "all") {
-        if (url.searchParams.has("categoria")) {
-          url.searchParams.delete("categoria");
-          changed = true;
-        }
-      } else {
-        if (url.searchParams.get("categoria") !== selectedCategory) {
-          url.searchParams.set("categoria", selectedCategory);
-          changed = true;
-        }
-      }
-
-      if (selectedMonth === "all") {
-        if (url.searchParams.has("mes")) {
-          url.searchParams.delete("mes");
-          changed = true;
-        }
-      } else {
-        if (url.searchParams.get("mes") !== selectedMonth) {
-          url.searchParams.set("mes", selectedMonth);
-          changed = true;
+      for (const [key, value] of Object.entries(updates)) {
+        if (value && value !== "all") {
+          if (params.get(key) !== value) {
+            params.set(key, value);
+            changed = true;
+          }
+        } else {
+          if (params.has(key)) {
+            params.delete(key);
+            changed = true;
+          }
         }
       }
-
       if (changed) {
-        window.history.replaceState({}, "", url.toString());
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
       }
-    }
-  }, [selectedCategory, selectedMonth]);
+    },
+    [searchParams, pathname, router]
+  );
 
-  const [lightboxImage, setLightboxImage] = useState<{
-    src: string;
-    concepto: string;
-  } | null>(null);
 
-  const uniqueCategories = useMemo(() => {
-    const cats = new Set<string>();
-    transacciones.forEach((t) => cats.add(t.categoria));
-    return Array.from(cats).sort();
-  }, [transacciones]);
-
-  useEffect(() => {
-    if (chartCategoryFilter) {
-      const timer = setTimeout(() => {
-        setSelectedCategory(chartCategoryFilter);
-        setPage(1);
-      }, 0);
-      return () => clearTimeout(timer);
-    }
-  }, [chartCategoryFilter]);
 
   const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,74 +101,17 @@ function ExpenseTable({
         clearTimeout(debounceTimer.current);
       }
       debounceTimer.current = setTimeout(() => {
-        startTransition(() => {
-          setSearchQuery(value);
-          setPage(1);
-        });
-      }, 150);
+        setURLParams({ search: value || null, page: "1" });
+      }, 300);
     },
-    [],
+    [setURLParams]
   );
 
   const handleClearAllFilters = useCallback(() => {
-    startTransition(() => {
-      setSelectedMonth("all");
-      setSelectedCategory("all");
-      setSearchQuery("");
-      setPage(1);
-    });
-    onClearChartFilter?.();
-  }, [onClearChartFilter]);
+    setURLParams({ mes: null, categoria: null, search: null, page: "1" });
+  }, [setURLParams]);
 
-  const filtered = useMemo(() => {
-    let result = transacciones;
-
-    if (selectedMonth !== "all") {
-      result = result.filter((t) => {
-        if (!t.fecha) return false;
-        const month = t.fecha.substring(5, 7);
-        return month === selectedMonth;
-      });
-    }
-
-    if (selectedCategory !== "all") {
-      result = result.filter((t) => t.categoria === selectedCategory);
-    }
-
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (t) =>
-          t.concepto.toLowerCase().includes(q) ||
-          t.categoria.toLowerCase().includes(q) ||
-          t.id.toLowerCase().includes(q),
-      );
-    }
-
-    return result;
-  }, [searchQuery, selectedMonth, selectedCategory, transacciones]);
-
-  const sortedItems = useMemo(() => {
-    return filtered.toSorted((a, b) => {
-      const col = sortDescriptor.column as keyof typeof a;
-      const first = a[col];
-      const second = b[col];
-
-      let cmp = 0;
-      if (col === "monto") {
-        cmp = (first as number) - (second as number);
-      } else {
-        cmp = String(first).localeCompare(String(second));
-      }
-
-      if (sortDescriptor.direction === "descending") {
-        cmp *= -1;
-      }
-      return cmp;
-    });
-  }, [filtered, sortDescriptor]);
-
-  const totalPages = Math.ceil(sortedItems.length / ROWS_PER_PAGE);
+  const totalPages = Math.ceil(totalRecords / ROWS_PER_PAGE);
 
   const visiblePages = useMemo((): (number | "ellipsis")[] => {
     if (totalPages <= 7) {
@@ -237,22 +144,26 @@ function ExpenseTable({
     return pages;
   }, [totalPages, page]);
 
-  const paginated = useMemo(() => {
-    const start = (page - 1) * ROWS_PER_PAGE;
-    return sortedItems.slice(start, start + ROWS_PER_PAGE);
-  }, [page, sortedItems]);
+  const paginated = transacciones;
 
   const start = (page - 1) * ROWS_PER_PAGE + 1;
-  const end = Math.min(page * ROWS_PER_PAGE, sortedItems.length);
+  const end = Math.min(page * ROWS_PER_PAGE, totalRecords);
 
   const hasActiveFilters =
-    selectedMonth !== "all" || selectedCategory !== "all";
+    selectedMonth !== "all" || selectedCategory !== "all" || searchQuery !== "";
 
   const handlePageChange = useCallback((newPage: number) => {
-    startTransition(() => {
-      setPage(newPage);
-    });
-  }, []);
+    setURLParams({ page: String(newPage) });
+  }, [setURLParams]);
+
+  const handleSortChange = useCallback((desc: SortDescriptor) => {
+    setURLParams({ sort: String(desc.column), direction: desc.direction });
+  }, [setURLParams]);
+
+  const [lightboxImage, setLightboxImage] = useState<{
+    src: string;
+    concepto: string;
+  } | null>(null);
 
   const handleViewLightbox = useCallback((src: string, concepto: string) => {
     setLightboxImage({ src, concepto });
@@ -273,7 +184,7 @@ function ExpenseTable({
             Gastos Recientes
           </h3>
           <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">
-            {filtered.length} {filtered.length === 1 ? "registro" : "registros"} encontrados
+            {totalRecords} {totalRecords === 1 ? "registro" : "registros"} encontrados
           </p>
         </div>
 
@@ -282,20 +193,11 @@ function ExpenseTable({
           onSearchChange={handleSearchChange}
           selectedMonth={selectedMonth}
           onMonthChange={(m) => {
-            startTransition(() => {
-              setSelectedMonth(m);
-              setPage(1);
-            });
+            setURLParams({ mes: m, page: "1" });
           }}
           selectedCategory={selectedCategory}
           onCategoryChange={(c) => {
-            startTransition(() => {
-              setSelectedCategory(c);
-              setPage(1);
-            });
-            if (chartCategoryFilter && c !== chartCategoryFilter) {
-              onClearChartFilter?.();
-            }
+            setURLParams({ categoria: c, page: "1" });
           }}
           uniqueCategories={uniqueCategories}
           hasActiveFilters={hasActiveFilters}
@@ -305,7 +207,7 @@ function ExpenseTable({
         <div className="p-6 pt-4">
           <ExpenseTableMobile
             paginated={paginated}
-            filteredLength={filtered.length}
+            filteredLength={totalRecords}
             hasActiveFilters={hasActiveFilters}
             page={page}
             totalPages={totalPages}
@@ -316,7 +218,7 @@ function ExpenseTable({
           />
           <ExpenseTableDesktop
             paginated={paginated}
-            filteredLength={filtered.length}
+            filteredLength={totalRecords}
             hasActiveFilters={hasActiveFilters}
             page={page}
             totalPages={totalPages}
@@ -325,7 +227,7 @@ function ExpenseTable({
             onPageChange={handlePageChange}
             onViewLightbox={handleViewLightbox}
             sortDescriptor={sortDescriptor}
-            onSortChange={setSortDescriptor}
+            onSortChange={handleSortChange}
             visiblePages={visiblePages}
           />
         </div>
