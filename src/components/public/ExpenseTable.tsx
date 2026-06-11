@@ -8,22 +8,14 @@ import React, {
   useTransition,
   useCallback,
 } from "react";
-import {
-  Table,
-  Modal,
-  Button,
-  Pagination,
-  Tooltip,
-  SortDescriptor,
-  EmptyState,
-  Select,
-  ListBox,
-} from "@heroui/react";
-import { formatDate, formatCLP } from "@/lib/utils";
+import { Modal, Button, SortDescriptor } from "@heroui/react";
 import Image from "next/image";
 import { SkeletonTable } from "./Skeletons";
+import { ExpenseTableFilters } from "./ExpenseTableFilters";
+import { ExpenseTableMobile } from "./ExpenseTableMobile";
+import { ExpenseTableDesktop } from "./ExpenseTableDesktop";
 
-interface TransaccionItem {
+export interface TransaccionItem {
   id: string;
   fecha: string;
   concepto: string;
@@ -41,124 +33,7 @@ interface ExpenseTableProps {
   isLoading?: boolean;
 }
 
-const SearchIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="11" cy="11" r="8" />
-    <path d="m21 21-4.3-4.3" />
-  </svg>
-);
-
-const EyeIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-    <circle cx="12" cy="12" r="3" />
-  </svg>
-);
-
-const EyeOffIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
-    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
-    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
-    <line x1="2" x2="22" y1="2" y2="22" />
-  </svg>
-);
-
-const XIcon = () => (
-  <svg
-    width="12"
-    height="12"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M18 6 6 18" />
-    <path d="m6 6 12 12" />
-  </svg>
-);
-
-function SortableColumnHeader({
-  children,
-  sortDirection,
-}: {
-  children: React.ReactNode;
-  sortDirection?: "ascending" | "descending";
-}) {
-  return (
-    <span className="flex items-center gap-1 cursor-pointer">
-      {children}
-      {!!sortDirection && (
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className={`transform transition-transform duration-200 ease-out ${sortDirection === "descending" ? "rotate-180" : ""}`}
-        >
-          <path d="m18 15-6-6-6 6" />
-        </svg>
-      )}
-    </span>
-  );
-}
-
 const ROWS_PER_PAGE = 10;
-
-const MONTH_OPTIONS = [
-  { id: "all", label: "Todos los meses" },
-  { id: "01", label: "Enero" },
-  { id: "02", label: "Febrero" },
-  { id: "03", label: "Marzo" },
-  { id: "04", label: "Abril" },
-  { id: "05", label: "Mayo" },
-  { id: "06", label: "Junio" },
-  { id: "07", label: "Julio" },
-  { id: "08", label: "Agosto" },
-  { id: "09", label: "Septiembre" },
-  { id: "10", label: "Octubre" },
-  { id: "11", label: "Noviembre" },
-  { id: "12", label: "Diciembre" },
-];
-
-function isNew(creado_el?: string): boolean {
-  if (!creado_el) return false;
-  const created = new Date(creado_el).getTime();
-  return Date.now() - created < 48 * 60 * 60 * 1000;
-}
 
 function ExpenseTable({
   transacciones,
@@ -373,6 +248,16 @@ function ExpenseTable({
   const hasActiveFilters =
     selectedMonth !== "all" || selectedCategory !== "all";
 
+  const handlePageChange = useCallback((newPage: number) => {
+    startTransition(() => {
+      setPage(newPage);
+    });
+  }, []);
+
+  const handleViewLightbox = useCallback((src: string, concepto: string) => {
+    setLightboxImage({ src, concepto });
+  }, []);
+
   if (isLoading) {
     return <SkeletonTable rows={5} />;
   }
@@ -388,452 +273,61 @@ function ExpenseTable({
             Gastos Recientes
           </h3>
           <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">
-            {filtered.length} {filtered.length === 1 ? "registro" : "registros"}{" "}
-            encontrados
+            {filtered.length} {filtered.length === 1 ? "registro" : "registros"} encontrados
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 px-6 pt-3">
-          <div className="relative w-full sm:w-56">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
-              <SearchIcon />
-            </div>
-            <input
-              type="text"
-              placeholder="Buscar gasto..."
-              aria-label="Buscar gastos"
-              defaultValue=""
-              onChange={handleSearchChange}
-              className="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 py-2 pl-9 pr-4
-                         text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500
-                         outline-hidden transition-all duration-200
-                         focus:border-red-300 dark:focus:border-red-500/50 focus:bg-white dark:focus:bg-zinc-800 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-500/20 h-9"
-              id="search-transactions"
-            />
-          </div>
-
-          <Select
-            className="w-44"
-            placeholder="Mes"
-            aria-label="Filtrar por mes"
-            selectedKey={selectedMonth}
-            onSelectionChange={(key) => {
-              if (key !== null) {
-                startTransition(() => {
-                  setSelectedMonth(key as string);
-                  setPage(1);
-                });
-              }
-            }}
-          >
-            <Select.Trigger className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-zinc-300">
-              <Select.Value>
-                {({ isPlaceholder, state }) => {
-                  if (isPlaceholder) return "Mes: Todos";
-                  const key = state.selectedItems?.[0]?.key;
-                  if (key === "all") return "Mes: Todos";
-                  const found = MONTH_OPTIONS.find((m) => m.id === key);
-                  return `Mes: ${found?.label ?? "Todos"}`;
-                }}
-              </Select.Value>
-              <Select.Indicator className="text-zinc-400 dark:text-zinc-500" />
-            </Select.Trigger>
-            <Select.Popover className="rounded-xl shadow-apple-lg border border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 min-w-48">
-              <ListBox>
-                {MONTH_OPTIONS.map((m) => (
-                  <ListBox.Item key={m.id} id={m.id} textValue={m.label}>
-                    {m.label}
-                    <ListBox.ItemIndicator />
-                  </ListBox.Item>
-                ))}
-              </ListBox>
-            </Select.Popover>
-          </Select>
-
-          <Select
-            className="w-56"
-            placeholder="Categoría"
-            aria-label="Filtrar por categoría"
-            selectedKey={selectedCategory}
-            onSelectionChange={(key) => {
-              if (key !== null) {
-                startTransition(() => {
-                  setSelectedCategory(key as string);
-                  setPage(1);
-                });
-                if (chartCategoryFilter && key !== chartCategoryFilter) {
-                  onClearChartFilter?.();
-                }
-              }
-            }}
-          >
-            <Select.Trigger className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 text-sm h-9 min-h-0 items-center **:data-[slot=select-value]:truncate **:data-[slot=select-value]:text-sm dark:text-zinc-300">
-              <Select.Value>
-                {({ isPlaceholder, state }) => {
-                  if (isPlaceholder) return "Categoría: Todas";
-                  const key = state.selectedItems?.[0]?.key;
-                  if (key === "all") return "Categoría: Todas";
-                  return `Categoría: ${String(key ?? "Todas")}`;
-                }}
-              </Select.Value>
-              <Select.Indicator className="text-zinc-400 dark:text-zinc-500" />
-            </Select.Trigger>
-            <Select.Popover className="rounded-xl shadow-apple-lg border border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 min-w-56">
-              <ListBox>
-                <ListBox.Item id="all" textValue="Todas las categorías">
-                  Todas las categorías
-                  <ListBox.ItemIndicator />
-                </ListBox.Item>
-                {uniqueCategories.map((cat) => (
-                  <ListBox.Item key={cat} id={cat} textValue={cat}>
-                    {cat}
-                    <ListBox.ItemIndicator />
-                  </ListBox.Item>
-                ))}
-              </ListBox>
-            </Select.Popover>
-          </Select>
-
-          {hasActiveFilters && (
-            <button type="button"
-              onClick={handleClearAllFilters}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 transition-all duration-200 hover:bg-red-100 cursor-pointer"
-            >
-              <XIcon />
-              Limpiar filtros
-            </button>
-          )}
-        </div>
+        <ExpenseTableFilters
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+          selectedMonth={selectedMonth}
+          onMonthChange={(m) => {
+            startTransition(() => {
+              setSelectedMonth(m);
+              setPage(1);
+            });
+          }}
+          selectedCategory={selectedCategory}
+          onCategoryChange={(c) => {
+            startTransition(() => {
+              setSelectedCategory(c);
+              setPage(1);
+            });
+            if (chartCategoryFilter && c !== chartCategoryFilter) {
+              onClearChartFilter?.();
+            }
+          }}
+          uniqueCategories={uniqueCategories}
+          hasActiveFilters={hasActiveFilters}
+          onClearAllFilters={handleClearAllFilters}
+        />
 
         <div className="p-6 pt-4">
-          <div className="md:hidden">
-            <ListBox
-              aria-label="Gastos recientes"
-              items={paginated}
-              renderEmptyState={() => (
-                <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-                  <div className="flex size-12 items-center justify-center rounded-full bg-zinc-50 dark:bg-zinc-800 text-zinc-400 border border-zinc-100 dark:border-zinc-700 shadow-xs">
-                    <SearchIcon />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-zinc-900 dark:text-white">
-                      Sin resultados
-                    </span>
-                    <span className="text-xs text-zinc-500 mt-0.5">
-                      {hasActiveFilters
-                        ? "No hay transacciones con los filtros seleccionados."
-                        : "La búsqueda no arrojó coincidencias."}
-                    </span>
-                  </div>
-                </EmptyState>
-              )}
-            >
-              {(txn: TransaccionItem) => {
-                const catColor = txn.color || "#9CA3AF";
-                return (
-                  <ListBox.Item
-                    key={txn.id}
-                    id={txn.id}
-                    textValue={txn.concepto}
-                    className="rounded-none px-0 py-3 border-b border-zinc-100 dark:border-zinc-800 last:border-b-0"
-                  >
-                    <div className="flex flex-col gap-1 w-full">
-                      <div className="flex items-start justify-between gap-2">
-                        <span className="text-sm font-medium text-zinc-900 dark:text-white line-clamp-2">
-                          {txn.concepto}
-                        </span>
-                        <span className="text-sm font-semibold text-zinc-900 dark:text-white tabular-nums shrink-0">
-                          {formatCLP(txn.monto)}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span
-                          className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
-                          style={{
-                            backgroundColor: `${catColor}18`,
-                            color: catColor,
-                          }}
-                        >
-                          {txn.categoria}
-                        </span>
-                        <span className="text-xs text-zinc-500">
-                          {formatDate(txn.fecha)}
-                        </span>
-                        {isNew(txn.creado_el) && (
-                          <span className="inline-flex items-center rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 ring-1 ring-emerald-200/60">
-                            Nuevo
-                          </span>
-                        )}
-                        {txn.comprobante ? (
-                          <button type="button"
-                            onClick={() =>
-                              setLightboxImage({
-                                src: txn.comprobante,
-                                concepto: txn.concepto,
-                              })
-                            }
-                            className="inline-flex items-center gap-1 text-xs font-medium text-red-500 hover:text-red-600 transition-colors cursor-pointer"
-                            aria-label={`Ver comprobante de ${txn.concepto}`}
-                          >
-                            <span className="size-3.5">
-                              <EyeIcon />
-                            </span>
-                            Ver comprobante
-                          </button>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 text-xs text-zinc-400">
-                            <span className="size-3.5">
-                              <EyeOffIcon />
-                            </span>
-                            Sin comprobante
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </ListBox.Item>
-                );
-              }}
-            </ListBox>
-
-            {totalPages > 0 && (
-              <div className="mt-4 flex flex-col gap-3">
-                <span className="text-xs text-zinc-500 text-center">
-                  {start} a {end} de {filtered.length} resultados
-                </span>
-                <Pagination size="sm">
-                  <Pagination.Content className="justify-center">
-                    <Pagination.Item>
-                      <Pagination.Previous
-                        isDisabled={page === 1}
-                        onPress={() =>
-                          startTransition(() =>
-                            setPage((p) => Math.max(1, p - 1)),
-                          )
-                        }
-                      >
-                        <Pagination.PreviousIcon />
-                      </Pagination.Previous>
-                    </Pagination.Item>
-                    <span className="text-sm text-zinc-600 dark:text-zinc-300">
-                      {page} / {totalPages}
-                    </span>
-                    <Pagination.Item>
-                      <Pagination.Next
-                        isDisabled={page === totalPages}
-                        onPress={() =>
-                          startTransition(() =>
-                            setPage((p) => Math.min(totalPages, p + 1)),
-                          )
-                        }
-                      >
-                        <Pagination.NextIcon />
-                      </Pagination.Next>
-                    </Pagination.Item>
-                  </Pagination.Content>
-                </Pagination>
-              </div>
-            )}
-          </div>
-
-          <div className="hidden md:block">
-            <Table variant="secondary">
-              <Table.ScrollContainer>
-                <Table.Content
-                  aria-label="Tabla de transacciones recientes"
-                  className="min-w-165"
-                  sortDescriptor={sortDescriptor}
-                  onSortChange={setSortDescriptor}
-                >
-                  <Table.Header>
-                    <Table.Column
-                      allowsSorting
-                      isRowHeader
-                      id="fecha"
-                      className="w-30"
-                    >
-                      {({ sortDirection }) => (
-                        <SortableColumnHeader sortDirection={sortDirection}>
-                          Fecha
-                        </SortableColumnHeader>
-                      )}
-                    </Table.Column>
-                    <Table.Column id="concepto" className="min-w-60">
-                      Descripción
-                    </Table.Column>
-                    <Table.Column allowsSorting id="categoria" className="w-30">
-                      {({ sortDirection }) => (
-                        <SortableColumnHeader sortDirection={sortDirection}>
-                          Categoría
-                        </SortableColumnHeader>
-                      )}
-                    </Table.Column>
-                    <Table.Column allowsSorting id="monto" className="w-32.5">
-                      {({ sortDirection }) => (
-                        <SortableColumnHeader sortDirection={sortDirection}>
-                          Monto
-                        </SortableColumnHeader>
-                      )}
-                    </Table.Column>
-                    <Table.Column id="boleta" className="w-25 text-center">
-                      Boleta
-                    </Table.Column>
-                  </Table.Header>
-                  <Table.Body
-                    items={paginated}
-                    renderEmptyState={() => (
-                      <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-                        <div className="flex size-12 items-center justify-center rounded-full bg-zinc-50 dark:bg-zinc-800 text-zinc-400 border border-zinc-100 dark:border-zinc-700 shadow-xs">
-                          <SearchIcon />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-semibold text-zinc-900 dark:text-white">
-                            Sin resultados
-                          </span>
-                          <span className="text-xs text-zinc-500 mt-0.5">
-                            {hasActiveFilters
-                              ? "No hay transacciones con los filtros seleccionados."
-                              : "La búsqueda no arrojó coincidencias."}
-                          </span>
-                        </div>
-                      </EmptyState>
-                    )}
-                  >
-                    {(txn: TransaccionItem) => {
-                      const catColor = txn.color || "#9CA3AF";
-                      return (
-                        <Table.Row key={txn.id}>
-                          <Table.Cell>
-                            <span className="text-sm text-zinc-600 whitespace-nowrap">
-                              {formatDate(txn.fecha)}
-                            </span>
-                          </Table.Cell>
-                          <Table.Cell>
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-zinc-900 dark:text-white">
-                                {txn.concepto}
-                              </span>
-                              {isNew(txn.creado_el) && (
-                                <span className="inline-flex items-center rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 ring-1 ring-emerald-200/60">
-                                  Nuevo
-                                </span>
-                              )}
-                            </div>
-                          </Table.Cell>
-                          <Table.Cell>
-                            <span
-                              className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
-                              style={{
-                                backgroundColor: `${catColor}18`,
-                                color: catColor,
-                              }}
-                            >
-                              {txn.categoria}
-                            </span>
-                          </Table.Cell>
-                          <Table.Cell>
-                            <span className="text-sm font-semibold text-zinc-900 dark:text-white tabular-nums">
-                              {formatCLP(txn.monto)}
-                            </span>
-                          </Table.Cell>
-                          <Table.Cell>
-                            <div className="flex justify-center">
-                              {txn.comprobante ? (
-                                <Tooltip delay={0}>
-                                  <Tooltip.Trigger>
-                                    <button type="button"
-                                      onClick={() =>
-                                        setLightboxImage({
-                                          src: txn.comprobante,
-                                          concepto: txn.concepto,
-                                        })
-                                      }
-                                      className="inline-flex items-center justify-center size-8 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 cursor-pointer transition-all duration-200 hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 hover:scale-105 active:scale-95"
-                                      aria-label={`Ver comprobante de ${txn.concepto}`}
-                                    >
-                                      <EyeIcon />
-                                    </button>
-                                  </Tooltip.Trigger>
-                                  <Tooltip.Content className="bg-zinc-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
-                                    <p>Ver comprobante</p>
-                                  </Tooltip.Content>
-                                </Tooltip>
-                              ) : (
-                                <Tooltip delay={0}>
-                                  <Tooltip.Trigger>
-                                    <span className="inline-flex items-center justify-center size-8 rounded-lg bg-zinc-50 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed border border-zinc-100 dark:border-zinc-700">
-                                      <EyeOffIcon />
-                                    </span>
-                                  </Tooltip.Trigger>
-                                  <Tooltip.Content className="bg-zinc-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
-                                    <p>Comprobante pendiente</p>
-                                  </Tooltip.Content>
-                                </Tooltip>
-                              )}
-                            </div>
-                          </Table.Cell>
-                        </Table.Row>
-                      );
-                    }}
-                  </Table.Body>
-                </Table.Content>
-              </Table.ScrollContainer>
-              {totalPages > 0 && (
-                <Table.Footer>
-                  <Pagination size="sm">
-                    <Pagination.Summary>
-                      {start} a {end} de {filtered.length} resultados
-                    </Pagination.Summary>
-                    <Pagination.Content>
-                      <Pagination.Item>
-                        <Pagination.Previous
-                          isDisabled={page === 1}
-                          onPress={() =>
-                            startTransition(() =>
-                              setPage((p) => Math.max(1, p - 1)),
-                            )
-                          }
-                        >
-                          <Pagination.PreviousIcon />
-                          Ant.
-                        </Pagination.Previous>
-                      </Pagination.Item>
-                      {visiblePages.map((p, idx) =>
-                        p === "ellipsis" ? (
-                          <Pagination.Item key={`ellipsis-${idx}`}>
-                            <span className="px-2 text-zinc-400 text-sm select-none">
-                              …
-                            </span>
-                          </Pagination.Item>
-                        ) : (
-                          <Pagination.Item key={p}>
-                            <Pagination.Link
-                              isActive={p === page}
-                              onPress={() => startTransition(() => setPage(p))}
-                            >
-                              {p}
-                            </Pagination.Link>
-                          </Pagination.Item>
-                        ),
-                      )}
-                      <Pagination.Item>
-                        <Pagination.Next
-                          isDisabled={page === totalPages}
-                          onPress={() =>
-                            startTransition(() =>
-                              setPage((p) => Math.min(totalPages, p + 1)),
-                            )
-                          }
-                        >
-                          Sig.
-                          <Pagination.NextIcon />
-                        </Pagination.Next>
-                      </Pagination.Item>
-                    </Pagination.Content>
-                  </Pagination>
-                </Table.Footer>
-              )}
-            </Table>
-          </div>
+          <ExpenseTableMobile
+            paginated={paginated}
+            filteredLength={filtered.length}
+            hasActiveFilters={hasActiveFilters}
+            page={page}
+            totalPages={totalPages}
+            start={start}
+            end={end}
+            onPageChange={handlePageChange}
+            onViewLightbox={handleViewLightbox}
+          />
+          <ExpenseTableDesktop
+            paginated={paginated}
+            filteredLength={filtered.length}
+            hasActiveFilters={hasActiveFilters}
+            page={page}
+            totalPages={totalPages}
+            start={start}
+            end={end}
+            onPageChange={handlePageChange}
+            onViewLightbox={handleViewLightbox}
+            sortDescriptor={sortDescriptor}
+            onSortChange={setSortDescriptor}
+            visiblePages={visiblePages}
+          />
         </div>
       </div>
 
