@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useReducer, useMemo, useRef } from "react";
 import Link from "next/link";
 import type { SortDescriptor } from "@heroui/react";
 import { Card } from "@heroui/react";
@@ -13,29 +13,84 @@ import AdminMobileList from "@/components/admin/AdminMobileList";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminFilters from "@/components/admin/AdminFilters";
 import AdminModals, { type GastoDB } from "@/components/admin/AdminModals";
-import { formatCLP } from "@/lib/utils";
 
 const ROWS_PER_PAGE = 10;
 
+type AdminState = {
+  page: number;
+  searchQuery: string;
+  selectedMonth: string;
+  selectedCategory: string;
+  sortDescriptor: SortDescriptor;
+  deletingCat: string | null;
+  editGasto: GastoDB | null;
+  deleteGasto: GastoDB | null;
+  lightboxUrl: string | null;
+};
+
+type AdminAction =
+  | { type: "SET_PAGE"; payload: number }
+  | { type: "SET_SEARCH"; payload: string }
+  | { type: "SET_MONTH"; payload: string }
+  | { type: "SET_CATEGORY"; payload: string }
+  | { type: "SET_SORT"; payload: SortDescriptor }
+  | { type: "SET_DELETING_CAT"; payload: string | null }
+  | { type: "SET_EDIT_GASTO"; payload: GastoDB | null }
+  | { type: "SET_DELETE_GASTO"; payload: GastoDB | null }
+  | { type: "SET_LIGHTBOX_URL"; payload: string | null }
+  | { type: "CLEAR_FILTERS" };
+
+const initialState: AdminState = {
+  page: 1,
+  searchQuery: "",
+  selectedMonth: "all",
+  selectedCategory: "all",
+  sortDescriptor: { column: "fecha", direction: "descending" },
+  deletingCat: null,
+  editGasto: null,
+  deleteGasto: null,
+  lightboxUrl: null,
+};
+
+function adminReducer(state: AdminState, action: AdminAction): AdminState {
+  switch (action.type) {
+    case "SET_PAGE": return { ...state, page: action.payload };
+    case "SET_SEARCH": return { ...state, searchQuery: action.payload, page: 1 };
+    case "SET_MONTH": return { ...state, selectedMonth: action.payload, page: 1 };
+    case "SET_CATEGORY": return { ...state, selectedCategory: action.payload, page: 1 };
+    case "SET_SORT": return { ...state, sortDescriptor: action.payload };
+    case "SET_DELETING_CAT": return { ...state, deletingCat: action.payload };
+    case "SET_EDIT_GASTO": return { ...state, editGasto: action.payload };
+    case "SET_DELETE_GASTO": return { ...state, deleteGasto: action.payload };
+    case "SET_LIGHTBOX_URL": return { ...state, lightboxUrl: action.payload };
+    case "CLEAR_FILTERS": return { ...state, selectedMonth: "all", selectedCategory: "all", page: 1 };
+    default: return state;
+  }
+}
+
 export default function AdminPage() {
-  const { gastos, isLoading: loadingTable, mutateGastos } = useGastos();
   const { categoriasDB, mutateCategorias } = useCategorias();
 
-  // react-doctor-disable-next-line react-doctor/prefer-useReducer
-  const [page, setPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState<string>("all");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "fecha",
-    direction: "descending",
-  });
+  const [state, dispatch] = useReducer(adminReducer, initialState);
+  const { page, searchQuery, selectedMonth, selectedCategory, sortDescriptor, deletingCat, editGasto, deleteGasto, lightboxUrl } = state;
+
+  const setPage = (p: number | ((prev: number) => number)) => dispatch({ type: "SET_PAGE", payload: typeof p === "function" ? p(page) : p });
+  const setSortDescriptor = (s: SortDescriptor | ((prev: SortDescriptor) => SortDescriptor)) => dispatch({ type: "SET_SORT", payload: typeof s === "function" ? s(sortDescriptor) : s });
+  const setDeletingCat = (c: string | null) => dispatch({ type: "SET_DELETING_CAT", payload: c });
+  const setEditGasto = (g: GastoDB | null) => dispatch({ type: "SET_EDIT_GASTO", payload: g });
+  const setDeleteGasto = (g: GastoDB | null) => dispatch({ type: "SET_DELETE_GASTO", payload: g });
+  const setLightboxUrl = (url: string | null) => dispatch({ type: "SET_LIGHTBOX_URL", payload: url });
+
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [deletingCat, setDeletingCat] = useState<string | null>(null);
-  const [editGasto, setEditGasto] = useState<GastoDB | null>(null);
-  const [deleteGasto, setDeleteGasto] = useState<GastoDB | null>(null);
-  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const { gastos: paginated, totalCount, isLoading: loadingTable, mutateGastos } = useGastos({
+    page,
+    pageSize: ROWS_PER_PAGE,
+    searchQuery,
+    selectedMonth,
+    selectedCategory,
+    sortDescriptor: { column: sortDescriptor.column as string, direction: sortDescriptor.direction }
+  });
 
   const categorias = useMemo(() => {
     const names = categoriasDB.map((c) => c.nombre);
@@ -54,72 +109,22 @@ export default function AdminPage() {
     return map;
   }, [categoriasDB]);
 
-  const filtered = useMemo(() => {
-    let result = [...gastos];
-
-    if (selectedMonth !== "all") {
-      result = result.filter((g) => {
-        const month = g.fecha.substring(5, 7);
-        return month === selectedMonth;
-      });
-    }
-
-    if (selectedCategory !== "all") {
-      result = result.filter((g) => g.categoria === selectedCategory);
-    }
-
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (g) =>
-          g.descripcion.toLowerCase().includes(q) ||
-          g.categoria.toLowerCase().includes(q) ||
-          formatCLP(g.monto).includes(q) ||
-          g.fecha.includes(q),
-      );
-    }
-
-    if (sortDescriptor.column) {
-      result.sort((a, b) => {
-        const col = sortDescriptor.column as string;
-        let cmp = 0;
-        if (col === "fecha") cmp = a.fecha.localeCompare(b.fecha);
-        else if (col === "cat") cmp = a.categoria.localeCompare(b.categoria);
-        else if (col === "monto") cmp = a.monto - b.monto;
-        return sortDescriptor.direction === "descending" ? -cmp : cmp;
-      });
-    }
-    return result;
-  }, [gastos, searchQuery, sortDescriptor, selectedMonth, selectedCategory]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / ROWS_PER_PAGE));
+  const totalPages = Math.max(1, Math.ceil(totalCount / ROWS_PER_PAGE));
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-  const paginated = filtered.slice(
-    (page - 1) * ROWS_PER_PAGE,
-    page * ROWS_PER_PAGE,
-  );
-  const pStart = filtered.length === 0 ? 0 : (page - 1) * ROWS_PER_PAGE + 1;
-  const pEnd = Math.min(page * ROWS_PER_PAGE, filtered.length);
+  // paginated is directly returned from useGastos
+  const pStart = totalCount === 0 ? 0 : (page - 1) * ROWS_PER_PAGE + 1;
+  const pEnd = Math.min(page * ROWS_PER_PAGE, totalCount);
 
   const handleSearch = (val: string) => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
     debounceTimer.current = setTimeout(() => {
-      setSearchQuery(val);
-      setPage(1);
+      dispatch({ type: "SET_SEARCH", payload: val });
     }, 250);
   };
 
   const openEdit = (g: GastoDB) => {
-    setEditGasto(g);
+    dispatch({ type: "SET_EDIT_GASTO", payload: g });
   };
-
-  const catCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    gastos.forEach((g) => {
-      counts[g.categoria] = (counts[g.categoria] || 0) + 1;
-    });
-    return counts;
-  }, [gastos]);
 
   return (
     <div className="min-h-dvh flex bg-transparent">
@@ -153,27 +158,17 @@ export default function AdminPage() {
                   Gastos Registrados
                 </h2>
                 <p className="text-sm text-zinc-400 dark:text-zinc-500 mt-0.5">
-                  {filtered.length} de {gastos.length} gastos
+                  {totalCount} gastos encontrados
                 </p>
               </div>
               <AdminFilters
                 selectedMonth={selectedMonth}
-                setSelectedMonth={(val) => {
-                  setSelectedMonth(val);
-                  setPage(1);
-                }}
+                setSelectedMonth={(val) => dispatch({ type: "SET_MONTH", payload: val })}
                 selectedCategory={selectedCategory}
-                setSelectedCategory={(val) => {
-                  setSelectedCategory(val);
-                  setPage(1);
-                }}
+                setSelectedCategory={(val) => dispatch({ type: "SET_CATEGORY", payload: val })}
                 onSearch={handleSearch}
                 categoriasDB={categoriasDB}
-                onClear={() => {
-                  setSelectedMonth("all");
-                  setSelectedCategory("all");
-                  setPage(1);
-                }}
+                onClear={() => dispatch({ type: "CLEAR_FILTERS" })}
               />
             </div>
             <div className="p-6 pt-4">
@@ -185,7 +180,7 @@ export default function AdminPage() {
                 <>
                   <AdminMobileList
                     paginated={paginated}
-                    filteredLength={filtered.length}
+                    filteredLength={totalCount}
                     catColors={catColors}
                     searchQuery={searchQuery}
                     pStart={pStart}
@@ -199,7 +194,7 @@ export default function AdminPage() {
                   />
                   <AdminDesktopTable
                     paginated={paginated}
-                    filteredLength={filtered.length}
+                    filteredLength={totalCount}
                     catColors={catColors}
                     searchQuery={searchQuery}
                     pStart={pStart}
@@ -245,7 +240,6 @@ export default function AdminPage() {
         categoriasDB={categoriasDB}
         mutateGastos={mutateGastos}
         mutateCategorias={mutateCategorias}
-        catCounts={catCounts}
         onGastoDeleted={() => {
           if (paginated.length === 1) {
             setPage((currentPage) => Math.max(1, currentPage - 1));

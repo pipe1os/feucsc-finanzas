@@ -35,8 +35,6 @@ export interface AdminModalsProps {
   
   mutateGastos: () => void;
   mutateCategorias: () => void;
-  
-  catCounts: Record<string, number>;
   onGastoDeleted: () => void;
 }
 
@@ -53,7 +51,6 @@ export default function AdminModals({
   categoriasDB,
   mutateGastos,
   mutateCategorias,
-  catCounts,
   onGastoDeleted,
 }: AdminModalsProps) {
   const [deletingCatLoading, setDeletingCatLoading] = useState(false);
@@ -198,14 +195,8 @@ export default function AdminModals({
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
                 Vas a eliminar la categoría{" "}
                 <strong>&ldquo;{deletingCat}&rdquo;</strong>.
-                {(catCounts[deletingCat || ""] || 0) > 0 && (
-                  <>
-                    {" "}
-                    Los <strong>{catCounts[deletingCat || ""]}</strong> gastos
-                    que usan esta categoría pasarán a{" "}
-                    <strong>&ldquo;N/A&rdquo;</strong>.
-                  </>
-                )}
+                {" "}
+                Los gastos que usan esta categoría pasarán a <strong>&ldquo;N/A&rdquo;</strong>.
               </p>
             </AlertDialog.Body>
             <AlertDialog.Footer>
