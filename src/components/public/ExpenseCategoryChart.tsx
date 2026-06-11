@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/chart";
 import { formatCLP } from "@/lib/utils";
 // react-doctor-disable-next-line react-doctor/prefer-dynamic-import
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { Cell, Pie, PieChart } from "recharts";
 import * as React from "react";
 
 interface CategoriaData {

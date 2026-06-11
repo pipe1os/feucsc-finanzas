@@ -1,7 +1,7 @@
 "use server";
 
-import crypto from "crypto";
 import { z } from "zod";
+import { deleteCloudinaryImage } from "@/lib/cloudinary-server";
 
 // CRUD de gastos/categorías. Acá validamos todo porque esto termina en la DB.
 import { supabaseServer } from "@/lib/supabase-server";
@@ -135,23 +135,6 @@ export async function updateGasto(formData: FormData) {
   revalidatePath("/gastos");
 }
 
-function extractPublicId(url: string) {
-  const parts = url.split("/upload/");
-  if (parts.length < 2) return null;
-
-  const path = parts[1];
-  const segments = path.split("/");
-  if (segments[0].match(/^v\d+$/)) {
-    segments.shift();
-  }
-  const publicIdWithExt = segments.join("/");
-  const lastDot = publicIdWithExt.lastIndexOf(".");
-  if (lastDot !== -1) {
-    return publicIdWithExt.substring(0, lastDot);
-  }
-  return publicIdWithExt;
-}
-
 export async function deleteGasto(id: string) {
   const parsed = z.string().uuid("ID inválido").safeParse(id);
   if (!parsed.success) throw new Error(parsed.error.issues[0]?.message || "ID inválido");
@@ -168,42 +151,7 @@ export async function deleteGasto(id: string) {
     gastoData?.comprobante_url &&
     gastoData.comprobante_url.startsWith("https://res.cloudinary.com/")
   ) {
-    try {
-      const publicId = extractPublicId(gastoData.comprobante_url);
-      if (publicId) {
-        const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-        const apiKey = process.env.CLOUDINARY_API_KEY;
-        const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-        if (cloudName && apiKey && apiSecret) {
-          const timestamp = Math.floor(new Date().getTime() / 1000).toString();
-          const stringToSign = `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
-          const signature = crypto
-            .createHash("sha1")
-            .update(stringToSign)
-            .digest("hex");
-
-          const formData = new FormData();
-          formData.append("public_id", publicId);
-          formData.append("api_key", apiKey);
-          formData.append("timestamp", timestamp);
-          formData.append("signature", signature);
-
-          const response = await fetch(
-            `https://api.cloudinary.com/v1_1/${cloudName}/image/destroy`,
-            { method: "POST", body: formData },
-          );
-
-          if (!response.ok) {
-            console.error("Cloudinary delete failed:", await response.json());
-          }
-        } else {
-          console.error("Cloudinary credentials missing for delete");
-        }
-      }
-    } catch (cloudErr) {
-      console.error("Error cleaning up Cloudinary image:", cloudErr);
-    }
+    await deleteCloudinaryImage(gastoData.comprobante_url);
   }
 
   const { error } = await supabaseServer.client
