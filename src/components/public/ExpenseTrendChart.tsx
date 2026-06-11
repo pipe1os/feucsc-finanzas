@@ -15,15 +15,8 @@ import {
   ChartTooltip,
   type ChartConfig,
 } from "@/components/ui/chart";
-
 // react-doctor-disable-next-line react-doctor/prefer-dynamic-import
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface CategoryBreakdown {
   categoria: string;
@@ -228,7 +221,7 @@ export default function ExpenseTrendChart({
   }, []);
 
   return (
-    <Card className="rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-apple ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
+    <Card className="rounded-2xl border border-zinc-100 dark:border-zinc-700/80 bg-white dark:bg-zinc-900 shadow-apple ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
       <CardHeader className="pb-6">
         <CardTitle className="text-base font-semibold text-zinc-900 dark:text-white font-heading">
           Tendencia de Gastos

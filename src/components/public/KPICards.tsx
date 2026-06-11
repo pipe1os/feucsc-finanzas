@@ -65,7 +65,7 @@ export default function KPICards({
 
   return (
     <div className="h-full">
-      <div className="rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-apple p-6 sm:p-8 h-full flex flex-col">
+      <div className="rounded-2xl border border-zinc-100 dark:border-zinc-700/80 bg-white dark:bg-zinc-900 shadow-apple p-6 sm:p-8 h-full flex flex-col">
         <div className="flex flex-col flex-1 justify-between gap-5 lg:justify-center">
           <div>
             <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-zinc-500 dark:text-zinc-400 mb-1.5">
@@ -103,7 +103,7 @@ export default function KPICards({
             </div>
           </div>
 
-          <div className="flex items-end justify-between gap-4 pt-4 border-t border-zinc-50 dark:border-zinc-800">
+          <div className="flex items-end justify-between gap-4 pt-4 border-t border-zinc-50 dark:border-zinc-700/80">
             <div>
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-zinc-500 dark:text-zinc-400 mb-1">
                 Presupuesto Total
