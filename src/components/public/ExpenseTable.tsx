@@ -28,8 +28,6 @@ export interface TransaccionItem {
 
 interface ExpenseTableProps {
   transacciones: TransaccionItem[];
-  chartCategoryFilter?: string | null;
-  onClearChartFilter?: () => void;
   totalRecords: number;
   uniqueCategories: string[];
   isLoading?: boolean;
@@ -39,8 +37,6 @@ const ROWS_PER_PAGE = 10;
 
 function ExpenseTable({
   transacciones,
-  chartCategoryFilter,
-  onClearChartFilter,
   totalRecords,
   uniqueCategories,
   isLoading,
@@ -64,9 +60,10 @@ function ExpenseTable({
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    const timerRef = debounceTimer;
     return () => {
-      if (debounceTimer.current) {
-        clearTimeout(debounceTimer.current);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
       }
     };
   }, []);
@@ -95,11 +92,7 @@ function ExpenseTable({
     [searchParams, pathname, router]
   );
 
-  useEffect(() => {
-    if (chartCategoryFilter && chartCategoryFilter !== selectedCategory) {
-      setURLParams({ categoria: chartCategoryFilter, page: "1" });
-    }
-  }, [chartCategoryFilter, selectedCategory, setURLParams]);
+
 
   const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,8 +109,7 @@ function ExpenseTable({
 
   const handleClearAllFilters = useCallback(() => {
     setURLParams({ mes: null, categoria: null, search: null, page: "1" });
-    onClearChartFilter?.();
-  }, [setURLParams, onClearChartFilter]);
+  }, [setURLParams]);
 
   const totalPages = Math.ceil(totalRecords / ROWS_PER_PAGE);
 
@@ -206,9 +198,6 @@ function ExpenseTable({
           selectedCategory={selectedCategory}
           onCategoryChange={(c) => {
             setURLParams({ categoria: c, page: "1" });
-            if (chartCategoryFilter && c !== chartCategoryFilter) {
-              onClearChartFilter?.();
-            }
           }}
           uniqueCategories={uniqueCategories}
           hasActiveFilters={hasActiveFilters}

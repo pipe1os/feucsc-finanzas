@@ -8,6 +8,8 @@ import Link from "next/link";
 
 export const revalidate = 60;
 
+const validSortCols = ["fecha", "monto", "descripcion", "categoria"];
+
 export const metadata = {
   title: "Gastos | FEUCSC",
   description:
@@ -45,7 +47,6 @@ export default async function GastosPage(props: {
     chartQuery = chartQuery.like("fecha", `____-${mes}-__`);
   }
 
-  const validSortCols = ["fecha", "monto", "descripcion", "categoria"];
   const mappedSortCol = sortCol === "concepto" ? "descripcion" : sortCol;
   const orderCol = validSortCols.includes(mappedSortCol) ? mappedSortCol : "fecha";
   const ascending = sortDir === "ascending";
