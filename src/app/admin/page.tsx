@@ -13,12 +13,10 @@ import AdminMobileList from "@/components/admin/AdminMobileList";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminFilters from "@/components/admin/AdminFilters";
 import AdminModals, { type GastoDB } from "@/components/admin/AdminModals";
-import { formatCLP } from "@/lib/utils";
 
 const ROWS_PER_PAGE = 10;
 
 export default function AdminPage() {
-  const { gastos, isLoading: loadingTable, mutateGastos } = useGastos();
   const { categoriasDB, mutateCategorias } = useCategorias();
 
   // react-doctor-disable-next-line react-doctor/prefer-useReducer
@@ -31,6 +29,15 @@ export default function AdminPage() {
     direction: "descending",
   });
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const { gastos: paginated, totalCount, isLoading: loadingTable, mutateGastos } = useGastos({
+    page,
+    pageSize: ROWS_PER_PAGE,
+    searchQuery,
+    selectedMonth,
+    selectedCategory,
+    sortDescriptor: { column: sortDescriptor.column as string, direction: sortDescriptor.direction }
+  });
 
   const [deletingCat, setDeletingCat] = useState<string | null>(null);
   const [editGasto, setEditGasto] = useState<GastoDB | null>(null);
@@ -54,52 +61,11 @@ export default function AdminPage() {
     return map;
   }, [categoriasDB]);
 
-  const filtered = useMemo(() => {
-    let result = [...gastos];
-
-    if (selectedMonth !== "all") {
-      result = result.filter((g) => {
-        const month = g.fecha.substring(5, 7);
-        return month === selectedMonth;
-      });
-    }
-
-    if (selectedCategory !== "all") {
-      result = result.filter((g) => g.categoria === selectedCategory);
-    }
-
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (g) =>
-          g.descripcion.toLowerCase().includes(q) ||
-          g.categoria.toLowerCase().includes(q) ||
-          formatCLP(g.monto).includes(q) ||
-          g.fecha.includes(q),
-      );
-    }
-
-    if (sortDescriptor.column) {
-      result.sort((a, b) => {
-        const col = sortDescriptor.column as string;
-        let cmp = 0;
-        if (col === "fecha") cmp = a.fecha.localeCompare(b.fecha);
-        else if (col === "cat") cmp = a.categoria.localeCompare(b.categoria);
-        else if (col === "monto") cmp = a.monto - b.monto;
-        return sortDescriptor.direction === "descending" ? -cmp : cmp;
-      });
-    }
-    return result;
-  }, [gastos, searchQuery, sortDescriptor, selectedMonth, selectedCategory]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / ROWS_PER_PAGE));
+  const totalPages = Math.max(1, Math.ceil(totalCount / ROWS_PER_PAGE));
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-  const paginated = filtered.slice(
-    (page - 1) * ROWS_PER_PAGE,
-    page * ROWS_PER_PAGE,
-  );
-  const pStart = filtered.length === 0 ? 0 : (page - 1) * ROWS_PER_PAGE + 1;
-  const pEnd = Math.min(page * ROWS_PER_PAGE, filtered.length);
+  // paginated is directly returned from useGastos
+  const pStart = totalCount === 0 ? 0 : (page - 1) * ROWS_PER_PAGE + 1;
+  const pEnd = Math.min(page * ROWS_PER_PAGE, totalCount);
 
   const handleSearch = (val: string) => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
@@ -112,14 +78,6 @@ export default function AdminPage() {
   const openEdit = (g: GastoDB) => {
     setEditGasto(g);
   };
-
-  const catCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    gastos.forEach((g) => {
-      counts[g.categoria] = (counts[g.categoria] || 0) + 1;
-    });
-    return counts;
-  }, [gastos]);
 
   return (
     <div className="min-h-dvh flex bg-transparent">
@@ -153,7 +111,7 @@ export default function AdminPage() {
                   Gastos Registrados
                 </h2>
                 <p className="text-sm text-zinc-400 dark:text-zinc-500 mt-0.5">
-                  {filtered.length} de {gastos.length} gastos
+                  {totalCount} gastos encontrados
                 </p>
               </div>
               <AdminFilters
@@ -185,7 +143,7 @@ export default function AdminPage() {
                 <>
                   <AdminMobileList
                     paginated={paginated}
-                    filteredLength={filtered.length}
+                    filteredLength={totalCount}
                     catColors={catColors}
                     searchQuery={searchQuery}
                     pStart={pStart}
@@ -199,7 +157,7 @@ export default function AdminPage() {
                   />
                   <AdminDesktopTable
                     paginated={paginated}
-                    filteredLength={filtered.length}
+                    filteredLength={totalCount}
                     catColors={catColors}
                     searchQuery={searchQuery}
                     pStart={pStart}
@@ -245,7 +203,6 @@ export default function AdminPage() {
         categoriasDB={categoriasDB}
         mutateGastos={mutateGastos}
         mutateCategorias={mutateCategorias}
-        catCounts={catCounts}
         onGastoDeleted={() => {
           if (paginated.length === 1) {
             setPage((currentPage) => Math.max(1, currentPage - 1));
