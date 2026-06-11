@@ -9,8 +9,7 @@
 
 [Read in English →](./README.md)
 
-Portal de transparencia financiera para la FEUCSC (Federación de Estudiantes UCSC). Los estudiantes rastrean los gastos de la federación y verifican los comprobantes.
-
+Portal de transparencia financiera hecho para la FEUCSC (Federación de Estudiantes UCSC).
 ## Características
 
 ### Portal público
