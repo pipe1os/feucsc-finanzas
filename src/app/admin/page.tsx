@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useReducer, useMemo, useRef } from "react";
 import Link from "next/link";
 import type { SortDescriptor } from "@heroui/react";
 import { Card } from "@heroui/react";
@@ -16,18 +16,71 @@ import AdminModals, { type GastoDB } from "@/components/admin/AdminModals";
 
 const ROWS_PER_PAGE = 10;
 
+type AdminState = {
+  page: number;
+  searchQuery: string;
+  selectedMonth: string;
+  selectedCategory: string;
+  sortDescriptor: SortDescriptor;
+  deletingCat: string | null;
+  editGasto: GastoDB | null;
+  deleteGasto: GastoDB | null;
+  lightboxUrl: string | null;
+};
+
+type AdminAction =
+  | { type: "SET_PAGE"; payload: number }
+  | { type: "SET_SEARCH"; payload: string }
+  | { type: "SET_MONTH"; payload: string }
+  | { type: "SET_CATEGORY"; payload: string }
+  | { type: "SET_SORT"; payload: SortDescriptor }
+  | { type: "SET_DELETING_CAT"; payload: string | null }
+  | { type: "SET_EDIT_GASTO"; payload: GastoDB | null }
+  | { type: "SET_DELETE_GASTO"; payload: GastoDB | null }
+  | { type: "SET_LIGHTBOX_URL"; payload: string | null }
+  | { type: "CLEAR_FILTERS" };
+
+const initialState: AdminState = {
+  page: 1,
+  searchQuery: "",
+  selectedMonth: "all",
+  selectedCategory: "all",
+  sortDescriptor: { column: "fecha", direction: "descending" },
+  deletingCat: null,
+  editGasto: null,
+  deleteGasto: null,
+  lightboxUrl: null,
+};
+
+function adminReducer(state: AdminState, action: AdminAction): AdminState {
+  switch (action.type) {
+    case "SET_PAGE": return { ...state, page: action.payload };
+    case "SET_SEARCH": return { ...state, searchQuery: action.payload, page: 1 };
+    case "SET_MONTH": return { ...state, selectedMonth: action.payload, page: 1 };
+    case "SET_CATEGORY": return { ...state, selectedCategory: action.payload, page: 1 };
+    case "SET_SORT": return { ...state, sortDescriptor: action.payload };
+    case "SET_DELETING_CAT": return { ...state, deletingCat: action.payload };
+    case "SET_EDIT_GASTO": return { ...state, editGasto: action.payload };
+    case "SET_DELETE_GASTO": return { ...state, deleteGasto: action.payload };
+    case "SET_LIGHTBOX_URL": return { ...state, lightboxUrl: action.payload };
+    case "CLEAR_FILTERS": return { ...state, selectedMonth: "all", selectedCategory: "all", page: 1 };
+    default: return state;
+  }
+}
+
 export default function AdminPage() {
   const { categoriasDB, mutateCategorias } = useCategorias();
 
-  // react-doctor-disable-next-line react-doctor/prefer-useReducer
-  const [page, setPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState<string>("all");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "fecha",
-    direction: "descending",
-  });
+  const [state, dispatch] = useReducer(adminReducer, initialState);
+  const { page, searchQuery, selectedMonth, selectedCategory, sortDescriptor, deletingCat, editGasto, deleteGasto, lightboxUrl } = state;
+
+  const setPage = (p: number | ((prev: number) => number)) => dispatch({ type: "SET_PAGE", payload: typeof p === "function" ? p(page) : p });
+  const setSortDescriptor = (s: SortDescriptor | ((prev: SortDescriptor) => SortDescriptor)) => dispatch({ type: "SET_SORT", payload: typeof s === "function" ? s(sortDescriptor) : s });
+  const setDeletingCat = (c: string | null) => dispatch({ type: "SET_DELETING_CAT", payload: c });
+  const setEditGasto = (g: GastoDB | null) => dispatch({ type: "SET_EDIT_GASTO", payload: g });
+  const setDeleteGasto = (g: GastoDB | null) => dispatch({ type: "SET_DELETE_GASTO", payload: g });
+  const setLightboxUrl = (url: string | null) => dispatch({ type: "SET_LIGHTBOX_URL", payload: url });
+
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { gastos: paginated, totalCount, isLoading: loadingTable, mutateGastos } = useGastos({
@@ -38,11 +91,6 @@ export default function AdminPage() {
     selectedCategory,
     sortDescriptor: { column: sortDescriptor.column as string, direction: sortDescriptor.direction }
   });
-
-  const [deletingCat, setDeletingCat] = useState<string | null>(null);
-  const [editGasto, setEditGasto] = useState<GastoDB | null>(null);
-  const [deleteGasto, setDeleteGasto] = useState<GastoDB | null>(null);
-  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
 
   const categorias = useMemo(() => {
     const names = categoriasDB.map((c) => c.nombre);
@@ -70,13 +118,12 @@ export default function AdminPage() {
   const handleSearch = (val: string) => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
     debounceTimer.current = setTimeout(() => {
-      setSearchQuery(val);
-      setPage(1);
+      dispatch({ type: "SET_SEARCH", payload: val });
     }, 250);
   };
 
   const openEdit = (g: GastoDB) => {
-    setEditGasto(g);
+    dispatch({ type: "SET_EDIT_GASTO", payload: g });
   };
 
   return (
@@ -116,22 +163,12 @@ export default function AdminPage() {
               </div>
               <AdminFilters
                 selectedMonth={selectedMonth}
-                setSelectedMonth={(val) => {
-                  setSelectedMonth(val);
-                  setPage(1);
-                }}
+                setSelectedMonth={(val) => dispatch({ type: "SET_MONTH", payload: val })}
                 selectedCategory={selectedCategory}
-                setSelectedCategory={(val) => {
-                  setSelectedCategory(val);
-                  setPage(1);
-                }}
+                setSelectedCategory={(val) => dispatch({ type: "SET_CATEGORY", payload: val })}
                 onSearch={handleSearch}
                 categoriasDB={categoriasDB}
-                onClear={() => {
-                  setSelectedMonth("all");
-                  setSelectedCategory("all");
-                  setPage(1);
-                }}
+                onClear={() => dispatch({ type: "CLEAR_FILTERS" })}
               />
             </div>
             <div className="p-6 pt-4">
