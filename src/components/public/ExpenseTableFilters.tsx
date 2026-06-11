@@ -17,7 +17,7 @@ const XIcon = () => (
   </svg>
 );
 
-export const MONTH_OPTIONS = [
+const MONTH_OPTIONS = [
   { id: "all", label: "Todos los meses" },
   { id: "01", label: "Enero" },
   { id: "02", label: "Febrero" },
