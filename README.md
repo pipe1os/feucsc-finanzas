@@ -38,8 +38,6 @@ Financial transparency portal made for FEUCSC (Federación de Estudiantes UCSC).
 - HeroUI
 - Zod (server-side validation)
 - Vitest
-- GitHub Actions CI
-- Lighthouse CI
 
 ## Security
 
