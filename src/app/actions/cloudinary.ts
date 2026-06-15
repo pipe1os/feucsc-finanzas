@@ -56,7 +56,7 @@ export async function deleteCloudinaryImage(url: string) {
 
     const stringToSign = `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
     const signature = crypto
-      .createHash("sha1")
+      .createHash("sha256")
       .update(stringToSign)
       .digest("hex");
 
