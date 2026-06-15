@@ -37,8 +37,6 @@ Portal de transparencia financiera hecho para la FEUCSC (Federación de Estudian
 - HeroUI
 - Zod (validación en el servidor)
 - Vitest
-- GitHub Actions CI
-- Lighthouse CI
 
 ## Seguridad
 
