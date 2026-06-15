@@ -9,7 +9,7 @@
 
 [Leer en Español →](./README_es.md)
 
-Financial transparency portal made for FEUCSC (Federación de Estudiantes UCSC).
+Financial transparency portal made for the FEUCSC (UCSC Student Federation).
 
 ## Features
 
