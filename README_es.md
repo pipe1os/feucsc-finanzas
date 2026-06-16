@@ -37,8 +37,6 @@ Portal de transparencia financiera hecho para la FEUCSC (Federación de Estudian
 - HeroUI
 - Zod (validación en el servidor)
 - Vitest
-- GitHub Actions CI
-- Lighthouse CI
 
 ## Seguridad
 
@@ -47,7 +45,7 @@ Múltiples capas protegen las acciones administrativas y la subida de archivos.
 ### Autenticación y autorización
 
 - OAuth con Google mediante Supabase Auth
-- **Row Level Security (RLS):** Las operaciones en la base de datos están restringidas a correos administradores autorizados mediante políticas de Supabase.
+- **Row Level Security (RLS):** Las operaciones en la base de datos están restringidas a correos autorizados mediante políticas de Supabase.
 - La lista blanca dinámica restringe el acceso en Next.js (middleware/Server Actions) y en la base de datos.
 - Rutas de administración protegidas vía `middleware.ts`
 - Las Server Actions requieren usuarios autenticados y autorizados

@@ -9,7 +9,7 @@
 
 [Leer en Español →](./README_es.md)
 
-Financial transparency portal made for FEUCSC (Federación de Estudiantes UCSC).
+Financial transparency portal made for the FEUCSC (UCSC Student Federation).
 
 ## Features
 
@@ -38,8 +38,6 @@ Financial transparency portal made for FEUCSC (Federación de Estudiantes UCSC).
 - HeroUI
 - Zod (server-side validation)
 - Vitest
-- GitHub Actions CI
-- Lighthouse CI
 
 ## Security
 
@@ -48,7 +46,7 @@ Multiple layers protect admin actions and file uploads.
 ### Authentication & authorization
 
 - Google OAuth via Supabase Auth
-- **Row Level Security (RLS):** Database operations restrict to authorized admin emails via Supabase policies.
+- **Row Level Security (RLS):** Database operations restrict to authorized emails via Supabase policies.
 - Dynamic email allowlist enforces access in Next.js (middleware/Server Actions) and the database.
 - Protected admin routes via `middleware.ts`
 - Server Actions require authenticated and authorized users
