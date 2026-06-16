@@ -26,6 +26,9 @@ export async function deleteCloudinaryImage(url: string) {
     return await deleteImage(url);
   } catch (error) {
     console.error("Error deleting Cloudinary image:", error);
+    if (error instanceof Error && error.message === "No autorizado") {
+      return { success: false, error: "No autorizado" };
+    }
     return { success: false, error: "Server error" };
   }
 }
