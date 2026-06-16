@@ -5,8 +5,6 @@ import { Providers } from "./providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { DotPattern } from "@/components/ui/dot-pattern";
-import SidebarWrapper from "@/components/SidebarWrapper";
-import MainWrapper from "@/components/MainWrapper";
 import Script from "next/script";
 
 const sfProDisplay = localFont({
@@ -100,10 +98,7 @@ export default function RootLayout({
         <DotPattern className="fixed inset-0 -z-10 text-neutral-400/15 dark:text-neutral-600/15" />
         <Providers>
           <div className="flex min-h-dvh bg-transparent">
-            <SidebarWrapper />
-            <MainWrapper>
-              {children}
-            </MainWrapper>
+            {children}
           </div>
         </Providers>
         <Analytics />
