@@ -16,6 +16,25 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
+const months = [
+  "Ene",
+  "Feb",
+  "Mar",
+  "Abr",
+  "May",
+  "Jun",
+  "Jul",
+  "Ago",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dic",
+];
+
+/**
+ * The main dashboard page for the financial transparency portal.
+ * Fetches expenses and categories to render KPI cards, charts, and latest transactions.
+ */
 export default async function Home() {
   const [gastosRes, categoriasRes] = await Promise.all([
     supabaseAnon
@@ -37,21 +56,6 @@ export default async function Home() {
   const totalGastado = data.reduce((acc, curr) => acc + curr.monto, 0);
   const saldoDisponible = presupuestoTotal - totalGastado;
   const resumenFinanciero = { presupuestoTotal, totalGastado, saldoDisponible };
-
-  const months = [
-    "Ene",
-    "Feb",
-    "Mar",
-    "Abr",
-    "May",
-    "Jun",
-    "Jul",
-    "Ago",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dic",
-  ];
   const gastosPorMesMap = new Map<string, number>();
   const gastosPorMesCatMap = new Map<string, Map<string, number>>();
   months.forEach((m) => {
