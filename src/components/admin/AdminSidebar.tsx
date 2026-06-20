@@ -129,7 +129,7 @@ export default function AdminSidebar() {
           <Button
             variant="ghost"
             onPress={handleSignOut}
-            className="w-full justify-start text-zinc-700 hover:text-red-700 hover:bg-red-50 cursor-pointer font-medium rounded-xl"
+            className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 cursor-pointer font-medium rounded-xl"
           >
             <LogOutIcon />
             Cerrar sesión
