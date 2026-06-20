@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@heroui/react";
 import { supabase } from "@/lib/supabase";
-import ThemeToggle from "@/components/admin/ThemeToggle";
 import {
   HugeiconsMenuIcon,
   type HugeiconsMenuIconHandle,
@@ -130,12 +129,11 @@ export default function AdminSidebar() {
           <Button
             variant="ghost"
             onPress={handleSignOut}
-            className="w-full justify-start text-zinc-600 dark:text-zinc-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/10 cursor-pointer font-medium rounded-xl mb-4"
+            className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 cursor-pointer font-medium rounded-xl"
           >
             <LogOutIcon />
             Cerrar sesión
           </Button>
-          <ThemeToggle />
         </div>
       </aside>
     </>

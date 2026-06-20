@@ -87,9 +87,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <head>
-        <meta name="color-scheme" content="light dark" />
-      </head>
       <body className={`antialiased bg-transparent text-foreground font-sans ${sfProText.variable} ${sfProDisplay.variable}`}>
         <div className="fixed inset-0 -z-10 bg-bg-secondary" />
         <DotPattern className="fixed inset-0 -z-10 text-neutral-400/15 dark:text-neutral-600/15" />
