@@ -176,7 +176,7 @@ function ExpenseTable({
   return (
     <>
       <div
-        className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-surface shadow-apple overflow-hidden animate-fade-in-up opacity-0"
+        className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-surface shadow-apple overflow-hidden"
         style={{ animationDelay: "0.2s" }}
       >
         <div className="p-6 pb-0">

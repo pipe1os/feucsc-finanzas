@@ -1,6 +1,8 @@
 "use client";
 
-import { Skeleton } from"@heroui/react";
+ 
+
+import { Skeleton } from "@heroui/react";
 
 export function SkeletonKPICards() {
  return (
@@ -34,7 +36,6 @@ export function SkeletonKPICards() {
 export function SkeletonTable({ rows = 5 }: { rows?: number }) {
  return (
  <div className="rounded-2xl border border-zinc-100 bg-white shadow-apple overflow-hidden">
- {}
  <div className="p-6 pb-0 space-y-2">
  <Skeleton className="h-5 w-40 rounded-lg" />
  <Skeleton className="h-3 w-56 rounded-lg" />

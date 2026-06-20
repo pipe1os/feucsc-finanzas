@@ -1,12 +1,11 @@
 import { SkeletonChart, SkeletonTable } from"@/components/public/Skeletons";
 import Footer from"@/components/public/Footer";
 import Link from"next/link";
-import { Skeleton } from"@heroui/react";
 
 export default function Loading() {
  return (
  <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
- <header className="mb-8">
+ <header className="mb-8 animate-fade-in-up opacity-0">
  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
  <div>
  <div className="flex items-center gap-2 mb-2">
@@ -34,13 +33,18 @@ export default function Loading() {
  </span>
  </Link>
  </div>
- <Skeleton className="h-8 w-48 rounded-lg mb-2" />
- <Skeleton className="h-4 w-64 rounded-lg" />
+ <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 font-heading">
+ Detalle de Gastos
+ </h1>
+ <p className="mt-1 text-sm text-zinc-500 max-w-xl">
+ Todos los gastos registrados, distribución por categoría y
+ comprobantes de respaldo.
+ </p>
  </div>
  </div>
  </header>
  
- <div className="space-y-6">
+ <div className="space-y-6 animate-fade-in-up opacity-0" style={{ animationDelay: "150ms" }}>
  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
  <div className="col-span-1 lg:col-span-8">
  <SkeletonChart type="trend" />

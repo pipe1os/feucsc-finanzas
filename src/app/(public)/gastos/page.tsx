@@ -104,7 +104,7 @@ export default async function GastosPage(props: {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
-      <header className="mb-8 animate-fade-in-up opacity-0">
+      <header className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
