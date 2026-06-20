@@ -114,7 +114,7 @@ export default function ExpenseCategoryChart({
 
   return (
     <Card
-      className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-900 shadow-xs dark:shadow-none ring-0 animate-fade-in-up opacity-0"
+      className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-900 shadow-xs dark:shadow-none ring-0"
       style={{ animationDelay: "0.25s" }}
     >
       <CardHeader className="pb-4">
@@ -201,7 +201,7 @@ export default function ExpenseCategoryChart({
                 onClick={() =>
                   onCategoryClick?.(isActive ? "" : item.categoria)
                 }
-                className={`flex items-center gap-3 w-full animate-fade-in-up opacity-0 cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-all duration-200
+                className={`flex items-center gap-3 w-full cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-all duration-200
                   ${isActive ? "bg-zinc-50 dark:bg-white/5" : "hover:bg-zinc-50/60 dark:hover:bg-white/3"}
                   ${isDimmed ? "opacity-40" : ""}`}
                 style={{ animationDelay: `${0.6 + index * 0.08}s` }}
