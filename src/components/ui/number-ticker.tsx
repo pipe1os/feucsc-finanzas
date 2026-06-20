@@ -4,6 +4,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useReducer,
   type ComponentPropsWithoutRef,
 } from "react";
 import { cn } from "@/lib/utils";
@@ -54,8 +55,8 @@ export function NumberTicker({
 
   const skipAnimation = hasAnimatedThisSession;
 
-  const initialValue = direction === "down" ? value : startValue;
-  const [displayValue, setDisplayValue] = useState(initialValue);
+  const targetValue = direction === "down" ? startValue : value;
+  const [displayValue, setDisplayValue] = useReducer((_: number, val: number) => val, targetValue);
 
   useEffect(() => {
     if (!isInView) return;
@@ -70,6 +71,9 @@ export function NumberTicker({
       hasAnimatedThisSession = true;
       const start = direction === "down" ? value : startValue;
       const end = direction === "down" ? startValue : value;
+
+      setDisplayValue(start);
+
       const duration = 1200;
       const startTime = performance.now();
 
@@ -93,21 +97,33 @@ export function NumberTicker({
     return () => clearTimeout(timer);
   }, [isInView, delay, value, direction, startValue, skipAnimation]);
 
-  const formatted = formatFn
+  const formattedDisplay = formatFn
     ? formatFn(Number(displayValue.toFixed(decimalPlaces)))
     : Intl.NumberFormat("en-US", {
         minimumFractionDigits: decimalPlaces,
         maximumFractionDigits: decimalPlaces,
       }).format(Number(displayValue.toFixed(decimalPlaces)));
 
+  const formattedTarget = formatFn
+    ? formatFn(Number(targetValue.toFixed(decimalPlaces)))
+    : Intl.NumberFormat("en-US", {
+        minimumFractionDigits: decimalPlaces,
+        maximumFractionDigits: decimalPlaces,
+      }).format(Number(targetValue.toFixed(decimalPlaces)));
+
   return (
     <span
       ref={ref}
-      className={cn("inline-block tabular-nums", className)}
+      className={cn("inline-grid tabular-nums", className)}
       suppressHydrationWarning
       {...props}
     >
-      {formatted}
+      <span className="invisible col-start-1 row-start-1">
+        {formattedTarget}
+      </span>
+      <span className="col-start-1 row-start-1">
+        {formattedDisplay}
+      </span>
     </span>
   );
 }
