@@ -39,9 +39,8 @@ export default async function Home() {
   const [gastosRes, categoriasRes] = await Promise.all([
     supabaseAnon
       .from("gastos")
-      .select("*")
-      .order("fecha", { ascending: false })
-      .limit(500),
+      .select("id, fecha, categoria, monto, descripcion, creado_el")
+      .order("fecha", { ascending: false }),
     supabaseAnon.from("categorias").select("*"),
   ]);
 
