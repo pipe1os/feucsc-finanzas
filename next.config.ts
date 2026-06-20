@@ -36,6 +36,21 @@ const nextConfig: NextConfig = {
 
   // ── Security headers ──────────────────────────────────
   async headers() {
+    const isDev = process.env.NODE_ENV === "development";
+    const cspHeader = [
+      "default-src 'self'",
+      `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com`,
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' https://res.cloudinary.com data: blob:",
+      "connect-src 'self' https://*.supabase.co https://api.cloudinary.com https://va.vercel-scripts.com https://vitals.vercel-insights.com",
+      "font-src 'self'",
+      "object-src 'none'",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "upgrade-insecure-requests",
+    ].join("; ");
+
     return [
       {
         source: "/:path*",
@@ -48,8 +63,7 @@ const nextConfig: NextConfig = {
           { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
           {
             key: "Content-Security-Policy",
-            value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://res.cloudinary.com data:; connect-src 'self' https://*.supabase.co https://api.cloudinary.com; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
+            value: cspHeader,
           },
         ],
       },
