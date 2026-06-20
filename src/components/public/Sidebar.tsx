@@ -3,8 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect, useSyncExternalStore, useRef } from "react";
-import { useTheme } from "next-themes";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import { Badge } from "@heroui/react";
 import {
@@ -188,46 +187,6 @@ function NavCategory({ label }: { label: string }) {
   );
 }
 
-function ThemeToggle() {
-  const { setTheme, resolvedTheme } = useTheme();
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  );
-
-  if (!mounted) {
-    return (
-      <div className="flex items-center rounded-lg bg-gray-100 dark:bg-gray-800 p-0.5 h-8">
-        <div className="flex-1" />
-      </div>
-    );
-  }
-
-  const isLight = resolvedTheme === "light";
-
-  return (
-    <div className="flex items-center rounded-lg bg-gray-100 dark:bg-gray-800 p-0.5">
-      <button type="button"
-        onClick={() => setTheme("light")}
-        data-active={isLight}
-        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-surface data-[active=true]:text-gray-900 data-[active=true]:shadow-xs data-[active=false]:text-gray-600 dark:data-[active=false]:text-gray-400"
-      >
-        <SunIcon />
-        <span>Claro</span>
-      </button>
-      <button type="button"
-        onClick={() => setTheme("dark")}
-        data-active={!isLight}
-        className="flex-1 flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer data-[active=true]:bg-surface dark:data-[active=true]:bg-gray-700 data-[active=true]:text-gray-900 dark:data-[active=true]:text-white data-[active=true]:shadow-xs data-[active=false]:text-gray-600 dark:data-[active=false]:text-gray-400"
-      >
-        <MoonIcon />
-        <span>Oscuro</span>
-      </button>
-    </div>
-  );
-}
-
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -380,11 +339,6 @@ export default function Sidebar() {
         </nav>
 
         <div className="flex-1" />
-
-        <div className="px-5 pb-6">
-          <div className="h-px bg-gray-100 dark:bg-gray-800 mb-4" />
-          <ThemeToggle />
-        </div>
       </aside>
     </>
   );

@@ -1,5 +1,4 @@
 import DashboardClient from "@/components/public/DashboardClient";
-import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { supabaseAnon } from "@/lib/supabase-anon";
 import { Suspense } from "react";
 import { buildCategoryColors } from "@/lib/data-transform";
@@ -103,19 +102,6 @@ export default async function GastosPage(props: {
     }))
     .sort((a, b) => b.monto - a.monto);
 
-  let lastSyncISO: string | null = null;
-  if (chartData.length > 0) {
-    const timestamps = chartData.flatMap((g) => {
-      const ts = g.creado_el || g.fecha;
-      if (!ts) return [];
-      const t = new Date(ts).getTime();
-      return isNaN(t) ? [] : [t];
-    });
-    if (timestamps.length > 0) {
-      lastSyncISO = new Date(Math.max(...timestamps)).toISOString();
-    }
-  }
-
   return (
     <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
       <header className="mb-8 animate-fade-in-up opacity-0">
@@ -154,8 +140,6 @@ export default async function GastosPage(props: {
               comprobantes de respaldo.
             </p>
           </div>
-
-          <LastSyncIndicator lastSyncISO={lastSyncISO} />
         </div>
       </header>
       <Suspense fallback={null}>

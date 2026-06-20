@@ -1,5 +1,4 @@
 import KPICards from "@/components/public/KPICards";
-import LastSyncIndicator from "@/components/public/LastSyncIndicator";
 import { LazyExpenseTrendChart } from "@/components/public/LazyCharts";
 import LatestTransactionsPreview from "@/components/public/LatestTransactionsPreview";
 import { supabaseAnon } from "@/lib/supabase-anon";
@@ -92,20 +91,6 @@ export default async function Home() {
     };
   });
 
-  let lastSyncISO: string | null = null;
-  if (data.length > 0) {
-    const timestamps = data
-      .flatMap((g) => {
-        const ts = g.creado_el || g.fecha;
-        if (!ts) return [];
-        const t = new Date(ts).getTime();
-        return isNaN(t) ? [] : [t];
-      });
-    if (timestamps.length > 0) {
-      lastSyncISO = new Date(Math.max(...timestamps)).toISOString();
-    }
-  }
-
   const latestTransactions = data.slice(0, 3).map((g) => {
     const catName = g.categoria || "Varios";
     return {
@@ -131,7 +116,6 @@ export default async function Home() {
               UCSC.
             </p>
           </div>
-          <LastSyncIndicator lastSyncISO={lastSyncISO} />
         </div>
       </header>
 
