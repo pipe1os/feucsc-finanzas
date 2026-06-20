@@ -65,15 +65,15 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
     const topCats = (dataPoint?.categorias || []).slice(0, 3);
 
     return (
-      <div className="rounded-xl sm:rounded-2xl bg-white/50 dark:bg-zinc-900/60 backdrop-blur-2xl px-3 py-2 sm:px-5 sm:py-4 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-zinc-300/60 dark:border-white/10 min-w-36 sm:min-w-48">
-        <p className="text-[10px] sm:text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1">
+      <div className="rounded-xl sm:rounded-2xl bg-white/50 backdrop-blur-2xl px-3 py-2 sm:px-5 sm:py-4 shadow-2xl shadow-black/5 border border-zinc-300/60 min-w-36 sm:min-w-48">
+        <p className="text-[10px] sm:text-xs font-medium text-zinc-500 mb-1">
           {label} 2026
         </p>
-        <p className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white tabular-nums">
+        <p className="text-base sm:text-lg font-bold text-zinc-900 tabular-nums">
           {formatCLP(payload[0].value)}
         </p>
         {topCats.length > 0 && (
-          <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-zinc-200/50 dark:border-white/10 flex flex-col gap-1 sm:gap-2">
+          <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-zinc-200/50 flex flex-col gap-1 sm:gap-2">
             {topCats.map((cat) => (
               <div
                 key={cat.categoria}
@@ -83,10 +83,10 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
                   className="size-1.5 sm:size-2 rounded-full shrink-0"
                   style={{ backgroundColor: cat.color }}
                 />
-                <span className="text-zinc-600 dark:text-zinc-300 flex-1 truncate">
+                <span className="text-zinc-600 flex-1 truncate">
                   {cat.categoria}
                 </span>
-                <span className="text-zinc-900 dark:text-white font-medium tabular-nums">
+                <span className="text-zinc-900 font-medium tabular-nums">
                   {formatCompact(cat.monto)}
                 </span>
               </div>
@@ -142,21 +142,21 @@ function ManualTooltip({ data, position, onClose }: ManualTooltipProps) {
   return (
     <div
       ref={tooltipRef}
-      className="fixed z-50 rounded-xl sm:rounded-2xl bg-white/50 dark:bg-zinc-900/60 backdrop-blur-2xl px-3 py-2 sm:px-5 sm:py-4 shadow-2xl shadow-black/5 dark:shadow-black/20 border border-zinc-300/60 dark:border-white/10 min-w-36 sm:min-w-48 max-w-[90vw] animate-fade-in"
+      className="fixed z-50 rounded-xl sm:rounded-2xl bg-white/50 backdrop-blur-2xl px-3 py-2 sm:px-5 sm:py-4 shadow-2xl shadow-black/5 border border-zinc-300/60 min-w-36 sm:min-w-48 max-w-[90vw] animate-fade-in"
       style={{
         left: position.x,
         top: position.y,
         transform: "translate(-50%, -100%) translateY(-12px)",
       }}
     >
-      <p className="text-[10px] sm:text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1">
+      <p className="text-[10px] sm:text-xs font-medium text-zinc-500 mb-1">
         {data.mes} 2026
       </p>
-      <p className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white tabular-nums">
+      <p className="text-base sm:text-lg font-bold text-zinc-900 tabular-nums">
         {formatCLP(data.monto)}
       </p>
       {topCats.length > 0 && (
-        <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-zinc-200/50 dark:border-white/10 flex flex-col gap-1 sm:gap-2">
+        <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-zinc-200/50 flex flex-col gap-1 sm:gap-2">
           {topCats.map((cat) => (
             <div
               key={cat.categoria}
@@ -166,10 +166,10 @@ function ManualTooltip({ data, position, onClose }: ManualTooltipProps) {
                 className="size-1.5 sm:size-2 rounded-full shrink-0"
                 style={{ backgroundColor: cat.color }}
               />
-              <span className="text-zinc-600 dark:text-zinc-300 flex-1 truncate">
+              <span className="text-zinc-600 flex-1 truncate">
                 {cat.categoria}
               </span>
-              <span className="text-zinc-900 dark:text-white font-medium tabular-nums">
+              <span className="text-zinc-900 font-medium tabular-nums">
                 {formatCompact(cat.monto)}
               </span>
             </div>
@@ -221,12 +221,12 @@ export default function ExpenseTrendChart({
   }, []);
 
   return (
-    <Card className="rounded-2xl border border-zinc-100 dark:border-zinc-700/80 bg-white dark:bg-zinc-900 shadow-apple ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
+    <Card className="rounded-2xl border border-zinc-100 bg-white shadow-apple ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
       <CardHeader className="pb-6">
-        <CardTitle className="text-base font-semibold text-zinc-900 dark:text-white font-heading">
+        <CardTitle className="text-base font-semibold text-zinc-900 font-heading">
           Tendencia de Gastos
         </CardTitle>
-        <CardDescription className="text-xs text-zinc-500 dark:text-zinc-400">
+        <CardDescription className="text-xs text-zinc-500">
           Gasto mensual a lo largo del año
         </CardDescription>
       </CardHeader>

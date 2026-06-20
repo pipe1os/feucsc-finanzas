@@ -45,18 +45,18 @@ function CustomTooltip({
     totalGastado > 0 ? Math.round((data.value / totalGastado) * 100) : 0;
 
   return (
-    <div className="rounded-xl bg-white dark:bg-zinc-900 px-4 py-3 shadow-xs dark:shadow-none border border-zinc-200/80 dark:border-zinc-700/80 pointer-events-none">
+    <div className="rounded-xl bg-white px-4 py-3 shadow-xs border border-zinc-200/80 pointer-events-none">
       <div className="flex items-center gap-2 mb-1">
         <div
           className="size-2.5 rounded-full"
           style={{ backgroundColor: data.payload.color }}
         />
-        <span className="text-xs font-semibold text-zinc-900 dark:text-white">
+        <span className="text-xs font-semibold text-zinc-900">
           {data.name}
         </span>
       </div>
       <div className="flex items-baseline gap-2">
-        <span className="text-sm font-bold text-zinc-900 dark:text-white">
+        <span className="text-sm font-bold text-zinc-900">
           {formatCLP(data.value)}
         </span>
         <span className="text-[10px] font-medium text-zinc-400">{pct}%</span>
@@ -114,11 +114,11 @@ export default function ExpenseCategoryChart({
 
   return (
     <Card
-      className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/80 bg-white dark:bg-zinc-900 shadow-xs dark:shadow-none ring-0"
+      className="rounded-2xl border border-zinc-100 bg-white shadow-apple ring-0"
       style={{ animationDelay: "0.25s" }}
     >
       <CardHeader className="pb-4">
-        <CardTitle className="text-base font-semibold text-zinc-900 dark:text-white font-heading">
+        <CardTitle className="text-base font-semibold text-zinc-900 font-heading">
           Distribución de Gastos
         </CardTitle>
         <CardDescription className="text-xs text-zinc-400">
@@ -177,7 +177,7 @@ export default function ExpenseCategoryChart({
             className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center z-0 animate-scale-in"
             style={{ animationDelay: "0.6s" }}
           >
-            <span className="text-sm font-bold text-zinc-900 dark:text-white">
+            <span className="text-sm font-bold text-zinc-900">
               {formatCLP(totalGastado)}
             </span>
             <span className="text-[9px] font-medium text-zinc-400 uppercase tracking-wider">
@@ -202,7 +202,7 @@ export default function ExpenseCategoryChart({
                   onCategoryClick?.(isActive ? "" : item.categoria)
                 }
                 className={`flex items-center gap-3 w-full cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-all duration-200
-                  ${isActive ? "bg-zinc-50 dark:bg-white/5" : "hover:bg-zinc-50/60 dark:hover:bg-white/3"}
+                  ${isActive ? "bg-zinc-50" : "hover:bg-zinc-50/60"}
                   ${isDimmed ? "opacity-40" : ""}`}
                 style={{ animationDelay: `${0.6 + index * 0.08}s` }}
               >
@@ -210,11 +210,11 @@ export default function ExpenseCategoryChart({
                   className="size-2.5 rounded-full shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="flex-1 text-xs text-zinc-600 dark:text-zinc-400 text-left">
+                <span className="flex-1 text-xs text-zinc-600 text-left">
                   {item.categoria}
                 </span>
                 <div className="flex items-center gap-2 shrink-0">
-                  <div className="hidden sm:block h-1.5 w-16 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+                  <div className="hidden sm:block h-1.5 w-16 rounded-full bg-zinc-100 overflow-hidden">
                     <div
                       className="h-full rounded-full animate-bar-grow"
                       style={{
@@ -224,7 +224,7 @@ export default function ExpenseCategoryChart({
                       }}
                     />
                   </div>
-                  <span className="text-xs font-semibold text-zinc-900 dark:text-white w-8 text-right">
+                  <span className="text-xs font-semibold text-zinc-900 w-8 text-right">
                     {pct}%
                   </span>
                 </div>
