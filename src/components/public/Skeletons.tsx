@@ -106,10 +106,24 @@ export function SkeletonChart({
 }) {
   if (type === "category") {
     return (
-      <div className="rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-apple overflow-hidden space-y-4">
-        <Skeleton className="h-5 w-36 rounded-lg" />
-        <div className="flex justify-center">
-          <Skeleton className="size-48 rounded-full" />
+      <div className="h-full flex flex-col rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-apple overflow-hidden gap-y-4">
+        <Skeleton className="h-5 w-40 rounded-lg" />
+        <div className="flex justify-center mt-4 mb-4">
+          <Skeleton className="size-56 rounded-full" />
+        </div>
+        <div className="flex-1 space-y-5 flex flex-col pt-4">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div key={i} className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <Skeleton className="size-3 rounded-full" />
+                <Skeleton className="h-4 w-24 rounded-lg" />
+              </div>
+              <div className="flex items-center gap-4 flex-1 justify-end">
+                <Skeleton className="h-2 w-16 rounded-full" />
+                <Skeleton className="h-4 w-10 rounded-lg" />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
