@@ -244,6 +244,7 @@ export function ExpenseTableDesktop({
                 {visiblePages.map((p, idx) => {
                   if (p === "ellipsis") {
                     return (
+                      // react-doctor-disable-next-line react-doctor/no-array-index-as-key
                       <Pagination.Item key={`ellipsis-${idx}`}>
                         <span className="px-2 text-zinc-400 text-sm select-none">
                           …
