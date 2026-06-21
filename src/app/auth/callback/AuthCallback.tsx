@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@heroui/react";
 import { supabase } from "@/lib/supabase";
-import { checkAuthorizedEmail } from "@/app/actions/auth";
+import { checkAuthorizedEmailClient } from "@/lib/auth-client";
 
 export default function AuthCallback() {
   const { replace } = useRouter();
@@ -21,14 +21,31 @@ export default function AuthCallback() {
     const verifyAndRedirect = async (email: string | undefined) => {
       if (!mounted) return;
 
-      if (!(await checkAuthorizedEmail(email))) {
-        setStatus("Cuenta no autorizada. Redirigiendo…");
-        await supabase.auth.signOut();
-        redirectTo("/login?error=unauthorized");
-        return;
-      }
+      try {
+        if (!(await checkAuthorizedEmailClient(email))) {
+          setStatus("Cuenta no autorizada. Redirigiendo…");
+          try {
+            await supabase.auth.signOut();
+          } catch (e) {
+            console.error("SignOut error:", e);
+          } finally {
+            redirectTo("/login?error=unauthorized");
+          }
+          return;
+        }
 
-      redirectTo("/admin");
+        redirectTo("/admin");
+      } catch (error) {
+        console.error("Error checking auth:", error);
+        setStatus("Error de servidor. Redirigiendo…");
+        try {
+          await supabase.auth.signOut();
+        } catch (e) {
+          console.error("SignOut error:", e);
+        } finally {
+          redirectTo("/login?error=unauthorized");
+        }
+      }
     };
 
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -62,7 +79,7 @@ export default function AuthCallback() {
   }, [replace]);
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-transparent">
+    <div className="flex w-full min-h-dvh items-center justify-center bg-transparent">
       <div className="flex flex-col items-center gap-4 animate-fade-in-up">
         <Spinner size="md" color="danger" />
         <p className="text-sm text-muted font-medium">{status}</p>

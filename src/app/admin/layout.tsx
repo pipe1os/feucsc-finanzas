@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+// useRouter removed: ponytail - using window.location.href for guaranteed hard redirect
 import { supabase } from "@/lib/supabase";
-import { checkAuthorizedEmail } from "@/app/actions/auth";
+import { checkAuthorizedEmailClient } from "@/lib/auth-client";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { replace } = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,20 +20,20 @@ export default function AdminLayout({
         } = await supabase.auth.getUser();
 
         if (!user) {
-          replace("/login?error=session_expired");
+          window.location.href = "/login?error=session_expired";
           return;
         }
 
-        if (!(await checkAuthorizedEmail(user.email))) {
+        if (!(await checkAuthorizedEmailClient(user.email))) {
           await supabase.auth.signOut();
-          replace("/login?error=unauthorized");
+          window.location.href = "/login?error=unauthorized";
           return;
         }
 
         setLoading(false);
       } catch (error) {
         console.error("Error during auth check:", error);
-        replace("/login?error=unauthorized");
+        window.location.href = "/login?error=unauthorized";
       }
     };
 
@@ -44,7 +43,7 @@ export default function AdminLayout({
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!session) {
-        replace("/login?error=session_expired");
+        window.location.href = "/login?error=session_expired";
         return;
       }
 
@@ -53,29 +52,29 @@ export default function AdminLayout({
           const {
             data: { user },
           } = await supabase.auth.getUser();
-          if (!user || !(await checkAuthorizedEmail(user.email))) {
+          if (!user || !(await checkAuthorizedEmailClient(user.email))) {
             await supabase.auth.signOut();
-            replace("/login?error=unauthorized");
+            window.location.href = "/login?error=unauthorized";
           }
         } catch (error) {
           console.error("Error during auth state change:", error);
           await supabase.auth.signOut();
-          replace("/login?error=unauthorized");
+          window.location.href = "/login?error=unauthorized";
         }
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [replace]);
+  }, []);
 
   useEffect(() => {
     const IDLE_TIMEOUT = 30 * 60 * 1000;
     let timer: ReturnType<typeof setTimeout> | undefined;
 
     const startTimer = () => {
-      timer = setTimeout(() => {
-        supabase.auth.signOut();
-        replace("/login?error=session_expired");
+      timer = setTimeout(async () => {
+        await supabase.auth.signOut();
+        window.location.href = "/login?error=session_expired";
       }, IDLE_TIMEOUT);
     };
 
@@ -95,7 +94,7 @@ export default function AdminLayout({
       window.removeEventListener("touchstart", resetTimer);
       clearTimeout(timer);
     };
-  }, [replace]);
+  }, []);
 
   if (loading) {
     return (

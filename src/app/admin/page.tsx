@@ -128,7 +128,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-dvh flex bg-transparent">
+    <div className="min-h-dvh flex w-full bg-transparent">
       <AdminSidebar />
       <main className="flex-1 min-w-0 lg:ml-65">
         <div className="mx-auto max-w-5xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
