@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { Modal, Button, SortDescriptor } from "@heroui/react";
 import Image from "next/image";
-import { m, LazyMotion, domAnimation } from "motion/react";
+import { m, LazyMotion, domAnimation, AnimatePresence } from "motion/react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SkeletonTable } from "./Skeletons";
 import { ExpenseTableFilters } from "./ExpenseTableFilters";
@@ -172,69 +172,89 @@ function ExpenseTable({
     setLightboxImage({ src, concepto });
   }, []);
 
-  if (isLoading) {
-    return <SkeletonTable rows={5} />;
-  }
-
   return (
     <>
-      <div
-        className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-surface shadow-apple overflow-hidden"
-        style={{ animationDelay: "0.2s" }}
-      >
-        <div className="p-6 pb-0">
-          <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-            Gastos Recientes
-          </h3>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
-            {totalRecords} {totalRecords === 1 ? "registro" : "registros"} encontrados
-          </p>
-        </div>
+      <LazyMotion features={domAnimation}>
+        <AnimatePresence mode="wait">
+          {isLoading ? (
+            <m.div
+              key="skeleton"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <SkeletonTable rows={5} />
+            </m.div>
+          ) : (
+            <m.div
+              key="content"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div
+                className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-surface shadow-apple overflow-hidden"
+                style={{ animationDelay: "0.2s" }}
+              >
+                <div className="p-6 pb-0">
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                    Gastos Recientes
+                  </h3>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                    {totalRecords} {totalRecords === 1 ? "registro" : "registros"} encontrados
+                  </p>
+                </div>
 
-        <ExpenseTableFilters
-          searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
-          selectedMonth={selectedMonth}
-          onMonthChange={(m) => {
-            setURLParams({ mes: m, page: "1" });
-          }}
-          selectedCategory={selectedCategory}
-          onCategoryChange={(c) => {
-            setURLParams({ categoria: c, page: "1" });
-          }}
-          uniqueCategories={uniqueCategories}
-          hasActiveFilters={hasActiveFilters}
-          onClearAllFilters={handleClearAllFilters}
-        />
+                <ExpenseTableFilters
+                  searchQuery={searchQuery}
+                  onSearchChange={handleSearchChange}
+                  selectedMonth={selectedMonth}
+                  onMonthChange={(m) => {
+                    setURLParams({ mes: m, page: "1" });
+                  }}
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={(c) => {
+                    setURLParams({ categoria: c, page: "1" });
+                  }}
+                  uniqueCategories={uniqueCategories}
+                  hasActiveFilters={hasActiveFilters}
+                  onClearAllFilters={handleClearAllFilters}
+                />
 
-        <div className="p-6 pt-4">
-          <ExpenseTableMobile
-            paginated={paginated}
-            filteredLength={totalRecords}
-            hasActiveFilters={hasActiveFilters}
-            page={page}
-            totalPages={totalPages}
-            start={start}
-            end={end}
-            onPageChange={handlePageChange}
-            onViewLightbox={handleViewLightbox}
-          />
-          <ExpenseTableDesktop
-            paginated={paginated}
-            filteredLength={totalRecords}
-            hasActiveFilters={hasActiveFilters}
-            page={page}
-            totalPages={totalPages}
-            start={start}
-            end={end}
-            onPageChange={handlePageChange}
-            onViewLightbox={handleViewLightbox}
-            sortDescriptor={sortDescriptor}
-            onSortChange={handleSortChange}
-            visiblePages={visiblePages}
-          />
-        </div>
-      </div>
+                <div className="p-6 pt-4">
+                  <ExpenseTableMobile
+                    paginated={paginated}
+                    filteredLength={totalRecords}
+                    hasActiveFilters={hasActiveFilters}
+                    page={page}
+                    totalPages={totalPages}
+                    start={start}
+                    end={end}
+                    onPageChange={handlePageChange}
+                    onViewLightbox={handleViewLightbox}
+                  />
+                  <ExpenseTableDesktop
+                    paginated={paginated}
+                    filteredLength={totalRecords}
+                    hasActiveFilters={hasActiveFilters}
+                    page={page}
+                    totalPages={totalPages}
+                    start={start}
+                    end={end}
+                    onPageChange={handlePageChange}
+                    onViewLightbox={handleViewLightbox}
+                    sortDescriptor={sortDescriptor}
+                    onSortChange={handleSortChange}
+                    visiblePages={visiblePages}
+                  />
+                </div>
+              </div>
+            </m.div>
+          )}
+        </AnimatePresence>
+      </LazyMotion>
 
       <Modal.Backdrop
         isOpen={!!lightboxImage}

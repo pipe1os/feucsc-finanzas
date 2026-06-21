@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import { Badge } from "@heroui/react";
+import { m, LazyMotion, domAnimation } from "motion/react";
 import {
   HugeiconsMenuIcon,
   type HugeiconsMenuIconHandle,
@@ -96,21 +97,31 @@ function NavItem({
   badgeCount,
 }: NavItemProps) {
   return (
-    <Link
-      href={href}
-      onClick={onClick}
-      className={`group relative flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 font-medium text-sm transition-all duration-200 cursor-pointer
-        ${
-          isActive
-            ? "text-red-600 dark:text-red-400"
-            : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200"
-        }`}
-    >
-      {}
-      {isActive && (
-        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-red-500/70 dark:bg-red-400/70" />
-      )}
-      <div className="flex items-center gap-3">
+    <LazyMotion features={domAnimation}>
+      <Link
+        href={href}
+        onClick={onClick}
+        className={`group relative flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 font-medium text-sm transition-all duration-200 cursor-pointer
+          ${
+            isActive
+              ? "text-red-600 dark:text-red-400"
+              : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+          }`}
+      >
+        {isActive && (
+          <m.div
+            layoutId="activeNavTab"
+            className="absolute inset-0 bg-red-50 dark:bg-white/5 rounded-xl -z-10"
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+          />
+        )}
+        {isActive && (
+          <m.span
+            layoutId="activeNavIndicator"
+            className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-red-500/70 dark:bg-red-400/70"
+          />
+        )}
+        <div className="flex items-center gap-3 relative z-10">
         <Badge.Anchor>
           <span
             className={`flex items-center justify-center size-8 rounded-lg transition-all duration-200
@@ -138,6 +149,7 @@ function NavItem({
         {label}
       </div>
     </Link>
+    </LazyMotion>
   );
 }
 
