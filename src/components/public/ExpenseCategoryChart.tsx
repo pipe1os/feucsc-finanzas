@@ -101,7 +101,7 @@ export default function ExpenseCategoryChart({
                       stroke={isActive ? d.data.color : "none"}
                       strokeWidth={isActive ? 4 : 0}
                       className="transition-all duration-200 outline-none"
-                      initial={{ scale: 0, opacity: 0 }}
+                      initial={{ scale: 0.95, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ type: "spring", stiffness: 260, damping: 20, delay: d.index * 0.08 }}
                     />
@@ -129,7 +129,7 @@ export default function ExpenseCategoryChart({
                   fontWeight="bold"
                   className="pointer-events-none transition-opacity duration-200"
                   style={{ textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}
-                  initial={{ opacity: 0, scale: 0 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: isDimmed ? 0.3 : 1, scale: 1 }}
                   transition={{ type: "spring", stiffness: 260, damping: 20, delay: d.index * 0.08 + 0.3 }}
                 >

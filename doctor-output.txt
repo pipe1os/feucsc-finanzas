@@ -1,0 +1,76 @@
+React Doctor v0.5.5
+
+✔ Select projects › feucsc-finanzas
+  
+
+  Top 3 errors you should fix
+
+  ✖ Bugs: Unauthenticated server action can be called directly
+    Anyone can call server action "checkAuthorizedEmail"
+    without logging in, since it has no auth check.
+    → Check auth before touching data because exported server
+    actions can be called directly by unauthenticated clients.
+
+    src/app/actions/auth.ts:7
+    ┌──────────────────────────────────────────────────────────────┐
+    │   6 | // react-doctor-disable-next-line server-auth-actions  │
+    │ > 7 | export async function checkAuthorizedEmail(            │
+    │     |                       ^                                │
+    │   8 |   email: string | undefined | null,                    │
+    └──────────────────────────────────────────────────────────────┘
+    ↳ An adjacent react-doctor-disable-next-line at line 6 lists "server-auth-actions" — react-doctor/server-auth-actions is not in that list. Use the comma form: react-doctor-disable-next-line server-auth-actions, react-doctor/server-auth-actions
+
+  ✖ Security: Secret shipped in browser artifact ×4
+    A browser-delivered artifact contains a secret-looking
+    credential value.
+    → Remove the secret from client bundles/static assets,
+    rotate it, and route privileged service calls through
+    server-only code.
+
+    .next/dev/static/chunks/0z.c_@supabase_auth-js_dist_module_0yx5qg5._.js.map:11
+
+  ✖ Security: Command execution uses caller-shaped input
+    Command execution appears to include request, query, body,
+    or shell-interpolated input.
+    → Avoid shell execution for caller-controlled values. Use
+    fixed commands, argument arrays, strict allowlists, and no
+    shell interpolation.
+
+    .agents/skills/skill-creator/eval-viewer/generate_review.py:291
+    ┌──────────────────────────────────────────────────────────────┐
+    │   290 |     try:                                             │
+    │ > 291 |         result = subprocess.run(                     │
+    │       |                  ^                                   │
+    │   292 |             ["lsof", "-ti", f":{port}"],             │
+    └──────────────────────────────────────────────────────────────┘
+
+
+  ────────────────────────────────────────────────────────────
+
+  All 24 issues
+
+  Security › 5 errors, 15 warnings
+  Bugs › 1 error, 1 warning
+  Performance › 2 warnings
+
+  Run npx react-doctor@latest --verbose to list every error and warning
+
+  ┌─────┐  40 / 100 Critical
+  │ x x │  ████████████████████▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░
+  │  ▽  │  React Doctor (https://react.doctor)
+  └─────┘
+
+  You could improve +18% by fixing the top 3 issues
+
+  ────────────────────────────────────────────────────────────
+
+  Share: https://react.doctor/share?p=feucsc-finanzas&s=40&e=6&w=18&f=19
+  Tell others how you did on socials
+
+  Docs: https://react.doctor/docs
+  Learn more about fixing issues, setting up CI/CD, and
+  configuring rules with a config file
+
+  GitHub: https://github.com/millionco/react-doctor
+  Report issues and star the repository!
+
