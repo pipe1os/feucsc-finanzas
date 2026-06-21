@@ -403,28 +403,27 @@ body {
 
 .accordion__panel {
     transition:
-        height 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        opacity 250ms ease !important;
+        height 400ms cubic-bezier(0.32, 0.72, 0, 1),
+        opacity 400ms ease !important;
 }
 
 .accordion__indicator {
-    transition: transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    transition: transform 400ms cubic-bezier(0.32, 0.72, 0, 1) !important;
 }
 
-@keyframes accordionFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(6px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* 👱‍♀️ ponytail: Removed one-way @keyframes and replaced with symmetric transition for smoother close animation */
+.accordion__body-inner {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+    transition: opacity 300ms ease, transform 400ms cubic-bezier(0.32, 0.72, 0, 1);
+    transform-origin: top center;
 }
 
-.accordion__panel[data-expanded="true"] .accordion__body-inner {
-    animation: accordionFadeIn 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)
-        forwards;
+.accordion__panel[aria-hidden="false"] .accordion__body-inner,
+.accordion__panel[data-expanded="true"] .accordion__body-inner,
+.accordion__panel[data-open="true"] .accordion__body-inner {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
 @layer base {
