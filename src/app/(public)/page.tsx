@@ -5,6 +5,7 @@ import { supabaseAnon } from "@/lib/supabase-anon";
 import { parseISODate } from "@/lib/utils";
 import { buildCategoryColors } from "@/lib/data-transform";
 import Footer from "@/components/public/Footer";
+import Link from "next/link";
 
 import { Metadata } from "next";
 
@@ -105,16 +106,26 @@ export default async function Home() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
-      <header className="mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white font-heading">
-              Transparencia Financiera
-            </h1>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400 max-w-xl">
-              Presupuesto, gastos y comprobantes de la Federación de Estudiantes
-              UCSC.
+      <header className="mb-8 md:mb-12">
+        <div className="flex flex-col sm:items-start justify-between gap-5 sm:gap-4">
+          <div className="max-w-2xl">
+            <p className="text-[11px] font-semibold tracking-[0.15em] uppercase text-red-600 dark:text-red-400 mb-3">
+              Transparencia Activa
             </p>
+            <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-zinc-900 dark:text-white font-heading leading-tight">
+              Finanzas Estudiantiles
+            </h1>
+            <p className="mt-4 text-base md:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-xl">
+              Revisa el presupuesto, desglose de gastos y comprobantes de la Federación de Estudiantes UCSC.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/gastos"
+                className="inline-flex h-11 items-center justify-center rounded-lg bg-red-600 px-6 font-medium text-white hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-colors shadow-sm"
+              >
+                Ver todos los gastos
+              </Link>
+            </div>
           </div>
         </div>
       </header>

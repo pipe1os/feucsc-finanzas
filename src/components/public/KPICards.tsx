@@ -40,17 +40,17 @@ export default function KPICards({
 
     const spent =
       porcentajeGastado <= 40
-        ? "text-emerald-600 dark:text-emerald-400"
+        ? "text-emerald-700 dark:text-emerald-400"
         : porcentajeGastado <= 69
           ? "text-amber-700 dark:text-amber-400"
-          : "text-rose-600 dark:text-rose-400";
+          : "text-rose-700 dark:text-rose-400";
 
     const available =
       porcentajeDisponible >= 60
-        ? "text-emerald-600 dark:text-emerald-400"
+        ? "text-emerald-700 dark:text-emerald-400"
         : porcentajeDisponible >= 31
           ? "text-amber-700 dark:text-amber-400"
-          : "text-rose-600 dark:text-rose-400";
+          : "text-rose-700 dark:text-rose-400";
 
     return {
       statusColor: color,
