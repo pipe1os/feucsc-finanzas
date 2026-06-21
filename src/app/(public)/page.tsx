@@ -2,8 +2,7 @@ import KPICards from "@/components/public/KPICards";
 import { LazyExpenseTrendChart } from "@/components/public/LazyCharts";
 import LatestTransactionsPreview from "@/components/public/LatestTransactionsPreview";
 import { supabaseAnon } from "@/lib/supabase-anon";
-import { parseISODate } from "@/lib/utils";
-import { buildCategoryColors } from "@/lib/data-transform";
+import { parseISODate, buildCategoryColors } from "@/lib/utils";
 import Footer from "@/components/public/Footer";
 
 import { Metadata } from "next";
