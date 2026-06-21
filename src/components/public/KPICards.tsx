@@ -100,7 +100,7 @@ export default function KPICards({
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-400 mb-1">
                 Presupuesto Total
               </p>
-              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading animate-fade-in-up animation-delay-100">
+              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading animate-fade-in-up delay-100">
                 {formatCLP(resumenFinanciero.presupuestoTotal)}
               </p>
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -112,7 +112,7 @@ export default function KPICards({
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-400 mb-1">
                 Presupuesto Disponible
               </p>
-              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading animate-fade-in-up animation-delay-200">
+              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading animate-fade-in-up delay-200">
                 {formatCLP(resumenFinanciero.saldoDisponible)}
               </p>
               <p
