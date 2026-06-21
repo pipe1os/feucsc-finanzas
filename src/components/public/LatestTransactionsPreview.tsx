@@ -24,7 +24,7 @@ export default function LatestTransactionsPreview({
   totalCount,
 }: LatestTransactionsPreviewProps) {
   return (
-    <div className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-surface shadow-apple overflow-hidden">
+    <div className="rounded-2xl border border-gray-100 dark:border-gray-700/80 bg-surface shadow-apple overflow-hidden">
       <div className="px-6 pt-5 pb-4">
         <h2 className="text-base font-semibold text-gray-900 dark:text-white font-heading">
           Últimos Gastos
@@ -49,7 +49,7 @@ export default function LatestTransactionsPreview({
                 key={txn.id}
                 id={txn.id}
                 textValue={txn.concepto}
-                className="rounded-none px-0 py-3 border-b border-gray-100 dark:border-gray-800 last:border-b-0"
+                className="rounded-none px-0 py-3"
               >
                 <div className="flex flex-col gap-1 w-full">
                   <div className="flex items-start justify-between gap-2">
@@ -82,7 +82,7 @@ export default function LatestTransactionsPreview({
       </div>
 
       <div className="hidden md:block">
-        <Table variant="secondary" className="w-full px-5">
+        <Table variant="secondary" className="w-full px-5 [&_tr]:border-none [&_td]:border-none">
           <Table.ScrollContainer>
             <Table.Content aria-label="Últimos gastos">
               <Table.Header>
@@ -106,7 +106,7 @@ export default function LatestTransactionsPreview({
                 {transactions.map((txn) => (
                   <Table.Row
                     key={txn.id}
-                    className="border-t border-gray-50 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-white/3 transition-colors duration-150"
+                    className="hover:bg-gray-50/50 dark:hover:bg-white/3 transition-colors duration-150"
                   >
                     <Table.Cell className="px-4 py-2">
                       <span className="text-gray-500 dark:text-gray-400 whitespace-nowrap">
