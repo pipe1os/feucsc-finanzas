@@ -55,7 +55,7 @@ export default function CategorySelect({
       <button
         id={selectId}
         type="button"
-        aria-haspopup="listbox"
+        aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => {
           setOpen(!open);
@@ -80,6 +80,8 @@ export default function CategorySelect({
           style={{ animationDuration: "150ms" }}
         >
           <div
+            role="menu"
+            aria-labelledby={selectId}
             className="max-h-60 overflow-y-auto"
           >
             {categorias.map((cat) => {
@@ -93,6 +95,7 @@ export default function CategorySelect({
                   >
                   <button
                     type="button"
+                    role="menuitem"
                     className="flex-1 cursor-pointer text-left"
                     onClick={() => {
                       onChange(cat);

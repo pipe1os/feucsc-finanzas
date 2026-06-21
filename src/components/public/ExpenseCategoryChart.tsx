@@ -128,9 +128,9 @@ export default function ExpenseCategoryChart({
                   fontSize="10.5px"
                   fontWeight="bold"
                   className="pointer-events-none transition-opacity duration-200"
-                  style={{ opacity: isDimmed ? 0.3 : 1, textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}
+                  style={{ textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}
                   initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  animate={{ opacity: isDimmed ? 0.3 : 1, scale: 1 }}
                   transition={{ type: "spring", stiffness: 260, damping: 20 }}
                 >
                   {pct}%
@@ -170,10 +170,9 @@ export default function ExpenseCategoryChart({
                   onCategoryClick?.(item.categoria)
                 }
                 className={`flex items-center gap-3 w-full cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-all duration-200
-                  ${isActive ? "bg-zinc-50" : "hover:bg-zinc-50/60"}
-                  ${isDimmed ? "opacity-40" : ""}`}
+                  ${isActive ? "bg-zinc-50" : "hover:bg-zinc-50/60"}`}
                 initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
+                animate={{ opacity: isDimmed ? 0.4 : 1, x: 0 }}
                 transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 + index * 0.08 }}
               >
                 <div
