@@ -1,6 +1,13 @@
 "use client";
 
 import { Skeleton } from "@heroui/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export function SkeletonChart({
   type = "trend",
@@ -9,38 +16,45 @@ export function SkeletonChart({
 }) {
   if (type === "category") {
     return (
-      <div className="rounded-2xl border border-zinc-100 bg-white shadow-apple ring-0 p-6 sm:p-8 flex flex-col">
-        <div className="space-y-2 mb-6 text-center">
-          <Skeleton className="h-5 w-40 mx-auto rounded-lg" />
-          <Skeleton className="h-3 w-24 mx-auto rounded-lg" />
-        </div>
-        <div className="flex justify-center mt-4 mb-4">
-          <Skeleton className="size-48 rounded-full" />
-        </div>
-        <div className="mt-8 space-y-4">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="flex items-center gap-3">
-              <Skeleton className="size-3 rounded-full" />
-              <Skeleton className="h-3 flex-1 rounded-lg" />
-              <Skeleton className="h-3 w-12 rounded-lg" />
-            </div>
-          ))}
-        </div>
-      </div>
+      <Card className="rounded-2xl border border-zinc-100 bg-white shadow-apple ring-0">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-base font-semibold text-zinc-900 font-heading">
+            <Skeleton className="h-5 w-40 rounded-lg" />
+          </CardTitle>
+          <CardDescription className="text-xs text-zinc-400">
+            <Skeleton className="h-3 w-24 rounded-lg mt-1" />
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center gap-6">
+          <Skeleton className="size-56 rounded-full" />
+          <div className="w-full space-y-3">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="flex items-center gap-3 w-full py-1">
+                <Skeleton className="size-2.5 rounded-full shrink-0" />
+                <Skeleton className="h-3 flex-1 rounded-lg" />
+                <Skeleton className="h-3 w-8 rounded-lg shrink-0" />
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-zinc-100 bg-white shadow-apple ring-0 h-full flex flex-col min-h-[320px] sm:min-h-[360px] lg:min-h-[300px]">
-      <div className="p-6 pb-6 flex flex-col space-y-1.5">
-        <Skeleton className="h-5 w-40 rounded-lg" />
-        <Skeleton className="h-3 w-56 rounded-lg" />
-      </div>
-      <div className="px-6 pb-6 pt-0 flex-1 flex flex-col min-h-0">
-        <div className="flex-1 w-full relative min-h-0 flex flex-col">
-          <Skeleton className="flex-1 w-full rounded-xl min-h-0" />
-        </div>
-      </div>
-    </div>
+    <Card className="rounded-2xl border border-zinc-100 bg-white shadow-apple ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
+      <CardHeader className="pb-6">
+        <CardTitle className="text-base font-semibold text-zinc-900 font-heading">
+          <Skeleton className="h-5 w-40 rounded-lg" />
+        </CardTitle>
+        <CardDescription className="text-xs text-zinc-500">
+          <Skeleton className="h-3 w-56 rounded-lg mt-1" />
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="flex-1 flex flex-col min-h-0 pt-0">
+        <Skeleton className="flex-1 w-full rounded-xl min-h-0" />
+      </CardContent>
+    </Card>
   );
 }
