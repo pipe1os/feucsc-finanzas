@@ -70,7 +70,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-dvh items-center justify-center bg-transparent px-4">
+    <div className="relative flex w-full min-h-dvh items-center justify-center bg-transparent px-4">
       <div className="relative z-10 w-full max-w-md animate-fade-in-up">
         <Card className="rounded-3xl shadow-apple-lg border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-8 sm:p-10">
           <div className="flex flex-col items-center mb-8">

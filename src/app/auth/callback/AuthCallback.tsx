@@ -21,14 +21,21 @@ export default function AuthCallback() {
     const verifyAndRedirect = async (email: string | undefined) => {
       if (!mounted) return;
 
-      if (!(await checkAuthorizedEmail(email))) {
-        setStatus("Cuenta no autorizada. Redirigiendo…");
+      try {
+        if (!(await checkAuthorizedEmail(email))) {
+          setStatus("Cuenta no autorizada. Redirigiendo…");
+          await supabase.auth.signOut();
+          redirectTo("/login?error=unauthorized");
+          return;
+        }
+
+        redirectTo("/admin");
+      } catch (error) {
+        console.error("Error checking auth:", error);
+        setStatus("Error de servidor. Redirigiendo…");
         await supabase.auth.signOut();
         redirectTo("/login?error=unauthorized");
-        return;
       }
-
-      redirectTo("/admin");
     };
 
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -62,7 +69,7 @@ export default function AuthCallback() {
   }, [replace]);
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-transparent">
+    <div className="flex w-full min-h-dvh items-center justify-center bg-transparent">
       <div className="flex flex-col items-center gap-4 animate-fade-in-up">
         <Spinner size="md" color="danger" />
         <p className="text-sm text-muted font-medium">{status}</p>
