@@ -131,7 +131,7 @@ export default function ExpenseCategoryChart({
                   style={{ textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: isDimmed ? 0.3 : 1, scale: 1 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.1 + d.index * 0.08 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 20, delay: d.index * 0.08 + 0.3 }}
                 >
                   {pct}%
                 </m.text>
