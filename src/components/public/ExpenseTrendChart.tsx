@@ -1,7 +1,7 @@
 "use client";
 
 import { formatCLP } from "@/lib/utils";
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { scaleLinear, line as d3line, max, area as d3area, curveMonotoneX } from "d3";
 import { m, LazyMotion, domAnimation } from "motion/react";
 
@@ -172,7 +172,7 @@ export default function ExpenseTrendChart({
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!chartRef.current) return;
+    if (!chartRef.current || gastosPorMes.length === 0) return;
     if (e.pointerType === "touch") isTouch.current = true;
     
     const rect = chartRef.current.getBoundingClientRect();
@@ -295,7 +295,7 @@ export default function ExpenseTrendChart({
               </LazyMotion>
 
               {/* Active Dot */}
-              {activeIndex !== null && (
+              {activeIndex !== null && activeIndex < gastosPorMes.length && (
                 <div
                   className="absolute size-3 sm:size-3.5 rounded-full bg-[#E30707] border-2 border-white shadow-md pointer-events-none transition-all duration-75"
                   style={{

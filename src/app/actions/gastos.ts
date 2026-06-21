@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { deleteCloudinaryImage } from "@/lib/cloudinary-server";
+import { destroyCloudinaryImage } from "@/lib/cloudinary-server";
 
 // CRUD de gastos/categorías. Acá validamos todo porque esto termina en la DB.
 import { supabaseServer } from "@/lib/supabase-server";
@@ -151,7 +151,7 @@ export async function deleteGasto(id: string) {
     gastoData?.comprobante_url &&
     gastoData.comprobante_url.startsWith("https://res.cloudinary.com/")
   ) {
-    await deleteCloudinaryImage(gastoData.comprobante_url);
+    await destroyCloudinaryImage(gastoData.comprobante_url);
   }
 
   const { error } = await supabaseServer.client

@@ -89,7 +89,7 @@ export default function ExpenseCategoryChart({
                    key={d.data.categoria} 
                    onClick={() => {
                      if (onCategoryClick) {
-                       onCategoryClick(isActive ? "" : d.data.categoria);
+                       onCategoryClick(d.data.categoria);
                      }
                    }}
                    style={{ cursor: "pointer", opacity: isDimmed ? 0.3 : 1 }}
@@ -167,7 +167,7 @@ export default function ExpenseCategoryChart({
               <m.button type="button"
                 key={item.categoria}
                 onClick={() =>
-                  onCategoryClick?.(isActive ? "" : item.categoria)
+                  onCategoryClick?.(item.categoria)
                 }
                 className={`flex items-center gap-3 w-full cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-all duration-200
                   ${isActive ? "bg-zinc-50" : "hover:bg-zinc-50/60"}

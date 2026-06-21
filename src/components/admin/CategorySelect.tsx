@@ -81,19 +81,16 @@ export default function CategorySelect({
         >
           <div
             className="max-h-60 overflow-y-auto"
-            role="listbox"
-            aria-labelledby={selectId}
           >
             {categorias.map((cat) => {
               const isSelected = cat === value;
               const isVarios = cat === "Varios";
               return (
-                <div
-                  key={cat}
-                  className={`group flex items-center justify-between px-3 py-2 text-sm transition-colors duration-150
-                ${isSelected ? "bg-red-50 text-red-600 font-medium" : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"}`}
-                  role="option"
-                >
+                  <div
+                    key={cat}
+                    className={`group flex items-center justify-between px-3 py-2 text-sm transition-colors duration-150
+                  ${isSelected ? "bg-red-50 text-red-600 font-medium" : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"}`}
+                  >
                   <button
                     type="button"
                     className="flex-1 cursor-pointer text-left"

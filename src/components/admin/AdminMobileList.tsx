@@ -7,7 +7,7 @@ import {
   EditIcon,
   TrashIcon,
 } from "@/components/admin/Icons";
-import { GastoDB } from "./AdminDesktopTable";
+import type { GastoDB } from "@/hooks/useGastos";
 
 function formatShortDate(dateStr: string) {
   const [y, m, d] = dateStr.split("-");

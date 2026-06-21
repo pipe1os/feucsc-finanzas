@@ -10,15 +10,7 @@ import {
 } from "@/app/actions/gastos";
 import EditGastoForm from "@/components/admin/EditGastoForm";
 
-interface GastoDB {
-  id: string;
-  fecha: string;
-  descripcion: string;
-  categoria: string;
-  monto: number;
-  comprobante_url: string | null;
-  creado_el: string;
-}
+import type { GastoDB } from "@/hooks/useGastos";
 
 export interface AdminModalsProps {
   editGasto: GastoDB | null;
