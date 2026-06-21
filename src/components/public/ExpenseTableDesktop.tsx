@@ -1,16 +1,13 @@
 "use client";
 
 import React from "react";
-import { Table, Tooltip, EmptyState, Pagination, SortDescriptor } from "@heroui/react";
+import { Table, Tooltip, Pagination, SortDescriptor } from "@heroui/react";
+import { EmptyState } from "@/components/ui/empty-state";
 import { formatDate, formatCLP } from "@/lib/utils";
+import { motion } from "motion/react";
 import type { TransaccionItem } from "./ExpenseTable";
 
-const SearchIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8" />
-    <path d="m21 21-4.3-4.3" />
-  </svg>
-);
+
 
 const EyeIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -134,27 +131,20 @@ export function ExpenseTableDesktop({
             <Table.Body
               items={paginated}
               renderEmptyState={() => (
-                <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-                  <div className="flex size-12 items-center justify-center rounded-full bg-zinc-50 dark:bg-zinc-800 text-zinc-400 border border-zinc-100 dark:border-zinc-700 shadow-xs">
-                    <SearchIcon />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-zinc-900 dark:text-white">
-                      Sin resultados
-                    </span>
-                    <span className="text-xs text-zinc-500 mt-0.5">
-                      {hasActiveFilters
-                        ? "No hay transacciones con los filtros seleccionados."
-                        : "La búsqueda no arrojó coincidencias."}
-                    </span>
-                  </div>
-                </EmptyState>
+                <EmptyState
+                  title="Sin resultados"
+                  description={
+                    hasActiveFilters
+                      ? "No hay transacciones con los filtros seleccionados."
+                      : "La búsqueda no arrojó coincidencias."
+                  }
+                />
               )}
             >
               {(txn: TransaccionItem) => {
                 const catColor = txn.color || "#9CA3AF";
                 return (
-                  <Table.Row key={txn.id}>
+                  <Table.Row key={txn.id} className="group cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors duration-200">
                     <Table.Cell>
                       <span className="text-sm text-zinc-600 whitespace-nowrap">
                         {formatDate(txn.fecha)}
@@ -193,13 +183,16 @@ export function ExpenseTableDesktop({
                         {txn.comprobante ? (
                           <Tooltip delay={0}>
                             <Tooltip.Trigger>
-                              <button type="button"
+                              <motion.button type="button"
                                 onClick={() => onViewLightbox(txn.comprobante, txn.concepto)}
-                                className="inline-flex items-center justify-center size-8 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 cursor-pointer transition-all duration-200 hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 hover:scale-105 active:scale-95"
+                                className="inline-flex items-center justify-center size-8 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 cursor-pointer hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
                                 aria-label={`Ver comprobante de ${txn.concepto}`}
+                                whileHover={{ scale: 1.08 }}
+                                whileTap={{ scale: 0.92 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 17 }}
                               >
                                 <EyeIcon />
-                              </button>
+                              </motion.button>
                             </Tooltip.Trigger>
                             <Tooltip.Content className="bg-zinc-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
                               <p>Ver comprobante</p>

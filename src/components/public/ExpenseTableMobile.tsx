@@ -1,16 +1,13 @@
 "use client";
 
 import React from "react";
-import { ListBox, EmptyState, Pagination } from "@heroui/react";
+import { ListBox, Pagination } from "@heroui/react";
+import { EmptyState } from "@/components/ui/empty-state";
 import { formatDate, formatCLP } from "@/lib/utils";
+import { motion } from "motion/react";
 import type { TransaccionItem } from "./ExpenseTable";
 
-const SearchIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8" />
-    <path d="m21 21-4.3-4.3" />
-  </svg>
-);
+
 
 const EyeIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -63,21 +60,14 @@ export function ExpenseTableMobile({
         aria-label="Gastos recientes"
         items={paginated}
         renderEmptyState={() => (
-          <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-            <div className="flex size-12 items-center justify-center rounded-full bg-zinc-50 dark:bg-zinc-800 text-zinc-400 border border-zinc-100 dark:border-zinc-700 shadow-xs">
-              <SearchIcon />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold text-zinc-900 dark:text-white">
-                Sin resultados
-              </span>
-              <span className="text-xs text-zinc-500 mt-0.5">
-                {hasActiveFilters
-                  ? "No hay transacciones con los filtros seleccionados."
-                  : "La búsqueda no arrojó coincidencias."}
-              </span>
-            </div>
-          </EmptyState>
+          <EmptyState
+            title="Sin resultados"
+            description={
+              hasActiveFilters
+                ? "No hay transacciones con los filtros seleccionados."
+                : "La búsqueda no arrojó coincidencias."
+            }
+          />
         )}
       >
         {(txn: TransaccionItem) => {
@@ -117,16 +107,19 @@ export function ExpenseTableMobile({
                     </span>
                   )}
                   {txn.comprobante ? (
-                    <button type="button"
+                    <motion.button type="button"
                       onClick={() => onViewLightbox(txn.comprobante, txn.concepto)}
-                      className="inline-flex items-center gap-1 text-xs font-medium text-red-500 hover:text-red-600 transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 transition-colors cursor-pointer rounded-sm focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
                       aria-label={`Ver comprobante de ${txn.concepto}`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
                     >
                       <span className="size-3.5">
                         <EyeIcon />
                       </span>
                       Ver comprobante
-                    </button>
+                    </motion.button>
                   ) : (
                     <span className="inline-flex items-center gap-1 text-xs text-zinc-400">
                       <span className="size-3.5">

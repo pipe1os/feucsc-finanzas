@@ -3,6 +3,7 @@
 import { Table, ListBox } from "@heroui/react";
 import { formatDate, formatCLP } from "@/lib/utils";
 import Link from "next/link";
+import { EmptyState } from "@/components/ui/empty-state";
 
 interface Transaction {
   id: string;
@@ -35,31 +36,10 @@ export default function LatestTransactionsPreview({
           aria-label="Últimos gastos"
           items={transactions}
           renderEmptyState={() => (
-            <div className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
-              <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 border border-gray-100 dark:border-gray-700 shadow-xs">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                  Sin resultados
-                </span>
-                <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                  No hay transacciones recientes.
-                </span>
-              </div>
-            </div>
+            <EmptyState
+              title="Sin resultados"
+              description="No hay transacciones recientes."
+            />
           )}
         >
           {(txn: Transaction) => {
