@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 // useRouter removed: ponytail - using window.location.href for guaranteed hard redirect
 import { supabase } from "@/lib/supabase";
-import { checkAuthorizedEmail } from "@/app/actions/auth";
+import { checkAuthorizedEmailClient } from "@/lib/auth-client";
 
 export default function AdminLayout({
   children,
@@ -24,7 +24,7 @@ export default function AdminLayout({
           return;
         }
 
-        if (!(await checkAuthorizedEmail(user.email))) {
+        if (!(await checkAuthorizedEmailClient(user.email))) {
           await supabase.auth.signOut();
           window.location.href = "/login?error=unauthorized";
           return;
@@ -52,7 +52,7 @@ export default function AdminLayout({
           const {
             data: { user },
           } = await supabase.auth.getUser();
-          if (!user || !(await checkAuthorizedEmail(user.email))) {
+          if (!user || !(await checkAuthorizedEmailClient(user.email))) {
             await supabase.auth.signOut();
             window.location.href = "/login?error=unauthorized";
           }
