@@ -1,6 +1,6 @@
-/* eslint-disable */
+
 import { renderHook, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { useGastos } from './useGastos';
 import { supabase } from '@/lib/supabase';
 
@@ -21,8 +21,18 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
   </SWRConfig>
 );
 
+interface MockQuery {
+  select: Mock;
+  eq: Mock;
+  like: Mock;
+  or: Mock;
+  order: Mock;
+  range: Mock;
+  then?: Mock;
+}
+
 describe('useGastos', () => {
-  let mockQuery: any;
+  let mockQuery: MockQuery;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -38,16 +48,16 @@ describe('useGastos', () => {
     };
     
     // We make the chain awaitable by giving it a then method
-    mockQuery.then = vi.fn().mockImplementation(function(this: any, resolve) {
+    mockQuery.then = vi.fn().mockImplementation(function(resolve: (value: unknown) => void) {
       resolve({ data: [], count: 0, error: null });
     });
 
-    (supabase.from as any).mockReturnValue(mockQuery);
+    (supabase.from as Mock).mockReturnValue(mockQuery);
   });
 
   it('fetches gastos without filters with default ordering', async () => {
     const mockData = [{ id: '1', descripcion: 'Test', monto: 100 }];
-    mockQuery.then.mockImplementation((resolve: any) => resolve({ data: mockData, count: 1, error: null }));
+    mockQuery.then!.mockImplementation((resolve: (value: unknown) => void) => resolve({ data: mockData, count: 1, error: null }));
 
     const { result } = renderHook(() => useGastos(), { wrapper });
 
@@ -129,7 +139,7 @@ describe('useGastos', () => {
   });
 
   it('returns error state if supabase fails', async () => {
-    mockQuery.then.mockImplementation((resolve: any) => resolve({ data: null, count: null, error: new Error('DB Error') }));
+    mockQuery.then!.mockImplementation((resolve: (value: unknown) => void) => resolve({ data: null, count: null, error: new Error('DB Error') }));
 
     const { result } = renderHook(() => useGastos(), { wrapper });
 

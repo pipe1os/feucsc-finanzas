@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { Modal, Button, SortDescriptor } from "@heroui/react";
 import Image from "next/image";
+import { m, LazyMotion, domAnimation } from "motion/react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SkeletonTable } from "./Skeletons";
 import { ExpenseTableFilters } from "./ExpenseTableFilters";
@@ -164,8 +165,10 @@ function ExpenseTable({
     src: string;
     concepto: string;
   } | null>(null);
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   const handleViewLightbox = useCallback((src: string, concepto: string) => {
+    setIsImageLoading(true);
     setLightboxImage({ src, concepto });
   }, []);
 
@@ -249,15 +252,29 @@ function ExpenseTable({
             </Modal.Header>
             <Modal.Body className="p-4">
               {lightboxImage && (
-                <div className="flex justify-center rounded-xl bg-gray-50 dark:bg-gray-800 p-4">
-                  <Image
-                    src={lightboxImage.src}
-                    alt={`Comprobante: ${lightboxImage.concepto}`}
-                    width={500}
-                    height={700}
-                    sizes="(max-width: 768px) 100vw, 500px"
-                    className="max-h-[70vh] w-auto rounded-lg object-contain"
-                  />
+                <div className="flex justify-center rounded-xl bg-zinc-50 dark:bg-zinc-800/50 p-4 relative min-h-[300px] items-center">
+                  {isImageLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="size-8 rounded-full border-2 border-red-500 border-t-transparent animate-spin" />
+                    </div>
+                  )}
+                  <LazyMotion features={domAnimation}>
+                    <m.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: isImageLoading ? 0 : 1, scale: isImageLoading ? 0.95 : 1 }}
+                      transition={{ duration: 0.4, type: "spring", bounce: 0.1 }}
+                    >
+                      <Image
+                        src={lightboxImage.src}
+                        alt={`Comprobante: ${lightboxImage.concepto}`}
+                        width={500}
+                        height={700}
+                        sizes="(max-width: 768px) 100vw, 500px"
+                        className="max-h-[70vh] w-auto rounded-lg object-contain"
+                        onLoad={() => setIsImageLoading(false)}
+                      />
+                    </m.div>
+                  </LazyMotion>
                 </div>
               )}
             </Modal.Body>
