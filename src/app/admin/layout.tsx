@@ -72,8 +72,8 @@ export default function AdminLayout({
     let timer: ReturnType<typeof setTimeout> | undefined;
 
     const startTimer = () => {
-      timer = setTimeout(() => {
-        supabase.auth.signOut();
+      timer = setTimeout(async () => {
+        await supabase.auth.signOut();
         window.location.href = "/login?error=session_expired";
       }, IDLE_TIMEOUT);
     };

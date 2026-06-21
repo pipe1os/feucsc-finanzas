@@ -24,6 +24,6 @@ export async function isAuthorizedEmail(
     return true;
   } catch (error) {
     console.error("isAuthorizedEmail error:", error);
-    return false;
+    throw error;
   }
 }

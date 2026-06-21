@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@heroui/react";
 import { supabase } from "@/lib/supabase";
-import { checkAuthorizedEmail } from "@/app/actions/auth";
+import { checkAuthorizedEmailClient } from "@/lib/auth-client";
 
 export default function AuthCallback() {
   const { replace } = useRouter();
@@ -22,10 +22,15 @@ export default function AuthCallback() {
       if (!mounted) return;
 
       try {
-        if (!(await checkAuthorizedEmail(email))) {
+        if (!(await checkAuthorizedEmailClient(email))) {
           setStatus("Cuenta no autorizada. Redirigiendo…");
-          await supabase.auth.signOut();
-          redirectTo("/login?error=unauthorized");
+          try {
+            await supabase.auth.signOut();
+          } catch (e) {
+            console.error("SignOut error:", e);
+          } finally {
+            redirectTo("/login?error=unauthorized");
+          }
           return;
         }
 
@@ -33,8 +38,13 @@ export default function AuthCallback() {
       } catch (error) {
         console.error("Error checking auth:", error);
         setStatus("Error de servidor. Redirigiendo…");
-        await supabase.auth.signOut();
-        redirectTo("/login?error=unauthorized");
+        try {
+          await supabase.auth.signOut();
+        } catch (e) {
+          console.error("SignOut error:", e);
+        } finally {
+          redirectTo("/login?error=unauthorized");
+        }
       }
     };
 
