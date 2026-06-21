@@ -15,22 +15,27 @@ export default function AdminLayout({
 
   useEffect(() => {
     const checkAuth = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
 
-      if (!user) {
-        replace("/login?error=session_expired");
-        return;
-      }
+        if (!user) {
+          replace("/login?error=session_expired");
+          return;
+        }
 
-      if (!(await checkAuthorizedEmail(user.email))) {
-        await supabase.auth.signOut();
+        if (!(await checkAuthorizedEmail(user.email))) {
+          await supabase.auth.signOut();
+          replace("/login?error=unauthorized");
+          return;
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error during auth check:", error);
         replace("/login?error=unauthorized");
-        return;
       }
-
-      setLoading(false);
     };
 
     checkAuth();
@@ -44,10 +49,16 @@ export default function AdminLayout({
       }
 
       if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (!user || !(await checkAuthorizedEmail(user.email))) {
+        try {
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+          if (!user || !(await checkAuthorizedEmail(user.email))) {
+            await supabase.auth.signOut();
+            replace("/login?error=unauthorized");
+          }
+        } catch (error) {
+          console.error("Error during auth state change:", error);
           await supabase.auth.signOut();
           replace("/login?error=unauthorized");
         }
@@ -88,7 +99,7 @@ export default function AdminLayout({
 
   if (loading) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-transparent">
+      <div className="flex w-full min-h-dvh items-center justify-center bg-transparent">
         <div className="flex flex-col items-center gap-4 animate-fade-in-up">
           <div className="size-8 animate-spin rounded-full border-3 border-zinc-200 dark:border-zinc-800 border-t-red-500" />
           <p className="text-sm text-zinc-400 dark:text-zinc-500 font-medium">
