@@ -71,10 +71,11 @@ export default function KPICards({
             <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-400 mb-1.5">
               Total Gastado
             </p>
-            <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-bold font-heading">
+            <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-bold font-heading animate-fade-in-up">
               <NumberTicker
                 value={resumenFinanciero.totalGastado}
                 formatFn={formatCLP}
+                animate={false}
                 className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-bold font-heading"
               />
             </p>
@@ -84,6 +85,7 @@ export default function KPICards({
               <span className="font-bold">
                 <NumberTicker
                   value={porcentajeGastado}
+                  animate={false}
                   className="text-inherit tabular-nums"
                 />
                 %
@@ -108,10 +110,11 @@ export default function KPICards({
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-400 mb-1">
                 Presupuesto Total
               </p>
-              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading">
+              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading animate-fade-in-up animation-delay-100">
                 <NumberTicker
                   value={resumenFinanciero.presupuestoTotal}
                   formatFn={formatCLP}
+                  animate={false}
                   className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading"
                 />
               </p>
@@ -124,10 +127,11 @@ export default function KPICards({
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-400 mb-1">
                 Presupuesto Disponible
               </p>
-              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading">
+              <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading animate-fade-in-up animation-delay-200">
                 <NumberTicker
                   value={resumenFinanciero.saldoDisponible}
                   formatFn={formatCLP}
+                  animate={false}
                   className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading"
                 />
               </p>
@@ -137,6 +141,7 @@ export default function KPICards({
                 <span className="font-semibold">
                   <NumberTicker
                     value={porcentajeDisponible}
+                    animate={false}
                     className="text-inherit tabular-nums"
                   />
                   %
