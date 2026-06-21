@@ -166,6 +166,7 @@ export default function ExpenseCategoryChart({
             return (
               <m.button type="button"
                 key={item.categoria}
+                aria-pressed={isActive}
                 onClick={() =>
                   onCategoryClick?.(item.categoria)
                 }
