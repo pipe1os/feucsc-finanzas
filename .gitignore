@@ -94,3 +94,6 @@ outputs/
 opencode.json
 skills-lock.json
 plans/
+doctor-output.txt
+doctor-verbose.txt
+doctor.config.json
