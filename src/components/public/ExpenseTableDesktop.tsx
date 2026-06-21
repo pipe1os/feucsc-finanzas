@@ -4,7 +4,7 @@ import React from "react";
 import { Table, Tooltip, Pagination, SortDescriptor } from "@heroui/react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { formatDate, formatCLP } from "@/lib/utils";
-import { motion } from "motion/react";
+import { m, LazyMotion, domAnimation } from "motion/react";
 import type { TransaccionItem } from "./ExpenseTable";
 
 
@@ -90,8 +90,9 @@ export function ExpenseTableDesktop({
   visiblePages,
 }: ExpenseTableDesktopProps) {
   return (
-    <div className="hidden md:block">
-      <Table variant="secondary">
+    <LazyMotion features={domAnimation}>
+      <div className="hidden md:block">
+        <Table variant="secondary">
         <Table.ScrollContainer>
           <Table.Content
             aria-label="Tabla de transacciones recientes"
@@ -183,7 +184,7 @@ export function ExpenseTableDesktop({
                         {txn.comprobante ? (
                           <Tooltip delay={0}>
                             <Tooltip.Trigger>
-                              <motion.button type="button"
+                              <m.button type="button"
                                 onClick={() => onViewLightbox(txn.comprobante, txn.concepto)}
                                 className="inline-flex items-center justify-center size-8 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 cursor-pointer hover:bg-red-100 dark:hover:bg-red-500/20 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
                                 aria-label={`Ver comprobante de ${txn.concepto}`}
@@ -192,7 +193,7 @@ export function ExpenseTableDesktop({
                                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
                               >
                                 <EyeIcon />
-                              </motion.button>
+                              </m.button>
                             </Tooltip.Trigger>
                             <Tooltip.Content className="bg-zinc-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
                               <p>Ver comprobante</p>
@@ -270,6 +271,7 @@ export function ExpenseTableDesktop({
           </Table.Footer>
         )}
       </Table>
-    </div>
+      </div>
+    </LazyMotion>
   );
 }

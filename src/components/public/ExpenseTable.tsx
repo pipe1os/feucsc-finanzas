@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { Modal, Button, SortDescriptor } from "@heroui/react";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { m, LazyMotion, domAnimation } from "motion/react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SkeletonTable } from "./Skeletons";
 import { ExpenseTableFilters } from "./ExpenseTableFilters";
@@ -258,21 +258,23 @@ function ExpenseTable({
                       <div className="size-8 rounded-full border-2 border-red-500 border-t-transparent animate-spin" />
                     </div>
                   )}
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: isImageLoading ? 0 : 1, scale: isImageLoading ? 0.95 : 1 }}
-                    transition={{ duration: 0.4, type: "spring", bounce: 0.1 }}
-                  >
-                    <Image
-                      src={lightboxImage.src}
-                      alt={`Comprobante: ${lightboxImage.concepto}`}
-                      width={500}
-                      height={700}
-                      sizes="(max-width: 768px) 100vw, 500px"
-                      className="max-h-[70vh] w-auto rounded-lg object-contain"
-                      onLoad={() => setIsImageLoading(false)}
-                    />
-                  </motion.div>
+                  <LazyMotion features={domAnimation}>
+                    <m.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: isImageLoading ? 0 : 1, scale: isImageLoading ? 0.95 : 1 }}
+                      transition={{ duration: 0.4, type: "spring", bounce: 0.1 }}
+                    >
+                      <Image
+                        src={lightboxImage.src}
+                        alt={`Comprobante: ${lightboxImage.concepto}`}
+                        width={500}
+                        height={700}
+                        sizes="(max-width: 768px) 100vw, 500px"
+                        className="max-h-[70vh] w-auto rounded-lg object-contain"
+                        onLoad={() => setIsImageLoading(false)}
+                      />
+                    </m.div>
+                  </LazyMotion>
                 </div>
               )}
             </Modal.Body>

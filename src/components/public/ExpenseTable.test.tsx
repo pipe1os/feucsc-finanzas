@@ -1,9 +1,8 @@
-/* eslint-disable */
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import ExpenseTable from './ExpenseTable';
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 
 // Mock matchMedia for HeroUI
 Object.defineProperty(window, 'matchMedia', {
@@ -64,7 +63,7 @@ describe('ExpenseTable', () => {
   });
 
   it('renders skeleton when isLoading is true', () => {
-    const { container } = render(<ExpenseTable {...defaultProps} isLoading={true} />);
+    render(<ExpenseTable {...defaultProps} isLoading={true} />);
     // Check if the actual table header is NOT there
     expect(screen.queryByText('Gastos Recientes')).not.toBeInTheDocument();
   });

@@ -4,7 +4,7 @@ import React from "react";
 import { ListBox, Pagination } from "@heroui/react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { formatDate, formatCLP } from "@/lib/utils";
-import { motion } from "motion/react";
+import { m, LazyMotion, domAnimation } from "motion/react";
 import type { TransaccionItem } from "./ExpenseTable";
 
 
@@ -55,8 +55,9 @@ export function ExpenseTableMobile({
   onViewLightbox,
 }: ExpenseTableMobileProps) {
   return (
-    <div className="md:hidden">
-      <ListBox
+    <LazyMotion features={domAnimation}>
+      <div className="md:hidden">
+        <ListBox
         aria-label="Gastos recientes"
         items={paginated}
         renderEmptyState={() => (
@@ -107,7 +108,7 @@ export function ExpenseTableMobile({
                     </span>
                   )}
                   {txn.comprobante ? (
-                    <motion.button type="button"
+                    <m.button type="button"
                       onClick={() => onViewLightbox(txn.comprobante, txn.concepto)}
                       className="inline-flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 transition-colors cursor-pointer rounded-sm focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
                       aria-label={`Ver comprobante de ${txn.concepto}`}
@@ -119,7 +120,7 @@ export function ExpenseTableMobile({
                         <EyeIcon />
                       </span>
                       Ver comprobante
-                    </motion.button>
+                    </m.button>
                   ) : (
                     <span className="inline-flex items-center gap-1 text-xs text-zinc-400">
                       <span className="size-3.5">
@@ -165,6 +166,7 @@ export function ExpenseTableMobile({
           </Pagination>
         </div>
       )}
-    </div>
+      </div>
+    </LazyMotion>
   );
 }

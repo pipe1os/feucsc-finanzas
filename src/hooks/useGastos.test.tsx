@@ -1,4 +1,4 @@
-/* eslint-disable */
+
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useGastos } from './useGastos';
@@ -22,6 +22,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 describe('useGastos', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockQuery: any;
 
   beforeEach(() => {
@@ -38,15 +39,18 @@ describe('useGastos', () => {
     };
     
     // We make the chain awaitable by giving it a then method
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockQuery.then = vi.fn().mockImplementation(function(this: any, resolve) {
       resolve({ data: [], count: 0, error: null });
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from as any).mockReturnValue(mockQuery);
   });
 
   it('fetches gastos without filters with default ordering', async () => {
     const mockData = [{ id: '1', descripcion: 'Test', monto: 100 }];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockQuery.then.mockImplementation((resolve: any) => resolve({ data: mockData, count: 1, error: null }));
 
     const { result } = renderHook(() => useGastos(), { wrapper });
@@ -129,6 +133,7 @@ describe('useGastos', () => {
   });
 
   it('returns error state if supabase fails', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockQuery.then.mockImplementation((resolve: any) => resolve({ data: null, count: null, error: new Error('DB Error') }));
 
     const { result } = renderHook(() => useGastos(), { wrapper });
