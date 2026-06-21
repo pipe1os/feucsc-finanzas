@@ -18,6 +18,7 @@ interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
   delay?: number;
   decimalPlaces?: number;
   formatFn?: (value: number) => string;
+  animate?: boolean;
 }
 
 function useInViewOnce(ref: React.RefObject<Element | null>, margin = "0px") {
@@ -48,12 +49,13 @@ export function NumberTicker({
   className,
   decimalPlaces = 0,
   formatFn,
+  animate = true,
   ...props
 }: NumberTickerProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInViewOnce(ref);
 
-  const skipAnimation = hasAnimatedThisSession;
+  const skipAnimation = hasAnimatedThisSession || !animate;
 
   const targetValue = direction === "down" ? startValue : value;
   const [displayValue, setDisplayValue] = useReducer((_: number, val: number) => val, targetValue);
