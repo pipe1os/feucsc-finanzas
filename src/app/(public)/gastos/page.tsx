@@ -1,7 +1,7 @@
 import DashboardClient from "@/components/public/DashboardClient";
 import { supabaseAnon } from "@/lib/supabase-anon";
 import { Suspense } from "react";
-import { buildCategoryColors } from "@/lib/data-transform";
+import { buildCategoryColors } from "@/lib/utils";
 import Footer from "@/components/public/Footer";
 import Link from "next/link";
 
