@@ -24,9 +24,10 @@ export default function LatestTransactionsPreview({
   totalCount,
 }: LatestTransactionsPreviewProps) {
   return (
-    <div className="rounded-2xl border border-gray-200/80 dark:border-gray-700/80 bg-surface shadow-apple overflow-hidden">
-      <div className="px-6 pt-5 pb-4">
-        <h2 className="text-base font-semibold text-gray-900 dark:text-white font-heading">
+    <div className="rounded-[2rem] border border-gray-100 dark:border-white/5 bg-gray-50/80 dark:bg-white/5 p-2 h-full">
+      <div className="rounded-[calc(2rem-0.5rem)] border border-transparent dark:border-white/5 bg-white dark:bg-zinc-950 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_10px_32px_-4px_rgba(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] overflow-hidden flex flex-col h-full">
+      <div className="px-6 pt-6 pb-4">
+        <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white font-heading">
           Últimos Gastos
         </h2>
       </div>
@@ -167,6 +168,7 @@ export default function LatestTransactionsPreview({
           </svg>
         </Link>
       </div>
+    </div>
     </div>
   );
 }

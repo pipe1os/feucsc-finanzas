@@ -104,14 +104,14 @@ export default async function Home() {
   });
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
-      <header className="mb-8">
+    <div className="mx-auto max-w-7xl px-4 py-16 sm:py-24 sm:px-6 lg:px-10">
+      <header className="mb-12 animate-fade-in-up">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white font-heading">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tighter text-zinc-900 dark:text-white font-heading">
               Transparencia Financiera
             </h1>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400 max-w-xl">
+            <p className="mt-2 text-base sm:text-lg text-zinc-500 dark:text-zinc-400 max-w-xl">
               Presupuesto, gastos y comprobantes de la Federación de Estudiantes
               UCSC.
             </p>
@@ -122,17 +122,17 @@ export default async function Home() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
         <section
           aria-label="Indicadores financieros"
-          className="col-span-1 lg:col-span-4 h-full"
+          className="col-span-1 lg:col-span-4 h-full animate-fade-in-up stagger-1"
         >
           <KPICards resumenFinanciero={resumenFinanciero} />
         </section>
         <section
           aria-label="Tendencia de gastos"
-          className="col-span-1 lg:col-span-8 h-full"
+          className="col-span-1 lg:col-span-8 h-full animate-fade-in-up stagger-2"
         >
           <LazyExpenseTrendChart gastosPorMes={gastosPorMes} />
         </section>
-        <section className="col-span-1 lg:col-span-12">
+        <section className="col-span-1 lg:col-span-12 animate-fade-in-up stagger-3">
           <LatestTransactionsPreview
             transactions={latestTransactions}
             totalCount={data.length}

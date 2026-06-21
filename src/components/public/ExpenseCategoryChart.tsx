@@ -60,8 +60,9 @@ export default function ExpenseCategoryChart({
   const MIN_ANGLE = 20;
 
   return (
+    <div className="rounded-[2rem] border border-gray-100 dark:border-white/5 bg-gray-50/80 dark:bg-white/5 p-2 h-full">
     <Card
-      className="rounded-2xl border border-zinc-100 bg-white shadow-apple ring-0"
+      className="rounded-[calc(2rem-0.5rem)] border border-transparent dark:border-white/5 bg-white dark:bg-zinc-950 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_10px_32px_-4px_rgba(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] ring-0 h-full flex flex-col"
       style={{ animationDelay: "0.25s" }}
     >
       <CardHeader className="pb-4">
@@ -145,7 +146,7 @@ export default function ExpenseCategoryChart({
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, ease: "easeOut", delay: 0.4 }}
           >
-            <span className="text-sm font-bold text-zinc-900">
+            <span className="text-sm font-bold text-zinc-900 dark:text-white">
               {formatCLP(totalGastado)}
             </span>
             <span className="text-[9px] font-medium text-zinc-400 uppercase tracking-wider">
@@ -171,7 +172,7 @@ export default function ExpenseCategoryChart({
                   onCategoryClick?.(item.categoria)
                 }
                 className={`flex items-center gap-3 w-full cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-all duration-200
-                  ${isActive ? "bg-zinc-50" : "hover:bg-zinc-50/60"}`}
+                  ${isActive ? "bg-zinc-50 dark:bg-white/10" : "hover:bg-zinc-50/60 dark:hover:bg-white/5"}`}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: isDimmed ? 0.4 : 1, x: 0 }}
                 transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 + index * 0.08 }}
@@ -180,11 +181,11 @@ export default function ExpenseCategoryChart({
                   className="size-2.5 rounded-full shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="flex-1 text-xs text-zinc-600 text-left">
+                <span className="flex-1 text-xs text-zinc-600 dark:text-zinc-300 text-left">
                   {item.categoria}
                 </span>
                 <div className="flex items-center gap-2 shrink-0">
-                  <div className="hidden sm:block h-1.5 w-16 rounded-full bg-zinc-100 overflow-hidden">
+                  <div className="hidden sm:block h-1.5 w-16 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
                     <m.div
                       className="h-full rounded-full"
                       style={{
@@ -195,7 +196,7 @@ export default function ExpenseCategoryChart({
                       transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 + index * 0.08 }}
                     />
                   </div>
-                  <span className="text-xs font-semibold text-zinc-900 w-8 text-right">
+                  <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 w-8 text-right">
                     {pct}%
                   </span>
                 </div>
@@ -206,5 +207,6 @@ export default function ExpenseCategoryChart({
         </LazyMotion>
       </CardContent>
     </Card>
+    </div>
   );
 }

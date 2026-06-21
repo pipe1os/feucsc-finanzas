@@ -6,68 +6,20 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { DotPattern } from "@/components/ui/dot-pattern";
 
-const sfProDisplay = localFont({
-  src: [
-    {
-      path: "../../public/fonts/SF-Pro-Display-Light.woff2",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/SF-Pro-Display-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/SF-Pro-Display-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/SF-Pro-Display-Semibold.woff2",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/SF-Pro-Display-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  variable: "--font-heading",
+import { Outfit } from "next/font/google";
+
+const outfitSans = Outfit({
+  subsets: ["latin"],
+  variable: "--font-sans-next",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const sfProText = localFont({
-  src: [
-    {
-      path: "../../public/fonts/SF-Pro-Text-Light.woff2",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/SF-Pro-Text-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/SF-Pro-Text-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/SF-Pro-Text-Semibold.woff2",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/SF-Pro-Text-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  variable: "--font-sans",
+const outfitHeading = Outfit({
+  subsets: ["latin"],
+  variable: "--font-heading-next",
   display: "swap",
+  weight: ["500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -87,7 +39,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body className={`antialiased bg-transparent text-foreground font-sans ${sfProText.variable} ${sfProDisplay.variable}`}>
+      <body className={`antialiased bg-transparent text-foreground font-sans ${outfitSans.variable} ${outfitHeading.variable}`}>
         <div className="fixed inset-0 -z-10 bg-bg-secondary" />
         <DotPattern className="fixed inset-0 -z-10 text-neutral-400/15 dark:text-neutral-600/15" />
         <Providers>

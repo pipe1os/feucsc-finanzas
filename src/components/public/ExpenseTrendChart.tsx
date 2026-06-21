@@ -204,8 +204,9 @@ export default function ExpenseTrendChart({
 // removed closeManualTooltip
 
   return (
-    <Card className="rounded-2xl border border-zinc-100 bg-white shadow-apple ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
-      <CardHeader className="pb-6">
+    <div className="rounded-[2rem] border border-gray-100 dark:border-white/5 bg-gray-50/80 dark:bg-white/5 p-2 h-full">
+      <Card className="rounded-[calc(2rem-0.5rem)] border border-transparent dark:border-white/5 bg-white dark:bg-zinc-950 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_10px_32px_-4px_rgba(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
+        <CardHeader className="pb-6">
         <CardTitle className="text-base font-semibold text-zinc-900 font-heading">
           Tendencia de Gastos
         </CardTitle>
@@ -349,5 +350,6 @@ export default function ExpenseTrendChart({
       </CardContent>
 
     </Card>
+    </div>
   );
 }

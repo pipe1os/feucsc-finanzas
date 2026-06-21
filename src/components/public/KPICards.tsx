@@ -65,8 +65,9 @@ export default function KPICards({
 
   return (
     <div className="h-full">
-      <div className="rounded-2xl border border-gray-100 dark:border-gray-700/80 bg-surface shadow-apple p-6 sm:p-8 h-full flex flex-col">
-        <div className="flex flex-col flex-1 justify-between gap-5 lg:justify-center">
+      <div className="rounded-[2rem] border border-gray-100 dark:border-white/5 bg-gray-50/80 dark:bg-white/5 p-2 h-full">
+        <div className="rounded-[calc(2rem-0.5rem)] border border-transparent dark:border-white/5 bg-white dark:bg-zinc-950 p-6 sm:p-8 h-full flex flex-col shadow-[0_1px_3px_rgba(0,0,0,0.05),0_10px_32px_-4px_rgba(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+          <div className="flex flex-col flex-1 justify-between gap-5 lg:justify-center">
           <div>
             <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 dark:text-gray-400 mb-1.5">
               Total Gastado
@@ -145,6 +146,7 @@ export default function KPICards({
               </p>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
