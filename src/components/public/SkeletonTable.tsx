@@ -3,6 +3,7 @@
 import { Skeleton } from "@heroui/react";
 
 export function SkeletonTable({ rows = 5 }: { rows?: number }) {
+  const safeRows = Math.max(0, Math.floor(rows));
  return (
  <div className="rounded-2xl border border-zinc-100 bg-white shadow-apple ring-0 overflow-hidden">
  <div className="p-6 pb-0 space-y-2">
@@ -25,7 +26,7 @@ export function SkeletonTable({ rows = 5 }: { rows?: number }) {
  <Skeleton className="h-3 w-12 rounded" />
  </div>
 
- {Array.from({ length: rows }).map((_, index) => (
+ {Array.from({ length: safeRows }).map((_, index) => (
  <div
  key={index}
  className="hidden md:grid grid-cols-[120px_1fr_120px_100px_80px] gap-4 items-center py-3 border-b border-zinc-50 last:border-b-0"
@@ -38,7 +39,7 @@ export function SkeletonTable({ rows = 5 }: { rows?: number }) {
  </div>
  ))}
 
- {Array.from({ length: rows }).map((_, index) => (
+ {Array.from({ length: safeRows }).map((_, index) => (
  <div
  key={`mobile-${index}`}
  className="md:hidden flex flex-col gap-2 py-3 border-b border-zinc-100 last:border-b-0"

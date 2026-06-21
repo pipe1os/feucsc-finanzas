@@ -12,7 +12,8 @@ import AdminDesktopTable from "@/components/admin/AdminDesktopTable";
 import AdminMobileList from "@/components/admin/AdminMobileList";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminFilters from "@/components/admin/AdminFilters";
-import AdminModals, { type GastoDB } from "@/components/admin/AdminModals";
+import AdminModals from "@/components/admin/AdminModals";
+import type { GastoDB } from "@/hooks/useGastos";
 
 const ROWS_PER_PAGE = 10;
 

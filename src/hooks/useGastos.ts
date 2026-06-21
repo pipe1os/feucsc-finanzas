@@ -22,7 +22,7 @@ export interface GastosFilters {
 
 const GASTOS_KEY = "supabase:gastos";
 
-async function fetchGastos([_key, filters]: [string, GastosFilters]): Promise<{ data: GastoDB[], count: number }> {
+async function fetchGastos([, filters]: [string, GastosFilters]): Promise<{ data: GastoDB[], count: number }> {
   let query = supabase
     .from("gastos")
     .select("*", { count: "exact" });

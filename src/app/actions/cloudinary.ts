@@ -2,7 +2,7 @@
 
 import { createAuthClient } from "@/lib/supabase-auth";
 import { isAuthorizedEmail } from "@/lib/auth";
-import { deleteCloudinaryImage as deleteImage } from "@/lib/cloudinary-server";
+import { destroyCloudinaryImage as deleteImage } from "@/lib/cloudinary-server";
 
 async function requireAuth() {
   const supabase = await createAuthClient();

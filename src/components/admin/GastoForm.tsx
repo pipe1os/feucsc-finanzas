@@ -17,6 +17,16 @@ interface GastoFormProps {
   onDeleteCategory?: (cat: string) => void;
 }
 
+const initialState = {
+  fecha: new Date().toISOString().split("T")[0],
+  descripcion: "",
+  categoria: "Varios",
+  monto: "",
+  selectedFile: null as File | null,
+  submitting: false,
+  formError: null as string | null,
+};
+
 export default function GastoForm({
   categorias,
   categoriasDB,
@@ -24,16 +34,6 @@ export default function GastoForm({
   mutateCategorias,
   onDeleteCategory,
 }: GastoFormProps) {
-  const initialState = {
-    fecha: new Date().toISOString().split("T")[0],
-    descripcion: "",
-    categoria: "Varios",
-    monto: "",
-    selectedFile: null as File | null,
-    submitting: false,
-    formError: null as string | null,
-  };
-
   const [state, setState] = useReducer(
     (prev: typeof initialState, next: Partial<typeof initialState>) => ({ ...prev, ...next }),
     initialState

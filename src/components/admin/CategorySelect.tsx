@@ -55,7 +55,7 @@ export default function CategorySelect({
       <button
         id={selectId}
         type="button"
-        aria-haspopup="listbox"
+        aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => {
           setOpen(!open);
@@ -79,24 +79,23 @@ export default function CategorySelect({
           className="absolute z-50 mt-1.5 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-lg py-1 animate-fade-in-up"
           style={{ animationDuration: "150ms" }}
         >
-          <ul
-            className="max-h-60 overflow-y-auto"
-            role="listbox"
+          <div
+            role="menu"
             aria-labelledby={selectId}
+            className="max-h-60 overflow-y-auto"
           >
             {categorias.map((cat) => {
               const isSelected = cat === value;
               const isVarios = cat === "Varios";
               return (
-                <li
-                  key={cat}
-                  className={`group flex items-center justify-between px-3 py-2 text-sm transition-colors duration-150
-                ${isSelected ? "bg-red-50 text-red-600 font-medium" : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"}`}
-                  role="option"
-                  aria-selected={isSelected}
-                >
+                  <div
+                    key={cat}
+                    className={`group flex items-center justify-between px-3 py-2 text-sm transition-colors duration-150
+                  ${isSelected ? "bg-red-50 text-red-600 font-medium" : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"}`}
+                  >
                   <button
                     type="button"
+                    role="menuitem"
                     className="flex-1 cursor-pointer text-left"
                     onClick={() => {
                       onChange(cat);
@@ -137,10 +136,10 @@ export default function CategorySelect({
                       </button>
                     )}
                   </div>
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
 
           {}
           <div className="border-t border-zinc-100 dark:border-zinc-800 mt-1 pt-1">

@@ -241,14 +241,17 @@ export function ExpenseTableDesktop({
                     Ant.
                   </Pagination.Previous>
                 </Pagination.Item>
-                {visiblePages.map((p, idx) =>
-                  p === "ellipsis" ? (
-                    <Pagination.Item key={`ellipsis-${idx}`}>
-                      <span className="px-2 text-zinc-400 text-sm select-none">
-                        …
-                      </span>
-                    </Pagination.Item>
-                  ) : (
+                {visiblePages.map((p, idx) => {
+                  if (p === "ellipsis") {
+                    return (
+                      <Pagination.Item key={`ellipsis-${idx}`}>
+                        <span className="px-2 text-zinc-400 text-sm select-none">
+                          …
+                        </span>
+                      </Pagination.Item>
+                    );
+                  }
+                  return (
                     <Pagination.Item key={p}>
                       <Pagination.Link
                         isActive={p === page}
@@ -257,8 +260,8 @@ export function ExpenseTableDesktop({
                         {p}
                       </Pagination.Link>
                     </Pagination.Item>
-                  ),
-                )}
+                  );
+                })}
                 <Pagination.Item>
                   <Pagination.Next
                     isDisabled={page === totalPages}

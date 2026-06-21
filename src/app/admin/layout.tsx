@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { checkAuthorizedEmail } from "@/app/actions/auth";
@@ -57,32 +57,32 @@ export default function AdminLayout({
     return () => subscription.unsubscribe();
   }, [replace]);
 
-  const idleRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   useEffect(() => {
     const IDLE_TIMEOUT = 30 * 60 * 1000;
+    let timer: ReturnType<typeof setTimeout> | undefined;
 
     const startTimer = () => {
-      idleRef.current = setTimeout(() => {
+      timer = setTimeout(() => {
         supabase.auth.signOut();
         replace("/login?error=session_expired");
       }, IDLE_TIMEOUT);
     };
 
     const resetTimer = () => {
-      clearTimeout(idleRef.current);
+      clearTimeout(timer);
       startTimer();
     };
-
-    startTimer();
 
     const events = ["mousemove", "keydown", "click", "scroll"];
     events.forEach((event) => window.addEventListener(event, resetTimer));
     window.addEventListener("touchstart", resetTimer, { passive: true });
 
+    startTimer();
+
     return () => {
       events.forEach((event) => window.removeEventListener(event, resetTimer));
       window.removeEventListener("touchstart", resetTimer);
-      clearTimeout(idleRef.current);
+      clearTimeout(timer);
     };
   }, [replace]);
 

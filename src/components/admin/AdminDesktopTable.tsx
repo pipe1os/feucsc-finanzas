@@ -11,15 +11,7 @@ import {
   TrashIcon,
 } from "@/components/admin/Icons";
 
-export interface GastoDB {
-  id: string;
-  fecha: string;
-  descripcion: string;
-  categoria: string;
-  monto: number;
-  comprobante_url: string | null;
-  creado_el: string;
-}
+import type { GastoDB } from "@/hooks/useGastos";
 
 interface AdminDesktopTableProps {
   paginated: GastoDB[];
