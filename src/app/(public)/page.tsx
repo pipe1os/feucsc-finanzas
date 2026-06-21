@@ -1,5 +1,5 @@
 import KPICards from "@/components/public/KPICards";
-import { LazyExpenseTrendChart } from "@/components/public/LazyCharts";
+import { LazyExpenseTrendChart, LazyExpenseCategoryChart } from "@/components/public/LazyCharts";
 import LatestTransactionsPreview from "@/components/public/LatestTransactionsPreview";
 import { supabaseAnon } from "@/lib/supabase-anon";
 import { parseISODate } from "@/lib/utils";
@@ -91,7 +91,21 @@ export default async function Home() {
     };
   });
 
-  const latestTransactions = data.slice(0, 3).map((g) => {
+  const categoriasMap = new Map<string, number>();
+  data.forEach((g) => {
+    const cat = g.categoria || "Varios";
+    categoriasMap.set(cat, (categoriasMap.get(cat) || 0) + g.monto);
+  });
+
+  const gastosPorCategoria = Array.from(categoriasMap.entries())
+    .map(([cat, monto]) => ({
+      categoria: cat,
+      monto,
+      color: categoryColors[cat] || "#E30707",
+    }))
+    .sort((a, b) => b.monto - a.monto);
+
+  const latestTransactions = data.slice(0, 5).map((g) => {
     const catName = g.categoria || "Varios";
     return {
       id: g.id,
@@ -105,7 +119,7 @@ export default async function Home() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
-      <header className="mb-8">
+      <header className="mb-8 animate-fade-in-up">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white font-heading">
@@ -122,17 +136,23 @@ export default async function Home() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
         <section
           aria-label="Indicadores financieros"
-          className="col-span-1 lg:col-span-4 h-full"
+          className="col-span-1 lg:col-span-4 h-full animate-fade-in-up stagger-1"
         >
           <KPICards resumenFinanciero={resumenFinanciero} />
         </section>
         <section
           aria-label="Tendencia de gastos"
-          className="col-span-1 lg:col-span-8 h-full"
+          className="col-span-1 lg:col-span-8 h-full animate-fade-in-up stagger-2"
         >
           <LazyExpenseTrendChart gastosPorMes={gastosPorMes} />
         </section>
-        <section className="col-span-1 lg:col-span-12">
+        <section
+          aria-label="Distribución por categoría"
+          className="col-span-1 lg:col-span-5 animate-fade-in-up stagger-3"
+        >
+          <LazyExpenseCategoryChart gastosPorCategoria={gastosPorCategoria} />
+        </section>
+        <section className="col-span-1 lg:col-span-7 animate-fade-in-up stagger-3">
           <LatestTransactionsPreview
             transactions={latestTransactions}
             totalCount={data.length}
