@@ -6,7 +6,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET!,
 });
 
-export function extractPublicId(url: string) {
+function extractPublicId(url: string) {
   const parts = url.split("/upload/");
   if (parts.length < 2) return null;
 
@@ -23,7 +23,7 @@ export function extractPublicId(url: string) {
   return publicIdWithExt;
 }
 
-export async function deleteCloudinaryImage(url: string) {
+export async function destroyCloudinaryImage(url: string) {
   try {
     const publicId = extractPublicId(url);
     if (!publicId) {

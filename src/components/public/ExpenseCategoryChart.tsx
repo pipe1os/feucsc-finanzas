@@ -10,7 +10,7 @@ import {
 import { formatCLP } from "@/lib/utils";
 import * as React from "react";
 import { pie, arc, PieArcDatum } from "d3";
-import { motion } from "motion/react";
+import { m, LazyMotion, domAnimation } from "motion/react";
 
 interface CategoriaData {
   categoria: string;
@@ -74,18 +74,19 @@ export default function ExpenseCategoryChart({
       </CardHeader>
 
       <CardContent className="flex flex-col items-center gap-6">
+        <LazyMotion features={domAnimation}>
         <div className="relative size-56 **:outline-none flex items-center justify-center">
           <svg
             viewBox={`-${radius * 1.25} -${radius * 1.25} ${radius * 2.5} ${radius * 2.5}`}
             className="overflow-visible w-full h-full"
           >
-            {arcs.map((d, i) => {
+            {arcs.map((d) => {
               const isActive = activeCategoryFilter === d.data.categoria;
               const isDimmed = activeCategoryFilter && activeCategoryFilter !== d.data.categoria;
               
               return (
                  <g 
-                   key={i} 
+                   key={d.data.categoria} 
                    onClick={() => {
                      if (onCategoryClick) {
                        onCategoryClick(isActive ? "" : d.data.categoria);
@@ -94,7 +95,7 @@ export default function ExpenseCategoryChart({
                    style={{ cursor: "pointer", opacity: isDimmed ? 0.3 : 1 }}
                    className="transition-opacity duration-200"
                  >
-                    <motion.path 
+                    <m.path 
                       fill={d.data.color} 
                       d={arcGenerator(d)!} 
                       stroke={isActive ? d.data.color : "none"}
@@ -102,13 +103,13 @@ export default function ExpenseCategoryChart({
                       className="transition-all duration-200 outline-none"
                       initial={{ scale: 0.5, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
-                      transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.1 + i * 0.08 }}
+                      transition={{ type: "spring", stiffness: 260, damping: 20 }}
                     />
                   </g>
               );
             })}
 
-            {arcs.map((d: PieArcDatum<CategoriaData>, i) => {
+            {arcs.map((d: PieArcDatum<CategoriaData>) => {
               const angle = computeAngle(d);
               if (angle <= MIN_ANGLE) return null;
 
@@ -117,8 +118,8 @@ export default function ExpenseCategoryChart({
               const isDimmed = activeCategoryFilter && activeCategoryFilter !== d.data.categoria;
 
               return (
-                <motion.text
-                  key={`label-${i}`}
+                <m.text
+                  key={d.data.categoria}
                   x={x}
                   y={y}
                   textAnchor="middle"
@@ -130,15 +131,15 @@ export default function ExpenseCategoryChart({
                   style={{ opacity: isDimmed ? 0.3 : 1, textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.15 + i * 0.08 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 20 }}
                 >
                   {pct}%
-                </motion.text>
+                </m.text>
               );
             })}
           </svg>
 
-          <motion.div
+          <m.div
             className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center z-0"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -150,7 +151,7 @@ export default function ExpenseCategoryChart({
             <span className="text-[9px] font-medium text-zinc-400 uppercase tracking-wider">
               Total
             </span>
-          </motion.div>
+          </m.div>
         </div>
 
         <div className="w-full space-y-3">
@@ -163,7 +164,7 @@ export default function ExpenseCategoryChart({
             const isDimmed =
               activeCategoryFilter && activeCategoryFilter !== item.categoria;
             return (
-              <motion.button type="button"
+              <m.button type="button"
                 key={item.categoria}
                 onClick={() =>
                   onCategoryClick?.(isActive ? "" : item.categoria)
@@ -184,7 +185,7 @@ export default function ExpenseCategoryChart({
                 </span>
                 <div className="flex items-center gap-2 shrink-0">
                   <div className="hidden sm:block h-1.5 w-16 rounded-full bg-zinc-100 overflow-hidden">
-                    <motion.div
+                    <m.div
                       className="h-full rounded-full"
                       style={{
                         backgroundColor: item.color,
@@ -198,10 +199,11 @@ export default function ExpenseCategoryChart({
                     {pct}%
                   </span>
                 </div>
-              </motion.button>
+              </m.button>
             );
           })}
         </div>
+        </LazyMotion>
       </CardContent>
     </Card>
   );

@@ -3,7 +3,7 @@
 import { formatCLP } from "@/lib/utils";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { scaleLinear, line as d3line, max, area as d3area, curveMonotoneX } from "d3";
-import { motion } from "motion/react";
+import { m, LazyMotion, domAnimation } from "motion/react";
 
 import {
   Card,
@@ -218,11 +218,11 @@ export default function ExpenseTrendChart({
         <div className="relative flex-1 w-full flex flex-row">
           {/* Y axis */}
           <div className="w-10 sm:w-12 shrink-0 relative pb-6 border-r border-zinc-100/50 mr-2">
-            {yScale.ticks(5).map((value, i) => {
+            {yScale.ticks(5).map((value) => {
               if (value === 0) return null;
               return (
                 <div
-                  key={i}
+                  key={`y-tick-${value}`}
                   style={{
                     top: `${yScale(+value)}%`,
                   }}
@@ -243,18 +243,19 @@ export default function ExpenseTrendChart({
               onPointerLeave={handlePointerLeave}
               onPointerDown={handlePointerDown}
             >
-              <svg
-                viewBox="0 0 100 100"
-                className="w-full h-full overflow-visible"
-                preserveAspectRatio="none"
-              >
+              <LazyMotion features={domAnimation}>
+                <svg
+                  viewBox="0 0 100 100"
+                  className="w-full h-full overflow-visible"
+                  preserveAspectRatio="none"
+                >
                 <defs>
                   <linearGradient id="outlinedAreaGradient" x1="0" x2="0" y1="0" y2="1">
                     <stop offset="0%" stopColor="#E30707" stopOpacity={0.15} />
                     <stop offset="100%" stopColor="#E30707" stopOpacity={0} />
                   </linearGradient>
                   <clipPath id="chartClip">
-                    <motion.rect
+                    <m.rect
                       x="0"
                       y="-10"
                       height="120"
@@ -291,6 +292,7 @@ export default function ExpenseTrendChart({
                   />
                 </g>
               </svg>
+              </LazyMotion>
 
               {/* Active Dot */}
               {activeIndex !== null && (
@@ -332,7 +334,7 @@ export default function ExpenseTrendChart({
             <div className="absolute bottom-0 left-0 right-0 h-6">
               {gastosPorMes.map((d, i) => (
                 <div
-                  key={i}
+                  key={`x-tick-${d.mes}`}
                   style={{
                     left: `${xScale(i)}%`,
                   }}

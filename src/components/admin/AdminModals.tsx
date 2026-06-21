@@ -10,7 +10,7 @@ import {
 } from "@/app/actions/gastos";
 import EditGastoForm from "@/components/admin/EditGastoForm";
 
-export interface GastoDB {
+interface GastoDB {
   id: string;
   fecha: string;
   descripcion: string;

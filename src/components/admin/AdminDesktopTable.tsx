@@ -11,7 +11,7 @@ import {
   TrashIcon,
 } from "@/components/admin/Icons";
 
-export interface GastoDB {
+interface GastoDB {
   id: string;
   fecha: string;
   descripcion: string;

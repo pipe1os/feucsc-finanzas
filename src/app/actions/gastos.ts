@@ -50,7 +50,7 @@ const GastoSchema = z.object({
     .finite("Monto inválido"),
   comprobante_url: z.preprocess(
     (val) => (val === "" ? null : val),
-    z.string().url("URL de comprobante inválida").refine((url) => {
+    z.url("URL de comprobante inválida").refine((url) => {
       try {
         return new URL(url).hostname === "res.cloudinary.com";
       } catch {
@@ -61,7 +61,7 @@ const GastoSchema = z.object({
 });
 
 const GastoUpdateSchema = GastoSchema.extend({
-  id: z.string({ message: "ID es requerido" }).uuid("ID inválido"),
+  id: z.uuid("ID inválido"),
 });
 
 const CategoriaSchema = z.object({
@@ -136,7 +136,7 @@ export async function updateGasto(formData: FormData) {
 }
 
 export async function deleteGasto(id: string) {
-  const parsed = z.string().uuid("ID inválido").safeParse(id);
+  const parsed = z.uuid("ID inválido").safeParse(id);
   if (!parsed.success) throw new Error(parsed.error.issues[0]?.message || "ID inválido");
   
   await requireAuth();

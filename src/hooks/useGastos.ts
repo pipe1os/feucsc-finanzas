@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { supabase } from "@/lib/supabase";
 
-export interface GastoDB {
+interface GastoDB {
   id: string;
   fecha: string;
   descripcion: string;

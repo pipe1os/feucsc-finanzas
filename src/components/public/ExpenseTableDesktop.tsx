@@ -243,6 +243,7 @@ export function ExpenseTableDesktop({
                 </Pagination.Item>
                 {visiblePages.map((p, idx) =>
                   p === "ellipsis" ? (
+                    {/* eslint-disable-next-line react/no-array-index-key */}
                     <Pagination.Item key={`ellipsis-${idx}`}>
                       <span className="px-2 text-zinc-400 text-sm select-none">
                         …
