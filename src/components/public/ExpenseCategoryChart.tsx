@@ -10,7 +10,7 @@ import {
 import { formatCLP } from "@/lib/utils";
 import * as React from "react";
 import { pie, arc, PieArcDatum } from "d3";
-import { m, LazyMotion, domAnimation, useMotionValue, useTransform, animate } from "motion/react";
+import { m, LazyMotion, domAnimation } from "motion/react";
 
 interface CategoriaData {
   categoria: string;
@@ -22,44 +22,6 @@ interface ExpenseCategoryChartProps {
   gastosPorCategoria: CategoriaData[];
   onCategoryClick?: (category: string) => void;
   activeCategoryFilter?: string | null;
-}
-
-function AnimatedArc({ 
-  d, 
-  arcGenerator, 
-  color, 
-  isActive 
-}: { 
-  d: PieArcDatum<CategoriaData>; 
-  arcGenerator: any; 
-  color: string; 
-  isActive: boolean; 
-}) {
-  const progress = useMotionValue(0);
-
-  React.useEffect(() => {
-    const controls = animate(progress, 1, {
-      duration: 0.6,
-      ease: "easeOut",
-      delay: d.index * 0.08
-    });
-    return () => controls.stop();
-  }, [d.index, progress]);
-
-  const pathTransform = useTransform(progress, (v) => {
-    const currentEndAngle = d.startAngle + (d.endAngle - d.startAngle) * v;
-    return arcGenerator({ ...d, endAngle: currentEndAngle }) || "";
-  });
-
-  return (
-    <m.path 
-      fill={color} 
-      d={pathTransform} 
-      stroke={isActive ? color : "none"}
-      strokeWidth={isActive ? 4 : 0}
-      className="transition-all duration-200 outline-none"
-    />
-  );
 }
 
 export default function ExpenseCategoryChart({
@@ -133,11 +95,15 @@ export default function ExpenseCategoryChart({
                    style={{ cursor: "pointer", opacity: isDimmed ? 0.3 : 1 }}
                    className="transition-opacity duration-200"
                  >
-                    <AnimatedArc
-                      d={d}
-                      arcGenerator={arcGenerator}
-                      color={d.data.color}
-                      isActive={isActive}
+                    <m.path 
+                      fill={d.data.color} 
+                      d={arcGenerator(d)!} 
+                      stroke={isActive ? d.data.color : "none"}
+                      strokeWidth={isActive ? 4 : 0}
+                      className="transition-all duration-200 outline-none"
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", stiffness: 260, damping: 20, delay: d.index * 0.08 }}
                     />
                   </g>
               );
