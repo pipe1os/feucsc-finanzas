@@ -3,7 +3,7 @@
 import { formatCLP } from "@/lib/utils";
 import { useMemo } from "react";
 import { SkeletonKPICards } from "./Skeletons";
-import { NumberTicker } from "@/components/ui/number-ticker";
+
 
 interface ResumenFinanciero {
   presupuestoTotal: number;
@@ -72,23 +72,13 @@ export default function KPICards({
               Total Gastado
             </p>
             <p className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-bold font-heading animate-fade-in-up">
-              <NumberTicker
-                value={resumenFinanciero.totalGastado}
-                formatFn={formatCLP}
-                animate={false}
-                className="text-4xl sm:text-5xl tracking-[-0.03em] tabular-nums text-gray-900 dark:text-white font-bold font-heading"
-              />
+              {formatCLP(resumenFinanciero.totalGastado)}
             </p>
             <p
               className={`mt-1.5 text-sm font-medium flex items-center gap-1 ${spentStatusText}`}
             >
               <span className="font-bold">
-                <NumberTicker
-                  value={porcentajeGastado}
-                  animate={false}
-                  className="text-inherit tabular-nums"
-                />
-                %
+                {Math.round(porcentajeGastado)}%
               </span>
               <span>del presupuesto utilizado</span>
             </p>
@@ -111,12 +101,7 @@ export default function KPICards({
                 Presupuesto Total
               </p>
               <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading animate-fade-in-up animation-delay-100">
-                <NumberTicker
-                  value={resumenFinanciero.presupuestoTotal}
-                  formatFn={formatCLP}
-                  animate={false}
-                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading"
-                />
+                {formatCLP(resumenFinanciero.presupuestoTotal)}
               </p>
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                 Año académico 2026
@@ -128,23 +113,13 @@ export default function KPICards({
                 Presupuesto Disponible
               </p>
               <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading animate-fade-in-up animation-delay-200">
-                <NumberTicker
-                  value={resumenFinanciero.saldoDisponible}
-                  formatFn={formatCLP}
-                  animate={false}
-                  className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 dark:text-white font-semibold font-heading"
-                />
+                {formatCLP(resumenFinanciero.saldoDisponible)}
               </p>
               <p
                 className={`mt-1 text-xs font-medium flex items-center gap-1 ${availableStatusText}`}
               >
                 <span className="font-semibold">
-                  <NumberTicker
-                    value={porcentajeDisponible}
-                    animate={false}
-                    className="text-inherit tabular-nums"
-                  />
-                  %
+                  {Math.round(porcentajeDisponible)}%
                 </span>
                 <span>restante</span>
               </p>
