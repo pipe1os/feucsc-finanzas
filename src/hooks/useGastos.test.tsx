@@ -57,7 +57,7 @@ describe('useGastos', () => {
 
  it('fetches gastos without filters with default ordering', async () => {
  const mockData = [{ id: '1', descripcion: 'Test', monto: 100 }];
- mockQuery.then!.mockImplementation((resolve: (value: unknown) => void) => resolve({ data: mockData, count: 1, error: null }));
+ mockQuery.then?.mockImplementation((resolve: (value: unknown) => void) => resolve({ data: mockData, count: 1, error: null }));
 
  const { result } = renderHook(() => useGastos(), { wrapper });
 
@@ -139,7 +139,7 @@ describe('useGastos', () => {
  });
 
  it('returns error state if supabase fails', async () => {
- mockQuery.then!.mockImplementation((resolve: (value: unknown) => void) => resolve({ data: null, count: null, error: new Error('DB Error') }));
+ mockQuery.then!.mockImplementation((resolve: (value: unknown) => void) => { resolve({ data: null, count: null, error: new Error('DB Error') }); });
 
  const { result } = renderHook(() => useGastos(), { wrapper });
 

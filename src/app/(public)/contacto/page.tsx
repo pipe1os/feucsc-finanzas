@@ -6,7 +6,7 @@ import Footer from"@/components/public/Footer";
 const handleCopyEmail = () => {
  const text ="feucsc@ucsc.cl";
  if (navigator.clipboard) {
- navigator.clipboard.writeText(text);
+ void navigator.clipboard.writeText(text);
  toast.success("Correo copiado al portapapeles");
  } else {
  const textarea = document.createElement("textarea");

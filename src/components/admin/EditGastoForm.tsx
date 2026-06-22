@@ -96,7 +96,7 @@ export default function EditGastoForm({
  form.append("descripcion", state.descripcion.trim());
  form.append("categoria", state.categoria);
  form.append("monto", state.monto);
- form.append("comprobante_url", finalUrl ||"");
+ form.append("comprobante_url", finalUrl ??"");
  await updateGasto(form);
 
  if (originalUrl && originalUrl !== finalUrl) {
@@ -122,7 +122,7 @@ export default function EditGastoForm({
  isRequired
  name="edit_fecha"
  type="date"
- onChange={(val) => setState({ fecha: val })}
+ onChange={(val) => { setState({ fecha: val }); }}
  className="w-full"
  >
  <Label>Fecha</Label>
@@ -150,7 +150,7 @@ export default function EditGastoForm({
  <TextField
  isRequired
  name="edit_descripcion"
- onChange={(val) => setState({ descripcion: val })}
+ onChange={(val) => { setState({ descripcion: val }); }}
  className="w-full"
  >
  <Label>Descripción</Label>
@@ -165,7 +165,7 @@ export default function EditGastoForm({
  isRequired
  name="edit_monto"
  type="number"
- onChange={(val) => setState({ monto: val })}
+ onChange={(val) => { setState({ monto: val }); }}
  className="w-full"
  >
  <Label>Monto</Label>
@@ -177,9 +177,9 @@ export default function EditGastoForm({
  </TextField>
  <ComprobanteUpload
  selectedFile={state.selectedFile}
- setSelectedFile={(val) => setState({ selectedFile: val, imageMarkedForDeletion: false })}
+ setSelectedFile={(val) => { setState({ selectedFile: val, imageMarkedForDeletion: false }); }}
  existingUrl={existingUrl}
- onDeleteExisting={() => setState({ imageMarkedForDeletion: true })}
+ onDeleteExisting={() => { setState({ imageMarkedForDeletion: true }); }}
  isMarkedForDeletion={state.imageMarkedForDeletion}
  onViewImage={onViewImage}
  />

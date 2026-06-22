@@ -46,7 +46,7 @@ async function fetchGastos([, filters]: [string, GastosFilters]): Promise<{ data
  }
  }
 
- const col = filters.sortDescriptor?.column ||"fecha";
+ const col = filters.sortDescriptor?.column ??"fecha";
  const ascending = filters.sortDescriptor?.direction ==="ascending";
  const mapCol = col ==="cat" ?"categoria" : col;
  

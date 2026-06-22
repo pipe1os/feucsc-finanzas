@@ -209,7 +209,7 @@ export default function Sidebar() {
 
  if (typeof requestIdleCallback ==="function") {
  idleId = requestIdleCallback(() => {
- checkNewExpenses();
+ void checkNewExpenses();
  });
  } else {
  timeoutId = setTimeout(() => {
@@ -227,12 +227,12 @@ export default function Sidebar() {
  };
  }, [pathname]);
 
- const close = () => toggleSidebar(false);
+ const close = () => { toggleSidebar(false); };
 
  return (
  <>
  <button type="button"
- onClick={() => toggleSidebar(!isOpen)}
+ onClick={() => { toggleSidebar(!isOpen); }}
  className="fixed top-4 right-4 z-50 flex items-center justify-center
  size-10 rounded-xl bg-surface shadow-apple-lg lg:hidden
  transition-colors hover:bg-gray-50 cursor-pointer"

@@ -58,7 +58,7 @@ export default function ComprobanteUpload({
  </span>
  <button
  type="button"
- onClick={() => setSelectedFile(null)}
+ onClick={() => { setSelectedFile(null); }}
  className="text-zinc-400 hover:text-red-500 transition-colors p-1"
  title="Eliminar archivo"
  >

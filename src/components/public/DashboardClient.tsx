@@ -37,11 +37,11 @@ export default function DashboardClient({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const search = searchParams.get("search")?.toLowerCase() || "";
-  const activeCategoryFilter = searchParams.get("categoria") || "all";
-  const mesFilter = searchParams.get("mes") || "all";
-  const sortCol = searchParams.get("sort") || "fecha";
-  const sortDir = searchParams.get("direction") || "descending";
+  const search = searchParams.get("search")?.toLowerCase() ?? "";
+  const activeCategoryFilter = searchParams.get("categoria") ?? "all";
+  const mesFilter = searchParams.get("mes") ?? "all";
+  const sortCol = searchParams.get("sort") ?? "fecha";
+  const sortDir = searchParams.get("direction") ?? "descending";
   const page = Number(searchParams.get("page")) || 1;
   const ROWS_PER_PAGE = 10;
 
@@ -110,7 +110,7 @@ export default function DashboardClient({
     const map = new Map<string, number>();
     filteredTransacciones.forEach((t) => {
       const cat = t.categoria || "Varios";
-      map.set(cat, (map.get(cat) || 0) + t.monto);
+      map.set(cat, (map.get(cat) ?? 0) + t.monto);
     });
 
     return Array.from(map.entries())

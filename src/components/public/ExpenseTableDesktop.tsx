@@ -143,7 +143,7 @@ export function ExpenseTableDesktop({
  )}
  >
  {(txn: TransaccionItem) => {
- const catColor = txn.color ||"#9CA3AF";
+ const catColor = txn.color ??"#9CA3AF";
  return (
  <Table.Row key={txn.id} className="group cursor-pointer hover:bg-zinc-50 transition-colors duration-200">
  <Table.Cell>
@@ -185,7 +185,7 @@ export function ExpenseTableDesktop({
  <Tooltip delay={0}>
  <Tooltip.Trigger>
  <m.button type="button"
- onClick={() => onViewLightbox(txn.comprobante, txn.concepto)}
+ onClick={() => { onViewLightbox(txn.comprobante, txn.concepto); }}
  className="inline-flex items-center justify-center size-8 rounded-lg bg-red-50 text-red-500 cursor-pointer hover:bg-red-100 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
  aria-label={`Ver comprobante de ${txn.concepto}`}
  whileHover={{ scale: 1.08 }}
@@ -229,7 +229,7 @@ export function ExpenseTableDesktop({
  <Pagination.Item>
  <Pagination.Previous
  isDisabled={page === 1}
- onPress={() => onPageChange(Math.max(1, page - 1))}
+ onPress={() => { onPageChange(Math.max(1, page - 1)); }}
  >
  <Pagination.PreviousIcon />
  Ant.
@@ -250,7 +250,7 @@ export function ExpenseTableDesktop({
  <Pagination.Item key={p}>
  <Pagination.Link
  isActive={p === page}
- onPress={() => onPageChange(p as number)}
+ onPress={() => { onPageChange(p as number); }}
  >
  {p}
  </Pagination.Link>
@@ -260,7 +260,7 @@ export function ExpenseTableDesktop({
  <Pagination.Item>
  <Pagination.Next
  isDisabled={page === totalPages}
- onPress={() => onPageChange(Math.min(totalPages, page + 1))}
+ onPress={() => { onPageChange(Math.min(totalPages, page + 1)); }}
  >
  Sig.
  <Pagination.NextIcon />

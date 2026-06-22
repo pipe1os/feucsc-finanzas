@@ -46,12 +46,12 @@ function ExpenseTable({
  const pathname = usePathname();
  const searchParams = useSearchParams();
 
- const searchQuery = searchParams.get("search") ||"";
+ const searchQuery = searchParams.get("search") ??"";
  const page = Number(searchParams.get("page")) || 1;
- const selectedMonth = searchParams.get("mes") ||"all";
- const selectedCategory = searchParams.get("categoria") ||"all";
- const sortCol = searchParams.get("sort") ||"fecha";
- const sortDir = searchParams.get("direction") ||"descending";
+ const selectedMonth = searchParams.get("mes") ??"all";
+ const selectedCategory = searchParams.get("categoria") ??"all";
+ const sortCol = searchParams.get("sort") ??"fecha";
+ const sortDir = searchParams.get("direction") ??"descending";
 
  const sortDescriptor: SortDescriptor = {
  column: sortCol as string,
@@ -291,7 +291,7 @@ function ExpenseTable({
  height={700}
  sizes="(max-width: 768px) 100vw, 500px"
  className="max-h-[70vh] w-auto rounded-lg object-contain"
- onLoad={() => setIsImageLoading(false)}
+ onLoad={() => { setIsImageLoading(false); }}
  />
  </m.div>
  </LazyMotion>

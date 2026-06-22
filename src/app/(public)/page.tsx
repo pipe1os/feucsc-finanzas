@@ -48,7 +48,7 @@ export default async function Home() {
  const categoryColors = buildCategoryColors(categoriasData);
 
  const presupuestoTotal = Number(
- process.env.NEXT_PUBLIC_PRESUPUESTO_TOTAL ||"19972000",
+ process.env.NEXT_PUBLIC_PRESUPUESTO_TOTAL ??"19972000",
  );
  const totalGastado = data.reduce((acc, curr) => acc + curr.monto, 0);
  const saldoDisponible = presupuestoTotal - totalGastado;
@@ -66,11 +66,11 @@ export default async function Home() {
  const monthStr = months[date.getMonth()];
  gastosPorMesMap.set(
  monthStr,
- (gastosPorMesMap.get(monthStr) || 0) + g.monto,
+ (gastosPorMesMap.get(monthStr) ?? 0) + g.monto,
  );
  const catMap = gastosPorMesCatMap.get(monthStr)!;
  const cat = g.categoria ||"Varios";
- catMap.set(cat, (catMap.get(cat) || 0) + g.monto);
+ catMap.set(cat, (catMap.get(cat) ?? 0) + g.monto);
  }
  });
 
@@ -85,7 +85,7 @@ export default async function Home() {
  .sort((a, b) => b.monto - a.monto);
  return {
  mes,
- monto: gastosPorMesMap.get(mes) || 0,
+ monto: gastosPorMesMap.get(mes) ?? 0,
  categorias,
  };
  });
