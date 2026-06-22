@@ -29,7 +29,7 @@ export function SkeletonTable({ rows = 5 }: { rows?: number }) {
  {Array.from({ length: safeRows }).map((_, index) => (
  <div
  key={index}
- className="hidden md:grid grid-cols-[120px_1fr_120px_100px_80px] gap-4 items-center py-3 border-b border-zinc-50 last:border-b-0"
+ className="hidden md:grid grid-cols-[120px_1fr_120px_100px_80px] gap-4 items-center py-3 border-b border-border last:border-b-0"
  >
  <Skeleton className="h-4 w-20 rounded" />
  <Skeleton className="h-4 w-3/4 rounded" />
@@ -56,7 +56,7 @@ export function SkeletonTable({ rows = 5 }: { rows?: number }) {
  ))}
  </div>
 
- <div className="px-6 py-4 border-t border-zinc-50 flex items-center justify-between">
+ <div className="px-6 py-4 border-t border-border flex items-center justify-between">
  <Skeleton className="h-4 w-32 rounded" />
  <div className="flex items-center gap-2">
  <Skeleton className="size-8 rounded-lg" />

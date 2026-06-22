@@ -177,7 +177,7 @@ export default function EditGastoForm({
  </TextField>
  <ComprobanteUpload
  selectedFile={state.selectedFile}
- setSelectedFile={(val) => setState({ selectedFile: val })}
+ setSelectedFile={(val) => setState({ selectedFile: val, imageMarkedForDeletion: false })}
  existingUrl={existingUrl}
  onDeleteExisting={() => setState({ imageMarkedForDeletion: true })}
  isMarkedForDeletion={state.imageMarkedForDeletion}

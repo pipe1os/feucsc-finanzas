@@ -74,7 +74,7 @@ export default function AdminSidebar() {
  priority
  />
  </div>
- <div className="mx-5 h-px bg-zinc-100" />
+ <div className="mx-5 h-px bg-border" />
  <nav className="flex flex-col gap-1 px-4 pt-6">
  <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-zinc-400 uppercase">
  Administración
@@ -125,7 +125,7 @@ export default function AdminSidebar() {
  </nav>
  <div className="flex-1" />
  <div className="px-5 pb-6 pt-4">
- <div className="h-px bg-zinc-100 mb-4" />
+ <div className="h-px bg-border mb-4" />
  <Button
  variant="ghost"
  onPress={handleSignOut}

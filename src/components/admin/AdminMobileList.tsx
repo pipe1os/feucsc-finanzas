@@ -60,7 +60,7 @@ export default function AdminMobileList({
  </div>
  </div>
  ) : (
- <ListBox aria-label="Gastos" className="divide-y divide-zinc-100">
+ <ListBox aria-label="Gastos" className="divide-y divide-border">
  {paginated.map((g) => {
  const catColor = catColors[g.categoria] || VARIOS_COLOR;
  return (

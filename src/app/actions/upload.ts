@@ -27,7 +27,11 @@ export async function uploadComprobanteAction(
 ): Promise<string | null> {
  await requireAuth();
 
- const file = formData.get("file") as File | null;
+ const file = formData.get("file");
+
+  if (!file || typeof file === "string") {
+    throw new Error("No se proporcionó ningún archivo válido");
+  }
 
  if (!file) {
  throw new Error("No se proporcionó ningún archivo");

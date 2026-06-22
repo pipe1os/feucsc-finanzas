@@ -108,14 +108,16 @@ export default function ExpenseTrendChart({
  
  const chartRef = useRef<HTMLDivElement>(null);
  const isTouch = useRef(false);
+ const [persistTooltip, setPersistTooltip] = useState(false);
 
  useEffect(() => {
- if (!tooltipState.data || !isTouch.current) return;
+ if (!persistTooltip) return;
  const handleClickOutside = (e: MouseEvent | TouchEvent) => {
  if (chartRef.current && !chartRef.current.contains(e.target as Node)) {
  setActiveIndex(null);
  setTooltipState({ data: null, position: null, transform:"" });
  isTouch.current = false;
+        setPersistTooltip(false);
  }
  };
  document.addEventListener("mousedown", handleClickOutside);
@@ -124,7 +126,7 @@ export default function ExpenseTrendChart({
  document.removeEventListener("mousedown", handleClickOutside);
  document.removeEventListener("touchstart", handleClickOutside);
  };
- }, [tooltipState.data]);
+ }, [persistTooltip]);
 
  const xScale = scaleLinear()
  .domain([0, Math.max(1, gastosPorMes.length - 1)])
@@ -173,7 +175,10 @@ export default function ExpenseTrendChart({
 
  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
  if (!chartRef.current || gastosPorMes.length === 0) return;
- if (e.pointerType ==="touch") isTouch.current = true;
+ if (e.pointerType ==="touch") {
+      isTouch.current = true;
+      setPersistTooltip(true);
+    }
  
  const rect = chartRef.current.getBoundingClientRect();
  const x = e.clientX - rect.left;
