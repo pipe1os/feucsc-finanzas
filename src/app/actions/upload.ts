@@ -1,83 +1,83 @@
 "use server";
 
-import { createAuthClient } from "@/lib/supabase-auth";
-import { isAuthorizedEmail } from "@/lib/auth";
-import { isValidImage } from "@/lib/validate-image";
-import cloudinary from "@/lib/cloudinary-server";
+import { createAuthClient } from"@/lib/supabase-auth";
+import { isAuthorizedEmail } from"@/lib/auth";
+import { isValidImage } from"@/lib/validate-image";
+import cloudinary from"@/lib/cloudinary-server";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 async function requireAuth() {
-  const supabase = await createAuthClient();
+ const supabase = await createAuthClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+ const {
+ data: { user },
+ } = await supabase.auth.getUser();
 
-  if (!user || !(await isAuthorizedEmail(user.email))) {
-    throw new Error("No autorizado");
-  }
+ if (!user || !(await isAuthorizedEmail(user.email))) {
+ throw new Error("No autorizado");
+ }
 
-  return user;
+ return user;
 }
 
 // Sube un comprobante a Cloudinary y devuelve la URL pública.
 export async function uploadComprobanteAction(
-  formData: FormData,
+ formData: FormData,
 ): Promise<string | null> {
-  await requireAuth();
+ await requireAuth();
 
-  const file = formData.get("file") as File | null;
+ const file = formData.get("file") as File | null;
 
-  if (!file) {
-    throw new Error("No se proporcionó ningún archivo");
-  }
+ if (!file) {
+ throw new Error("No se proporcionó ningún archivo");
+ }
 
-  // Validar tamaño
-  if (file.size > MAX_FILE_SIZE) {
-    throw new Error("El archivo excede el límite de 5 MB");
-  }
+ // Validar tamaño
+ if (file.size > MAX_FILE_SIZE) {
+ throw new Error("El archivo excede el límite de 5 MB");
+ }
 
-  // Validar MIME
-  if (!file.type.startsWith("image/")) {
-    throw new Error("Solo se permiten archivos de imagen");
-  }
+ // Validar MIME
+ if (!file.type.startsWith("image/")) {
+ throw new Error("Solo se permiten archivos de imagen");
+ }
 
-  // Validar magic bytes
-  const arrayBuffer = await file.arrayBuffer();
-  const bytes = new Uint8Array(arrayBuffer);
+ // Validar magic bytes
+ const arrayBuffer = await file.arrayBuffer();
+ const bytes = new Uint8Array(arrayBuffer);
 
-  if (!isValidImage(bytes)) {
-    throw new Error(
-      "Solo se permiten archivos de imagen válidos (JPEG, PNG, GIF, WebP)",
-    );
-  }
+ if (!isValidImage(bytes)) {
+ throw new Error(
+"Solo se permiten archivos de imagen válidos (JPEG, PNG, GIF, WebP)",
+ );
+ }
 
-  try {
-    const base64 = Buffer.from(arrayBuffer).toString("base64");
+ try {
+ const base64 = Buffer.from(arrayBuffer).toString("base64");
 
-    const result = await cloudinary.uploader.upload(
-      `data:${file.type};base64,${base64}`,
-      {
-        folder: "comprobantes",
-        resource_type: "image",
-        allowed_formats: ["jpg", "jpeg", "png", "gif", "webp"],
-        transformation: [{ quality: "auto" }],
-      },
-    );
+ const result = await cloudinary.uploader.upload(
+`data:${file.type};base64,${base64}`,
+ {
+ folder:"comprobantes",
+ resource_type:"image",
+ allowed_formats: ["jpg","jpeg","png","gif","webp"],
+ transformation: [{ quality:"auto" }],
+ },
+ );
 
-    if (!result.secure_url) {
-      throw new Error("Cloudinary no devolvió una URL válida");
-    }
+ if (!result.secure_url) {
+ throw new Error("Cloudinary no devolvió una URL válida");
+ }
 
-    return result.secure_url;
-  } catch (err) {
-    console.error("Cloudinary upload error:", err);
+ return result.secure_url;
+ } catch (err) {
+ console.error("Cloudinary upload error:", err);
 
-    if (err instanceof Error) {
-      throw new Error(err.message);
-    }
+ if (err instanceof Error) {
+ throw new Error(err.message);
+ }
 
-    throw new Error("Error al subir el comprobante");
-  }
+ throw new Error("Error al subir el comprobante");
+ }
 }

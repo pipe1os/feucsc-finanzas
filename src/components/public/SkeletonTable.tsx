@@ -1,11 +1,11 @@
 "use client";
 
-import { Skeleton } from "@heroui/react";
+import { Skeleton } from"@heroui/react";
 
 export function SkeletonTable({ rows = 5 }: { rows?: number }) {
-  const safeRows = Math.max(0, Math.floor(rows));
+ const safeRows = Math.max(0, Math.floor(rows));
  return (
- <div className="rounded-2xl border border-zinc-100 bg-white shadow-apple ring-0 overflow-hidden">
+ <div className="rounded-2xl border border-border bg-white shadow-apple ring-0 overflow-hidden">
  <div className="p-6 pb-0 space-y-2">
  <Skeleton className="h-5 w-40 rounded-lg" />
  <Skeleton className="h-3 w-56 rounded-lg" />
@@ -18,7 +18,7 @@ export function SkeletonTable({ rows = 5 }: { rows?: number }) {
  </div>
 
  <div className="p-6 pt-4 space-y-3">
- <div className="hidden md:grid grid-cols-[120px_1fr_120px_100px_80px] gap-4 pb-3 border-b border-zinc-100">
+ <div className="hidden md:grid grid-cols-[120px_1fr_120px_100px_80px] gap-4 pb-3 border-b border-border">
  <Skeleton className="h-3 w-16 rounded" />
  <Skeleton className="h-3 w-24 rounded" />
  <Skeleton className="h-3 w-20 rounded" />
@@ -42,7 +42,7 @@ export function SkeletonTable({ rows = 5 }: { rows?: number }) {
  {Array.from({ length: safeRows }).map((_, index) => (
  <div
  key={`mobile-${index}`}
- className="md:hidden flex flex-col gap-2 py-3 border-b border-zinc-100 last:border-b-0"
+ className="md:hidden flex flex-col gap-2 py-3 border-b border-border last:border-b-0"
  >
  <div className="flex items-start justify-between gap-2">
  <Skeleton className="h-4 w-3/4 rounded" />
