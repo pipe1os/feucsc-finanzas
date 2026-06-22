@@ -36,7 +36,7 @@ export default function CategorySelect({
  }
  };
  document.addEventListener("mousedown", handler);
- return () => document.removeEventListener("mousedown", handler);
+ return () => { document.removeEventListener("mousedown", handler); };
  }, []);
 
  const confirmNewCategory = () => {
@@ -150,7 +150,7 @@ export default function CategorySelect({
  placeholder="Nombre..."
  aria-label="Nombre de nueva categoría"
  value={newCatName}
- onChange={(e) => setNewCatName(e.target.value)}
+ onChange={(e) => { setNewCatName(e.target.value); }}
  onKeyDown={(e) => {
  if (e.key ==="Enter") {
  e.preventDefault();
@@ -169,7 +169,7 @@ export default function CategorySelect({
  </button>
  <button
  type="button"
- onClick={() => setIsCreating(false)}
+ onClick={() => { setIsCreating(false); }}
  className="inline-flex items-center justify-center rounded-lg border border-border px-2 py-1.5 text-zinc-400 text-xs hover:bg-zinc-100 transition-colors cursor-pointer"
  >
  ✕

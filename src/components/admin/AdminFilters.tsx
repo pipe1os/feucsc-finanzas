@@ -130,7 +130,7 @@ export default function AdminFilters({
  placeholder="Buscar..."
  aria-label="Buscar gastos"
  defaultValue=""
- onChange={(e) => onSearch(e.target.value)}
+ onChange={(e) => { onSearch(e.target.value); }}
  className="w-full h-9 rounded-xl border border-border bg-zinc-50 pl-10 pr-4 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 outline-hidden transition-all duration-200 focus:border-red-300 focus:ring-2 focus:ring-red-100"
  />
  </div>

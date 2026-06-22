@@ -75,12 +75,12 @@ export default function AdminPage() {
  const [state, dispatch] = useReducer(adminReducer, initialState);
  const { page, searchQuery, selectedMonth, selectedCategory, sortDescriptor, deletingCat, editGasto, deleteGasto, lightboxUrl } = state;
 
- const setPage = (p: number | ((prev: number) => number)) => dispatch({ type:"SET_PAGE", payload: typeof p ==="function" ? p(page) : p });
- const setSortDescriptor = (s: SortDescriptor | ((prev: SortDescriptor) => SortDescriptor)) => dispatch({ type:"SET_SORT", payload: typeof s ==="function" ? s(sortDescriptor) : s });
- const setDeletingCat = (c: string | null) => dispatch({ type:"SET_DELETING_CAT", payload: c });
- const setEditGasto = (g: GastoDB | null) => dispatch({ type:"SET_EDIT_GASTO", payload: g });
- const setDeleteGasto = (g: GastoDB | null) => dispatch({ type:"SET_DELETE_GASTO", payload: g });
- const setLightboxUrl = (url: string | null) => dispatch({ type:"SET_LIGHTBOX_URL", payload: url });
+ const setPage = (p: number | ((prev: number) => number)) => { dispatch({ type:"SET_PAGE", payload: typeof p ==="function" ? p(page) : p }); };
+ const setSortDescriptor = (s: SortDescriptor | ((prev: SortDescriptor) => SortDescriptor)) => { dispatch({ type:"SET_SORT", payload: typeof s ==="function" ? s(sortDescriptor) : s }); };
+ const setDeletingCat = (c: string | null) => { dispatch({ type:"SET_DELETING_CAT", payload: c }); };
+ const setEditGasto = (g: GastoDB | null) => { dispatch({ type:"SET_EDIT_GASTO", payload: g }); };
+ const setDeleteGasto = (g: GastoDB | null) => { dispatch({ type:"SET_DELETE_GASTO", payload: g }); };
+ const setLightboxUrl = (url: string | null) => { dispatch({ type:"SET_LIGHTBOX_URL", payload: url }); };
 
  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -164,12 +164,12 @@ export default function AdminPage() {
  </div>
  <AdminFilters
  selectedMonth={selectedMonth}
- setSelectedMonth={(val) => dispatch({ type:"SET_MONTH", payload: val })}
+ setSelectedMonth={(val) => { dispatch({ type:"SET_MONTH", payload: val }); }}
  selectedCategory={selectedCategory}
- setSelectedCategory={(val) => dispatch({ type:"SET_CATEGORY", payload: val })}
+ setSelectedCategory={(val) => { dispatch({ type:"SET_CATEGORY", payload: val }); }}
  onSearch={handleSearch}
  categoriasDB={categoriasDB}
- onClear={() => dispatch({ type:"CLEAR_FILTERS" })}
+ onClear={() => { dispatch({ type:"CLEAR_FILTERS" }); }}
  />
  </div>
  <div className="p-6 pt-4">

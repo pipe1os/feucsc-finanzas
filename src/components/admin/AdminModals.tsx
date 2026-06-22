@@ -91,7 +91,7 @@ export default function AdminModals({
  <>
  <Modal.Backdrop
  isOpen={!!editGasto}
- onOpenChange={() => setEditGasto(null)}
+ onOpenChange={() => { setEditGasto(null); }}
  >
  <Modal.Container>
  <Modal.Dialog className="sm:max-w-lg bg-white border border-border shadow-apple-lg">
@@ -114,7 +114,7 @@ export default function AdminModals({
  mutateGastos();
  toast.success("Gasto actualizado exitosamente");
  }}
- onCancel={() => setEditGasto(null)}
+ onCancel={() => { setEditGasto(null); }}
  onDeleteCategory={setDeletingCat}
  onViewImage={setLightboxUrl}
  />
@@ -125,7 +125,7 @@ export default function AdminModals({
  </Modal.Backdrop>
  <AlertDialog.Backdrop
  isOpen={!!deleteGasto}
- onOpenChange={() => setDeleteGasto(null)}
+ onOpenChange={() => { setDeleteGasto(null); }}
  >
  <AlertDialog.Container>
  <AlertDialog.Dialog className="sm:max-w-100 bg-white border border-border shadow-apple-lg">
@@ -174,7 +174,7 @@ export default function AdminModals({
  </AlertDialog.Backdrop>
  <AlertDialog.Backdrop
  isOpen={!!deletingCat}
- onOpenChange={() => setDeletingCat(null)}
+ onOpenChange={() => { setDeletingCat(null); }}
  >
  <AlertDialog.Container>
  <AlertDialog.Dialog className="sm:max-w-100 bg-white border border-border shadow-apple-lg">
@@ -212,7 +212,7 @@ export default function AdminModals({
  </AlertDialog.Backdrop>
  <Modal.Backdrop
  isOpen={!!lightboxUrl}
- onOpenChange={() => setLightboxUrl(null)}
+ onOpenChange={() => { setLightboxUrl(null); }}
  >
  <Modal.Container size="lg">
  <Modal.Dialog>

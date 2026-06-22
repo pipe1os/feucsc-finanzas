@@ -17,7 +17,7 @@ async function requireAuth() {
 
 export async function deleteCloudinaryImage(url: string) {
  try {
- if (!url || !url.startsWith("https://res.cloudinary.com/")) {
+ if (!url.startsWith("https://res.cloudinary.com/")) {
  return { success: false, error:"Invalid Cloudinary URL" };
  }
 

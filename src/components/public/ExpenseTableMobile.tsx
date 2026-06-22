@@ -109,7 +109,7 @@ export function ExpenseTableMobile({
  )}
  {txn.comprobante ? (
  <m.button type="button"
- onClick={() => onViewLightbox(txn.comprobante, txn.concepto)}
+ onClick={() => { onViewLightbox(txn.comprobante, txn.concepto); }}
  className="inline-flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 transition-colors cursor-pointer rounded-sm focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
  aria-label={`Ver comprobante de ${txn.concepto}`}
  whileHover={{ scale: 1.05 }}
@@ -146,7 +146,7 @@ export function ExpenseTableMobile({
  <Pagination.Item>
  <Pagination.Previous
  isDisabled={page === 1}
- onPress={() => onPageChange(Math.max(1, page - 1))}
+ onPress={() => { onPageChange(Math.max(1, page - 1)); }}
  >
  <Pagination.PreviousIcon />
  </Pagination.Previous>
@@ -157,7 +157,7 @@ export function ExpenseTableMobile({
  <Pagination.Item>
  <Pagination.Next
  isDisabled={page === totalPages}
- onPress={() => onPageChange(Math.min(totalPages, page + 1))}
+ onPress={() => { onPageChange(Math.min(totalPages, page + 1)); }}
  >
  <Pagination.NextIcon />
  </Pagination.Next>

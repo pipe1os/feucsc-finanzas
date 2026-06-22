@@ -147,7 +147,7 @@ export default function AdminDesktopTable({
  <Tooltip.Trigger>
  <button
  type="button"
- onClick={() => openEdit(g)}
+ onClick={() => { openEdit(g); }}
  className="inline-flex items-center justify-center size-8 rounded-full bg-zinc-100 text-zinc-600 hover:bg-zinc-200 transition-all duration-200 cursor-pointer"
  aria-label="Editar"
  >
@@ -162,7 +162,7 @@ export default function AdminDesktopTable({
  <Tooltip.Trigger>
  <button
  type="button"
- onClick={() => setDeleteGasto(g)}
+ onClick={() => { setDeleteGasto(g); }}
  className="inline-flex items-center justify-center size-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transition-all duration-200 cursor-pointer"
  aria-label="Eliminar"
  >
@@ -191,7 +191,7 @@ export default function AdminDesktopTable({
  <Pagination.Item>
  <Pagination.Previous
  isDisabled={page === 1}
- onPress={() => setPage((p) => Math.max(1, typeof p ==="number" ? p - 1 : p))}
+ onPress={() => { setPage((p) => Math.max(1, typeof p ==="number" ? p - 1 : p)); }}
  >
  <Pagination.PreviousIcon />
  Ant.
@@ -199,7 +199,7 @@ export default function AdminDesktopTable({
  </Pagination.Item>
  {pages.map((p) => (
  <Pagination.Item key={p}>
- <Pagination.Link isActive={p === page} onPress={() => setPage(p)}>
+ <Pagination.Link isActive={p === page} onPress={() => { setPage(p); }}>
  {p}
  </Pagination.Link>
  </Pagination.Item>
@@ -207,7 +207,7 @@ export default function AdminDesktopTable({
  <Pagination.Item>
  <Pagination.Next
  isDisabled={page === totalPages}
- onPress={() => setPage((p) => Math.min(totalPages, typeof p ==="number" ? p + 1 : p))}
+ onPress={() => { setPage((p) => Math.min(totalPages, typeof p ==="number" ? p + 1 : p)); }}
  >
  Sig.
  <Pagination.NextIcon />

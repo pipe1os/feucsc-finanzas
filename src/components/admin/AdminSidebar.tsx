@@ -27,7 +27,7 @@ export default function AdminSidebar() {
  menuIconRef.current?.stopAnimation();
  }
  };
- const closeSidebar = () => toggleSidebar(false);
+ const closeSidebar = () => { toggleSidebar(false); };
 
  const handleSignOut = async () => {
  await supabase.auth.signOut();
@@ -37,7 +37,7 @@ export default function AdminSidebar() {
  return (
  <>
  <button type="button"
- onClick={() => toggleSidebar(!sidebarOpen)}
+ onClick={() => { toggleSidebar(!sidebarOpen); }}
  className="fixed top-4 right-4 z-50 flex items-center justify-center
  size-10 rounded-xl bg-white shadow-apple-lg lg:hidden
  transition-colors hover:bg-zinc-50 cursor-pointer"

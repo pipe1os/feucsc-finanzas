@@ -37,7 +37,7 @@ export default function DashboardClient({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const search = searchParams.get("search")?.toLowerCase() || "";
+  const search = searchParams.get("search")?.toLowerCase() ?? "";
   const activeCategoryFilter = searchParams.get("categoria") || "all";
   const mesFilter = searchParams.get("mes") || "all";
   const sortCol = searchParams.get("sort") || "fecha";
@@ -86,7 +86,7 @@ export default function DashboardClient({
     const sortKey = sortCol === "descripcion" ? "concepto" : sortCol;
     
     // Create a new array for sorting
-    result = [...result].sort((a, b) => {
+    result = result.toSorted((a, b) => {
       const valA = a[sortKey as keyof Transaccion];
       const valB = b[sortKey as keyof Transaccion];
 
@@ -110,7 +110,7 @@ export default function DashboardClient({
     const map = new Map<string, number>();
     filteredTransacciones.forEach((t) => {
       const cat = t.categoria || "Varios";
-      map.set(cat, (map.get(cat) || 0) + t.monto);
+      map.set(cat, (map.get(cat) ?? 0) + t.monto);
     });
 
     return Array.from(map.entries())

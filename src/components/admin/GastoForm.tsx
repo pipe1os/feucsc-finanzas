@@ -115,7 +115,7 @@ export default function GastoForm({
  isRequired
  name="fecha"
  type="date"
- onChange={(val) => setState({ fecha: val })}
+ onChange={(val) => { setState({ fecha: val }); }}
  className="w-full"
  >
  <Label>Fecha</Label>
@@ -143,7 +143,7 @@ export default function GastoForm({
  <TextField
  isRequired
  name="descripcion"
- onChange={(val) => setState({ descripcion: val })}
+ onChange={(val) => { setState({ descripcion: val }); }}
  className="w-full"
  >
  <Label>Descripción</Label>
@@ -158,7 +158,7 @@ export default function GastoForm({
  isRequired
  name="monto"
  type="number"
- onChange={(val) => setState({ monto: val })}
+ onChange={(val) => { setState({ monto: val }); }}
  className="w-full"
  >
  <Label>Monto</Label>
@@ -170,7 +170,7 @@ export default function GastoForm({
  </TextField>
  <ComprobanteUpload
  selectedFile={state.selectedFile}
- setSelectedFile={(val) => setState({ selectedFile: val })}
+ setSelectedFile={(val) => { setState({ selectedFile: val }); }}
  />
  </div>
  {state.formError && (

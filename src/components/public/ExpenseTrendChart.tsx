@@ -55,7 +55,7 @@ interface CustomTooltipProps {
 }
 
 function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
- if (active && payload && payload.length) {
+ if (active && payload?.length) {
  const dataPoint = payload[0]?.payload;
  const topCats = (dataPoint?.categorias || []).slice(0, 3);
 

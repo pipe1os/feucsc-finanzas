@@ -51,7 +51,7 @@ export default function AuthCallback() {
  supabase.auth.getSession().then(({ data: { session } }) => {
  if (!mounted) return;
  if (session?.user?.email) {
- verifyAndRedirect(session.user.email);
+ void verifyAndRedirect(session.user.email);
  }
  });
 
@@ -63,7 +63,7 @@ export default function AuthCallback() {
  (event ==="SIGNED_IN" || event ==="INITIAL_SESSION") &&
  newSession?.user?.email
  ) {
- verifyAndRedirect(newSession.user.email);
+ void verifyAndRedirect(newSession.user.email);
  }
  });
 

@@ -37,7 +37,7 @@ export default function AdminLayout({
  }
  };
 
- checkAuth();
+ void checkAuth();
 
  const {
  data: { subscription },
@@ -84,13 +84,13 @@ export default function AdminLayout({
  };
 
  const events = ["mousemove","keydown","click","scroll"];
- events.forEach((event) => window.addEventListener(event, resetTimer));
+ events.forEach((event) => { window.addEventListener(event, resetTimer); });
  window.addEventListener("touchstart", resetTimer, { passive: true });
 
  startTimer();
 
  return () => {
- events.forEach((event) => window.removeEventListener(event, resetTimer));
+ events.forEach((event) => { window.removeEventListener(event, resetTimer); });
  window.removeEventListener("touchstart", resetTimer);
  clearTimeout(timer);
  };

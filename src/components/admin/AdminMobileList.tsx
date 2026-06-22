@@ -143,7 +143,7 @@ export default function AdminMobileList({
  <Pagination.Item>
  <Pagination.Previous
  isDisabled={page === 1}
- onPress={() => setPage((p) => Math.max(1, typeof p ==="number" ? p - 1 : p))}
+ onPress={() => { setPage((p) => Math.max(1, typeof p ==="number" ? p - 1 : p)); }}
  >
  <Pagination.PreviousIcon />
  </Pagination.Previous>
@@ -154,7 +154,7 @@ export default function AdminMobileList({
  <Pagination.Item>
  <Pagination.Next
  isDisabled={page === totalPages}
- onPress={() => setPage((p) => Math.min(totalPages, typeof p ==="number" ? p + 1 : p))}
+ onPress={() => { setPage((p) => Math.min(totalPages, typeof p ==="number" ? p + 1 : p)); }}
  >
  <Pagination.NextIcon />
  </Pagination.Next>
