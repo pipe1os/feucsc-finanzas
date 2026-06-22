@@ -96,7 +96,7 @@ export default function EditGastoForm({
  form.append("descripcion", state.descripcion.trim());
  form.append("categoria", state.categoria);
  form.append("monto", state.monto);
- form.append("comprobante_url", finalUrl ??"");
+ form.append("comprobante_url", finalUrl ||"");
  await updateGasto(form);
 
  if (originalUrl && originalUrl !== finalUrl) {

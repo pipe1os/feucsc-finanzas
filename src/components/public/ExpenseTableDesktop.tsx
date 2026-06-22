@@ -143,7 +143,7 @@ export function ExpenseTableDesktop({
  )}
  >
  {(txn: TransaccionItem) => {
- const catColor = txn.color ??"#9CA3AF";
+ const catColor = txn.color ||"#9CA3AF";
  return (
  <Table.Row key={txn.id} className="group cursor-pointer hover:bg-zinc-50 transition-colors duration-200">
  <Table.Cell>

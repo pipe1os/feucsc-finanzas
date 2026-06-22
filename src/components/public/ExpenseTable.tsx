@@ -46,12 +46,12 @@ function ExpenseTable({
  const pathname = usePathname();
  const searchParams = useSearchParams();
 
- const searchQuery = searchParams.get("search") ??"";
+ const searchQuery = searchParams.get("search") || "";
  const page = Number(searchParams.get("page")) || 1;
- const selectedMonth = searchParams.get("mes") ??"all";
- const selectedCategory = searchParams.get("categoria") ??"all";
- const sortCol = searchParams.get("sort") ??"fecha";
- const sortDir = searchParams.get("direction") ??"descending";
+ const selectedMonth = searchParams.get("mes") || "all";
+ const selectedCategory = searchParams.get("categoria") || "all";
+ const sortCol = searchParams.get("sort") || "fecha";
+ const sortDir = searchParams.get("direction") || "descending";
 
  const sortDescriptor: SortDescriptor = {
  column: sortCol as string,

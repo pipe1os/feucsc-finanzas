@@ -38,10 +38,10 @@ export default function DashboardClient({
   const searchParams = useSearchParams();
 
   const search = searchParams.get("search")?.toLowerCase() ?? "";
-  const activeCategoryFilter = searchParams.get("categoria") ?? "all";
-  const mesFilter = searchParams.get("mes") ?? "all";
-  const sortCol = searchParams.get("sort") ?? "fecha";
-  const sortDir = searchParams.get("direction") ?? "descending";
+  const activeCategoryFilter = searchParams.get("categoria") || "all";
+  const mesFilter = searchParams.get("mes") || "all";
+  const sortCol = searchParams.get("sort") || "fecha";
+  const sortDir = searchParams.get("direction") || "descending";
   const page = Number(searchParams.get("page")) || 1;
   const ROWS_PER_PAGE = 10;
 

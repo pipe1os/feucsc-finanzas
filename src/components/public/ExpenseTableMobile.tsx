@@ -72,7 +72,7 @@ export function ExpenseTableMobile({
  )}
  >
  {(txn: TransaccionItem) => {
- const catColor = txn.color ??"#9CA3AF";
+ const catColor = txn.color ||"#9CA3AF";
  return (
  <ListBox.Item
  key={txn.id}
