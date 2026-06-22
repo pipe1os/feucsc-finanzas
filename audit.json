@@ -1,0 +1,528 @@
+{
+  "advisories": {
+    "1120082": {
+      "findings": [
+        {
+          "version": "4.12.19",
+          "paths": [
+            ".>shadcn>@modelcontextprotocol/sdk>@hono/node-server>hono",
+            ".>shadcn>@modelcontextprotocol/sdk>hono"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120082,
+      "title": "Hono: IP Restriction bypasses static deny rules for non-canonical IPv6 ",
+      "module_name": "hono",
+      "vulnerable_versions": "<4.12.21",
+      "patched_versions": ">=4.12.21",
+      "severity": "moderate",
+      "cwe": "CWE-185, CWE-1289",
+      "github_advisory_id": "GHSA-xrhx-7g5j-rcj5",
+      "url": "https://github.com/advisories/GHSA-xrhx-7g5j-rcj5"
+    },
+    "1120083": {
+      "findings": [
+        {
+          "version": "4.12.19",
+          "paths": [
+            ".>shadcn>@modelcontextprotocol/sdk>@hono/node-server>hono",
+            ".>shadcn>@modelcontextprotocol/sdk>hono"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120083,
+      "title": "Hono: Cookie helper does not sanitize sameSite and priority, allowing Set-Cookie injection",
+      "module_name": "hono",
+      "vulnerable_versions": "<4.12.21",
+      "patched_versions": ">=4.12.21",
+      "severity": "moderate",
+      "cwe": "CWE-113, CWE-1287",
+      "github_advisory_id": "GHSA-3hrh-pfw6-9m5x",
+      "url": "https://github.com/advisories/GHSA-3hrh-pfw6-9m5x"
+    },
+    "1120084": {
+      "findings": [
+        {
+          "version": "4.12.19",
+          "paths": [
+            ".>shadcn>@modelcontextprotocol/sdk>@hono/node-server>hono",
+            ".>shadcn>@modelcontextprotocol/sdk>hono"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120084,
+      "title": "Hono: JWT middleware accepts any Authorization scheme, not only Bearer",
+      "module_name": "hono",
+      "vulnerable_versions": "<4.12.21",
+      "patched_versions": ">=4.12.21",
+      "severity": "moderate",
+      "cwe": "CWE-285",
+      "github_advisory_id": "GHSA-f577-qrjj-4474",
+      "url": "https://github.com/advisories/GHSA-f577-qrjj-4474"
+    },
+    "1120085": {
+      "findings": [
+        {
+          "version": "4.12.19",
+          "paths": [
+            ".>shadcn>@modelcontextprotocol/sdk>@hono/node-server>hono",
+            ".>shadcn>@modelcontextprotocol/sdk>hono"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120085,
+      "title": "Hono: app.mount() strips mount prefix using undecoded path, causing incorrect routing for percent-encoded paths",
+      "module_name": "hono",
+      "vulnerable_versions": "<4.12.21",
+      "patched_versions": ">=4.12.21",
+      "severity": "moderate",
+      "cwe": "CWE-444, CWE-693",
+      "github_advisory_id": "GHSA-2gcr-mfcq-wcc3",
+      "url": "https://github.com/advisories/GHSA-2gcr-mfcq-wcc3"
+    },
+    "1120786": {
+      "findings": [
+        {
+          "version": "8.0.13",
+          "paths": [
+            ".>@vitest/coverage-v8>vitest>@vitest/mocker>vite",
+            ".>@vitest/coverage-v8>vitest>vite",
+            ".>vitest>@vitest/mocker>vite",
+            ".>vitest>vite"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120786,
+      "title": "launch-editor: NTLMv2 hash disclosure via UNC path handling on Windows",
+      "module_name": "vite",
+      "vulnerable_versions": ">=8.0.0 <=8.0.15",
+      "patched_versions": ">=8.0.16",
+      "severity": "moderate",
+      "cwe": "CWE-73, CWE-522",
+      "github_advisory_id": "GHSA-v6wh-96g9-6wx3",
+      "url": "https://github.com/advisories/GHSA-v6wh-96g9-6wx3"
+    },
+    "1120791": {
+      "findings": [
+        {
+          "version": "8.0.13",
+          "paths": [
+            ".>@vitest/coverage-v8>vitest>@vitest/mocker>vite",
+            ".>@vitest/coverage-v8>vitest>vite",
+            ".>vitest>@vitest/mocker>vite",
+            ".>vitest>vite"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120791,
+      "title": "vite: `server.fs.deny` bypass on Windows alternate paths",
+      "module_name": "vite",
+      "vulnerable_versions": ">=8.0.0 <=8.0.15",
+      "patched_versions": ">=8.0.16",
+      "severity": "high",
+      "cwe": "CWE-22, CWE-200",
+      "github_advisory_id": "GHSA-fx2h-pf6j-xcff",
+      "url": "https://github.com/advisories/GHSA-fx2h-pf6j-xcff"
+    },
+    "1120792": {
+      "findings": [
+        {
+          "version": "4.1.1",
+          "paths": [
+            ".>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-import-resolver-typescript>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-import-resolver-typescript>eslint-plugin-import>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-import-resolver-typescript>eslint-plugin-import>eslint-module-utils>@typescript-eslint/parser>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-import-resolver-typescript>eslint-plugin-import>eslint-module-utils>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-import-resolver-typescript>eslint-plugin-import>@typescript-eslint/parser>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-plugin-import>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-plugin-import>eslint-module-utils>@typescript-eslint/parser>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-plugin-import>eslint-module-utils>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-plugin-import>eslint-module-utils>eslint-import-resolver-typescript>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-plugin-import>@typescript-eslint/parser>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-plugin-jsx-a11y>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-plugin-react>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>eslint-plugin-react-hooks>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>typescript-eslint>@typescript-eslint/parser>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>typescript-eslint>@typescript-eslint/utils>eslint>@eslint/eslintrc>js-yaml",
+            ".>eslint-config-next>typescript-eslint>eslint>@eslint/eslintrc>js-yaml",
+            ".>shadcn>cosmiconfig>js-yaml"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120792,
+      "title": "JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases",
+      "module_name": "js-yaml",
+      "vulnerable_versions": "<=4.1.1",
+      "patched_versions": ">=4.1.2",
+      "severity": "moderate",
+      "cwe": "CWE-407",
+      "github_advisory_id": "GHSA-h67p-54hq-rp68",
+      "url": "https://github.com/advisories/GHSA-h67p-54hq-rp68"
+    },
+    "1120793": {
+      "findings": [
+        {
+          "version": "7.29.0",
+          "paths": [
+            ".>@vercel/analytics>next>styled-jsx>@babel/core",
+            ".>@vercel/speed-insights>next>styled-jsx>@babel/core",
+            ".>next>styled-jsx>@babel/core",
+            ".>eslint-config-next>eslint-plugin-react-hooks>@babel/core",
+            ".>shadcn>@babel/core",
+            ".>shadcn>@babel/plugin-transform-typescript>@babel/core",
+            ".>shadcn>@babel/plugin-transform-typescript>@babel/helper-create-class-features-plugin>@babel/core",
+            ".>shadcn>@babel/plugin-transform-typescript>@babel/helper-create-class-features-plugin>@babel/helper-replace-supers>@babel/core",
+            ".>shadcn>@babel/plugin-transform-typescript>@babel/plugin-syntax-typescript>@babel/core",
+            ".>shadcn>@babel/preset-typescript>@babel/core",
+            ".>shadcn>@babel/preset-typescript>@babel/plugin-syntax-jsx>@babel/core",
+            ".>shadcn>@babel/preset-typescript>@babel/plugin-transform-modules-commonjs>@babel/core",
+            ".>shadcn>@babel/preset-typescript>@babel/plugin-transform-modules-commonjs>@babel/helper-module-transforms>@babel/core",
+            ".>shadcn>@babel/preset-typescript>@babel/plugin-transform-typescript>@babel/core",
+            ".>shadcn>@babel/preset-typescript>@babel/plugin-transform-typescript>@babel/helper-create-class-features-plugin>@babel/core",
+            ".>shadcn>@babel/preset-typescript>@babel/plugin-transform-typescript>@babel/helper-create-class-features-plugin>@babel/helper-replace-supers>@babel/core",
+            ".>shadcn>@babel/preset-typescript>@babel/plugin-transform-typescript>@babel/plugin-syntax-typescript>@babel/core"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120793,
+      "title": "@babel/core: Arbitrary File Read via sourceMappingURL Comment",
+      "module_name": "@babel/core",
+      "vulnerable_versions": "<=7.29.0",
+      "patched_versions": ">=7.29.1",
+      "severity": "low",
+      "cwe": "CWE-22, CWE-200",
+      "github_advisory_id": "GHSA-4x5r-pxfx-6jf8",
+      "url": "https://github.com/advisories/GHSA-4x5r-pxfx-6jf8"
+    },
+    "1120910": {
+      "findings": [
+        {
+          "version": "4.12.19",
+          "paths": [
+            ".>shadcn>@modelcontextprotocol/sdk>@hono/node-server>hono",
+            ".>shadcn>@modelcontextprotocol/sdk>hono"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120910,
+      "title": "hono: Path traversal in `serve-static` on Windows via encoded backslash (`%5C`)",
+      "module_name": "hono",
+      "vulnerable_versions": "<4.12.25",
+      "patched_versions": ">=4.12.25",
+      "severity": "moderate",
+      "cwe": "CWE-22",
+      "github_advisory_id": "GHSA-wwfh-h76j-fc44",
+      "url": "https://github.com/advisories/GHSA-wwfh-h76j-fc44"
+    },
+    "1120911": {
+      "findings": [
+        {
+          "version": "4.12.19",
+          "paths": [
+            ".>shadcn>@modelcontextprotocol/sdk>@hono/node-server>hono",
+            ".>shadcn>@modelcontextprotocol/sdk>hono"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120911,
+      "title": "hono: AWS Lambda adapter merges multiple `Set-Cookie` headers into one value, dropping cookies on ALB single-header and Lattice",
+      "module_name": "hono",
+      "vulnerable_versions": "<4.12.25",
+      "patched_versions": ">=4.12.25",
+      "severity": "moderate",
+      "cwe": "CWE-116",
+      "github_advisory_id": "GHSA-j6c9-x7qj-28xf",
+      "url": "https://github.com/advisories/GHSA-j6c9-x7qj-28xf"
+    },
+    "1120913": {
+      "findings": [
+        {
+          "version": "4.12.19",
+          "paths": [
+            ".>shadcn>@modelcontextprotocol/sdk>@hono/node-server>hono",
+            ".>shadcn>@modelcontextprotocol/sdk>hono"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120913,
+      "title": "hono: CORS Middleware reflects any Origin with credentials when `origin` defaults to the wildcard",
+      "module_name": "hono",
+      "vulnerable_versions": "<4.12.25",
+      "patched_versions": ">=4.12.25",
+      "severity": "high",
+      "cwe": "CWE-942",
+      "github_advisory_id": "GHSA-88fw-hqm2-52qc",
+      "url": "https://github.com/advisories/GHSA-88fw-hqm2-52qc"
+    },
+    "1120921": {
+      "findings": [
+        {
+          "version": "4.12.19",
+          "paths": [
+            ".>shadcn>@modelcontextprotocol/sdk>@hono/node-server>hono",
+            ".>shadcn>@modelcontextprotocol/sdk>hono"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120921,
+      "title": "hono: Body Limit Middleware can be bypassed on AWS Lambda by understating `Content-Length`",
+      "module_name": "hono",
+      "vulnerable_versions": "<4.12.25",
+      "patched_versions": ">=4.12.25",
+      "severity": "moderate",
+      "cwe": "CWE-345",
+      "github_advisory_id": "GHSA-rv63-4mwf-qqc2",
+      "url": "https://github.com/advisories/GHSA-rv63-4mwf-qqc2"
+    },
+    "1120922": {
+      "findings": [
+        {
+          "version": "4.12.19",
+          "paths": [
+            ".>shadcn>@modelcontextprotocol/sdk>@hono/node-server>hono",
+            ".>shadcn>@modelcontextprotocol/sdk>hono"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120922,
+      "title": "hono: Lambda@Edge adapter keeps only the last value of a repeated request header, dropping the rest",
+      "module_name": "hono",
+      "vulnerable_versions": "<4.12.25",
+      "patched_versions": ">=4.12.25",
+      "severity": "moderate",
+      "cwe": "CWE-348",
+      "github_advisory_id": "GHSA-wgpf-jwqj-8h8p",
+      "url": "https://github.com/advisories/GHSA-wgpf-jwqj-8h8p"
+    },
+    "1121187": {
+      "findings": [
+        {
+          "version": "7.27.2",
+          "paths": [
+            ".>@vitest/coverage-v8>vitest>jsdom>undici",
+            ".>jsdom>undici",
+            ".>vitest>jsdom>undici"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1121187,
+      "title": "undici vulnerable to TLS certificate validation bypass via dropped requestTls in SOCKS5 ProxyAgent",
+      "module_name": "undici",
+      "vulnerable_versions": ">=7.23.0 <7.28.0",
+      "patched_versions": ">=7.28.0",
+      "severity": "high",
+      "cwe": "CWE-295",
+      "github_advisory_id": "GHSA-vmh5-mc38-953g",
+      "url": "https://github.com/advisories/GHSA-vmh5-mc38-953g"
+    },
+    "1121189": {
+      "findings": [
+        {
+          "version": "7.27.2",
+          "paths": [
+            ".>@vitest/coverage-v8>vitest>jsdom>undici",
+            ".>jsdom>undici",
+            ".>vitest>jsdom>undici"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1121189,
+      "title": "undici vulnerable to cross-user information disclosure via shared cache whitespace bypass",
+      "module_name": "undici",
+      "vulnerable_versions": ">=7.0.0 <7.28.0",
+      "patched_versions": ">=7.28.0",
+      "severity": "moderate",
+      "cwe": "CWE-524",
+      "github_advisory_id": "GHSA-pr7r-676h-xcf6",
+      "url": "https://github.com/advisories/GHSA-pr7r-676h-xcf6"
+    },
+    "1121241": {
+      "findings": [
+        {
+          "version": "7.27.2",
+          "paths": [
+            ".>@vitest/coverage-v8>vitest>jsdom>undici",
+            ".>jsdom>undici",
+            ".>vitest>jsdom>undici"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1121241,
+      "title": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+      "module_name": "undici",
+      "vulnerable_versions": ">=7.0.0 <7.28.0",
+      "patched_versions": ">=7.28.0",
+      "severity": "moderate",
+      "cwe": "CWE-93",
+      "github_advisory_id": "GHSA-p88m-4jfj-68fv",
+      "url": "https://github.com/advisories/GHSA-p88m-4jfj-68fv"
+    },
+    "1121244": {
+      "findings": [
+        {
+          "version": "7.27.2",
+          "paths": [
+            ".>@vitest/coverage-v8>vitest>jsdom>undici",
+            ".>jsdom>undici",
+            ".>vitest>jsdom>undici"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1121244,
+      "title": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+      "module_name": "undici",
+      "vulnerable_versions": ">=7.0.0 <7.28.0",
+      "patched_versions": ">=7.28.0",
+      "severity": "high",
+      "cwe": "CWE-400, CWE-770",
+      "github_advisory_id": "GHSA-vxpw-j846-p89q",
+      "url": "https://github.com/advisories/GHSA-vxpw-j846-p89q"
+    },
+    "1121247": {
+      "findings": [
+        {
+          "version": "7.27.2",
+          "paths": [
+            ".>@vitest/coverage-v8>vitest>jsdom>undici",
+            ".>jsdom>undici",
+            ".>vitest>jsdom>undici"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1121247,
+      "title": "undici vulnerable to cross-origin request routing via SOCKS5 proxy pool reuse",
+      "module_name": "undici",
+      "vulnerable_versions": ">=7.23.0 <7.28.0",
+      "patched_versions": ">=7.28.0",
+      "severity": "high",
+      "cwe": "CWE-346",
+      "github_advisory_id": "GHSA-hm92-r4w5-c3mj",
+      "url": "https://github.com/advisories/GHSA-hm92-r4w5-c3mj"
+    },
+    "1121249": {
+      "findings": [
+        {
+          "version": "7.27.2",
+          "paths": [
+            ".>@vitest/coverage-v8>vitest>jsdom>undici",
+            ".>jsdom>undici",
+            ".>vitest>jsdom>undici"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1121249,
+      "title": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+      "module_name": "undici",
+      "vulnerable_versions": ">=7.0.0 <7.28.0",
+      "patched_versions": ">=7.28.0",
+      "severity": "low",
+      "cwe": "CWE-367",
+      "github_advisory_id": "GHSA-35p6-xmwp-9g52",
+      "url": "https://github.com/advisories/GHSA-35p6-xmwp-9g52"
+    },
+    "1121254": {
+      "findings": [
+        {
+          "version": "7.27.2",
+          "paths": [
+            ".>@vitest/coverage-v8>vitest>jsdom>undici",
+            ".>jsdom>undici",
+            ".>vitest>jsdom>undici"
+          ],
+          "dev": true,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1121254,
+      "title": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+      "module_name": "undici",
+      "vulnerable_versions": ">=7.0.0 <7.28.0",
+      "patched_versions": ">=7.28.0",
+      "severity": "low",
+      "cwe": "CWE-183",
+      "github_advisory_id": "GHSA-g8m3-5g58-fq7m",
+      "url": "https://github.com/advisories/GHSA-g8m3-5g58-fq7m"
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 3,
+      "moderate": 12,
+      "high": 5,
+      "critical": 0
+    },
+    "dependencies": 176,
+    "devDependencies": 700,
+    "optionalDependencies": 98,
+    "totalDependencies": 911
+  }
+}
