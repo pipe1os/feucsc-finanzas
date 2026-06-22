@@ -29,7 +29,11 @@ export async function uploadComprobanteAction(
 
  const file = formData.get("file");
 
-  if (!file || typeof file === "string") {
+  if (!file) {
+    throw new Error("No se proporcionó ningún archivo");
+  }
+
+  if (typeof file === "string") {
     throw new Error("No se proporcionó ningún archivo válido");
   }
 
