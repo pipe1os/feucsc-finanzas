@@ -69,7 +69,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Test
-        run: pnpm test
+        run: pnpm test:coverage
+      - name: Report Coverage
+        uses: davelosert/vitest-coverage-report-action@v2
+        if: always()
 
   build:
     runs-on: ubuntu-latest
