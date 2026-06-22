@@ -44,7 +44,7 @@ export default function Loading() {
  </div>
  </header>
  
- <div className="space-y-6 animate-fade-in-up opacity-0" style={{ animationDelay: "150ms" }}>
+ <div className="space-y-6 animate-fade-in-up opacity-0" style={{ animationDelay:"150ms" }}>
  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
  <div className="col-span-1 lg:col-span-8">
  <SkeletonChart type="trend" />

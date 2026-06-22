@@ -1,10 +1,10 @@
-import { Metadata } from "next";
+import { Metadata } from"next";
 
 export const metadata: Metadata = {
-  title: "Contacto | FEUCSC",
-  description: "Ponte en contacto con la Federación de Estudiantes UCSC.",
+ title:"Contacto | FEUCSC",
+ description:"Ponte en contacto con la Federación de Estudiantes UCSC.",
 };
 
 export default function ContactoLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+ return <>{children}</>;
 }

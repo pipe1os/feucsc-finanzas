@@ -1,4 +1,4 @@
-import Sidebar from "@/components/public/Sidebar";
+import Sidebar from"@/components/public/Sidebar";
 
 /**
  * Public layout that wraps the public-facing pages with the Sidebar component.
@@ -8,16 +8,16 @@ import Sidebar from "@/components/public/Sidebar";
  * @param {React.ReactNode} props.children The nested routes.
  */
 export default function PublicLayout({
-  children,
+ children,
 }: {
-  children: React.ReactNode;
+ children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Sidebar />
-      <main className="flex-1 min-w-0 lg:ml-65">
-        {children}
-      </main>
-    </>
-  );
+ return (
+ <>
+ <Sidebar />
+ <main className="flex-1 min-w-0 lg:ml-65">
+ {children}
+ </main>
+ </>
+ );
 }

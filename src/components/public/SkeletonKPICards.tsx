@@ -1,10 +1,10 @@
 "use client";
 
-import { Skeleton } from "@heroui/react";
+import { Skeleton } from"@heroui/react";
 
 export function SkeletonKPICards() {
  return (
- <div className="rounded-2xl border border-zinc-100 bg-white shadow-apple ring-0 p-6 sm:p-8 h-full flex flex-col">
+ <div className="rounded-2xl border border-border bg-white shadow-apple ring-0 p-6 sm:p-8 h-full flex flex-col">
  <div className="flex flex-col flex-1 justify-between gap-5 lg:justify-center">
  <div>
  <Skeleton className="h-3 w-24 rounded-lg mb-2" />

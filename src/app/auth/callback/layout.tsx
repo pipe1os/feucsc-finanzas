@@ -1,9 +1,9 @@
-import { Metadata } from "next";
+import { Metadata } from"next";
 
 export const metadata: Metadata = {
-  title: "Verificando... | FEUCSC",
+ title:"Verificando... | FEUCSC",
 };
 
 export default function AuthCallbackLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+ return <>{children}</>;
 }
