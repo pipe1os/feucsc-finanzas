@@ -213,7 +213,7 @@ export default function Sidebar() {
  });
  } else {
  timeoutId = setTimeout(() => {
- checkNewExpenses();
+ void checkNewExpenses();
  }, 200);
  }
 

@@ -86,7 +86,7 @@ export default function DashboardClient({
     const sortKey = sortCol === "descripcion" ? "concepto" : sortCol;
     
     // Create a new array for sorting
-    result = [...result].sort((a, b) => {
+    result = result.toSorted((a, b) => {
       const valA = a[sortKey as keyof Transaccion];
       const valB = b[sortKey as keyof Transaccion];
 

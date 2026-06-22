@@ -48,7 +48,7 @@ export default async function Home() {
  const categoryColors = buildCategoryColors(categoriasData);
 
  const presupuestoTotal = Number(
- process.env.NEXT_PUBLIC_PRESUPUESTO_TOTAL ??"19972000",
+  process.env.NEXT_PUBLIC_PRESUPUESTO_TOTAL || "19972000",
  );
  const totalGastado = data.reduce((acc, curr) => acc + curr.monto, 0);
  const saldoDisponible = presupuestoTotal - totalGastado;
