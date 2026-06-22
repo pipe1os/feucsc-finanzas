@@ -56,7 +56,7 @@ describe("gastos server actions", () => {
       update: mockUpdate,
       delete: mockDelete,
       select: mockSelect,
-    } as any);
+    } as unknown as ReturnType<typeof supabaseServer.client.from>);
 
     mockUpdate.mockReturnValue({ eq: mockEqUpdate });
     mockDelete.mockReturnValue({ eq: mockEqDelete });
@@ -79,7 +79,7 @@ describe("gastos server actions", () => {
           data: { user: { email: "admin@feucsc.cl" } },
         }),
       },
-    } as any);
+    } as unknown as Awaited<ReturnType<typeof createAuthClient>>);
     vi.mocked(isAuthorizedEmail).mockResolvedValue(true);
   });
 
@@ -185,6 +185,7 @@ describe("gastos server actions", () => {
         color: "#FFFFFF",
       });
       expect(revalidatePath).toHaveBeenCalledWith("/");
+      expect(revalidatePath).toHaveBeenCalledWith("/gastos");
     });
   });
 
