@@ -83,17 +83,12 @@ export default function DashboardClient({
       });
     }
 
-    const mappedSortCol = sortCol === "concepto" ? "descripcion" : sortCol;
+    const sortKey = sortCol === "descripcion" ? "concepto" : sortCol;
     
     // Create a new array for sorting
     result = [...result].sort((a, b) => {
-      let valA: any = a[mappedSortCol as keyof Transaccion];
-      let valB: any = b[mappedSortCol as keyof Transaccion];
-
-      if (mappedSortCol === "descripcion") {
-        valA = a.concepto;
-        valB = b.concepto;
-      }
+      const valA = a[sortKey as keyof Transaccion];
+      const valB = b[sortKey as keyof Transaccion];
 
       if (typeof valA === "string" && typeof valB === "string") {
         return sortDir === "ascending"
@@ -111,7 +106,7 @@ export default function DashboardClient({
     return result;
   }, [allTransacciones, search, activeCategoryFilter, mesFilter, sortCol, sortDir]);
 
-  const gastosPorCategoria = useMemo(() => {
+  const gastosPorCategoria: CategoriaData[] = useMemo(() => {
     const map = new Map<string, number>();
     filteredTransacciones.forEach((t) => {
       const cat = t.categoria || "Varios";

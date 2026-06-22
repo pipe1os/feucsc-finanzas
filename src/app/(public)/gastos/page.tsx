@@ -19,6 +19,13 @@ export default async function GastosPage() {
     supabaseAnon.from("categorias").select("*"),
   ]);
 
+  if (gastosRes.error) {
+    console.error("Error fetching gastos:", gastosRes.error);
+  }
+  if (categoriasRes.error) {
+    console.error("Error fetching categorias:", categoriasRes.error);
+  }
+
   const data = gastosRes.data || [];
   const categoriasData = categoriasRes.data || [];
 
