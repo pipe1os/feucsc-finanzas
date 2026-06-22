@@ -60,7 +60,7 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
  const topCats = (dataPoint?.categorias || []).slice(0, 3);
 
  return (
- <div className="rounded-xl sm:rounded-2xl glass-surface px-3 py-2 sm:px-5 sm:py-4 shadow-apple-lg border border-zinc-300/60 min-w-36 sm:min-w-48">
+ <div className="rounded-xl sm:rounded-2xl bg-white/70 backdrop-blur-xl px-3 py-2 sm:px-5 sm:py-4 shadow-apple-lg border border-zinc-300/60 min-w-36 sm:min-w-48">
  <p className="text-[10px] sm:text-xs font-medium text-zinc-500 mb-1">
  {label} 2026
  </p>
