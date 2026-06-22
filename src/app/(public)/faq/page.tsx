@@ -30,7 +30,7 @@ export default function FAQPage() {
  style={{ animationDelay:"0.4s" }}
  >
  <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight text-zinc-900 leading-snug font-heading">
- ¿Tienes otra duda?{""}
+ ¿Tienes otra duda?{" "}
  <Link
  href="/contacto"
  className="inline-flex items-center gap-1.5 text-red-500 hover:text-red-600 transition-colors duration-200 group"
