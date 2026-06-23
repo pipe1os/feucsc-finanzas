@@ -5,23 +5,10 @@ import { destroyCloudinaryImage } from"@/lib/cloudinary-server";
 
 // CRUD de gastos/categorías. Acá validamos todo porque esto termina en la DB.
 import { supabaseServer } from"@/lib/supabase-server";
-import { createAuthClient } from"@/lib/supabase-auth";
-import { isAuthorizedEmail } from"@/lib/auth";
+import { requireAuth } from"@/lib/require-auth";
 import { revalidatePath } from"next/cache";
 
 import { type PostgrestError } from"@supabase/supabase-js";
-
-// Guard simple para asegurar que quien llama está logueado y en la whitelist.
-async function requireAuth() {
- const supabase = await createAuthClient();
- const {
- data: { user },
- } = await supabase.auth.getUser();
- if (!user || !(await isAuthorizedEmail(user.email))) {
- throw new Error("No autorizado");
- }
- return user;
-}
 
 function sanitizeDbError(error: PostgrestError): Error {
  console.error("Supabase DB error:", JSON.stringify(error));

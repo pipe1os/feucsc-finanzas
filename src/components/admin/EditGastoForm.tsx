@@ -72,6 +72,7 @@ export default function EditGastoForm({
 
  const originalUrl = gasto.comprobante_url;
  let finalUrl: string | null = originalUrl || null;
+ let newlyUploadedUrl: string | null = null;
 
  try {
  if (state.selectedFile) {
@@ -80,6 +81,7 @@ export default function EditGastoForm({
  const uploadedUrl = await uploadComprobanteAction(uploadForm);
  if (uploadedUrl) {
  finalUrl = uploadedUrl;
+ newlyUploadedUrl = uploadedUrl;
  } else {
  setState({ error:"Error al subir el comprobante" });
  toast.danger("Error al subir el comprobante");
@@ -107,6 +109,9 @@ export default function EditGastoForm({
  onSuccess();
  }, 500);
  } catch (err: unknown) {
+ if (newlyUploadedUrl) {
+ await deleteCloudinaryImage(newlyUploadedUrl);
+ }
  const msg = err instanceof Error ? err.message :"Error desconocido";
  setState({ error: msg });
  toast.danger("Error al actualizar gasto");
