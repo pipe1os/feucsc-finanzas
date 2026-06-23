@@ -2,6 +2,7 @@
 
 import React from"react";
 import { Select, ListBox } from"@heroui/react";
+import { MONTH_OPTIONS } from"@/lib/months";
 
 const SearchIcon = () => (
  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -16,22 +17,6 @@ const XIcon = () => (
  <path d="m6 6 12 12" />
  </svg>
 );
-
-const MONTH_OPTIONS = [
- { id:"all", label:"Todos los meses" },
- { id:"01", label:"Enero" },
- { id:"02", label:"Febrero" },
- { id:"03", label:"Marzo" },
- { id:"04", label:"Abril" },
- { id:"05", label:"Mayo" },
- { id:"06", label:"Junio" },
- { id:"07", label:"Julio" },
- { id:"08", label:"Agosto" },
- { id:"09", label:"Septiembre" },
- { id:"10", label:"Octubre" },
- { id:"11", label:"Noviembre" },
- { id:"12", label:"Diciembre" },
-];
 
 export interface ExpenseTableFiltersProps {
  searchQuery?: string;

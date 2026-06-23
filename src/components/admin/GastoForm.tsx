@@ -4,6 +4,7 @@ import { useReducer, useCallback } from"react";
 import { TextField, Label, Input, Button, Alert, toast } from"@heroui/react";
 import { createGasto, createCategoria } from"@/app/actions/gastos";
 import { uploadComprobanteAction } from"@/app/actions/upload";
+import { deleteCloudinaryImage } from"@/app/actions/cloudinary";
 import { getNextPaletteColor } from"@/lib/category-palette";
 import CategorySelect from"./CategorySelect";
 import ComprobanteUpload from"./ComprobanteUpload";
@@ -100,6 +101,9 @@ export default function GastoForm({
  });
  mutateGastos();
  } catch (err: unknown) {
+ if (comprobanteUrl) {
+ await deleteCloudinaryImage(comprobanteUrl);
+ }
  const msg = err instanceof Error ? err.message :"Error desconocido";
  setState({ formError: msg });
  toast.danger("Error al registrar gasto");

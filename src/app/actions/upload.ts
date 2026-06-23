@@ -1,25 +1,10 @@
 "use server";
 
-import { createAuthClient } from"@/lib/supabase-auth";
-import { isAuthorizedEmail } from"@/lib/auth";
+import { requireAuth } from"@/lib/require-auth";
 import { isValidImage } from"@/lib/validate-image";
 import cloudinary from"@/lib/cloudinary-server";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
-
-async function requireAuth() {
- const supabase = await createAuthClient();
-
- const {
- data: { user },
- } = await supabase.auth.getUser();
-
- if (!user || !(await isAuthorizedEmail(user.email))) {
- throw new Error("No autorizado");
- }
-
- return user;
-}
 
 // Sube un comprobante a Cloudinary y devuelve la URL pública.
 export async function uploadComprobanteAction(
@@ -36,10 +21,6 @@ export async function uploadComprobanteAction(
   if (typeof file === "string") {
     throw new Error("No se proporcionó ningún archivo válido");
   }
-
- if (!file) {
- throw new Error("No se proporcionó ningún archivo");
- }
 
  // Validar tamaño
  if (file.size > MAX_FILE_SIZE) {
