@@ -97,3 +97,8 @@ plans/
 doctor-output.txt
 doctor-verbose.txt
 doctor.config.json
+generate_summary.py
+tune_codacy.py
+undici:
+.npmrc
+codacy_fixes.patch
