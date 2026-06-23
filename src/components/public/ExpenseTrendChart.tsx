@@ -3,7 +3,7 @@
 import { formatCLP } from"@/lib/utils";
 import { useState, useRef, useEffect } from"react";
 import { scaleLinear, line as d3line, max, area as d3area, curveMonotoneX } from"d3";
-import { m, LazyMotion, domAnimation } from"motion/react";
+import { m, LazyMotion, domAnimation, useReducedMotion } from"motion/react";
 
 import {
  Card,
@@ -60,11 +60,11 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
  const topCats = (dataPoint?.categorias || []).slice(0, 3);
 
  return (
- <div className="rounded-xl sm:rounded-2xl bg-white/70 backdrop-blur-xl px-3 py-2 sm:px-5 sm:py-4 shadow-apple-lg border border-zinc-300/60 min-w-36 sm:min-w-48">
- <p className="text-[10px] sm:text-xs font-medium text-zinc-500 mb-1">
+ <div className="rounded-xl sm:rounded-2xl bg-white/70 backdrop-blur-xl px-3 py-2 sm:px-5 sm:py-4 shadow-apple-lg border border-gray-300/60 min-w-36 sm:min-w-48">
+ <p className="text-[10px] sm:text-xs font-medium text-gray-500 mb-1">
  {label} 2026
  </p>
- <p className="text-base sm:text-lg font-bold text-zinc-900 tabular-nums">
+ <p className="text-base sm:text-lg font-bold text-gray-900 tabular-nums">
  {formatCLP(payload[0].value)}
  </p>
  {topCats.length > 0 && (
@@ -78,10 +78,10 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
  className="size-1.5 sm:size-2 rounded-full shrink-0"
  style={{ backgroundColor: cat.color }}
  />
- <span className="text-zinc-600 flex-1 truncate">
+ <span className="text-gray-600 flex-1 truncate">
  {cat.categoria}
  </span>
- <span className="text-zinc-900 font-medium tabular-nums">
+ <span className="text-gray-900 font-medium tabular-nums">
  {formatCompact(cat.monto)}
  </span>
  </div>
@@ -100,6 +100,7 @@ export default function ExpenseTrendChart({
  gastosPorMes,
 }: ExpenseTrendChartProps) {
  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+ const reduce = useReducedMotion();
  const [tooltipState, setTooltipState] = useState<{
  data: TrendDataPoint | null;
  position: { x: number; y: number } | null;
@@ -209,10 +210,10 @@ export default function ExpenseTrendChart({
  return (
  <Card className="rounded-2xl border border-border bg-white shadow-apple ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
  <CardHeader className="pb-6">
- <CardTitle className="text-base font-semibold text-zinc-900 font-heading">
+ <CardTitle className="text-base font-semibold text-gray-900 font-heading">
  Tendencia de Gastos
  </CardTitle>
- <CardDescription className="text-xs text-zinc-500">
+ <CardDescription className="text-xs text-gray-500">
  Gasto mensual a lo largo del año
  </CardDescription>
  </CardHeader>
@@ -229,7 +230,7 @@ export default function ExpenseTrendChart({
  style={{
  top:`${yScale(+value)}%`,
  }}
- className="absolute right-2 text-[10px] sm:text-xs tabular-nums text-zinc-400 -translate-y-1/2"
+ className="absolute right-2 text-[10px] sm:text-xs tabular-nums text-gray-500 -translate-y-1/2"
  >
  {formatCompact(+value)}
  </div>
@@ -251,6 +252,8 @@ export default function ExpenseTrendChart({
  viewBox="0 0 100 100"
  className="w-full h-full overflow-visible"
  preserveAspectRatio="none"
+ role="img"
+ aria-label="Gráfico de tendencia de gastos mensuales"
  >
  <defs>
  <linearGradient id="outlinedAreaGradient" x1="0" x2="0" y1="0" y2="1">
@@ -262,9 +265,9 @@ export default function ExpenseTrendChart({
  x="0"
  y="-10"
  height="120"
- initial={{ width: 0 }}
+ initial={reduce ? false : { width: 0 }}
  animate={{ width: 100 }}
- transition={{ duration: 1.4, ease:"easeInOut", delay: 0.1 }}
+ transition={reduce ? { duration: 0 } : { duration: 1.4, ease:"easeInOut", delay: 0.1 }}
  />
  </clipPath>
  </defs>
@@ -341,7 +344,7 @@ export default function ExpenseTrendChart({
  style={{
  left:`${xScale(i)}%`,
  }}
- className="absolute top-1 text-[10px] sm:text-xs text-zinc-400 -translate-x-1/2"
+ className="absolute top-1 text-[10px] sm:text-xs text-gray-400 -translate-x-1/2"
  >
  {d.mes}
  </div>
@@ -349,6 +352,11 @@ export default function ExpenseTrendChart({
  </div>
  </div>
  </div>
+ <ul className="sr-only">
+ {gastosPorMes.map((d) => (
+ <li key={d.mes}>{d.mes}: {formatCLP(d.monto)}</li>
+ ))}
+ </ul>
  </CardContent>
 
  </Card>

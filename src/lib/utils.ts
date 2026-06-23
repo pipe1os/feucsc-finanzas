@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from"clsx";
 import { twMerge } from"tailwind-merge";
+import { VARIOS_COLOR } from"@/lib/category-palette";
 
 export function cn(...inputs: ClassValue[]) {
  return twMerge(clsx(inputs));
@@ -41,7 +42,7 @@ export function buildCategoryColors(
  categoriasData.forEach((c) => {
  if (c.color) categoryColors[c.nombre] = c.color;
  });
- if (!categoryColors["N/A"]) categoryColors["N/A"] ="#9CA3AF";
- if (!categoryColors["Varios"]) categoryColors["Varios"] ="#9CA3AF";
+ if (!categoryColors["N/A"]) categoryColors["N/A"] = VARIOS_COLOR;
+ if (!categoryColors["Varios"]) categoryColors["Varios"] = VARIOS_COLOR;
  return categoryColors;
 }

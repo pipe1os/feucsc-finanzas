@@ -101,7 +101,7 @@ export default function AdminLayout({
  <div className="flex w-full min-h-dvh items-center justify-center bg-transparent">
  <div className="flex flex-col items-center gap-4 animate-fade-in-up">
  <div className="size-8 animate-spin rounded-full border-3 border-border border-t-red-500" />
- <p className="text-sm text-zinc-400 font-medium">
+ <p className="text-sm text-gray-400 font-medium">
  Verificando acceso…
  </p>
  </div>

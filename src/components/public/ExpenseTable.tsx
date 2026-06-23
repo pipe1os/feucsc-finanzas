@@ -202,7 +202,7 @@ function ExpenseTable({
  <h3 className="text-base font-semibold text-gray-900">
  Gastos Recientes
  </h3>
- <p className="text-xs text-gray-400 mt-0.5">
+ <p className="text-xs text-gray-500 mt-0.5">
  {totalRecords} {totalRecords === 1 ?"registro" :"registros"} encontrados
  </p>
  </div>
@@ -234,6 +234,8 @@ function ExpenseTable({
  end={end}
  onPageChange={handlePageChange}
  onViewLightbox={handleViewLightbox}
+ sortDescriptor={sortDescriptor}
+ onSortChange={handleSortChange}
  />
  <ExpenseTableDesktop
  paginated={paginated}
@@ -272,7 +274,7 @@ function ExpenseTable({
  </Modal.Header>
  <Modal.Body className="p-4">
  {lightboxImage && (
- <div className="flex justify-center rounded-xl bg-zinc-50 p-4 relative min-h-[300px] items-center">
+ <div className="flex justify-center rounded-xl bg-gray-50 p-4 relative min-h-[300px] items-center">
  {isImageLoading && (
  <div className="absolute inset-0 flex items-center justify-center">
  <div className="size-8 rounded-full border-2 border-red-500 border-t-transparent animate-spin" />

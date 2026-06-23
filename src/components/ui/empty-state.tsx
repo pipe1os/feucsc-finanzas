@@ -22,7 +22,7 @@ export function EmptyState({
  )}
  {...props}
  >
- <div className="flex size-14 items-center justify-center rounded-full bg-zinc-50 text-zinc-400 border border-border shadow-xs ring-4 ring-zinc-50/50">
+ <div className="flex size-14 items-center justify-center rounded-full bg-gray-50 text-gray-400 border border-border shadow-xs ring-4 ring-gray-50/50">
  {icon || (
  <svg
  width="20"
@@ -40,10 +40,10 @@ export function EmptyState({
  )}
  </div>
  <div className="flex flex-col">
- <span className="text-sm font-semibold text-zinc-900 font-heading">
+ <span className="text-sm font-semibold text-gray-900 font-heading">
  {title}
  </span>
- <span className="text-xs text-zinc-500 mt-0.5 max-w-[250px]">
+ <span className="text-xs text-gray-500 mt-0.5 max-w-[250px]">
  {description}
  </span>
  </div>

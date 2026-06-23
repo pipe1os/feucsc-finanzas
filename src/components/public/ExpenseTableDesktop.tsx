@@ -33,9 +33,8 @@ function SortableColumnHeader({
  sortDirection?:"ascending" |"descending";
 }) {
  return (
- <span className="flex items-center gap-1 cursor-pointer">
+ <span className="flex items-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded-xs">
  {children}
- {!!sortDirection && (
  <svg
  width="14"
  height="14"
@@ -45,11 +44,10 @@ function SortableColumnHeader({
  strokeWidth="2"
  strokeLinecap="round"
  strokeLinejoin="round"
- className={`transform transition-transform duration-200 ease-out ${sortDirection ==="descending" ?"rotate-180" :""}`}
+ className={`transition-transform duration-200 ease-out ${sortDirection ? "opacity-100" : "opacity-30"} ${sortDirection === "ascending" ? "rotate-0" : sortDirection === "descending" ? "rotate-180" : "rotate-0"}`}
  >
  <path d="m18 15-6-6-6 6" />
  </svg>
- )}
  </span>
  );
 }
@@ -145,19 +143,19 @@ export function ExpenseTableDesktop({
  {(txn: TransaccionItem) => {
  const catColor = txn.color ||"#9CA3AF";
  return (
- <Table.Row key={txn.id} className="group cursor-pointer hover:bg-zinc-50 transition-colors duration-200">
+ <Table.Row key={txn.id} className="group cursor-pointer hover:bg-gray-50 transition-colors duration-200">
  <Table.Cell>
- <span className="text-sm text-zinc-600 whitespace-nowrap">
+ <span className="text-sm text-gray-600 whitespace-nowrap">
  {formatDate(txn.fecha)}
  </span>
  </Table.Cell>
  <Table.Cell>
  <div className="flex items-center gap-2">
- <span className="text-sm font-medium text-zinc-900">
+ <span className="text-sm font-medium text-gray-900">
  {txn.concepto}
  </span>
  {isNew(txn.creado_el) && (
- <span className="inline-flex items-center rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 ring-1 ring-emerald-200/60">
+ <span className="inline-flex items-center rounded-md bg-red-50 px-1.5 py-0.5 text-[10px] font-semibold text-red-700 ring-1 ring-red-200/60">
  Nuevo
  </span>
  )}
@@ -165,17 +163,16 @@ export function ExpenseTableDesktop({
  </Table.Cell>
  <Table.Cell>
  <span
- className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
+ className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium text-gray-800"
  style={{
  backgroundColor:`${catColor}18`,
- color: catColor,
  }}
  >
  {txn.categoria}
  </span>
  </Table.Cell>
  <Table.Cell>
- <span className="text-sm font-semibold text-zinc-900 tabular-nums">
+ <span className="text-sm font-semibold text-gray-900 tabular-nums">
  {formatCLP(txn.monto)}
  </span>
  </Table.Cell>
@@ -195,18 +192,18 @@ export function ExpenseTableDesktop({
  <EyeIcon />
  </m.button>
  </Tooltip.Trigger>
- <Tooltip.Content className="bg-zinc-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
+ <Tooltip.Content className="bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
  <p>Ver comprobante</p>
  </Tooltip.Content>
  </Tooltip>
  ) : (
  <Tooltip delay={0}>
  <Tooltip.Trigger>
- <span className="inline-flex items-center justify-center size-8 rounded-lg bg-zinc-50 text-zinc-400 cursor-not-allowed border border-border">
+ <span className="inline-flex items-center justify-center size-8 rounded-lg bg-gray-50 text-gray-400 cursor-not-allowed border border-border">
  <EyeOffIcon />
  </span>
  </Tooltip.Trigger>
- <Tooltip.Content className="bg-zinc-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
+ <Tooltip.Content className="bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-xl">
  <p>Comprobante pendiente</p>
  </Tooltip.Content>
  </Tooltip>
@@ -240,7 +237,7 @@ export function ExpenseTableDesktop({
  return (
  // react-doctor-disable-next-line react-doctor/no-array-index-as-key
  <Pagination.Item key={`ellipsis-${idx}`}>
- <span className="px-2 text-zinc-400 text-sm select-none">
+ <span className="px-2 text-gray-400 text-sm select-none">
  …
  </span>
  </Pagination.Item>

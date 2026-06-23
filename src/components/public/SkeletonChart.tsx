@@ -18,10 +18,10 @@ export function SkeletonChart({
  return (
  <Card className="rounded-2xl border border-border bg-white shadow-apple ring-0">
  <CardHeader className="pb-4">
- <CardTitle className="text-base font-semibold text-zinc-900 font-heading">
+ <CardTitle className="text-base font-semibold text-gray-900 font-heading">
  <Skeleton className="h-5 w-40 rounded-lg" />
  </CardTitle>
- <CardDescription className="text-xs text-zinc-400">
+ <CardDescription className="text-xs text-gray-400">
  <Skeleton className="h-3 w-24 rounded-lg mt-1" />
  </CardDescription>
  </CardHeader>
@@ -44,10 +44,10 @@ export function SkeletonChart({
  return (
  <Card className="rounded-2xl border border-border bg-white shadow-apple ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
  <CardHeader className="pb-6">
- <CardTitle className="text-base font-semibold text-zinc-900 font-heading">
+ <CardTitle className="text-base font-semibold text-gray-900 font-heading">
  <Skeleton className="h-5 w-40 rounded-lg" />
  </CardTitle>
- <CardDescription className="text-xs text-zinc-500">
+ <CardDescription className="text-xs text-gray-500">
  <Skeleton className="h-3 w-56 rounded-lg mt-1" />
  </CardDescription>
  </CardHeader>

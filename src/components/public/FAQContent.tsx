@@ -79,7 +79,7 @@ export default function FAQContent() {
  className="animate-fade-in-up opacity-0"
  style={{ animationDelay:`${0.1 + catIndex * 0.08}s` }}
  >
- <p className="text-xs font-semibold tracking-widest text-zinc-400 uppercase mb-3 px-1">
+ <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-3 px-1">
  {category.title}
  </p>
 
@@ -91,18 +91,18 @@ export default function FAQContent() {
  {category.items.map((item) => (
  <Accordion.Item key={item.title}>
  <Accordion.Heading>
- <Accordion.Trigger className="px-5! py-4! text-left hover:bg-zinc-50/50 active:scale-[0.99] transition-all duration-300 ease-out">
- <span className="text-[15px] font-medium tracking-tight text-zinc-900 pr-4">
+ <Accordion.Trigger className="px-5! py-4! text-left hover:bg-gray-50/50 active:scale-[0.99] transition-all duration-300 ease-out">
+ <span className="text-[15px] font-medium tracking-tight text-gray-900 pr-4">
  {item.title}
  </span>
- <Accordion.Indicator className="text-zinc-400 [&>svg]:size-5 shrink-0">
+ <Accordion.Indicator className="text-gray-400 [&>svg]:size-5 shrink-0">
  <ChevronDown />
  </Accordion.Indicator>
  </Accordion.Trigger>
  </Accordion.Heading>
  <Accordion.Panel>
  <Accordion.Body className="px-5! pb-5! pt-0!">
- <p className="text-sm text-zinc-500 leading-relaxed pr-4">
+ <p className="text-sm text-gray-500 leading-relaxed pr-4">
  {item.content}
  </p>
  </Accordion.Body>

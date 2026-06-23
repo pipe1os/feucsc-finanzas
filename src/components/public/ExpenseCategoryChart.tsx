@@ -65,10 +65,10 @@ export default function ExpenseCategoryChart({
  style={{ animationDelay:"0.25s" }}
  >
  <CardHeader className="pb-4">
- <CardTitle className="text-base font-semibold text-zinc-900 font-heading">
+ <CardTitle className="text-base font-semibold text-gray-900 font-heading">
  Distribución de Gastos
  </CardTitle>
- <CardDescription className="text-xs text-zinc-400">
+ <CardDescription className="text-xs text-gray-400">
  Por categoría
  </CardDescription>
  </CardHeader>
@@ -145,10 +145,10 @@ export default function ExpenseCategoryChart({
  animate={{ scale: 1, opacity: 1 }}
  transition={{ duration: 0.5, ease:"easeOut", delay: 0.4 }}
  >
- <span className="text-sm font-bold text-zinc-900">
+ <span className="text-sm font-bold text-gray-900">
  {formatCLP(totalGastado)}
  </span>
- <span className="text-[9px] font-medium text-zinc-400 uppercase tracking-wider">
+ <span className="text-[9px] font-medium text-gray-400 uppercase tracking-wider">
  Total
  </span>
  </m.div>
@@ -171,7 +171,7 @@ export default function ExpenseCategoryChart({
  onCategoryClick?.(item.categoria)
  }
  className={`flex items-center gap-3 w-full cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-all duration-200
- ${isActive ?"bg-zinc-50" :"hover:bg-zinc-50/60"}`}
+ ${isActive ?"bg-gray-50" :"hover:bg-gray-50/60"}`}
  initial={{ opacity: 0, x: -10 }}
  animate={{ opacity: isDimmed ? 0.4 : 1, x: 0 }}
  transition={{ duration: 0.4, ease:"easeOut", delay: 0.1 + index * 0.08 }}
@@ -180,11 +180,11 @@ export default function ExpenseCategoryChart({
  className="size-2.5 rounded-full shrink-0"
  style={{ backgroundColor: item.color }}
  />
- <span className="flex-1 text-xs text-zinc-600 text-left">
+ <span className="flex-1 text-xs text-gray-600 text-left">
  {item.categoria}
  </span>
  <div className="flex items-center gap-2 shrink-0">
- <div className="hidden sm:block h-1.5 w-16 rounded-full bg-zinc-100 overflow-hidden">
+ <div className="hidden sm:block h-1.5 w-16 rounded-full bg-gray-100 overflow-hidden">
  <m.div
  className="h-full rounded-full"
  style={{
@@ -195,7 +195,7 @@ export default function ExpenseCategoryChart({
  transition={{ duration: 0.6, ease:"easeOut", delay: 0.3 + index * 0.08 }}
  />
  </div>
- <span className="text-xs font-semibold text-zinc-900 w-8 text-right">
+ <span className="text-xs font-semibold text-gray-900 w-8 text-right">
  {pct}%
  </span>
  </div>

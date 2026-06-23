@@ -1,7 +1,6 @@
 "use client";
 
 import { formatCLP } from"@/lib/utils";
-import { useMemo } from"react";
 import { SkeletonKPICards } from"./Skeletons";
 
 
@@ -29,35 +28,9 @@ export default function KPICards({
  )
  : 0;
  const porcentajeDisponible = 100 - porcentajeGastado;
-
- const { statusColor, spentStatusText, availableStatusText } = useMemo(() => {
- const color =
- porcentajeGastado <= 40
- ?"bg-emerald-500"
- : porcentajeGastado <= 69
- ?"bg-amber-400"
- :"bg-rose-500";
-
- const spent =
- porcentajeGastado <= 40
- ?"text-emerald-600"
- : porcentajeGastado <= 69
- ?"text-amber-700"
- :"text-rose-600";
-
- const available =
- porcentajeDisponible >= 60
- ?"text-emerald-600"
- : porcentajeDisponible >= 31
- ?"text-amber-700"
- :"text-rose-600";
-
- return {
- statusColor: color,
- spentStatusText: spent,
- availableStatusText: available,
- };
- }, [porcentajeGastado, porcentajeDisponible]);
+ // ponytail: one-accent rule — red only when genuinely over budget
+ const overBudget = porcentajeGastado > 100;
+ const barColor = overBudget ? "bg-red-600" : "bg-gray-400";
 
  if (isLoading) {
  return <SkeletonKPICards />;
@@ -75,7 +48,7 @@ export default function KPICards({
  {formatCLP(resumenFinanciero.totalGastado)}
  </p>
  <p
- className={`mt-1.5 text-sm font-medium flex items-center gap-1 ${spentStatusText}`}
+ className={`mt-1.5 text-sm font-medium flex items-center gap-1 ${overBudget ? "text-red-700" : "text-gray-700"}`}
  >
  <span className="font-bold">
  {Math.round(porcentajeGastado)}%
@@ -85,7 +58,7 @@ export default function KPICards({
 
  <div className="mt-3 h-1 w-full rounded-full bg-gray-100 overflow-hidden">
  <div
- className={`h-full rounded-full ${statusColor} animate-bar-grow`}
+ className={`h-full rounded-full ${barColor} animate-bar-grow`}
  style={
  {
 "--bar-width":`${porcentajeGastado}%`,
@@ -116,7 +89,7 @@ export default function KPICards({
  {formatCLP(resumenFinanciero.saldoDisponible)}
  </p>
  <p
- className={`mt-1 text-xs font-medium flex items-center gap-1 ${availableStatusText}`}
+ className="mt-1 text-xs font-medium flex items-center gap-1 text-gray-700"
  >
  <span className="font-semibold">
  {Math.round(porcentajeDisponible)}%

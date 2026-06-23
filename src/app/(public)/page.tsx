@@ -107,10 +107,10 @@ export default async function Home() {
  <header className="mb-8">
  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
  <div>
- <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 font-heading">
+ <h1 className="text-2xl font-semibold tracking-tight text-gray-900 font-heading">
  Transparencia Financiera
  </h1>
- <p className="mt-1 text-sm text-zinc-500 max-w-xl">
+ <p className="mt-1 text-sm text-gray-500 max-w-xl">
  Presupuesto, gastos y comprobantes de la Federación de Estudiantes
  UCSC.
  </p>

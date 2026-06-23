@@ -82,20 +82,20 @@ export default function LoginPage() {
  className="mb-6"
  priority
  />
- <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 text-center font-heading">
+ <h1 className="text-2xl font-semibold tracking-tight text-gray-900 text-center font-heading">
  Portal de Administración
  </h1>
- <p className="mt-2 text-sm text-zinc-400 text-center leading-relaxed max-w-xs">
+ <p className="mt-2 text-sm text-gray-500 text-center leading-relaxed max-w-xs">
  Inicia sesión con tu correo institucional.
  </p>
  </div>
 
  <div className="flex items-center gap-3">
- <div className="h-px flex-1 bg-zinc-100" />
- <span className="text-xs text-zinc-300 font-medium uppercase tracking-wider">
+ <div className="h-px flex-1 bg-gray-100" />
+ <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">
  Iniciar sesión
  </span>
- <div className="h-px flex-1 bg-zinc-100" />
+ <div className="h-px flex-1 bg-gray-100" />
  </div>
 
  <Suspense fallback={null}>
@@ -108,20 +108,20 @@ export default function LoginPage() {
  variant="outline"
  size="lg"
  isDisabled={loading}
- className="w-full rounded-2xl border-border bg-white text-zinc-700 font-medium
- hover:bg-zinc-50 hover:border-zinc-300 hover:shadow-sm
+ className="w-full rounded-2xl border-border bg-white text-gray-700 font-medium
+ hover:bg-gray-50 hover:border-gray-300 hover:shadow-xs
  transition-all duration-200 h-12 text-sm cursor-pointer"
  onPress={handleGoogleLogin}
  >
  {loading ? (
- <div className="size-5 animate-spin rounded-full border-2 border-zinc-300 border-t-red-500" />
+ <div className="size-5 animate-spin rounded-full border-2 border-gray-300 border-t-red-500" />
  ) : (
  <GoogleIcon />
  )}
  {loading ?"Redirigiendo..." :"Continuar con Google"}
  </Button>
 
- <div className="mt-8 flex items-start gap-2.5 rounded-xl bg-zinc-50 border border-border px-4 py-3">
+ <div className="mt-8 flex items-start gap-2.5 rounded-xl bg-gray-50 border border-border px-4 py-3">
  <svg
  width="16"
  height="16"
@@ -131,12 +131,12 @@ export default function LoginPage() {
  strokeWidth="2"
  strokeLinecap="round"
  strokeLinejoin="round"
- className="text-zinc-400 mt-0.5 shrink-0"
+ className="text-gray-400 mt-0.5 shrink-0"
  >
  <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
  </svg>
- <p className="text-xs text-zinc-400 leading-relaxed">
+ <p className="text-xs text-gray-500 leading-relaxed">
  Solo cuentas autorizadas pueden acceder al panel de
  administración.
  </p>
@@ -145,7 +145,7 @@ export default function LoginPage() {
  <div className="mt-6 text-center">
  <Link
  href="/"
- className="text-xs text-zinc-400 hover:text-red-500 transition-colors duration-200"
+ className="text-xs text-gray-400 hover:text-red-600 transition-colors duration-200"
  >
  ← Volver al portal público
  </Link>

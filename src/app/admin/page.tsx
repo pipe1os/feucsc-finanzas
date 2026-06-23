@@ -133,15 +133,15 @@ export default function AdminPage() {
  <main className="flex-1 min-w-0 lg:ml-65">
  <div className="mx-auto max-w-5xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
  <div className="mb-8 animate-fade-in-up">
- <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 font-heading">
+ <h1 className="text-2xl font-semibold tracking-tight text-gray-900 font-heading">
  Gestión de Gastos
  </h1>
- <p className="mt-1 text-sm text-zinc-500">
+ <p className="mt-1 text-sm text-gray-500">
  Ingresa, edita o elimina gastos de la base de datos.
  </p>
  </div>
  <Card className="overflow-visible rounded-2xl shadow-apple border border-border bg-white p-6 sm:p-8 mb-8 animate-fade-in-up stagger-1 opacity-0">
- <h2 className="text-lg font-semibold text-zinc-900 mb-6 font-heading">
+ <h2 className="text-lg font-semibold text-gray-900 mb-6 font-heading">
  Ingresar Gasto
  </h2>
  <GastoForm
@@ -155,10 +155,10 @@ export default function AdminPage() {
  <Card className="rounded-2xl shadow-apple border border-border bg-white animate-fade-in-up stagger-2 opacity-0">
  <div className="p-6 pb-4 border-b border-border flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
  <div>
- <h2 className="text-lg font-semibold text-zinc-900 font-heading">
+ <h2 className="text-lg font-semibold text-gray-900 font-heading">
  Gastos Registrados
  </h2>
- <p className="text-sm text-zinc-400 mt-0.5">
+ <p className="text-sm text-gray-400 mt-0.5">
  {totalCount} gastos encontrados
  </p>
  </div>
@@ -218,7 +218,7 @@ export default function AdminPage() {
  <div className="mt-6 text-center">
  <Link
  href="/"
- className="text-xs text-zinc-400 hover:text-red-500 transition-colors duration-200"
+ className="text-xs text-gray-400 hover:text-red-500 transition-colors duration-200"
  >
  ← Ver portal público
  </Link>

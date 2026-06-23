@@ -121,13 +121,13 @@ export default function GastoForm({
  <Label>Fecha</Label>
  <Input
  value={state.fecha}
- className="h-10 bg-zinc-50 border border-border"
+ className="h-10 bg-gray-50 border border-border"
  />
  </TextField>
  <div className="space-y-1.5">
  <label
  htmlFor="gasto-categoria"
- className="label text-sm font-medium text-zinc-700"
+ className="label text-sm font-medium text-gray-700"
  >
  Categoría
  </label>
@@ -150,7 +150,7 @@ export default function GastoForm({
  <Input
  placeholder="Ej: Producción Bienvenida Mechona"
  value={state.descripcion}
- className="h-10 bg-zinc-50 border border-border placeholder:text-zinc-400"
+ className="h-10 bg-gray-50 border border-border placeholder:text-gray-400"
  />
  </TextField>
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -165,7 +165,7 @@ export default function GastoForm({
  <Input
  placeholder="850000"
  value={state.monto}
- className="h-10 bg-zinc-50 border border-border placeholder:text-zinc-400"
+ className="h-10 bg-gray-50 border border-border placeholder:text-gray-400"
  />
  </TextField>
  <ComprobanteUpload
@@ -187,7 +187,7 @@ export default function GastoForm({
  type="submit"
  size="lg"
  isDisabled={state.submitting}
- className="w-full sm:w-fit px-8 rounded-2xl bg-zinc-900 text-white font-semibold hover:bg-zinc-800 transition-all duration-200 h-12 shadow-sm hover:shadow-md cursor-pointer text-sm"
+ className="w-full sm:w-fit px-8 rounded-2xl bg-gray-900 text-white font-semibold hover:bg-gray-800 transition-all duration-200 h-12 shadow-xs hover:shadow-md cursor-pointer text-sm"
  >
  {state.submitting ? (
  <div className="size-5 animate-spin rounded-full border-2 border-current border-t-transparent" />

@@ -128,13 +128,13 @@ export default function EditGastoForm({
  <Label>Fecha</Label>
  <Input
  value={state.fecha}
- className="h-10 bg-zinc-50 border border-border"
+ className="h-10 bg-gray-50 border border-border"
  />
  </TextField>
  <div className="space-y-1.5">
  <label
  htmlFor="edit-gasto-categoria"
- className="text-sm font-medium text-zinc-700"
+ className="text-sm font-medium text-gray-700"
  >
  Categoría
  </label>
@@ -157,7 +157,7 @@ export default function EditGastoForm({
  <Input
  placeholder="Descripción del gasto"
  value={state.descripcion}
- className="h-10 bg-zinc-50 border border-border placeholder:text-zinc-400"
+ className="h-10 bg-gray-50 border border-border placeholder:text-gray-400"
  />
  </TextField>
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -172,7 +172,7 @@ export default function EditGastoForm({
  <Input
  placeholder="850000"
  value={state.monto}
- className="h-10 bg-zinc-50 border border-border placeholder:text-zinc-400"
+ className="h-10 bg-gray-50 border border-border placeholder:text-gray-400"
  />
  </TextField>
  <ComprobanteUpload
@@ -196,14 +196,14 @@ export default function EditGastoForm({
  <Button
  variant="secondary"
  onPress={onCancel}
- className="cursor-pointer text-zinc-700"
+ className="cursor-pointer text-gray-700"
  >
  Cancelar
  </Button>
  <Button
  isDisabled={state.submitting}
  onPress={handleSubmit}
- className="bg-zinc-900 text-white hover:bg-zinc-800 cursor-pointer rounded-xl px-6 font-medium shadow-sm"
+ className="bg-gray-900 text-white hover:bg-gray-800 cursor-pointer rounded-xl px-6 font-medium shadow-xs"
  >
  {state.submitting ?"Guardando..." :"Guardar cambios"}
  </Button>

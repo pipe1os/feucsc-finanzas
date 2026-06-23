@@ -62,10 +62,9 @@ export default function LatestTransactionsPreview({
  </div>
  <div className="flex items-center gap-2 flex-wrap">
  <span
- className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
+ className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium text-gray-800"
  style={{
  backgroundColor:`${catColor}18`,
- color: catColor,
  }}
  >
  {txn.categoria}
@@ -148,7 +147,7 @@ export default function LatestTransactionsPreview({
  </span>
  <Link
  href="/gastos"
- className="group inline-flex items-center gap-1.5 text-sm font-medium text-red-500 hover:text-red-600 transition-colors duration-200"
+ className="group inline-flex items-center gap-1.5 text-sm font-medium text-red-600 hover:text-red-700 transition-colors duration-200"
  >
  Ver todos los gastos
  <svg

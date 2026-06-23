@@ -1,31 +1,9 @@
 const CATEGORY_PALETTE = [
-"#C41E3A",
-"#D4595E",
-"#B83232",
-
-"#D97706",
-"#C2410C",
-"#B45309",
-
-"#2563EB",
-"#3B82F6",
-"#1D4ED8",
-"#0891B2",
-
-"#059669",
-"#10B981",
-"#0F766E",
-
-"#7C3AED",
-"#8B5CF6",
-"#6D28D9",
-
-"#DB2777",
-"#E11D48",
-"#BE185D",
-
-"#475569",
-"#64748B",
+  "#D97706", "#C2410C", "#B45309", "#EA580C", "#CA8A04",   // oranges / golds
+  "#059669", "#10B981", "#0F766E", "#16A34A", "#0E7490",   // greens / teal
+  "#2563EB", "#3B82F6", "#1D4ED8", "#0891B2",              // blues / cyan
+  "#7C3AED", "#8B5CF6", "#6D28D9", "#4F46E5",              // purples / indigo
+  "#475569", "#64748B",                                    // slates
 ] as const;
 
 export const VARIOS_COLOR ="#9CA3AF";

@@ -54,9 +54,9 @@ export default async function GastosPage() {
             <div className="flex items-center gap-2 mb-2">
               <Link
                 href="/"
-                className="group inline-flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-red-500 transition-colors duration-200"
+                className="group inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-red-600 transition-colors duration-200"
               >
-                <span className="flex items-center justify-center size-7 rounded-lg bg-zinc-100 group-hover:bg-red-50 transition-colors duration-200">
+                <span className="flex items-center justify-center size-7 rounded-lg bg-gray-100 group-hover:bg-red-50 transition-colors duration-200">
                   <svg
                     width="14"
                     height="14"
@@ -76,10 +76,10 @@ export default async function GastosPage() {
                 </span>
               </Link>
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 font-heading">
+            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 font-heading">
               Detalle de Gastos
             </h1>
-            <p className="mt-1 text-sm text-zinc-500 max-w-xl">
+            <p className="mt-1 text-sm text-gray-500 max-w-xl">
               Todos los gastos registrados, distribución por categoría y
               comprobantes de respaldo.
             </p>

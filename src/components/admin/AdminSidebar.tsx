@@ -40,7 +40,7 @@ export default function AdminSidebar() {
  onClick={() => { toggleSidebar(!sidebarOpen); }}
  className="fixed top-4 right-4 z-50 flex items-center justify-center
  size-10 rounded-xl bg-white shadow-apple-lg lg:hidden
- transition-colors hover:bg-zinc-50 cursor-pointer"
+ transition-colors hover:bg-gray-50 cursor-pointer"
  aria-label={sidebarOpen ?"Cerrar menú" :"Abrir menú"}
  >
  <HugeiconsMenuIcon ref={menuIconRef} size={22} />
@@ -76,7 +76,7 @@ export default function AdminSidebar() {
  </div>
  <div className="mx-5 h-px bg-border" />
  <nav className="flex flex-col gap-1 px-4 pt-6">
- <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-zinc-400 uppercase">
+ <span className="px-3 pb-2 pt-1 text-[10px] font-medium tracking-widest text-gray-400 uppercase">
  Administración
  </span>
  <Link
@@ -86,7 +86,7 @@ export default function AdminSidebar() {
  ${
  pathname ==="/admin"
  ?"text-red-600"
- :"text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900"
+ :"text-gray-500 hover:bg-gray-50 hover:text-gray-900"
  }`}
  >
  {pathname ==="/admin" && (
@@ -98,7 +98,7 @@ export default function AdminSidebar() {
  ${
  pathname ==="/admin"
  ?"text-red-500"
- :"text-zinc-400 group-hover:text-zinc-600"
+ :"text-gray-400 group-hover:text-gray-600"
  }`}
  >
  <svg

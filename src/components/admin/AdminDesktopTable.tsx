@@ -80,14 +80,14 @@ export default function AdminDesktopTable({
  <Table.Body
  renderEmptyState={() => (
  <EmptyState className="flex h-48 w-full flex-col items-center justify-center gap-3 text-center">
- <div className="flex size-12 items-center justify-center rounded-full bg-zinc-50 text-zinc-400 border border-border">
+ <div className="flex size-12 items-center justify-center rounded-full bg-gray-50 text-gray-400 border border-border">
  {searchQuery ? <SearchIcon /> : <InboxIcon />}
  </div>
  <div className="flex flex-col">
- <span className="text-sm font-semibold text-zinc-900">
+ <span className="text-sm font-semibold text-gray-900">
  {searchQuery ?"Sin resultados" :"Sin gastos"}
  </span>
- <span className="text-xs text-zinc-500 mt-0.5">
+ <span className="text-xs text-gray-500 mt-0.5">
  {searchQuery ?"Intenta con otro término." :"Ingresa un gasto usando el formulario."}
  </span>
  </div>
@@ -99,12 +99,12 @@ export default function AdminDesktopTable({
  return (
  <Table.Row key={g.id}>
  <Table.Cell>
- <span className="text-sm text-zinc-600 whitespace-nowrap">
+ <span className="text-sm text-gray-600 whitespace-nowrap">
  {formatDate(g.fecha)}
  </span>
  </Table.Cell>
  <Table.Cell>
- <span className="text-sm font-medium text-zinc-900">
+ <span className="text-sm font-medium text-gray-900">
  {g.descripcion}
  </span>
  </Table.Cell>
@@ -117,7 +117,7 @@ export default function AdminDesktopTable({
  </span>
  </Table.Cell>
  <Table.Cell>
- <span className="text-sm font-semibold text-zinc-900 tabular-nums">
+ <span className="text-sm font-semibold text-gray-900 tabular-nums">
  {formatCLP(g.monto)}
  </span>
  </Table.Cell>
@@ -131,15 +131,15 @@ export default function AdminDesktopTable({
  disabled={!g.comprobante_url}
  className={`inline-flex items-center justify-center size-8 rounded-full transition-all duration-200 cursor-pointer ${
  g.comprobante_url
- ?"bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
- :"bg-zinc-50 text-zinc-300 cursor-not-allowed"
+ ?"bg-gray-100 text-gray-600 hover:bg-gray-200"
+ :"bg-gray-50 text-gray-300 cursor-not-allowed"
  }`}
  aria-label="Ver comprobante"
  >
  <EyeIcon />
  </button>
  </Tooltip.Trigger>
- <Tooltip.Content className="bg-zinc-800 text-white text-xs px-3 py-1.5 rounded-lg">
+ <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
  <p>{g.comprobante_url ?"Ver comprobante" :"Sin comprobante"}</p>
  </Tooltip.Content>
  </Tooltip>
@@ -148,13 +148,13 @@ export default function AdminDesktopTable({
  <button
  type="button"
  onClick={() => { openEdit(g); }}
- className="inline-flex items-center justify-center size-8 rounded-full bg-zinc-100 text-zinc-600 hover:bg-zinc-200 transition-all duration-200 cursor-pointer"
+ className="inline-flex items-center justify-center size-8 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200 cursor-pointer"
  aria-label="Editar"
  >
  <EditIcon />
  </button>
  </Tooltip.Trigger>
- <Tooltip.Content className="bg-zinc-800 text-white text-xs px-3 py-1.5 rounded-lg">
+ <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
  <p>Editar</p>
  </Tooltip.Content>
  </Tooltip>
@@ -169,7 +169,7 @@ export default function AdminDesktopTable({
  <TrashIcon />
  </button>
  </Tooltip.Trigger>
- <Tooltip.Content className="bg-zinc-800 text-white text-xs px-3 py-1.5 rounded-lg">
+ <Tooltip.Content className="bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg">
  <p>Eliminar</p>
  </Tooltip.Content>
  </Tooltip>

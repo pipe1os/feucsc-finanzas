@@ -61,13 +61,13 @@ export default function CategorySelect({
  setOpen(!open);
  setIsCreating(false);
  }}
- className="flex w-full items-center justify-between rounded-xl border border-border bg-zinc-50 px-4 py-2.5
- text-sm text-zinc-900 transition-all duration-200 cursor-pointer
- hover:border-zinc-300 focus:border-red-300 focus:ring-2 focus:ring-red-100 outline-hidden"
+ className="flex w-full items-center justify-between rounded-xl border border-border bg-gray-50 px-4 py-2.5
+ text-sm text-gray-900 transition-all duration-200 cursor-pointer
+ hover:border-gray-300 focus:border-red-300 focus:ring-2 focus:ring-red-100 outline-hidden"
  >
  <span>{value}</span>
  <span
- className={`text-zinc-400 transition-transform duration-200 ${open ?"rotate-180" :""}`}
+ className={`text-gray-400 transition-transform duration-200 ${open ?"rotate-180" :""}`}
  >
  <ChevronDownIcon />
  </span>
@@ -91,7 +91,7 @@ export default function CategorySelect({
  <div
  key={cat}
  className={`group flex items-center justify-between px-3 py-2 text-sm transition-colors duration-150
- ${isSelected ?"bg-red-50 text-red-600 font-medium" :"text-zinc-700 hover:bg-zinc-50"}`}
+ ${isSelected ?"bg-red-50 text-red-600 font-medium" :"text-gray-700 hover:bg-gray-50"}`}
  >
  <button
  type="button"
@@ -158,7 +158,7 @@ export default function CategorySelect({
  }
  if (e.key ==="Escape") setIsCreating(false);
  }}
- className="flex-1 rounded-lg border border-border bg-zinc-50 px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 outline-hidden focus:border-red-300 focus:ring-1 focus:ring-red-100"
+ className="flex-1 rounded-lg border border-border bg-gray-50 px-3 py-1.5 text-sm text-gray-900 placeholder:text-gray-400 outline-hidden focus:border-red-300 focus:ring-1 focus:ring-red-100"
  />
  <button
  type="button"
@@ -170,7 +170,7 @@ export default function CategorySelect({
  <button
  type="button"
  onClick={() => { setIsCreating(false); }}
- className="inline-flex items-center justify-center rounded-lg border border-border px-2 py-1.5 text-zinc-400 text-xs hover:bg-zinc-100 transition-colors cursor-pointer"
+ className="inline-flex items-center justify-center rounded-lg border border-border px-2 py-1.5 text-gray-400 text-xs hover:bg-gray-100 transition-colors cursor-pointer"
  >
  ✕
  </button>

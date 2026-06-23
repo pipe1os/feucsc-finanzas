@@ -6,7 +6,7 @@ import { usePathname } from"next/navigation";
 import { useState, useEffect, useRef } from"react";
 import { supabase } from"@/lib/supabase";
 import { Badge } from"@heroui/react";
-import { m, LazyMotion, domAnimation } from"motion/react";
+import { m, LazyMotion, domAnimation, useReducedMotion } from"motion/react";
 import {
  HugeiconsMenuIcon,
  type HugeiconsMenuIconHandle,
@@ -96,11 +96,13 @@ function NavItem({
  onClick,
  badgeCount,
 }: NavItemProps) {
+ const reduce = useReducedMotion();
  return (
  <LazyMotion features={domAnimation}>
  <Link
  href={href}
  onClick={onClick}
+ aria-label={badgeCount && badgeCount > 0 ? `${label}, ${badgeCount} gastos nuevos` : undefined}
  className={`group relative flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 font-medium text-sm transition-all duration-200 cursor-pointer
  ${
  isActive
@@ -112,7 +114,7 @@ function NavItem({
  <m.div
  layoutId="activeNavTab"
  className="absolute inset-0 bg-red-50 rounded-xl -z-10"
- transition={{ type:"spring", stiffness: 400, damping: 30 }}
+ transition={reduce ? { duration: 0 } : { type:"spring", stiffness: 400, damping: 30 }}
  />
  )}
  {isActive && (
@@ -127,7 +129,7 @@ function NavItem({
  className={`flex items-center justify-center size-8 rounded-lg transition-all duration-200
  ${
  isActive
- ?"text-red-500"
+ ?"text-red-600"
  :"text-gray-500 group-hover:text-gray-600"
  }`}
  >
@@ -166,15 +168,29 @@ export default function Sidebar() {
  const pathname = usePathname();
  const [newExpensesCount, setNewExpensesCount] = useState(0);
  const menuIconRef = useRef<HugeiconsMenuIconHandle>(null);
+ const toggleBtnRef = useRef<HTMLButtonElement>(null);
+ const asideRef = useRef<HTMLElement>(null);
 
  const toggleSidebar = (open: boolean) => {
  setIsOpen(open);
  if (open) {
  menuIconRef.current?.startAnimation();
+ setTimeout(() => {
+ asideRef.current?.querySelector<HTMLElement>("a")?.focus();
+ }, 300);
  } else {
  menuIconRef.current?.stopAnimation();
+ toggleBtnRef.current?.focus();
  }
  };
+
+ // ponytail: Escape closes the drawer, no focus-trap lib needed
+ useEffect(() => {
+ if (!isOpen) return;
+ const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") toggleSidebar(false); };
+ document.addEventListener("keydown", onKey);
+ return () => document.removeEventListener("keydown", onKey);
+ }, [isOpen]);
 
  useEffect(() => {
  const checkNewExpenses = async () => {
@@ -232,6 +248,7 @@ export default function Sidebar() {
  return (
  <>
  <button type="button"
+ ref={toggleBtnRef}
  onClick={() => { toggleSidebar(!isOpen); }}
  className="fixed top-4 right-4 z-50 flex items-center justify-center
  size-10 rounded-xl bg-surface shadow-apple-lg lg:hidden
@@ -251,6 +268,10 @@ export default function Sidebar() {
  )}
 
  <aside
+ ref={asideRef}
+ role="dialog"
+ aria-modal="true"
+ aria-label="Menú de navegación"
  className={`
  fixed top-0 left-0 z-40 h-dvh w-65
  flex flex-col bg-surface/80 backdrop-blur-xl

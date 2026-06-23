@@ -1,7 +1,7 @@
 "use client";
 
 import React from"react";
-import { ListBox, Pagination } from"@heroui/react";
+import { ListBox, Pagination, Select, type SortDescriptor } from"@heroui/react";
 import { EmptyState } from"@/components/ui/empty-state";
 import { formatDate, formatCLP } from"@/lib/utils";
 import { m, LazyMotion, domAnimation } from"motion/react";
@@ -41,6 +41,8 @@ export interface ExpenseTableMobileProps {
  end: number;
  onPageChange: (page: number) => void;
  onViewLightbox: (src: string, concepto: string) => void;
+ sortDescriptor: SortDescriptor;
+ onSortChange: (descriptor: SortDescriptor) => void;
 }
 
 export function ExpenseTableMobile({
@@ -53,10 +55,48 @@ export function ExpenseTableMobile({
  end,
  onPageChange,
  onViewLightbox,
+ sortDescriptor,
+ onSortChange,
 }: ExpenseTableMobileProps) {
+ const sortKey = `${sortDescriptor.column}-${sortDescriptor.direction}`;
  return (
  <LazyMotion features={domAnimation}>
  <div className="md:hidden">
+ <div className="mb-3">
+ <Select
+ className="w-full"
+ aria-label="Ordenar gastos"
+ selectedKey={sortKey}
+ onSelectionChange={(key) => {
+ if (!key) return;
+ const [col, dir] = (key as string).split("-");
+ onSortChange({ column: col, direction: dir as "ascending" | "descending" });
+ }}
+ >
+ <Select.Trigger className="rounded-xl border border-gray-200 bg-gray-50 text-sm h-9 min-h-0">
+ <Select.Value>
+ {({ isPlaceholder }) => {
+ if (isPlaceholder) return "Ordenar por: Fecha (más reciente)";
+ const key = sortKey;
+ if (key === "fecha-descending") return "Fecha: Más reciente";
+ if (key === "fecha-ascending") return "Fecha: Más antiguo";
+ if (key === "monto-descending") return "Monto: Mayor a menor";
+ if (key === "monto-ascending") return "Monto: Menor a mayor";
+ return "Ordenar por";
+ }}
+ </Select.Value>
+ <Select.Indicator className="text-gray-400" />
+ </Select.Trigger>
+ <Select.Popover className="rounded-xl shadow-apple-lg border border-border min-w-52">
+ <ListBox>
+ <ListBox.Item id="fecha-descending" textValue="Fecha: Más reciente">Fecha: Más reciente</ListBox.Item>
+ <ListBox.Item id="fecha-ascending" textValue="Fecha: Más antiguo">Fecha: Más antiguo</ListBox.Item>
+ <ListBox.Item id="monto-descending" textValue="Monto: Mayor a menor">Monto: Mayor a menor</ListBox.Item>
+ <ListBox.Item id="monto-ascending" textValue="Monto: Menor a mayor">Monto: Menor a mayor</ListBox.Item>
+ </ListBox>
+ </Select.Popover>
+ </Select>
+ </div>
  <ListBox
  aria-label="Gastos recientes"
  items={paginated}
@@ -82,35 +122,34 @@ export function ExpenseTableMobile({
  >
  <div className="flex flex-col gap-1 w-full">
  <div className="flex items-start justify-between gap-2">
- <span className="text-sm font-medium text-zinc-900 line-clamp-2">
+ <span className="text-sm font-medium text-gray-900 line-clamp-2">
  {txn.concepto}
  </span>
- <span className="text-sm font-semibold text-zinc-900 tabular-nums shrink-0">
+ <span className="text-sm font-semibold text-gray-900 tabular-nums shrink-0">
  {formatCLP(txn.monto)}
  </span>
  </div>
  <div className="flex items-center gap-2 flex-wrap">
  <span
- className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium"
+ className="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium text-gray-800"
  style={{
  backgroundColor:`${catColor}18`,
- color: catColor,
  }}
  >
  {txn.categoria}
  </span>
- <span className="text-xs text-zinc-500">
+ <span className="text-xs text-gray-500">
  {formatDate(txn.fecha)}
  </span>
  {isNew(txn.creado_el) && (
- <span className="inline-flex items-center rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 ring-1 ring-emerald-200/60">
+ <span className="inline-flex items-center rounded-md bg-red-50 px-1.5 py-0.5 text-[10px] font-semibold text-red-700 ring-1 ring-red-200/60">
  Nuevo
  </span>
  )}
  {txn.comprobante ? (
  <m.button type="button"
  onClick={() => { onViewLightbox(txn.comprobante, txn.concepto); }}
- className="inline-flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 transition-colors cursor-pointer rounded-sm focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
+ className="inline-flex items-center gap-1.5 text-xs font-medium text-red-600 hover:text-red-700 transition-colors cursor-pointer rounded-xs focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none min-h-11 py-2"
  aria-label={`Ver comprobante de ${txn.concepto}`}
  whileHover={{ scale: 1.05 }}
  whileTap={{ scale: 0.95 }}
@@ -122,7 +161,7 @@ export function ExpenseTableMobile({
  Ver comprobante
  </m.button>
  ) : (
- <span className="inline-flex items-center gap-1 text-xs text-zinc-400">
+ <span className="inline-flex items-center gap-1 text-xs text-gray-500">
  <span className="size-3.5">
  <EyeOffIcon />
  </span>
@@ -138,7 +177,7 @@ export function ExpenseTableMobile({
 
  {totalPages > 0 && (
  <div className="mt-4 flex flex-col gap-3">
- <span className="text-xs text-zinc-500 text-center">
+ <span className="text-xs text-gray-500 text-center">
  {start} a {end} de {filteredLength} resultados
  </span>
  <Pagination size="sm">
@@ -151,7 +190,7 @@ export function ExpenseTableMobile({
  <Pagination.PreviousIcon />
  </Pagination.Previous>
  </Pagination.Item>
- <span className="text-sm text-zinc-600">
+ <span className="text-sm text-gray-600">
  {page} / {totalPages}
  </span>
  <Pagination.Item>

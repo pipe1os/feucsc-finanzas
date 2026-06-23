@@ -5,14 +5,14 @@ export default function NotFound() {
  return (
  <div className="flex min-h-dvh flex-col items-center justify-center gap-2 px-4">
  <div className="flex flex-col items-center gap-3 max-w-sm text-center">
- <h1 className="text-5xl font-light tracking-tight text-zinc-900">
+ <h1 className="text-5xl font-light tracking-tight text-gray-900">
  404
  </h1>
  <div className="space-y-1">
- <p className="text-sm font-medium text-zinc-900">
+ <p className="text-sm font-medium text-gray-900">
  Página no encontrada
  </p>
- <p className="text-xs text-zinc-400">
+ <p className="text-xs text-gray-400">
  Esta URL no existe
  </p>
  </div>

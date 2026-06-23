@@ -14,7 +14,7 @@ export function SkeletonKPICards() {
  <Skeleton className="h-1 w-full rounded-full" />
  </div>
 
- <div className="flex items-end justify-between gap-4 pt-4 border-t border-zinc-50">
+ <div className="flex items-end justify-between gap-4 pt-4 border-t border-gray-50">
  <div className="space-y-2">
  <Skeleton className="h-3 w-28 rounded-lg" />
  <Skeleton className="h-7 w-32 rounded-lg" />

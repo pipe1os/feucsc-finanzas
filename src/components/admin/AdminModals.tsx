@@ -95,7 +95,7 @@ export default function AdminModals({
  >
  <Modal.Container>
  <Modal.Dialog className="sm:max-w-lg bg-white border border-border shadow-apple-lg">
- <Modal.CloseTrigger className="hover:bg-zinc-100 transition-colors" />
+ <Modal.CloseTrigger className="hover:bg-gray-100 transition-colors" />
  <Modal.Header className="sm:px-8 sm:pt-6 border-b border-border pb-4 mb-4">
  <Modal.Heading className="text-xl font-semibold font-heading">
  Editar Gasto
@@ -129,13 +129,13 @@ export default function AdminModals({
  >
  <AlertDialog.Container>
  <AlertDialog.Dialog className="sm:max-w-100 bg-white border border-border shadow-apple-lg">
- <AlertDialog.CloseTrigger className="hover:bg-zinc-100 transition-colors" />
+ <AlertDialog.CloseTrigger className="hover:bg-gray-100 transition-colors" />
  <AlertDialog.Header>
  <AlertDialog.Icon status="danger" />
  <AlertDialog.Heading>¿Eliminar gasto?</AlertDialog.Heading>
  </AlertDialog.Header>
  <AlertDialog.Body>
- <p className="text-sm text-zinc-600">
+ <p className="text-sm text-gray-600">
  Estás por eliminar{""}
  <strong>&ldquo;{deleteGasto?.descripcion}&rdquo;</strong> por{""}
  <strong>
@@ -156,7 +156,7 @@ export default function AdminModals({
  <Button
  variant="tertiary"
  slot="close"
- className="cursor-pointer text-zinc-700"
+ className="cursor-pointer text-gray-700"
  >
  Cancelar
  </Button>
@@ -178,13 +178,13 @@ export default function AdminModals({
  >
  <AlertDialog.Container>
  <AlertDialog.Dialog className="sm:max-w-100 bg-white border border-border shadow-apple-lg">
- <AlertDialog.CloseTrigger className="hover:bg-zinc-100 transition-colors" />
+ <AlertDialog.CloseTrigger className="hover:bg-gray-100 transition-colors" />
  <AlertDialog.Header>
  <AlertDialog.Icon status="warning" />
  <AlertDialog.Heading>¿Eliminar categoría?</AlertDialog.Heading>
  </AlertDialog.Header>
  <AlertDialog.Body>
- <p className="text-sm text-zinc-600">
+ <p className="text-sm text-gray-600">
  Vas a eliminar la categoría{""}
  <strong>&ldquo;{deletingCat}&rdquo;</strong>.
  {""}
@@ -195,7 +195,7 @@ export default function AdminModals({
  <Button
  variant="tertiary"
  slot="close"
- className="cursor-pointer text-zinc-700"
+ className="cursor-pointer text-gray-700"
  >
  Cancelar
  </Button>

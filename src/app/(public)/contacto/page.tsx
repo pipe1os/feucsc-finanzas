@@ -31,10 +31,10 @@ export default function ContactoPage() {
  return (
  <div className="mx-auto max-w-3xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
  <header className="mb-10 animate-fade-in-up opacity-0 text-center">
- <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 font-heading">
+ <h1 className="text-2xl font-semibold tracking-tight text-gray-900 font-heading">
  Contacto
  </h1>
- <p className="mt-2 text-base text-zinc-500 max-w-md mx-auto">
+ <p className="mt-2 text-base text-gray-500 max-w-md mx-auto">
  ¿Tienes dudas? Ponte en contacto con nosotros.
  </p>
  </header>
@@ -48,7 +48,7 @@ export default function ContactoPage() {
  onClick={handleCopyEmail}
  className="group flex items-center gap-5 p-5 sm:p-6 text-left cursor-pointer transition-all duration-200 rounded-2xl bg-white border border-border shadow-apple hover:shadow-apple-lg hover:border-border"
  >
- <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 text-zinc-400">
+ <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-gray-400">
  <svg
  xmlns="http://www.w3.org/2000/svg"
  width="20"
@@ -65,20 +65,20 @@ export default function ContactoPage() {
  </svg>
  </div>
  <div className="flex flex-col gap-0.5 min-w-0 flex-1">
- <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
+ <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
  Correo institucional
  </span>
- <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 break-all">
+ <span className="text-base sm:text-lg font-semibold tracking-tight text-gray-900 break-all">
  feucsc@ucsc.cl
  </span>
  </div>
- <span className="text-[11px] font-medium text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
+ <span className="text-[11px] font-medium text-gray-500 shrink-0">
  Copiar
  </span>
  </button>
 
  <div className="flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white border border-border shadow-apple">
- <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 text-zinc-400">
+ <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-gray-400">
  <svg
  xmlns="http://www.w3.org/2000/svg"
  width="20"
@@ -95,10 +95,10 @@ export default function ContactoPage() {
  </svg>
  </div>
  <div className="flex flex-col gap-0.5 min-w-0">
- <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
+ <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
  Sala FEUCSC
  </span>
- <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900">
+ <span className="text-base sm:text-lg font-semibold tracking-tight text-gray-900">
  Avenida Alonso de Ribera 2850, Concepción
  </span>
  </div>
@@ -110,7 +110,7 @@ export default function ContactoPage() {
  rel="noopener noreferrer"
  className="group flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white border border-border shadow-apple transition-all duration-200 hover:shadow-apple-lg hover:border-border"
  >
- <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 text-zinc-400">
+ <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-gray-400">
  <svg
  xmlns="http://www.w3.org/2000/svg"
  width="20"
@@ -128,10 +128,10 @@ export default function ContactoPage() {
  </svg>
  </div>
  <div className="flex flex-col gap-0.5 min-w-0 flex-1">
- <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
+ <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
  Síguenos en Instagram
  </span>
- <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 group-hover:text-red-500 transition-colors duration-200">
+ <span className="text-base sm:text-lg font-semibold tracking-tight text-gray-900 group-hover:text-red-600 transition-colors duration-200">
  @feucsc_
  </span>
  </div>
