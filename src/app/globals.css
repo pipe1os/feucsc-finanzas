@@ -332,17 +332,15 @@ body {
         opacity 400ms ease !important;
 }
 
-/* HeroUI flips the indicator via the `rotate` property but sets
-   transition-property:none on it, so the chevron snapped with no animation.
-   Drive the flip with `transform` (interpolates reliably), force the
-   transition, and neutralize HeroUI's `rotate` so the two don't stack to 360deg. */
-.accordion__indicator {
-    rotate: none !important;
-    transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1) !important;
+/* The FAQ chevron renders as a bare <svg> inside .accordion__trigger (HeroUI's
+   Accordion.Indicator emits no wrapper element here), and the expanded state
+   lives on the trigger button as aria-expanded. Rotate the svg on expand. */
+.accordion__trigger svg {
+    transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-.accordion__indicator[data-expanded="true"] {
-    transform: rotate(180deg) !important;
+.accordion__trigger[aria-expanded="true"] svg {
+    transform: rotate(180deg);
 }
 
 /* 👱‍♀️ ponytail: Removed one-way @keyframes and replaced with symmetric transition for smoother close animation */
