@@ -55,12 +55,14 @@ export function SkeletonChart({
 
  <CardContent className="flex-1 flex flex-col min-h-0 pt-0 relative">
  <div className="flex-1 w-full min-h-0">
- <AreaChartLoading
- gridShimmerSync
- label="Loading"
- stroke="var(--foreground)"
- strokeOpacity={0.5}
- />
+          <AreaChartLoading
+            gridShimmerSync
+            label="Loading"
+            stroke="var(--foreground)"
+            strokeOpacity={0.5}
+            aspectRatio="auto"
+            className="h-full"
+          />
  </div>
  </CardContent>
  </Card>
