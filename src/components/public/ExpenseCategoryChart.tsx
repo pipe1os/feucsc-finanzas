@@ -175,7 +175,7 @@ export default function ExpenseCategoryChart({
  onClick={() =>
  onCategoryClick?.(item.categoria)
  }
- className={`flex items-center gap-3 w-full cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-all duration-200
+ className={`flex items-center gap-3 w-full cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-colors duration-200
  ${isActive ?"bg-zinc-50" :"hover:bg-zinc-50/60"}`}
  initial={{ opacity: 0 }}
  animate={{ opacity: isDimmed ? 0.4 : 1 }}
