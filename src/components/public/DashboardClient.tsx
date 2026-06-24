@@ -59,7 +59,12 @@ export default function DashboardClient({
     [activeCategoryFilter, pathname, router, searchParams]
   );
 
-  const filteredTransacciones = useMemo(() => {
+  // Search + month only — shared base. The category filter is applied on top
+  // for the table, but NOT for the pie: the chart always shows every category
+  // and dims the selected one instead of collapsing to a single slice. Keeping
+  // the pie's dataset stable across category clicks also stops its entrance
+  // animation from re-triggering on every filter/clear.
+  const baseFiltered = useMemo(() => {
     let result = allTransacciones;
 
     if (search) {
@@ -71,22 +76,24 @@ export default function DashboardClient({
       );
     }
 
+    if (mesFilter !== "all") {
+      // match YYYY-MM-DD
+      result = result.filter((t) => t.fecha.substring(5, 7) === mesFilter);
+    }
+
+    return result;
+  }, [allTransacciones, search, mesFilter]);
+
+  const filteredTransacciones = useMemo(() => {
+    let result = baseFiltered;
+
     if (activeCategoryFilter !== "all") {
       result = result.filter((t) => t.categoria === activeCategoryFilter);
     }
 
-    if (mesFilter !== "all") {
-      result = result.filter((t) => {
-        // match YYYY-MM-DD
-        const monthPart = t.fecha.substring(5, 7);
-        return monthPart === mesFilter;
-      });
-    }
-
     const sortKey = sortCol === "descripcion" ? "concepto" : sortCol;
-    
-    // Create a new array for sorting
-    result = result.toSorted((a, b) => {
+
+    return result.toSorted((a, b) => {
       const valA = a[sortKey as keyof Transaccion];
       const valB = b[sortKey as keyof Transaccion];
 
@@ -102,13 +109,11 @@ export default function DashboardClient({
 
       return 0;
     });
-
-    return result;
-  }, [allTransacciones, search, activeCategoryFilter, mesFilter, sortCol, sortDir]);
+  }, [baseFiltered, activeCategoryFilter, sortCol, sortDir]);
 
   const gastosPorCategoria: CategoriaData[] = useMemo(() => {
     const map = new Map<string, number>();
-    filteredTransacciones.forEach((t) => {
+    baseFiltered.forEach((t) => {
       const cat = t.categoria || "Varios";
       map.set(cat, (map.get(cat) ?? 0) + t.monto);
     });
@@ -120,7 +125,7 @@ export default function DashboardClient({
         color: categoryColors[categoria] || "#E30707",
       }))
       .sort((a, b) => b.monto - a.monto);
-  }, [filteredTransacciones, categoryColors]);
+  }, [baseFiltered, categoryColors]);
 
   const paginatedTransacciones = useMemo(() => {
     const start = (page - 1) * ROWS_PER_PAGE;
