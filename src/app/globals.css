@@ -332,8 +332,17 @@ body {
         opacity 400ms ease !important;
 }
 
+/* HeroUI flips the indicator via the `rotate` property but sets
+   transition-property:none on it, so the chevron snapped with no animation.
+   Drive the flip with `transform` (interpolates reliably), force the
+   transition, and neutralize HeroUI's `rotate` so the two don't stack to 360deg. */
 .accordion__indicator {
-    transition: rotate 400ms cubic-bezier(0.32, 0.72, 0, 1) !important;
+    rotate: none !important;
+    transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1) !important;
+}
+
+.accordion__indicator[data-expanded="true"] {
+    transform: rotate(180deg) !important;
 }
 
 /* 👱‍♀️ ponytail: Removed one-way @keyframes and replaced with symmetric transition for smoother close animation */
