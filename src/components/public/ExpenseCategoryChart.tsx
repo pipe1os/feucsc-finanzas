@@ -118,8 +118,12 @@ export default function ExpenseCategoryChart({
  const isDimmed = activeCategoryFilter && activeCategoryFilter !== d.data.categoria;
 
  return (
- <m.text
+ <g
  key={d.data.categoria}
+ style={{ opacity: isDimmed ? 0.3 : 1 }}
+ className="transition-opacity duration-200"
+ >
+ <m.text
  x={x}
  y={y}
  textAnchor="middle"
@@ -127,14 +131,15 @@ export default function ExpenseCategoryChart({
  fill="white"
  fontSize="10.5px"
  fontWeight="bold"
- className="pointer-events-none transition-opacity duration-200"
+ className="pointer-events-none"
  style={{ textShadow:"0 1px 2px rgba(0,0,0,0.4)" }}
  initial={{ opacity: 0 }}
- animate={{ opacity: isDimmed ? 0.3 : 1 }}
- transition={{ duration: 0.3, ease:"easeOut" }}
+ animate={{ opacity: 1 }}
+ transition={{ duration: 0.4, ease:"easeOut", delay: d.index * 0.08 + 0.3 }}
  >
  {pct}%
  </m.text>
+ </g>
  );
  })}
  </svg>
