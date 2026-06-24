@@ -23,6 +23,7 @@
   },
   "registries": {
     "@icons-animated": "https://icons.lndev.me/r/{name}.json",
-    "@react-bits": "https://reactbits.dev/r/{name}.json"
+    "@react-bits": "https://reactbits.dev/r/{name}.json",
+    "@bklit": "https://ui.bklit.com/r/{name}.json"
   }
 }

@@ -1,13 +1,14 @@
 "use client";
 
-import { Skeleton } from"@heroui/react";
+import { Skeleton } from "@heroui/react";
+import AreaChartLoading from "@/components/charts/area-chart-loading";
 import {
  Card,
  CardContent,
  CardDescription,
  CardHeader,
  CardTitle,
-} from"@/components/ui/card";
+} from "@/components/ui/card";
 
 export function SkeletonChart({
  type ="trend",
@@ -52,8 +53,15 @@ export function SkeletonChart({
  </CardDescription>
  </CardHeader>
 
- <CardContent className="flex-1 flex flex-col min-h-0 pt-0">
- <Skeleton className="flex-1 w-full rounded-xl min-h-0" />
+ <CardContent className="flex-1 flex flex-col min-h-0 pt-0 relative">
+ <div className="flex-1 w-full min-h-0">
+ <AreaChartLoading
+ gridShimmerSync
+ label="Loading"
+ stroke="var(--foreground)"
+ strokeOpacity={0.5}
+ />
+ </div>
  </CardContent>
  </Card>
  );

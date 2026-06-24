@@ -3,6 +3,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
 
 @source "../../src";
 
@@ -71,8 +72,23 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+    --chart-background: oklch(1 0 0);
+    --chart-foreground: oklch(0.145 0.004 285);
+    --chart-foreground-muted: oklch(0.55 0.014 260);
+    --chart-line-primary: var(--chart-1);
+    --chart-line-secondary: var(--chart-2);
+    --chart-crosshair: oklch(0.4 0.1828 274.34);
+    --chart-grid: oklch(0.9 0 0);
+    --chart-brush-border: var(--chart-grid);
+    --chart-tooltip-background: oklch(0.21 0.006 285 / 0.8);
+    --chart-tooltip-foreground: oklch(0.985 0 0);
+    --chart-tooltip-muted: oklch(0.65 0.01 260);
+    --chart-marker-background: oklch(0.97 0.005 260);
+    --chart-marker-border: oklch(0.85 0.01 260);
+    --chart-marker-foreground: oklch(0.3 0.01 260);
+    --chart-ring-background: oklch(0.9 0.005 260 / 0.25);
+    --chart-label: oklch(0.45 0.01 260);
 }
-
 
 @theme inline {
     --color-background: var(--background);
@@ -181,6 +197,38 @@
     --radius-3xl: calc(var(--radius) * 2.2);
 
     --radius-4xl: calc(var(--radius) * 2.6);
+
+    --color-chart-label: var(----chart-label);
+
+    --color-chart-ring-background: var(----chart-ring-background);
+
+    --color-chart-marker-foreground: var(----chart-marker-foreground);
+
+    --color-chart-marker-border: var(----chart-marker-border);
+
+    --color-chart-marker-background: var(----chart-marker-background);
+
+    --color-chart-tooltip-muted: var(----chart-tooltip-muted);
+
+    --color-chart-tooltip-foreground: var(----chart-tooltip-foreground);
+
+    --color-chart-tooltip-background: var(----chart-tooltip-background);
+
+    --chart-brush-border: var(----chart-brush-border);
+
+    --color-chart-grid: var(----chart-grid);
+
+    --color-chart-crosshair: var(----chart-crosshair);
+
+    --chart-line-secondary: var(----chart-line-secondary);
+
+    --chart-line-primary: var(----chart-line-primary);
+
+    --color-chart-foreground-muted: var(----chart-foreground-muted);
+
+    --color-chart-foreground: var(----chart-foreground);
+
+    --color-chart-background: var(----chart-background);
 }
 
 body {
@@ -195,7 +243,6 @@ body {
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
 }
-
 
 @utility card-hover {
     transition:
@@ -365,7 +412,6 @@ body {
     }
 }
 
-
 @media (min-width: 1920px) {
     :root {
         font-size: 18px;
@@ -379,4 +425,23 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+.dark {
+    --chart-1: oklch(1 0 none);
+    --chart-2: oklch(0.73 0 none);
+    --chart-3: oklch(0.51 0 none);
+    --chart-4: oklch(0.39 0 none);
+    --chart-5: oklch(0.32 0 none);
+    --chart-background: oklch(0.145 0 0);
+    --chart-foreground: oklch(0.45 0 0);
+    --chart-foreground-muted: oklch(0.65 0.01 260);
+    --chart-crosshair: oklch(0.45 0 0);
+    --chart-grid: oklch(0.25 0 0);
+    --chart-brush-border: var(--chart-grid);
+    --chart-marker-background: oklch(0.25 0.01 260);
+    --chart-marker-border: oklch(0.4 0.01 260);
+    --chart-marker-foreground: oklch(0.9 0 0);
+    --chart-ring-background: oklch(0.35 0.01 260 / 0.25);
+    --chart-label: oklch(0.75 0.01 260);
 }

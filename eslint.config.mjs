@@ -16,6 +16,7 @@ const eslintConfig = defineConfig([
     ".agents/**",
     ".claude/**",
     ".unlighthouse/**",
+    "src/components/charts/**",
   ]),
 ]);
 
