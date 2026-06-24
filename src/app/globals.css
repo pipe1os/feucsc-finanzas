@@ -333,7 +333,7 @@ body {
 }
 
 .accordion__indicator {
-    transition: transform 400ms cubic-bezier(0.32, 0.72, 0, 1) !important;
+    transition: rotate 400ms cubic-bezier(0.32, 0.72, 0, 1) !important;
 }
 
 /* 👱‍♀️ ponytail: Removed one-way @keyframes and replaced with symmetric transition for smoother close animation */

@@ -261,11 +261,9 @@ export default function ExpenseTrendChart({
  <m.rect
  x="0"
  y="-10"
- width="100"
  height="120"
- style={{ transformBox:"fill-box", transformOrigin:"left" }}
- initial={{ scaleX: 0 }}
- animate={{ scaleX: 1 }}
+ initial={{ width: 0 }}
+ animate={{ width: 100 }}
  transition={{ duration: 1.4, ease:"easeInOut", delay: 0.1 }}
  />
  </clipPath>

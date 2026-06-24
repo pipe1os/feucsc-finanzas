@@ -129,9 +129,9 @@ export default function ExpenseCategoryChart({
  fontWeight="bold"
  className="pointer-events-none transition-opacity duration-200"
  style={{ textShadow:"0 1px 2px rgba(0,0,0,0.4)" }}
- initial={{ opacity: 0, scale: 0.95 }}
- animate={{ opacity: isDimmed ? 0.3 : 1, scale: 1 }}
- transition={{ type:"spring", stiffness: 260, damping: 20, delay: d.index * 0.08 + 0.3 }}
+ initial={{ opacity: 0 }}
+ animate={{ opacity: isDimmed ? 0.3 : 1 }}
+ transition={{ duration: 0.3, ease:"easeOut" }}
  >
  {pct}%
  </m.text>
@@ -172,8 +172,8 @@ export default function ExpenseCategoryChart({
  }
  className={`flex items-center gap-3 w-full cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-all duration-200
  ${isActive ?"bg-zinc-50" :"hover:bg-zinc-50/60"}`}
- initial={{ opacity: 0, y: 4 }}
- animate={{ opacity: isDimmed ? 0.4 : 1, y: 0 }}
+ initial={{ opacity: 0 }}
+ animate={{ opacity: isDimmed ? 0.4 : 1 }}
  transition={{ duration: 0.35, ease:"easeOut", delay: index * 0.04 }}
  >
  <div
