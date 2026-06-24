@@ -172,9 +172,9 @@ export default function ExpenseCategoryChart({
  }
  className={`flex items-center gap-3 w-full cursor-pointer rounded-lg px-2 py-1 -mx-2 transition-all duration-200
  ${isActive ?"bg-zinc-50" :"hover:bg-zinc-50/60"}`}
- initial={{ opacity: 0, x: -10 }}
- animate={{ opacity: isDimmed ? 0.4 : 1, x: 0 }}
- transition={{ duration: 0.4, ease:"easeOut", delay: 0.1 + index * 0.08 }}
+ initial={{ opacity: 0, y: 4 }}
+ animate={{ opacity: isDimmed ? 0.4 : 1, y: 0 }}
+ transition={{ duration: 0.35, ease:"easeOut", delay: index * 0.04 }}
  >
  <div
  className="size-2.5 rounded-full shrink-0"
@@ -189,9 +189,11 @@ export default function ExpenseCategoryChart({
  className="h-full rounded-full"
  style={{
  backgroundColor: item.color,
+ width:`${pct}%`,
+ transformOrigin:"left",
  }}
- initial={{ width: 0 }}
- animate={{ width:`${pct}%` }}
+ initial={{ scaleX: 0 }}
+ animate={{ scaleX: 1 }}
  transition={{ duration: 0.6, ease:"easeOut", delay: 0.3 + index * 0.08 }}
  />
  </div>
