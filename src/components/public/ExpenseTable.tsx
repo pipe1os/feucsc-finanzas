@@ -196,7 +196,9 @@ function ExpenseTable({
       const timer = setTimeout(() => {
         setLastImage(null);
       }, 300);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+      };
     }
   }, [lightboxImage]);
 
