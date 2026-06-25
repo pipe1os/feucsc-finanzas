@@ -1,9 +1,9 @@
 "use client";
 
 import type { Transition } from "motion/react";
-import { motion, useAnimation } from "motion/react";
-import type { HTMLAttributes } from "react";
-import { forwardRef, useCallback, useImperativeHandle } from "react";
+import { m, LazyMotion, domAnimation, useAnimation } from "motion/react";
+import type { HTMLAttributes, Ref } from "react";
+import { useCallback, useImperativeHandle } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -15,6 +15,7 @@ export interface CopyIconHandle {
 interface CopyIconProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
   disableHover?: boolean;
+  ref?: Ref<CopyIconHandle>;
 }
 
 const DEFAULT_TRANSITION: Transition = {
@@ -24,42 +25,50 @@ const DEFAULT_TRANSITION: Transition = {
   mass: 1,
 };
 
-const CopyIcon = forwardRef<CopyIconHandle, CopyIconProps>(
-  ({ onMouseEnter, onMouseLeave, className, size = 28, disableHover = false, ...props }, ref) => {
-    const controls = useAnimation();
+const CopyIcon = ({
+  onMouseEnter,
+  onMouseLeave,
+  className,
+  size = 28,
+  disableHover = false,
+  ref,
+  ...props
+}: CopyIconProps) => {
+  const controls = useAnimation();
 
-    useImperativeHandle(ref, () => ({
-      startAnimation: () => controls.start("animate"),
-      stopAnimation: () => controls.start("normal"),
-    }), [controls]);
+  useImperativeHandle(ref, () => ({
+    startAnimation: () => controls.start("animate"),
+    stopAnimation: () => controls.start("normal"),
+  }), [controls]);
 
-    const handleMouseEnter = useCallback(
-      (e: React.MouseEvent<HTMLDivElement>) => {
-        onMouseEnter?.(e);
-        if (!disableHover) {
-          controls.start("animate");
-        }
-      },
-      [controls, onMouseEnter, disableHover]
-    );
+  const handleMouseEnter = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      onMouseEnter?.(e);
+      if (!disableHover) {
+        controls.start("animate");
+      }
+    },
+    [controls, onMouseEnter, disableHover]
+  );
 
-    const handleMouseLeave = useCallback(
-      (e: React.MouseEvent<HTMLDivElement>) => {
-        onMouseLeave?.(e);
-        if (!disableHover) {
-          controls.start("normal");
-        }
-      },
-      [controls, onMouseLeave, disableHover]
-    );
+  const handleMouseLeave = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      onMouseLeave?.(e);
+      if (!disableHover) {
+        controls.start("normal");
+      }
+    },
+    [controls, onMouseLeave, disableHover]
+  );
 
-    return (
-      <div
-        className={cn(className)}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        {...props}
-      >
+  return (
+    <div
+      className={cn(className)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      {...props}
+    >
+      <LazyMotion features={domAnimation}>
         <svg
           aria-hidden="true"
           focusable="false"
@@ -73,7 +82,7 @@ const CopyIcon = forwardRef<CopyIconHandle, CopyIconProps>(
           width={size}
           xmlns="http://www.w3.org/2000/svg"
         >
-          <motion.rect
+          <m.rect
             animate={controls}
             height="14"
             rx="2"
@@ -87,7 +96,7 @@ const CopyIcon = forwardRef<CopyIconHandle, CopyIconProps>(
             x="8"
             y="8"
           />
-          <motion.path
+          <m.path
             animate={controls}
             d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
             transition={DEFAULT_TRANSITION}
@@ -97,10 +106,10 @@ const CopyIcon = forwardRef<CopyIconHandle, CopyIconProps>(
             }}
           />
         </svg>
-      </div>
-    );
-  }
-);
+      </LazyMotion>
+    </div>
+  );
+};
 
 CopyIcon.displayName = "CopyIcon";
 

@@ -15,7 +15,7 @@ export default function ContactoPage() {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, []);
+  }, [timeoutRef]);
 
   const handleCopyEmail = () => {
     const text = "feucsc@ucsc.cl";
