@@ -1,19 +1,33 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { toast } from "@heroui/react";
 import Footer from "@/components/public/Footer";
 import { CopyIcon, type CopyIconHandle } from "@/components/ui/copy";
 
 export default function ContactoPage() {
   const copyIconRef = useRef<CopyIconHandle>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleCopyEmail = () => {
     const text = "feucsc@ucsc.cl";
     
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
     copyIconRef.current?.startAnimation();
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       copyIconRef.current?.stopAnimation();
+      timeoutRef.current = null;
     }, 1000);
 
     if (navigator.clipboard) {
@@ -85,6 +99,7 @@ export default function ContactoPage() {
  <CopyIcon
    ref={copyIconRef}
    size={20}
+   disableHover={true}
    className="text-zinc-400 group-hover:text-zinc-600 transition-colors duration-200 shrink-0"
  />
  </button>

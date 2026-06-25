@@ -188,6 +188,25 @@ function ExpenseTable({
     concepto: string;
   } | null>(null);
 
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // Reset lastImage after modal closing animation completes to avoid memory leak
+  useEffect(() => {
+    if (!lightboxImage) {
+      const timer = setTimeout(() => {
+        setLastImage(null);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [lightboxImage]);
+
+  // Guard cached image reopens: check if image is already complete in browser cache
+  useEffect(() => {
+    if (imgRef.current?.complete) {
+      setIsImageLoading(false);
+    }
+  }, [lastImage]);
+
   const handleViewLightbox = useCallback((src: string, concepto: string) => {
     setIsImageLoading(true);
     const img = { src, concepto };
@@ -286,7 +305,10 @@ function ExpenseTable({
     }}
   >
     <Modal.Container placement="center" size="lg">
-      <Modal.Dialog className="relative sm:max-w-2xl bg-surface rounded-2xl overflow-hidden shadow-apple-lg p-3">
+      <Modal.Dialog
+        aria-label={lastImage ? `Comprobante: ${lastImage.concepto}` : "Comprobante"}
+        className="relative sm:max-w-2xl bg-surface rounded-2xl overflow-hidden shadow-apple-lg p-3"
+      >
         <Modal.CloseTrigger className="absolute top-4 right-4 z-50 bg-white/80 hover:bg-white text-zinc-800 rounded-full p-1.5 transition-colors shadow-xs cursor-pointer border border-zinc-200/50" />
         <Modal.Body className="p-0">
           {lastImage && (
@@ -303,6 +325,8 @@ function ExpenseTable({
                   transition={{ duration: 0.4, type: "spring", bounce: 0.1 }}
                 >
                   <Image
+                    ref={imgRef}
+                    key={lastImage.src}
                     src={lastImage.src}
                     alt={`Comprobante: ${lastImage.concepto}`}
                     width={600}
