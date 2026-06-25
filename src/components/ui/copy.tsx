@@ -1,0 +1,117 @@
+"use client";
+
+import type { Transition } from "motion/react";
+import { m, LazyMotion, domAnimation, useAnimation } from "motion/react";
+import type { HTMLAttributes, Ref } from "react";
+import { useCallback, useImperativeHandle } from "react";
+
+import { cn } from "@/lib/utils";
+
+export interface CopyIconHandle {
+  startAnimation: () => void;
+  stopAnimation: () => void;
+}
+
+interface CopyIconProps extends HTMLAttributes<HTMLDivElement> {
+  size?: number;
+  disableHover?: boolean;
+  ref?: Ref<CopyIconHandle>;
+}
+
+const DEFAULT_TRANSITION: Transition = {
+  type: "spring",
+  stiffness: 160,
+  damping: 17,
+  mass: 1,
+};
+
+const CopyIcon = ({
+  onMouseEnter,
+  onMouseLeave,
+  className,
+  size = 28,
+  disableHover = false,
+  ref,
+  ...props
+}: CopyIconProps) => {
+  const controls = useAnimation();
+
+  useImperativeHandle(ref, () => ({
+    startAnimation: () => controls.start("animate"),
+    stopAnimation: () => controls.start("normal"),
+  }), [controls]);
+
+  const handleMouseEnter = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      onMouseEnter?.(e);
+      if (!disableHover) {
+        controls.start("animate");
+      }
+    },
+    [controls, onMouseEnter, disableHover]
+  );
+
+  const handleMouseLeave = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      onMouseLeave?.(e);
+      if (!disableHover) {
+        controls.start("normal");
+      }
+    },
+    [controls, onMouseLeave, disableHover]
+  );
+
+  return (
+    <div
+      className={cn(className)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      {...props}
+    >
+      <LazyMotion features={domAnimation}>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          fill="none"
+          height={size}
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          width={size}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <m.rect
+            animate={controls}
+            height="14"
+            rx="2"
+            ry="2"
+            transition={DEFAULT_TRANSITION}
+            variants={{
+              normal: { translateY: 0, translateX: 0 },
+              animate: { translateY: -3, translateX: -3 },
+            }}
+            width="14"
+            x="8"
+            y="8"
+          />
+          <m.path
+            animate={controls}
+            d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+            transition={DEFAULT_TRANSITION}
+            variants={{
+              normal: { x: 0, y: 0 },
+              animate: { x: 3, y: 3 },
+            }}
+          />
+        </svg>
+      </LazyMotion>
+    </div>
+  );
+};
+
+CopyIcon.displayName = "CopyIcon";
+
+export { CopyIcon };
+

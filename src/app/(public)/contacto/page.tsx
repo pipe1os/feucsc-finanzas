@@ -1,33 +1,57 @@
 "use client";
 
-import { toast } from"@heroui/react";
-import Footer from"@/components/public/Footer";
-
-const handleCopyEmail = () => {
- const text ="feucsc@ucsc.cl";
- if (navigator.clipboard) {
-  navigator.clipboard.writeText(text).then(() => {
-    toast.success("Correo copiado al portapapeles");
-  }).catch(() => {
-    toast.danger("No se pudo copiar el correo");
-  });
- } else {
- const textarea = document.createElement("textarea");
- textarea.value = text;
- textarea.style.cssText ="position: fixed; opacity: 0;";
- document.body.appendChild(textarea);
- textarea.select();
- try {
- document.execCommand("copy");
- toast.success("Correo copiado al portapapeles");
- } catch {
- toast.danger("No se pudo copiar el correo");
- }
- document.body.removeChild(textarea);
- }
-};
+import { useRef, useEffect } from "react";
+import { toast } from "@heroui/react";
+import Footer from "@/components/public/Footer";
+import { CopyIcon, type CopyIconHandle } from "@/components/ui/copy";
 
 export default function ContactoPage() {
+  const copyIconRef = useRef<CopyIconHandle>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [timeoutRef]);
+
+  const handleCopyEmail = () => {
+    const text = "feucsc@ucsc.cl";
+    
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
+    copyIconRef.current?.startAnimation();
+    timeoutRef.current = setTimeout(() => {
+      copyIconRef.current?.stopAnimation();
+      timeoutRef.current = null;
+    }, 1000);
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        toast.success("Correo copiado al portapapeles");
+      }).catch(() => {
+        toast.danger("No se pudo copiar el correo");
+      });
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.cssText = "position: fixed; opacity: 0;";
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        toast.success("Correo copiado al portapapeles");
+      } catch {
+        toast.danger("No se pudo copiar el correo");
+      }
+      document.body.removeChild(textarea);
+    }
+  };
+
  return (
  <div className="mx-auto max-w-3xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
  <header className="mb-10 animate-fade-in-up opacity-0 text-center">
@@ -72,9 +96,12 @@ export default function ContactoPage() {
  feucsc@ucsc.cl
  </span>
  </div>
- <span className="text-[11px] font-medium text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
- Copiar
- </span>
+ <CopyIcon
+   ref={copyIconRef}
+   size={20}
+   disableHover={true}
+   className="text-zinc-400 group-hover:text-zinc-600 transition-colors duration-200 shrink-0"
+ />
  </button>
 
  <div className="flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white border border-border shadow-apple">
