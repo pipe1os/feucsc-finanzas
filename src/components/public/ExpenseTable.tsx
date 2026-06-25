@@ -7,7 +7,7 @@ import React, {
  useEffect,
  useCallback,
 } from"react";
-import { Modal, Button, SortDescriptor } from"@heroui/react";
+import { Modal, SortDescriptor } from "@heroui/react";
 import Image from"next/image";
 import { m, LazyMotion, domAnimation, AnimatePresence } from"motion/react";
 import { useRouter, usePathname, useSearchParams } from"next/navigation";
@@ -177,16 +177,23 @@ function ExpenseTable({
  setURLParams({ sort: String(desc.column), direction: desc.direction });
  }, [setURLParams]);
 
- const [lightboxImage, setLightboxImage] = useState<{
- src: string;
- concepto: string;
- } | null>(null);
- const [isImageLoading, setIsImageLoading] = useState(true);
+  const [lightboxImage, setLightboxImage] = useState<{
+    src: string;
+    concepto: string;
+  } | null>(null);
+  const [isImageLoading, setIsImageLoading] = useState(true);
+ 
+  const [lastImage, setLastImage] = useState<{
+    src: string;
+    concepto: string;
+  } | null>(null);
 
- const handleViewLightbox = useCallback((src: string, concepto: string) => {
- setIsImageLoading(true);
- setLightboxImage({ src, concepto });
- }, []);
+  const handleViewLightbox = useCallback((src: string, concepto: string) => {
+    setIsImageLoading(true);
+    const img = { src, concepto };
+    setLightboxImage(img);
+    setLastImage(img);
+  }, []);
 
  return (
  <>
@@ -272,60 +279,46 @@ function ExpenseTable({
  </AnimatePresence>
  </LazyMotion>
 
- <Modal.Backdrop
- isOpen={!!lightboxImage}
- onOpenChange={(isOpen) => {
- if (!isOpen) setLightboxImage(null);
- }}
- >
- <Modal.Container placement="center" size="lg">
- <Modal.Dialog className="sm:max-w-2xl bg-surface rounded-2xl overflow-hidden shadow-apple-lg">
- <Modal.CloseTrigger />
- <Modal.Header>
- <Modal.Heading className="text-sm font-semibold text-gray-900">
- {lightboxImage?.concepto ??"Comprobante"}
- </Modal.Heading>
- </Modal.Header>
- <Modal.Body className="p-4">
- {lightboxImage && (
- <div className="flex justify-center rounded-xl bg-zinc-50 p-4 relative min-h-[300px] items-center">
- {isImageLoading && (
- <div className="absolute inset-0 flex items-center justify-center">
- <div className="size-8 rounded-full border-2 border-red-500 border-t-transparent animate-spin" />
- </div>
- )}
- <LazyMotion features={domAnimation}>
- <m.div
- initial={{ opacity: 0, scale: 0.95 }}
- animate={{ opacity: isImageLoading ? 0 : 1, scale: isImageLoading ? 0.95 : 1 }}
- transition={{ duration: 0.4, type:"spring", bounce: 0.1 }}
- >
- <Image
- src={lightboxImage.src}
- alt={`Comprobante: ${lightboxImage.concepto}`}
- width={500}
- height={700}
- sizes="(max-width: 768px) 100vw, 500px"
- className="max-h-[70vh] w-auto rounded-lg object-contain"
- onLoad={() => { setIsImageLoading(false); }}
- />
- </m.div>
- </LazyMotion>
- </div>
- )}
- </Modal.Body>
- <Modal.Footer>
- <Button
- slot="close"
- variant="secondary"
- className="rounded-xl text-gray-900"
- >
- Cerrar
- </Button>
- </Modal.Footer>
- </Modal.Dialog>
- </Modal.Container>
- </Modal.Backdrop>
+  <Modal.Backdrop
+    isOpen={!!lightboxImage}
+    onOpenChange={(isOpen) => {
+      if (!isOpen) setLightboxImage(null);
+    }}
+  >
+    <Modal.Container placement="center" size="lg">
+      <Modal.Dialog className="relative sm:max-w-2xl bg-surface rounded-2xl overflow-hidden shadow-apple-lg p-3">
+        <Modal.CloseTrigger className="absolute top-4 right-4 z-50 bg-white/80 hover:bg-white text-zinc-800 rounded-full p-1.5 transition-colors shadow-xs cursor-pointer border border-zinc-200/50" />
+        <Modal.Body className="p-0">
+          {lastImage && (
+            <div className="relative flex justify-center items-center min-h-[300px] w-full">
+              {isImageLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-surface/50 backdrop-blur-xs rounded-xl z-10">
+                  <div className="size-8 rounded-full border-2 border-red-500 border-t-transparent animate-spin" />
+                </div>
+              )}
+              <LazyMotion features={domAnimation}>
+                <m.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: isImageLoading ? 0 : 1, scale: isImageLoading ? 0.95 : 1 }}
+                  transition={{ duration: 0.4, type: "spring", bounce: 0.1 }}
+                >
+                  <Image
+                    src={lastImage.src}
+                    alt={`Comprobante: ${lastImage.concepto}`}
+                    width={600}
+                    height={800}
+                    sizes="(max-width: 768px) 100vw, 600px"
+                    className="max-h-[75vh] w-auto rounded-xl object-contain shadow-xs block"
+                    onLoad={() => { setIsImageLoading(false); }}
+                  />
+                </m.div>
+              </LazyMotion>
+            </div>
+          )}
+        </Modal.Body>
+      </Modal.Dialog>
+    </Modal.Container>
+  </Modal.Backdrop>
  </>
  );
 }
