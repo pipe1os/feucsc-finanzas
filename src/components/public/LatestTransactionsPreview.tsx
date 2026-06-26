@@ -24,14 +24,14 @@ export default function LatestTransactionsPreview({
  totalCount,
 }: LatestTransactionsPreviewProps) {
  return (
- <div className="rounded-2xl border border-border bg-surface shadow-apple overflow-hidden">
- <div className="px-6 pt-5 pb-4">
+ <div className="rounded-2xl border border-gray-100/80 bg-surface-warm shadow-warm overflow-hidden">
+ <div className="px-5 pt-5 pb-3 sm:px-6 sm:pt-5 sm:pb-4">
  <h2 className="text-base font-semibold text-gray-900 font-heading">
  Últimos Gastos
  </h2>
  </div>
 
- <div className="md:hidden px-5">
+ <div className="md:hidden px-4 sm:px-5">
  <ListBox
  aria-label="Últimos gastos"
  items={transactions}
@@ -70,7 +70,7 @@ export default function LatestTransactionsPreview({
  >
  {txn.categoria}
  </span>
- <span className="text-xs text-gray-500">
+ <span className="text-xs text-gray-400">
  {formatDate(txn.fecha)}
  </span>
  </div>
@@ -88,17 +88,17 @@ export default function LatestTransactionsPreview({
  <Table.Header>
  <Table.Column
  isRowHeader
- className="text-left text-[11px] font-semibold tracking-wider text-gray-500 uppercase"
+ className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase"
  >
  Fecha
  </Table.Column>
- <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
+ <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
  Descripción
  </Table.Column>
- <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
+ <Table.Column className="text-left text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
  Categoría
  </Table.Column>
- <Table.Column className="text-right text-[11px] font-semibold tracking-wider text-gray-500 uppercase">
+ <Table.Column className="text-right text-[11px] font-semibold tracking-wider text-gray-400 uppercase">
  Monto
  </Table.Column>
  </Table.Header>
@@ -106,10 +106,10 @@ export default function LatestTransactionsPreview({
  {transactions.map((txn) => (
  <Table.Row
  key={txn.id}
- className="hover:bg-gray-50/50 transition-colors duration-150"
+ className="hover:bg-gray-50/60 transition-colors duration-150"
  >
  <Table.Cell className="px-4 py-2">
- <span className="text-gray-500 whitespace-nowrap">
+ <span className="text-gray-400 whitespace-nowrap">
  {formatDate(txn.fecha)}
  </span>
  </Table.Cell>
@@ -142,13 +142,13 @@ export default function LatestTransactionsPreview({
  </Table>
  </div>
 
- <div className="px-6 py-4 border-t border-gray-50 flex items-center justify-between">
- <span className="text-xs text-gray-500">
+ <div className="px-5 py-4 sm:px-6 sm:py-4 border-t border-gray-100/70 flex items-center justify-between">
+ <span className="text-xs text-gray-400">
  {totalCount} registros en total
  </span>
  <Link
  href="/gastos"
- className="group inline-flex items-center gap-1.5 text-sm font-medium text-red-500 hover:text-red-600 transition-colors duration-200"
+ className="group inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors duration-200"
  >
  Ver todos los gastos
  <svg

@@ -60,15 +60,15 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
  const topCats = (dataPoint?.categorias || []).slice(0, 3);
 
  return (
- <div className="rounded-xl sm:rounded-2xl bg-white/70 backdrop-blur-xl px-3 py-2 sm:px-5 sm:py-4 shadow-apple-lg border border-zinc-300/60 min-w-36 sm:min-w-48">
- <p className="text-[10px] sm:text-xs font-medium text-zinc-500 mb-1">
+ <div className="rounded-xl sm:rounded-2xl bg-white/70 backdrop-blur-xl px-3 py-2 sm:px-5 sm:py-4 shadow-apple-lg border border-gray-200/80 min-w-36 sm:min-w-48">
+ <p className="text-[10px] sm:text-xs font-medium text-gray-500 mb-1">
  {label} 2026
  </p>
- <p className="text-base sm:text-lg font-bold text-zinc-900 tabular-nums">
+ <p className="text-base sm:text-lg font-bold text-gray-900 tabular-nums">
  {formatCLP(payload[0].value)}
  </p>
  {topCats.length > 0 && (
- <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-border/50 flex flex-col gap-1 sm:gap-2">
+ <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-gray-100/80 flex flex-col gap-1 sm:gap-2">
  {topCats.map((cat) => (
  <div
  key={cat.categoria}
@@ -78,10 +78,10 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
  className="size-1.5 sm:size-2 rounded-full shrink-0"
  style={{ backgroundColor: cat.color }}
  />
- <span className="text-zinc-600 flex-1 truncate">
+ <span className="text-gray-600 flex-1 truncate">
  {cat.categoria}
  </span>
- <span className="text-zinc-900 font-medium tabular-nums">
+ <span className="text-gray-900 font-medium tabular-nums">
  {formatCompact(cat.monto)}
  </span>
  </div>
@@ -93,8 +93,6 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
  }
  return null;
 }
-
-// Removed ManualTooltip as it's now unified
 
 export default function ExpenseTrendChart({
  gastosPorMes,
@@ -207,12 +205,12 @@ export default function ExpenseTrendChart({
 // removed closeManualTooltip
 
  return (
- <Card className="rounded-2xl border border-border bg-white shadow-apple ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
- <CardHeader className="pb-6">
- <CardTitle className="text-base font-semibold text-zinc-900 font-heading">
+ <Card className="rounded-2xl border border-gray-100/80 bg-surface-warm shadow-warm ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
+ <CardHeader className="pb-4 sm:pb-6">
+ <CardTitle className="text-base font-semibold text-gray-900 font-heading">
  Tendencia de Gastos
  </CardTitle>
- <CardDescription className="text-xs text-zinc-500">
+ <CardDescription className="text-xs text-gray-400">
  Gasto mensual a lo largo del año
  </CardDescription>
  </CardHeader>
@@ -220,7 +218,7 @@ export default function ExpenseTrendChart({
  <CardContent className="flex-1 flex flex-col min-h-0 pt-0">
  <div className="relative flex-1 w-full flex flex-row">
  {/* Y axis */}
- <div className="w-10 sm:w-12 shrink-0 relative pb-6 border-r border-border/50 mr-2">
+ <div className="w-10 sm:w-12 shrink-0 relative pb-6 border-r border-gray-100/80 mr-2">
  {yScale.ticks(5).map((value) => {
  if (value === 0) return null;
  return (
@@ -229,7 +227,7 @@ export default function ExpenseTrendChart({
  style={{
  top:`${yScale(+value)}%`,
  }}
- className="absolute right-2 text-[10px] sm:text-xs tabular-nums text-zinc-400 -translate-y-1/2"
+ className="absolute right-2 text-[10px] sm:text-xs tabular-nums text-gray-400 -translate-y-1/2"
  >
  {formatCompact(+value)}
  </div>
@@ -254,7 +252,8 @@ export default function ExpenseTrendChart({
  >
  <defs>
  <linearGradient id="outlinedAreaGradient" x1="0" x2="0" y1="0" y2="1">
- <stop offset="0%" stopColor="#E30707" stopOpacity={0.15} />
+ <stop offset="0%" stopColor="#E30707" stopOpacity={0.12} />
+ <stop offset="50%" stopColor="#E30707" stopOpacity={0.06} />
  <stop offset="100%" stopColor="#E30707" stopOpacity={0} />
  </linearGradient>
  <clipPath id="chartClip">
@@ -269,7 +268,7 @@ export default function ExpenseTrendChart({
  </clipPath>
  </defs>
 
- {/* Grid Lines */}
+ {/* Grid Lines — warmer tone */}
  {yScale.ticks(5).map((value, i) => (
  <line
  key={`grid-${i}`}
@@ -277,7 +276,7 @@ export default function ExpenseTrendChart({
  y1={yScale(+value)}
  x2="100"
  y2={yScale(+value)}
- stroke="#E5E7EB"
+ stroke="#E5E0D8"
  strokeDasharray="3 3"
  vectorEffect="non-scaling-stroke"
  />
@@ -341,7 +340,7 @@ export default function ExpenseTrendChart({
  style={{
  left:`${xScale(i)}%`,
  }}
- className="absolute top-1 text-[10px] sm:text-xs text-zinc-400 -translate-x-1/2"
+ className="absolute top-1 text-[10px] sm:text-xs text-gray-400 -translate-x-1/2"
  >
  {d.mes}
  </div>

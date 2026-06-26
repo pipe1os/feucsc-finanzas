@@ -103,35 +103,36 @@ export default async function Home() {
  });
 
  return (
- <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
- <header className="mb-8">
- <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
+ <div className="mx-auto max-w-7xl px-4 pt-14 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
+ <header className="mb-6 sm:mb-8 animate-fade-in-up">
+ <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 sm:gap-4">
  <div>
- <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 font-heading">
- Transparencia Financiera
+ <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 font-heading">
+ Transparencia{" "}
+ <span className="text-gradient-red">Financiera</span>
  </h1>
- <p className="mt-1 text-sm text-zinc-500 max-w-xl">
+ <p className="mt-1.5 text-sm text-gray-500 max-w-xl leading-relaxed">
  Presupuesto, gastos y comprobantes de la Federación de Estudiantes
- UCSC.
+ UCSC. Toda la información financiera de forma clara y accesible.
  </p>
  </div>
  </div>
  </header>
 
- <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch mb-6">
+ <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-stretch mb-6">
  <section
  aria-label="Indicadores financieros"
- className="col-span-1 lg:col-span-4 h-full"
+ className="col-span-1 lg:col-span-4 h-full animate-fade-in-up stagger-1"
  >
  <KPICards resumenFinanciero={resumenFinanciero} />
  </section>
  <section
  aria-label="Tendencia de gastos"
- className="col-span-1 lg:col-span-8 h-full"
+ className="col-span-1 lg:col-span-8 h-full animate-fade-in-up stagger-2"
  >
  <LazyExpenseTrendChart gastosPorMes={gastosPorMes} />
  </section>
- <section className="col-span-1 lg:col-span-12">
+ <section className="col-span-1 lg:col-span-12 animate-fade-in-up stagger-3">
  <LatestTransactionsPreview
  transactions={latestTransactions}
  totalCount={data.length}
