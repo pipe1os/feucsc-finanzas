@@ -1,0 +1,201 @@
+{
+  "summary": {
+    "enabledPatterns": {
+      "before": 0,
+      "after": 2426
+    },
+    "enabledTools": {
+      "before": 0,
+      "after": 12
+    },
+    "issues": {
+      "before": 0,
+      "after": 183
+    },
+    "analysisRuntime": {
+      "before": null,
+      "after": 38728
+    }
+  },
+  "toolChanges": [
+    {
+      "toolId": "Agentlinter",
+      "action": "enabled",
+      "reason": "Initialized by Codacy for standard analysis.",
+      "patternsAffected": 0
+    },
+    {
+      "toolId": "Biome",
+      "action": "enabled",
+      "reason": "Initialized by Codacy. Tuned noise floor.",
+      "patternsAffected": 226
+    },
+    {
+      "toolId": "Checkov",
+      "action": "enabled",
+      "reason": "Initialized by Codacy for IaC.",
+      "patternsAffected": 0
+    },
+    {
+      "toolId": "ESLint9",
+      "action": "enabled",
+      "reason": "Initialized by Codacy, using local config.",
+      "patternsAffected": 0
+    },
+    {
+      "toolId": "JacksonLinter",
+      "action": "enabled",
+      "reason": "Initialized by Codacy.",
+      "patternsAffected": 0
+    },
+    {
+      "toolId": "Lizard",
+      "action": "enabled",
+      "reason": "Initialized by Codacy, tuned complexity parameters.",
+      "patternsAffected": 32
+    },
+    {
+      "toolId": "markdownlint",
+      "action": "enabled",
+      "reason": "Initialized by Codacy.",
+      "patternsAffected": 0
+    },
+    {
+      "toolId": "Opengrep",
+      "action": "enabled",
+      "reason": "Initialized by Codacy.",
+      "patternsAffected": 22
+    },
+    {
+      "toolId": "PMD7",
+      "action": "enabled",
+      "reason": "Initialized by Codacy.",
+      "patternsAffected": 0
+    },
+    {
+      "toolId": "Spectral",
+      "action": "enabled",
+      "reason": "Initialized by Codacy.",
+      "patternsAffected": 0
+    },
+    {
+      "toolId": "Stylelint",
+      "action": "enabled",
+      "reason": "Initialized by Codacy.",
+      "patternsAffected": 6
+    },
+    {
+      "toolId": "Trivy",
+      "action": "enabled",
+      "reason": "Initialized by Codacy.",
+      "patternsAffected": 0
+    }
+  ],
+  "patternChanges": [
+    {
+      "patternId": "Biome_lint_nursery_noJsxPropsBind",
+      "toolId": "Biome",
+      "action": "disabled",
+      "reason": "Performance rule with Next.js convention mismatch (React inline functions are common)",
+      "delta": -67,
+      "parameters": []
+    },
+    {
+      "patternId": "Stylelint_color-no-hex",
+      "toolId": "Stylelint",
+      "action": "disabled",
+      "reason": "Noise floor: Info CodeStyle rules removed",
+      "delta": -23,
+      "parameters": []
+    },
+    {
+      "patternId": "Biome_lint_style_useImportType",
+      "toolId": "Biome",
+      "action": "disabled",
+      "reason": "Noise floor: Info CodeStyle rules removed",
+      "delta": -13,
+      "parameters": []
+    },
+    {
+      "patternId": "Semgrep_typescript.react.best-practice.react-props-spreading.react-props-spreading",
+      "toolId": "Semgrep",
+      "action": "disabled",
+      "reason": "React convention mismatch (props spreading is common in UI libraries like HeroUI)",
+      "delta": -12,
+      "parameters": []
+    },
+    {
+      "patternId": "Biome_lint_style_useComponentExportOnlyModules",
+      "toolId": "Biome",
+      "action": "disabled",
+      "reason": "Next.js App Router convention mismatch (files often export metadata alongside components)",
+      "delta": -8,
+      "parameters": []
+    },
+    {
+      "patternId": "Lizard_ccn-medium",
+      "toolId": "Lizard",
+      "action": "updated",
+      "reason": "Raised threshold to match codebase complexity profile",
+      "delta": 0,
+      "parameters": [
+        {
+          "id": "threshold",
+          "before": "10",
+          "after": "15"
+        }
+      ]
+    },
+    {
+      "patternId": "Lizard_nloc-medium",
+      "toolId": "Lizard",
+      "action": "updated",
+      "reason": "Raised threshold to match codebase complexity profile",
+      "delta": 0,
+      "parameters": [
+        {
+          "id": "threshold",
+          "before": "40",
+          "after": "50"
+        }
+      ]
+    }
+  ],
+  "fileExclusions": {
+    "global": [],
+    "perTool": {
+      "Biome": [
+        "src/components/admin/Icons.tsx"
+      ]
+    }
+  },
+  "securityCoverage": {
+    "deduplication": [],
+    "newCoverage": [
+      "Avoid Variant Package Dependency Versions (High, 14 issues)",
+      "Enforce Pinning of Third-Party GitHub Actions to Full Commit SHA (High, 6 issues)",
+      "Disallow Secrets in Source (High, 3 issues)",
+      "Avoid Hardcoded Passwords (High, 2 issues)",
+      "Disallow then property (High, 1 issue)"
+    ],
+    "noisyButKept": []
+  },
+  "keyImprovements": [
+    "Established a clean baseline configuration tailored for Next.js, React, and TypeScript.",
+    "Disabled noisy styling rules and convention mismatches (e.g., inline functions in JSX, props spreading), reducing total noise by ~149 issues.",
+    "Excluded the SVG library file `Icons.tsx` from Biome to prevent false positives for missing SVG titles.",
+    "Tuned Lizard complexity thresholds to better match the real-world complexity of this codebase, preserving visibility into genuine hotspots.",
+    "Added 5 critical security patterns to detect hardcoded secrets, dangerous package versions, and GitHub Action pinning."
+  ],
+  "localConfigTools": [
+    {
+      "toolId": "ESLint9",
+      "configFile": "eslint.config.mjs",
+      "issueCount": 0,
+      "note": "Issues from this tool are controlled by the project's ESLint config, not Codacy patterns. Edit eslint.config.mjs to reduce noise."
+    }
+  ],
+  "codacyYaml": "---\nengines:\n  biome:\n    exclude_paths:\n      - \"src/components/admin/Icons.tsx\"\n",
+  "importResults": null,
+  "cloudVerification": null
+}

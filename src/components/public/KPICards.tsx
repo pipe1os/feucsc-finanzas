@@ -67,8 +67,8 @@ export default function KPICards({
 
   return (
     <div className="h-full">
-      <div className="rounded-2xl border border-border bg-surface shadow-apple p-6 sm:p-8 h-full flex flex-col">
-        <div className="flex flex-col flex-1 justify-between gap-5 lg:justify-center">
+      <div className="rounded-2xl border border-zinc-200 bg-white h-full flex flex-col divide-y divide-zinc-100">
+        <div className="p-6 sm:p-8 flex-1 flex flex-col justify-center">
           <div>
             <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 mb-1.5">
               Total Gastado
@@ -104,9 +104,10 @@ export default function KPICards({
               </div>
             )}
           </div>
+        </div>
 
-          <div className="flex items-end justify-between gap-4 pt-4">
-            <div>
+        <div className="p-6 sm:p-8 flex items-end justify-between gap-4 bg-zinc-50/30">
+          <div>
               <p className="text-[11px] font-medium tracking-[0.08em] uppercase text-gray-500 mb-1">
                 Presupuesto Total
               </p>
@@ -132,7 +133,6 @@ export default function KPICards({
                 <span>restante</span>
               </p>
             </div>
-          </div>
         </div>
       </div>
     </div>

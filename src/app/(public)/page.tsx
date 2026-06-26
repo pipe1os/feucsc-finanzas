@@ -119,7 +119,7 @@ export default async function Home() {
  });
 
  return (
- <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4 relative">
+ <div className="mx-auto max-w-7xl px-4 pt-24 pb-16 sm:px-6 lg:px-10 relative">
  <DotPattern dense className="absolute inset-0 -z-10 text-neutral-400/35" />
  <header className="mb-8">
  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">

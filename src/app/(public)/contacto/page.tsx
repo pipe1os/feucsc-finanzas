@@ -53,7 +53,7 @@ export default function ContactoPage() {
   };
 
  return (
- <div className="mx-auto max-w-3xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
+ <div className="mx-auto max-w-3xl px-4 pt-24 pb-16 sm:px-6 lg:px-10">
  <header className="mb-10 animate-fade-in-up opacity-0 text-center">
  <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 font-heading">
  Contacto
@@ -64,13 +64,13 @@ export default function ContactoPage() {
  </header>
 
  <div
- className="mb-12 animate-fade-in-up opacity-0 flex flex-col gap-4"
+ className="mb-12 animate-fade-in-up opacity-0 max-w-xl mx-auto rounded-2xl border border-zinc-200 bg-white overflow-hidden divide-y divide-zinc-100"
  style={{ animationDelay:"0.1s" }}
  >
  <button
  type="button"
  onClick={handleCopyEmail}
- className="group flex items-center gap-5 p-5 sm:p-6 text-left cursor-pointer transition-all duration-200 rounded-2xl bg-white border border-border shadow-apple hover:shadow-apple-lg hover:border-border"
+ className="w-full group flex items-center gap-5 p-5 sm:p-6 text-left cursor-pointer transition-all duration-200 hover:bg-zinc-50 active:scale-[0.98]"
  >
  <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 text-zinc-400">
  <svg
@@ -104,7 +104,7 @@ export default function ContactoPage() {
  />
  </button>
 
- <div className="flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white border border-border shadow-apple">
+ <div className="flex items-center gap-5 p-5 sm:p-6">
  <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 text-zinc-400">
  <svg
  xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +135,7 @@ export default function ContactoPage() {
  href="https://instagram.com/feucsc_"
  target="_blank"
  rel="noopener noreferrer"
- className="group flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white border border-border shadow-apple transition-all duration-200 hover:shadow-apple-lg hover:border-border"
+ className="w-full group flex items-center gap-5 p-5 sm:p-6 transition-all duration-200 hover:bg-zinc-50 active:scale-[0.98]"
  >
  <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 text-zinc-400">
  <svg

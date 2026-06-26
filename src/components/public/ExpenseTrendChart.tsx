@@ -217,7 +217,7 @@ export default function ExpenseTrendChart({
 // removed closeManualTooltip
 
  return (
- <Card className="rounded-2xl border border-border bg-white shadow-apple ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
+ <Card className="rounded-2xl border border-zinc-200 bg-white ring-0 h-full flex flex-col min-h-80 sm:min-h-90 lg:min-h-75">
  <CardHeader className="pb-6">
  <CardTitle className="text-base font-semibold text-zinc-900 font-heading">
  Tendencia de Gastos

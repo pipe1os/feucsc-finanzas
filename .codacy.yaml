@@ -1,0 +1,5 @@
+---
+engines:
+  biome:
+    exclude_paths:
+      - "src/components/admin/Icons.tsx"
