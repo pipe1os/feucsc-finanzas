@@ -52,118 +52,121 @@ export default function ContactoPage() {
     }
   };
 
- return (
- <div className="mx-auto max-w-3xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
- <header className="mb-10 animate-fade-in-up opacity-0 text-center">
- <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 font-heading">
- Contacto
- </h1>
- <p className="mt-2 text-base text-zinc-500 max-w-md mx-auto">
- ¿Tienes dudas? Ponte en contacto con nosotros.
- </p>
- </header>
+  return (
+  <div className="mx-auto max-w-3xl px-4 pt-24 pb-16 sm:px-6 lg:px-10">
+  <header className="mb-10 animate-fade-in-up opacity-0 text-center">
+  <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 font-heading">
+  Contacto
+  </h1>
+  <p className="mt-2 text-base text-zinc-500 max-w-md mx-auto">
+  ¿Tienes dudas? Ponte en contacto con nosotros.
+  </p>
+  </header>
 
- <div
- className="mb-12 animate-fade-in-up opacity-0 flex flex-col gap-4"
- style={{ animationDelay:"0.1s" }}
- >
- <button
- type="button"
- onClick={handleCopyEmail}
- className="group flex items-center gap-5 p-5 sm:p-6 text-left cursor-pointer transition-all duration-200 rounded-2xl bg-white border border-border shadow-apple hover:shadow-apple-lg hover:border-border"
- >
- <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 text-zinc-400">
- <svg
- xmlns="http://www.w3.org/2000/svg"
- width="20"
- height="20"
- viewBox="0 0 24 24"
- fill="none"
- stroke="currentColor"
- strokeWidth="2"
- strokeLinecap="round"
- strokeLinejoin="round"
- >
- <rect width="20" height="16" x="2" y="4" rx="2" />
- <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
- </svg>
- </div>
- <div className="flex flex-col gap-0.5 min-w-0 flex-1">
- <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
- Correo institucional
- </span>
- <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 break-all">
- feucsc@ucsc.cl
- </span>
- </div>
- <CopyIcon
-   ref={copyIconRef}
-   size={20}
-   disableHover={true}
-   className="text-zinc-400 group-hover:text-zinc-600 transition-colors duration-200 shrink-0"
- />
- </button>
+  <div
+  className="mb-12 animate-fade-in-up opacity-0 max-w-xl mx-auto rounded-2xl border border-zinc-200 bg-white overflow-hidden divide-y divide-zinc-100"
+  style={{ animationDelay:"0.1s" }}
+  >
+  {/* Correo Institucional */}
+  <button
+  type="button"
+  onClick={handleCopyEmail}
+  className="group flex w-full items-center gap-5 p-5 sm:p-6 text-left cursor-pointer transition-colors duration-200 hover:bg-zinc-50 active:bg-zinc-100"
+  >
+  <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 border border-zinc-100 text-zinc-400 group-hover:text-zinc-600 transition-colors">
+  <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="20"
+  height="20"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  strokeWidth="2"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  >
+  <rect width="20" height="16" x="2" y="4" rx="2" />
+  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+  </svg>
+  </div>
+  <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+  <span className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">
+  Correo institucional
+  </span>
+  <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 break-all">
+  feucsc@ucsc.cl
+  </span>
+  </div>
+  <CopyIcon
+    ref={copyIconRef}
+    size={20}
+    disableHover={true}
+    className="text-zinc-400 group-hover:text-zinc-600 transition-colors duration-200 shrink-0"
+  />
+  </button>
 
- <div className="flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white border border-border shadow-apple">
- <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 text-zinc-400">
- <svg
- xmlns="http://www.w3.org/2000/svg"
- width="20"
- height="20"
- viewBox="0 0 24 24"
- fill="none"
- stroke="currentColor"
- strokeWidth="2"
- strokeLinecap="round"
- strokeLinejoin="round"
- >
- <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
- <circle cx="12" cy="10" r="3" />
- </svg>
- </div>
- <div className="flex flex-col gap-0.5 min-w-0">
- <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
- Sala FEUCSC
- </span>
- <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900">
- Avenida Alonso de Ribera 2850, Concepción
- </span>
- </div>
- </div>
+  {/* Sala FEUCSC */}
+  <div className="flex items-center gap-5 p-5 sm:p-6">
+  <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 border border-zinc-100 text-zinc-400">
+  <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="20"
+  height="20"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  strokeWidth="2"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  >
+  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+  <circle cx="12" cy="10" r="3" />
+  </svg>
+  </div>
+  <div className="flex flex-col gap-0.5 min-w-0">
+  <span className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">
+  Sala FEUCSC
+  </span>
+  <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900">
+  Avenida Alonso de Ribera 2850, Concepción
+  </span>
+  </div>
+  </div>
 
- <a
- href="https://instagram.com/feucsc_"
- target="_blank"
- rel="noopener noreferrer"
- className="group flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-white border border-border shadow-apple transition-all duration-200 hover:shadow-apple-lg hover:border-border"
- >
- <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 text-zinc-400">
- <svg
- xmlns="http://www.w3.org/2000/svg"
- width="20"
- height="20"
- viewBox="0 0 24 24"
- fill="none"
- stroke="currentColor"
- strokeWidth="2"
- strokeLinecap="round"
- strokeLinejoin="round"
- >
- <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
- <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
- <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
- </svg>
- </div>
- <div className="flex flex-col gap-0.5 min-w-0 flex-1">
- <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
- Síguenos en Instagram
- </span>
- <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 group-hover:text-red-500 transition-colors duration-200">
- @feucsc_
- </span>
- </div>
- </a>
- </div>
+  {/* Instagram */}
+  <a
+  href="https://instagram.com/feucsc_"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="group flex items-center gap-5 p-5 sm:p-6 transition-colors duration-200 hover:bg-zinc-50 active:bg-zinc-100"
+  >
+  <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-50 border border-zinc-100 text-zinc-400 group-hover:text-zinc-600 transition-colors">
+  <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="20"
+  height="20"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  strokeWidth="2"
+  strokeLinecap="round"
+  strokeLinejoin="round"
+  >
+  <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+  </div>
+  <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+  <span className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">
+  Síguenos en Instagram
+  </span>
+  <span className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 transition-colors duration-200">
+  @feucsc_
+  </span>
+  </div>
+  </a>
+  </div>
 
  <Footer />
  </div>

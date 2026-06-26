@@ -24,7 +24,7 @@ export default function LatestTransactionsPreview({
  totalCount,
 }: LatestTransactionsPreviewProps) {
  return (
- <div className="rounded-2xl border border-border bg-surface shadow-apple overflow-hidden">
+ <div className="rounded-2xl border border-zinc-200 bg-white ring-0 overflow-hidden">
  <div className="px-6 pt-5 pb-4">
  <h2 className="text-base font-semibold text-gray-900 font-heading">
  Últimos Gastos
