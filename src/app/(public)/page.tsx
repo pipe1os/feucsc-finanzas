@@ -55,8 +55,6 @@ export default async function Home() {
  const saldoDisponible = presupuestoTotal - totalGastado;
  const resumenFinanciero = { presupuestoTotal, totalGastado, saldoDisponible };
 
- const monthlySpendingData = months.map((m) => gastosPorMesMap.get(m) ?? 0);
-
  const gastosPorMesMap = new Map<string, number>();
  const gastosPorMesCatMap = new Map<string, Map<string, number>>();
  months.forEach((m) => {
@@ -86,6 +84,8 @@ export default async function Home() {
  transactionCountMap.set(monthStr, (transactionCountMap.get(monthStr) ?? 0) + 1);
  }
  });
+
+ const monthlySpendingData = months.map((m) => gastosPorMesMap.get(m) ?? 0);
 
  const gastosPorMes = months.map((mes) => {
  const catMap = gastosPorMesCatMap.get(mes)!;
