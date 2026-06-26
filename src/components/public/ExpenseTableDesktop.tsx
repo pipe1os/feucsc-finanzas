@@ -130,7 +130,7 @@ export function ExpenseTableDesktop({
  return (
  <Table.Row key={txn.id} className="group cursor-pointer hover:bg-zinc-50 transition-colors duration-200">
  <Table.Cell>
- <span className="text-sm text-zinc-600 whitespace-nowrap">
+ <span className="text-sm text-zinc-600 whitespace-nowrap tabular-nums">
  {formatDate(txn.fecha)}
  </span>
  </Table.Cell>
@@ -206,7 +206,9 @@ export function ExpenseTableDesktop({
  <Table.Footer>
  <Pagination size="sm">
  <Pagination.Summary>
+ <span className="tabular-nums">
  {start} a {end} de {filteredLength} resultados
+ </span>
  </Pagination.Summary>
  <Pagination.Content>
  <Pagination.Item>

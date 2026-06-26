@@ -70,7 +70,7 @@ export default function LatestTransactionsPreview({
  >
  {txn.categoria}
  </span>
- <span className="text-xs text-gray-500">
+ <span className="text-xs text-gray-500 tabular-nums">
  {formatDate(txn.fecha)}
  </span>
  </div>
@@ -109,7 +109,7 @@ export default function LatestTransactionsPreview({
  className="hover:bg-gray-50/50 transition-colors duration-150"
  >
  <Table.Cell className="px-4 py-2">
- <span className="text-gray-500 whitespace-nowrap">
+ <span className="text-gray-500 whitespace-nowrap tabular-nums">
  {formatDate(txn.fecha)}
  </span>
  </Table.Cell>
@@ -143,7 +143,7 @@ export default function LatestTransactionsPreview({
  </div>
 
  <div className="px-6 py-4 border-t border-gray-50 flex items-center justify-between">
- <span className="text-xs text-gray-500">
+ <span className="text-xs text-gray-500 tabular-nums">
  {totalCount} registros en total
  </span>
  <Link

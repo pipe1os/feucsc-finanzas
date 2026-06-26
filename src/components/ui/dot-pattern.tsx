@@ -7,7 +7,7 @@ interface DotPatternProps extends React.SVGProps<SVGSVGElement> {
  cy?: number;
  cr?: number;
  className?: string;
-
+ dense?: boolean;
  glow?: boolean;
  [key: string]: unknown;
 }
@@ -19,12 +19,14 @@ export function DotPattern({
  cy = 1,
  cr = 1,
  className,
-
+ dense = false,
  glow: _glow,
  ...props
 }: DotPatternProps) {
  void _glow;
- const id ="dot-pattern-bg";
+ const id = dense ? "dot-pattern-dense" : "dot-pattern-bg";
+ const finalWidth = dense ? width * 0.7 : width;
+ const finalHeight = dense ? height * 0.7 : height;
 
  return (
  <svg
@@ -40,8 +42,8 @@ export function DotPattern({
  id={id}
  x="0"
  y="0"
- width={width}
- height={height}
+ width={finalWidth}
+ height={finalHeight}
  patternUnits="userSpaceOnUse"
  >
  <circle cx={cx} cy={cy} r={cr} fill="currentColor" />

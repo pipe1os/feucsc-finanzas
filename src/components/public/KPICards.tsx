@@ -3,6 +3,7 @@
 import { formatCLP } from "@/lib/utils";
 import { useMemo } from "react";
 import { SkeletonKPICards } from "./Skeletons";
+import { Sparkline } from "./Sparkline";
 
 interface ResumenFinanciero {
   presupuestoTotal: number;
@@ -12,11 +13,13 @@ interface ResumenFinanciero {
 
 interface KPICardsProps {
   resumenFinanciero: ResumenFinanciero;
+  monthlySpending?: number[];
   isLoading?: boolean;
 }
 
 export default function KPICards({
   resumenFinanciero,
+  monthlySpending = [],
   isLoading,
 }: KPICardsProps) {
   const porcentajeGastado =
@@ -74,7 +77,7 @@ export default function KPICards({
               {formatCLP(resumenFinanciero.totalGastado)}
             </p>
             <p
-              className={`mt-1.5 text-sm font-medium flex items-center gap-1 ${spentStatusText}`}
+              className={`mt-1.5 text-sm font-medium flex items-center gap-1 tabular-nums ${spentStatusText}`}
             >
               <span className="font-bold">
                 {Math.round(porcentajeGastado)}%
@@ -82,16 +85,24 @@ export default function KPICards({
               <span>del presupuesto utilizado</span>
             </p>
 
-            <div className="mt-3 h-1 w-full rounded-full bg-gray-100 overflow-hidden">
-              <div
-                className={`h-full rounded-full ${statusColor} animate-bar-grow`}
-                style={
-                  {
-                    "--bar-width": `${porcentajeGastado}%`,
-                  } as React.CSSProperties
-                }
-              />
-            </div>
+            {monthlySpending.length > 0 && (
+              <div className="mt-3 w-full">
+                <Sparkline
+                  data={monthlySpending}
+                  width={100}
+                  height={28}
+                  strokeWidth={2}
+                  color={
+                    porcentajeGastado <= 40
+                      ? "#10b981"
+                      : porcentajeGastado <= 69
+                        ? "#f59e0b"
+                        : "#ef4444"
+                  }
+                  className="w-full"
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex items-end justify-between gap-4 pt-4">
@@ -102,7 +113,7 @@ export default function KPICards({
               <p className="text-xl sm:text-2xl tracking-[-0.02em] tabular-nums text-gray-900 font-semibold font-heading animate-fade-in-up delay-100">
                 {formatCLP(resumenFinanciero.presupuestoTotal)}
               </p>
-              <p className="mt-1 text-xs text-gray-500">Año académico 2026</p>
+              <p className="mt-1 text-xs text-gray-500 tabular-nums">Año académico 2026</p>
             </div>
 
             <div>
@@ -113,7 +124,7 @@ export default function KPICards({
                 {formatCLP(resumenFinanciero.saldoDisponible)}
               </p>
               <p
-                className={`mt-1 text-xs font-medium flex items-center gap-1 ${availableStatusText}`}
+                className={`mt-1 text-xs font-medium flex items-center gap-1 tabular-nums ${availableStatusText}`}
               >
                 <span className="font-semibold">
                   {Math.round(porcentajeDisponible)}%

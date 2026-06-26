@@ -89,7 +89,7 @@ export default function RootLayout({
  <html lang="es" suppressHydrationWarning>
  <body className={`antialiased bg-transparent text-foreground font-sans ${sfProText.variable} ${sfProDisplay.variable}`}>
  <div className="fixed inset-0 -z-10 bg-bg-secondary" />
- <DotPattern className="fixed inset-0 -z-10 text-neutral-400/15" />
+ <DotPattern className="fixed inset-0 -z-10 text-neutral-400/25" />
  <Providers>
  <div className="flex w-full min-h-dvh bg-transparent">
  {children}

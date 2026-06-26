@@ -4,6 +4,7 @@ import LatestTransactionsPreview from"@/components/public/LatestTransactionsPrev
 import { supabaseAnon } from"@/lib/supabase-anon";
 import { parseISODate, buildCategoryColors } from"@/lib/utils";
 import Footer from"@/components/public/Footer";
+import { DotPattern } from"@/components/ui/dot-pattern";
 
 import { Metadata } from"next";
 
@@ -53,6 +54,9 @@ export default async function Home() {
  const totalGastado = data.reduce((acc, curr) => acc + curr.monto, 0);
  const saldoDisponible = presupuestoTotal - totalGastado;
  const resumenFinanciero = { presupuestoTotal, totalGastado, saldoDisponible };
+
+ const monthlySpendingData = months.map((m) => gastosPorMesMap.get(m) ?? 0);
+
  const gastosPorMesMap = new Map<string, number>();
  const gastosPorMesCatMap = new Map<string, Map<string, number>>();
  months.forEach((m) => {
@@ -74,6 +78,15 @@ export default async function Home() {
  }
  });
 
+ const transactionCountMap = new Map<string, number>();
+ data.forEach((g) => {
+ const date = parseISODate(g.fecha);
+ if (date) {
+ const monthStr = months[date.getMonth()];
+ transactionCountMap.set(monthStr, (transactionCountMap.get(monthStr) ?? 0) + 1);
+ }
+ });
+
  const gastosPorMes = months.map((mes) => {
  const catMap = gastosPorMesCatMap.get(mes)!;
  const categorias = Array.from(catMap.entries())
@@ -83,10 +96,13 @@ export default async function Home() {
  color: categoryColors[categoria] ||"#E30707",
  }))
  .sort((a, b) => b.monto - a.monto);
+ const montoMes = gastosPorMesMap.get(mes) ?? 0;
  return {
  mes,
- monto: gastosPorMesMap.get(mes) ?? 0,
+ monto: montoMes,
  categorias,
+ transactionCount: transactionCountMap.get(mes) ?? 0,
+ budgetPercent: presupuestoTotal > 0 ? (montoMes / presupuestoTotal) * 100 : 0,
  };
  });
 
@@ -103,7 +119,8 @@ export default async function Home() {
  });
 
  return (
- <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4">
+ <div className="mx-auto max-w-7xl px-4 pt-16 pb-4 sm:px-6 lg:px-10 lg:pt-10 lg:pb-4 relative">
+ <DotPattern dense className="absolute inset-0 -z-10 text-neutral-400/35" />
  <header className="mb-8">
  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 sm:gap-4">
  <div>
@@ -123,7 +140,7 @@ export default async function Home() {
  aria-label="Indicadores financieros"
  className="col-span-1 lg:col-span-4 h-full"
  >
- <KPICards resumenFinanciero={resumenFinanciero} />
+ <KPICards resumenFinanciero={resumenFinanciero} monthlySpending={monthlySpendingData} />
  </section>
  <section
  aria-label="Tendencia de gastos"

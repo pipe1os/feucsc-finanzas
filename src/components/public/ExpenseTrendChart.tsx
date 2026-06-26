@@ -23,6 +23,8 @@ interface TrendDataPoint {
  mes: string;
  monto: number;
  categorias?: CategoryBreakdown[];
+ transactionCount?: number;
+ budgetPercent?: number;
 }
 
 interface ExpenseTrendChartProps {
@@ -67,6 +69,14 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
  <p className="text-base sm:text-lg font-bold text-zinc-900 tabular-nums">
  {formatCLP(payload[0].value)}
  </p>
+ <div className="mt-1.5 flex flex-col gap-0.5 text-[10px] sm:text-xs text-zinc-600 tabular-nums">
+ {dataPoint?.budgetPercent !== undefined && (
+ <p>{dataPoint.budgetPercent.toFixed(1)}% del presupuesto total</p>
+ )}
+ {dataPoint?.transactionCount !== undefined && (
+ <p>{dataPoint.transactionCount} {dataPoint.transactionCount === 1 ? 'transacción' : 'transacciones'}</p>
+ )}
+ </div>
  {topCats.length > 0 && (
  <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-border/50 flex flex-col gap-1 sm:gap-2">
  {topCats.map((cat) => (
@@ -299,6 +309,27 @@ export default function ExpenseTrendChart({
 
  {/* Active Dot */}
  {activeIndex !== null && activeIndex < gastosPorMes.length && (
+ <>
+ {/* Crosshair lines */}
+ <div
+ className="absolute inset-0 pointer-events-none"
+ style={{
+ clipPath: "inset(0 0 6px 0)",
+ }}
+ >
+ <div
+ className="absolute top-0 bottom-0 w-px bg-zinc-300/50"
+ style={{
+ left: `${xScale(activeIndex)}%`,
+ }}
+ />
+ <div
+ className="absolute left-0 right-0 h-px bg-zinc-300/50"
+ style={{
+ top: `${yScale(gastosPorMes[activeIndex].monto)}%`,
+ }}
+ />
+ </div>
  <div
  className="absolute size-3 sm:size-3.5 rounded-full bg-[#E30707] border-2 border-white shadow-md pointer-events-none transition-all duration-75"
  style={{
@@ -307,6 +338,7 @@ export default function ExpenseTrendChart({
  transform:"translate(-50%, -50%)",
  }}
  />
+ </>
  )}
 
  {/* Unified Tooltip */}

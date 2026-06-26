@@ -82,7 +82,7 @@ export function ExpenseTableMobile({
  >
  {txn.categoria}
  </span>
- <span className="text-xs text-zinc-500">
+ <span className="text-xs text-zinc-500 tabular-nums">
  {formatDate(txn.fecha)}
  </span>
  {isNew(txn.creado_el) && (
@@ -121,7 +121,7 @@ export function ExpenseTableMobile({
 
  {totalPages > 0 && (
  <div className="mt-4 flex flex-col gap-3">
- <span className="text-xs text-zinc-500 text-center">
+ <span className="text-xs text-zinc-500 text-center tabular-nums">
  {start} a {end} de {filteredLength} resultados
  </span>
  <Pagination size="sm">
@@ -134,7 +134,7 @@ export function ExpenseTableMobile({
  <Pagination.PreviousIcon />
  </Pagination.Previous>
  </Pagination.Item>
- <span className="text-sm text-zinc-600">
+ <span className="text-sm text-zinc-600 tabular-nums">
  {page} / {totalPages}
  </span>
  <Pagination.Item>
